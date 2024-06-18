@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <link rel="stylesheet" href="/css/slyle_register.css"> <!-- Ajusta la ruta según tu estructura de archivos -->
+</head>
+<body>
+    <div class="contenedor">
+        <div class="imagen">
+            <img src="/img/imagen_login.svg" alt="Imagen de registro">
+        </div>
+        <div class="fondo">
+            <div class="content_form">
+                <h2>Regístrate</h2>
+                <form action="/user/registro" method="POST">
+                    <div class="linea">
+                        <div class="inputs">
+                            <label for="nombre">Nombre*</label>
+                            <input type="text" name="nombre" id="nombre" placeholder="Ingresa tu nombre" required>
+                        </div>
+                        <div class="inputs">
+                            <label for="apellidos">Apellidos*</label>
+                            <input type="text" name="apellidos" id="apellidos" placeholder="Ingresa tus apellidos" required>
+                        </div>
+                    </div>
+                    <div class="linea">
+                        <div class="inputs">
+                            <label for="dni">DNI*</label>
+                            <input type="text" name="dni" id="dni" placeholder="Ingresa tu DNI" required>
+                        </div>
+                        <div class="inputs">
+                            <label for="celular">Celular*</label>
+                            <input type="text" name="celular" id="celular" placeholder="Ingresa tu celular" required>
+                        </div>
+                    </div>
+                    <div class="linea">
+                        <div class="inputs">
+                            <label for="correo_electronico">Correo Electrónico*</label>
+                            <input type="email" name="correo_electronico" id="correo_electronico" placeholder="Ingresa tu correo electrónico" required>
+                        </div>
+                        <div class="inputs">
+                            <label for="contraseña">Contraseña*</label>
+                            <input type="password" name="contraseña" id="contraseña" placeholder="Ingresa tu contraseña" required>
+                        </div>
+                    </div>
+                    <div class="lineas">
+                        <p>Quiero recibir:</p>
+                        <div class="content_check">
+                            <div class="recibo">
+                                <label for="boleta">Boleta</label>
+                                <input type="checkbox" name="boleta" id="boleta" value="1">
+                            </div>
+                            <div class="recibo">
+                                <label for="factura">Factura</label>
+                                <input type="checkbox" name="factura" id="factura" value="1" onchange="toggleNumeroFactura()">
+                                <input type="hidden" name="factura" id="hidden_factura" value="0">
+                                <input type="text" name="numero_factura" id="numero_factura" placeholder="Ingresa el número de factura" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="terminos">
+                        <p>Importante:</p>
+                        <div class="content_infor">
+                            <ul>
+                                <li>
+                                    Debes leer nuestras <span><a href="">Condiciones y términos</a></span> antes de registrarte.
+                                </li>
+                                <li>
+                                    Tu DNI es obligatorio en todo proceso de compra - venta.
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="content_ckec_info">
+                            <div class="terminoss">
+                                <input type="checkbox" name="terminos_y_condiciones" id="terminos_y_condiciones" value="1" required>
+                                <label for="terminos_y_condiciones">
+                                    He leído y acepto los <span><a href="">términos y condiciones</a></span> de uso del servicio.
+                                </label>
+                            </div>
+                            <div class="terminoss">
+                                <input type="checkbox" name="uso_datos_personales" id="uso_datos_personales" value="1" required>
+                                <label for="uso_datos_personales">
+                                    He leído y acepto el uso de los Datos Personales.
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit">Registrar</button>
+                    <p>
+                        <span>¿Ya tienes una cuenta?</span>
+                        <span><a href="/user/login">Login</a></span>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleNumeroFactura() {
+            var facturaCheckbox = document.getElementById("factura");
+            var numeroFacturaInput = document.getElementById("numero_factura");
+            var hiddenFacturaInput = document.getElementById("hidden_factura");
+
+            if (facturaCheckbox.checked) {
+                numeroFacturaInput.disabled = false;
+                hiddenFacturaInput.value = "1"; // Cambiar el valor del campo oculto a 1 si el checkbox está marcado
+            } else {
+                numeroFacturaInput.disabled = true;
+                numeroFacturaInput.value = ""; // Limpiar el valor del campo de número de factura si el checkbox no está marcado
+                hiddenFacturaInput.value = "0"; // Cambiar el valor del campo oculto a 0 si el checkbox no está marcado
+            }
+        }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const boletaCheckbox = document.getElementById("boleta");
+            const facturaCheckbox = document.getElementById("factura");
+    
+            // Función para deseleccionar el otro checkbox al seleccionar uno
+            function toggleCheckboxes(event) {
+                if (event.target === boletaCheckbox && boletaCheckbox.checked) {
+                    facturaCheckbox.checked = false;
+                } else if (event.target === facturaCheckbox && facturaCheckbox.checked) {
+                    boletaCheckbox.checked = false;
+                }
+            }
+    
+            // Agregar el evento 'change' a los checkboxes
+            boletaCheckbox.addEventListener("change", toggleCheckboxes);
+            facturaCheckbox.addEventListener("change", toggleCheckboxes);
+        });
+    </script>
+</body>
+</html>

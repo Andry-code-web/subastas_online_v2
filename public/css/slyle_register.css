@@ -1,0 +1,288 @@
+@import url('https://fonts.googleapis.com/css2?family=BioRhyme:wght@200..800&family=Sedan:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Modern+Antiqua&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Scope+One&display=swap');
+
+:root{
+    --font--banner--semi: url("/fonts/segoeuithis.ttf");
+    --font--banner--bool: url("/fonts/segoeuithibd.ttf");
+    --font--parrafo: "Space Mono";
+    --font--header: "Sedan";
+    --font--testimoni: "Modern Antiqua";
+    --font--about: "BioRhyme";
+    --font--cont: "Scope One";
+    --color--label: #989898;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.contenedor{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.imagen{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+    left: 8%;
+}
+
+.regreso{
+    margin-left: 3rem;
+}
+
+.fondo{
+    width: 100%;
+    height: 100%;
+    background-image: url("/img/color_fondo_login.svg");
+    display: flex;
+    justify-content: center;
+    padding-right: 5rem;
+}
+
+.content_form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+}
+
+.content_form h2{
+    font-family: var(--font--about);
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+}
+
+.content_form form{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.content_form form .linea label{
+    font-size: .9rem;
+    font-family: var(--font--header);
+    color: var(--color--label);
+}
+
+.content_form form .linea input{
+    width: 100%;
+    height: 42px;
+    border-radius: 10px;
+    border: none;
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+}
+
+.content_form form input:focus{
+    outline: none;
+}
+
+.content_form form input::placeholder{
+    color: #acacac;
+}
+
+.content_form form button{
+    width: 40%;
+    height: 40px;
+    background-color: #ED5544;
+    border-radius: 20px;
+    border: none;
+    color: #fff;
+    font-family: var(--font--testimoni);
+    margin-top: 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.content_form form p span a{
+    text-decoration: none;
+    color: #ED5544;
+    font-weight: 800;
+}
+
+.linea{
+    width: 100%;
+    display: flex;
+    gap: 1rem;
+}
+
+.inputs{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.lineas{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.content_check{
+    display: flex;
+}
+
+.recibo{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Estilo para los checkboxes */
+.recibo input[type="checkbox"] {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    margin-right: 1rem;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 1px solid #999;
+    border-radius: 50%; /* Ajusta el radio del borde según sea necesario */
+}
+
+/* Estilo para cuando el checkbox está seleccionado */
+.recibo input[type="checkbox"]:checked {
+    background-color: transparent; /* Cambia el color de fondo cuando el checkbox está seleccionado */
+}
+
+/* Estilo para el indicador del checkbox cuando está seleccionado */
+.recibo input[type="checkbox"]:checked::before {
+    content: ''; /* Contenido vacío */
+    display: block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%; /* Forma un círculo */
+    background-color: #DB0000; /* Color del círculo */
+    position: relative;
+    top: 50%; /* Centra verticalmente */
+    left: 50%; /* Centra horizontalmente */
+    transform: translate(-50%, -50%); /* Centra el círculo */
+}
+
+
+.recibo input[name="numero_factura"]{
+    height: 40px;
+    width: 290px;
+    border-radius: 10px;
+    border: none;
+    padding-left: 1rem;
+    background-color: #FFFFFF;
+}
+
+.recibo label{
+    font-size: 1.2rem;
+    font-family: var(--font--parrafo);
+}
+
+.content_form form .lineas p{
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+    /* font-family: var(--font--about); */
+}
+
+.terminos{
+    width: 100%;
+}
+
+.terminos p{
+    font-size: 1.4rem;
+}
+
+.terminos .content_infor{
+    margin-top: 1rem;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+}
+
+.content_infor ul li{
+    font-family: var(--font--parrafo);
+    font-size: .9rem;
+    letter-spacing: -.05rem;
+}
+
+.content_infor ul li span a{
+    color: #DB0000;
+    font-weight: 600;
+}
+
+.terminoss input{
+    width: 15px;
+    height: 15px;
+    background: none;
+    border: none;
+}
+
+/* Estilo para los checkboxes dentro de .terminoss */
+.terminoss input[type="checkbox"] {
+    display: none; /* Oculta el checkbox */
+}
+
+/* Estilo para el label asociado al checkbox */
+.terminoss label {
+    display: inline-block;
+    padding-left: 25px; /* Espacio a la izquierda del texto para acomodar el checkbox personalizado */
+    position: relative;
+    cursor: pointer;
+}
+
+/* Estilo para el borde del checkbox cuando no está marcado */
+.terminoss input[type="checkbox"] + label::before {
+    content: '';
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border: 1px solid #999; /* Borde del checkbox */
+    border-radius: 3px; /* Radio del borde */
+    position: absolute;
+    left: 0;
+    top: 1px; /* Ajuste vertical */
+}
+
+/* Estilo para el checkbox cuando está marcado */
+.terminoss input[type="checkbox"]:checked + label::before {
+    background-color: #DB0000; /* Color de fondo cuando el checkbox está marcado */
+    border-color: #DB0000; /* Color del borde cuando el checkbox está marcado */
+}
+
+/* Estilo para el tick dentro del checkbox cuando está marcado */
+.terminoss input[type="checkbox"]:checked + label::after {
+    content: '\2713'; /* Carácter de verificación Unicode */
+    display: inline-block;
+    font-size: 12px; /* Tamaño del tick */
+    color: #fff; /* Color del tick */
+    position: absolute;
+    font-weight: 900;
+    left: 4px;
+    top: 1px;
+}
+
+
+.terminoss label{
+    font-family: var(--font--parrafo);
+    font-size: .9rem;
+    letter-spacing: -.05rem;
+}
+
+.terminoss label span a{
+    color: #DB0000;
+    font-weight: 600;
+}

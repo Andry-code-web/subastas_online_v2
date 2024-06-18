@@ -1,0 +1,337 @@
+@import url('https://fonts.googleapis.com/css2?family=BioRhyme:wght@200..800&family=Sedan:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Modern+Antiqua&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Scope+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+:root{
+    --font--banner--semi: "Barlow";
+    --font--banner--bool: "Roboto";
+    --font--parrafo: "Space Mono";
+    --font--header: "Sedan";
+    --font--testimoni: "Modern Antiqua";
+    --font--about: "BioRhyme";
+    --font--cont: "Scope One";
+    --bg--botones: #A29060;
+    --color--sub: #C5AC75;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos de la barra de navegación */
+header{
+    position: absolute;
+    width: 100%;
+    height: 86px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 100;
+}
+
+.session{
+    position: relative;
+}
+
+.session p{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 1rem;
+}
+
+.session p span a{
+    font-size: 1rem;
+    font-family: var(--font--parrafo);
+    color: #fff;
+    text-decoration: none;
+    transition: all .5s;
+}
+
+.session p span a:hover{
+    font-weight: 900;
+}
+
+header nav{
+    display: flex;
+    gap: 2rem;
+}
+
+header nav a{
+    font-size: 1.1rem;
+    font-family: var(--font--header);
+    text-decoration: none;
+    color: #fff;
+    transition: all .3s;
+}
+
+header nav a:hover{
+    transform: scale(1.1);
+}
+
+/* Estilos del título y la imagen del encabezado */
+.header {
+    position: relative;
+}
+
+.header img {
+    width: 100%;
+    height: 70vh;
+}
+
+.header .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    color: #fff;
+    text-align: center;
+}
+
+.header .overlay h1,
+.header .overlay p{
+    margin-left: 5rem;
+}
+
+.header .overlay h1{
+    font-size: 3rem;
+    font-family: var(--font--banner--bool);
+}
+
+.header .overlay p{
+    font-size: 1rem;
+    font-family: var(--font--banner--semi);
+}
+
+/* Estilos del formulario de búsqueda */
+.search-form {
+    position: relative;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.search-form input[type="text"] {
+    width: 15%;
+    padding: 0.5rem 5rem 0.5rem 1rem; /* Ajusta el espaciado para dejar espacio para la imagen */
+    border: none;
+    border-radius: 0.25rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+    box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.30);
+    background-image: url("/img/search.png"); /* Establece la imagen como fondo */
+    background-repeat: no-repeat;
+    background-position: right 10px center;  /* Ajusta la posición de la imagen */
+    background-size: 20px; /* Ajusta el tamaño de la imagen */
+}
+
+.search-form input[type="text"]:focus {
+    outline: none;
+}
+
+/* Estilos del contenido */
+.container {
+    max-width: 80%;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+}
+
+.property-listing {
+    width: 100%;
+}
+
+.content_filtro{
+    width: 30%;
+}
+
+.content_filtro h2{
+    font-family: var(--font--banner--bool);
+    font-size: .95rem;
+    font-weight: 400;
+    margin-bottom: 2rem;
+}
+
+.filtro {
+    width: 200px; /* Ancho fijo */
+    height: 120px; /* Altura fija */
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-bottom: 2rem;
+    text-align: center;
+    padding: .5rem;
+    cursor: pointer;
+    position: relative; /* Para posicionar correctamente las imágenes dentro del filtro */
+    overflow: hidden; /* Evita que el contenido se desborde */
+    transition: ease-in-out .2s;
+}
+
+
+
+.filtro p {
+    width: 100%;
+    font-size: .8rem;
+    margin-bottom: .5rem;
+    font-family: var(--font--banner--bool);
+    color: #757575;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    align-items: center;
+}
+
+.filtro p span{
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.filtro:hover{
+    background: #fff;
+    border: none;
+    box-shadow: 0px 0px 15px rgb(0, 0, 0, 0.30);
+    border: 1px solid #fff;
+    border-radius: 0;
+}
+
+.filtro:hover p{
+    color: #000;
+    font-weight: 600;
+}
+
+.filtro:hover p span svg g path {
+    fill: #ff0000;
+}
+
+.filtro:hover .svg path {
+    stroke: #000;
+}
+
+.property-card {
+    height: 30vh;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    display: flex;
+}
+
+.slider{
+    width: 40%;
+    height: 100%;
+}
+
+.carousel-inner{
+    height: 100%;
+}
+
+.carousel-item{
+    height: 100%;
+}
+
+.carousel img{
+    height: 100%;
+}
+
+.img_flechas img{
+    width: 25px;
+}
+
+
+.property-card-content {
+    width: 100%;
+    display: flex;
+    padding: 3rem;
+}
+
+.content_info{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.nombre_tipo h3{
+    font-size: 1.1rem;
+    font-family: var(--font--banner--bool);
+}
+
+.nombre_tipo p{
+    font-size: .8rem;
+    font-family: var(--font--banner--semi);
+    margin-top: -.7rem;
+    color: #757575;
+    font-weight: 600;
+}
+
+.content_info .ubicacion{
+    font-family: var(--font--parrafo);
+    letter-spacing: -.01rem;
+    font-size: .9rem;
+}
+
+.content_info .precio{
+    font-size: 1rem;
+    font-weight: 300;
+    font-family: var(--font--banner--bool);
+}
+
+.property-card-content .content_info h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.property-card-content p {
+    margin-bottom: 0.5rem;
+}
+
+.property-card-content .price {
+    color: #ff0000;
+    font-weight: bold;
+}
+
+.property-card-content .features {
+    width: 30%;
+    display: flex;
+    gap: 0.5rem;
+    color: #4a5568;
+    flex-wrap: wrap;
+    flex-direction: column;
+    row-gap: 1rem;
+}
+
+.property-card-content .features .imgenes{
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+}
+
+.property-card-content .features .imgenes p{
+    font-size: 1rem;
+    font-family: var(--font--parrafo);
+}
+
+.property-card-content .features .imgenes img {
+    width: 60%;
+    height: 60%;
+    object-fit: scale-down;
+}

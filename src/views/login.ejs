@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/img/footer_logo.svg" type="image/x-icon">
+    <link rel="stylesheet" href="/css/style_login.css">
+    <title>Subastas online | login</title>
+</head>
+
+<body>
+    <div class="contenedor">
+        <div class="imagen">
+            <a class="regreso" href="/user/">
+                <img src="/img/regresar.svg" alt="">
+            </a>
+            <img src="/img/imagen_login.svg" alt="">
+        </div>
+        <div class="fondo">
+            <div class="content_form">
+                <h2>Inicia sesión</h2>
+                <form action="/user/login" method="POST" id="loginForm">
+                    <label for="usuario">Usuario*</label>
+                    <input type="text" name="usuario" id="usuario" placeholder="Ingresa tu Usuario" required>
+                    <label for="contraseña">Contraseña*</label>
+                    <input type="password" name="contra" id="contraseña" placeholder="Ingresa tu Contraseña" required>
+                    <button type="submit">Iniciar sesión</button>
+                    <p>
+                        <span>No tienes una cuenta?</span>
+                        <span>
+                            <a href="/user/registro">Sign up</a>
+                        </span>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Incluye SweetAlert2 desde un CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            const data = {
+                usuario: formData.get('usuario'),
+                contra: formData.get('contra')
+            };
+
+            try {
+                const response = await fetch('/user/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Login exitoso',
+                        text: 'bienvenido ' + data.usuario,
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        window.location.href = result.redirect;
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: result.message
+                    });
+                }
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Error al intentar realizar la solicitud'
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
