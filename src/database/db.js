@@ -5,7 +5,7 @@ const conection = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     database: process.env.DB_DATABASE,
-    password: process.env.DB_PASWORD
+    password: process.env.DB_PASSWORD
 });
 
 conection.connect((error) =>{

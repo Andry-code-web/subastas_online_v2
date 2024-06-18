@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Modern+Antiqua&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Scope+One&display=swap');
 
-:root{
+:root {
     --font--banner--semi: url("/fonts/segoeuithis.ttf");
     --font--banner--bool: url("/fonts/segoeuithibd.ttf");
     --font--parrafo: "Space Mono";
@@ -13,13 +13,13 @@
     --color--label: #989898;
 }
 
-*{
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
 
-.contenedor{
+.contenedor {
     width: 100%;
     height: 100vh;
     display: flex;
@@ -27,19 +27,25 @@
     justify-content: center;
 }
 
-.imagen{
+.imagen {
+    height: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 1rem;
     position: relative;
     left: 8%;
 }
 
-.regreso{
+.regreso {
     margin-left: 3rem;
 }
 
-.fondo{
+.imagen_fondo {
+    height: 90%;
+}
+
+.fondo {
     width: 100%;
     height: 100%;
     background-image: url("/img/color_fondo_login.svg");
@@ -48,7 +54,7 @@
     align-items: center;
 }
 
-.content_form{
+.content_form {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -56,27 +62,27 @@
     width: 60%;
 }
 
-.content_form h2{
+.content_form h2 {
     font-family: var(--font--about);
     font-size: 2.5rem;
     font-weight: 800;
     margin-bottom: 2rem;
 }
 
-.content_form form{
+.content_form form {
     width: 50%;
     display: flex;
     flex-direction: column;
 }
 
-.content_form form label{
+.content_form form label {
     font-size: .9rem;
     font-family: var(--font--header);
     color: var(--color--label);
     margin-bottom: .3rem;
 }
 
-.content_form form input{
+.content_form form input {
     width: 100%;
     height: 45px;
     border-radius: 10px;
@@ -85,15 +91,15 @@
     margin-bottom: 1rem;
 }
 
-.content_form form input:focus{
+.content_form form input:focus {
     outline: none;
 }
 
-.content_form form input::placeholder{
+.content_form form input::placeholder {
     color: #acacac;
 }
 
-.content_form form button{
+.content_form form button {
     width: 100%;
     height: 40px;
     background-color: #ED5544;
@@ -104,14 +110,99 @@
     margin-top: 1rem;
 }
 
-.content_form form p{
+.content_form form p {
     margin-top: 1rem;
     text-align: center;
     font-size: .9rem;
 }
 
-.content_form form p span a{
+.content_form form p span a {
     text-decoration: none;
     color: #ED5544;
     font-weight: 800;
+}
+
+
+.subastar {
+    margin-top: .5rem;
+    text-align: center;
+    color: #ED5544;
+    font-family: var(--font--about);
+    font-size: .8rem;
+    text-decoration: none;
+    transition: ease-in-out .3s;
+}
+
+.subastar span {
+    text-decoration: underline;
+    color: #000;
+    transition: ease-in-out .3s;
+}
+
+.subastar:hover {
+    color: var(--color--sub);
+}
+
+.subastar:hover span {
+    color: #ED5544;
+}
+
+.content_contra {
+    position: relative;
+}
+
+.content_contra {
+    position: relative;
+    /* Make the container relative */
+    display: flex;
+    flex-direction: column;
+}
+
+.input-container {
+    position: relative;
+    /* Make this container relative for positioning the button inside it */
+}
+
+#contraseña {
+    width: 100%;
+    /* Make sure the input takes the full width */
+    padding-right: 2.5rem;
+    /* Add padding to make space for the button */
+}
+
+.mostarC {
+    width: auto !important;
+    height: auto !important;
+    position: absolute;
+    right: 1.5rem;
+    top: 40%;
+    transform: translateY(-50%);
+    border: none !important;
+    background: none !important;
+    cursor: pointer;
+    padding: 0 !important;
+    color: #ED5544 !important;
+    margin: 0 !important;
+}
+
+.mostarC i {
+    font-size: 1.1rem;
+}
+
+
+
+/* Animación de deslizamiento desde la izquierda */
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+/* Aplicar animación a la clase .slideInLeft */
+.slideInLeft {
+    animation: slideInLeft 0.5s ease forwards;
 }

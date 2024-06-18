@@ -20,6 +20,7 @@
     "formidable": "^3.5.1",
     "morgan": "^1.10.0",
     "mysql2": "^3.9.7",
+    "nodemailer": "^6.9.13",
     "socket.io": "^4.7.5"
   },
   "devDependencies": {

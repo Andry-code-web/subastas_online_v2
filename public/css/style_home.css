@@ -625,6 +625,28 @@ footer::before{
     width: 70%;
 }
 
+.subastar{
+    color: #ebebeb;
+    font-family: var(--font--about);
+    font-size: .9rem;
+    text-decoration: none;
+    transition: ease-in-out .3s;
+}
+
+.subastar span{
+    text-decoration: underline;
+    color: var(--color--sub);
+    transition: ease-in-out .3s;
+}
+
+.subastar:hover{
+    color: var(--color--sub);
+}
+
+.subastar:hover span{
+    color: #ebebeb;
+}
+
 .redes_footer{
     margin-top: 2rem;
     margin-bottom: 2rem;
