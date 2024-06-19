@@ -1,91 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=BioRhyme:wght@200..800&family=Sedan:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Modern+Antiqua&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Scope+One&display=swap');
+
+:root {
+    --font--banner--semi: url("/fonts/segoeuithibd.ttf");
+    --font--banner--bool: url("/fonts/segoeuithibd.ttf");
+    --font--parrafo: "Space Mono";
+    --font--header: "Sedan";
+    --font--testimoni: "Modern Antiqua";
+    --font--about: "BioRhyme";
+    --font--cont: "Scope One";
+    --bg--botones: #A29060;
+    --color--sub: #C5AC75;
+}
+
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: var(--font--cont);
     background-color: #f7f8fc;
 }
+
 .sidebar {
     background-color: #0056e0;
+    width: 15%;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    bottom: 0;
 }
-.sidebar .nav-link, .sidebar .nav-link:hover {
+
+.logo_title {
+    width: 100%;
+}
+
+.logo_title img {
+    width: 30%;
+}
+
+.logo_title h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 1.5rem;
+    font-family: var(--font--parrafo) !important;
+    font-weight: 600;
+}
+
+.logo p {
+    font-size: .8rem;
+    font-weight: 700;
+    font-family: var(--font--banner--semi) !important;
+    margin-left: 1rem;
+}
+
+.sidebar .nav-link,
+.sidebar .nav-link:hover {
     color: #fff;
 }
+
 .sidebar .nav-link.active {
-    background-color: #004bb5;
+    font-weight: 600;
+    font-family: var(--font--parrafo);
+    transition: all .5s;
 }
+
+.sidebar .nav-link:hover {
+    transform: scale(1.1);
+    background-color: #0056cf;
+    box-shadow: 0px 4px 5px #4a94fc;
+    border-radius: 5px;
+}
+
 .sidebar .user-profile {
     background-color: #0056e0;
     border-top: 1px solid #004bb5;
     padding: 15px;
     color: #fff;
 }
+
 .sidebar .user-profile img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     margin-right: 10px;
 }
+
 .main-content {
-    width: 100%;
-    margin-left: 2rem;
+    margin-left: 15%;
     padding: 20px;
+    width: 85%;
+    height: 100vh;
+    overflow-y: auto;
 }
+
 .card {
     border: none;
     border-radius: 10px;
 }
+
 .card-header {
     background-color: #fff;
     border-bottom: none;
     font-weight: bold;
 }
+
 .stats-card {
     background-color: #fff;
     border-radius: 10px;
     padding: 20px;
 }
+
 .stats-card h6 {
     font-size: 12px;
     color: #b1b1b1;
 }
+
 .stats-card h3 {
     font-weight: bold;
 }
+
 .graph-card {
     background-color: #fff;
     border-radius: 10px;
     padding: 20px;
 }
+
 .data-table thead th {
     font-size: 12px;
     color: #b1b1b1;
 }
+
 .data-table tbody td {
     vertical-align: middle;
 }
+
 .data-table tbody td img {
     width: 40px;
     height: 40px;
     border-radius: 5px;
 }
+
 .data-table tbody .status.pending {
     color: #ffc107;
 }
+
 .data-table tbody .status.active {
     color: #28a745;
 }
+
 .chart-container {
     position: relative;
     height: 300px;
 }
+
 .new-customers-card {
     background-color: #6f42c1;
     color: #fff;
     border-radius: 10px;
     padding: 20px;
 }
-.new-customers-card h6, .new-customers-card h3 {
+
+.new-customers-card h6,
+.new-customers-card h3 {
     color: #fff;
 }
+
 .categories-card {
     background-color: #fff;
     border-radius: 10px;

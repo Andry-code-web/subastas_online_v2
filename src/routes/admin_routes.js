@@ -190,7 +190,6 @@ router.get("/test-session", (req, res) => {
 });
 
 /* FUNCIONE PARA GENERAR CODIGO DE VERIFICACION */
-
 function generateVerificationCode() {
   return Math.floor(1000000000 + Math.random() * 9000000000).toString(); // Genera un número aleatorio de 10 dígitos
 }
@@ -199,7 +198,6 @@ router.get("/recuperar", (req, res) => {
   res.render("recup_contra");
 });
 
-// Endpoint para verificar el correo y enviar el código de verificación
 router.post('/recuperar', (req, res) => {
   const { email } = req.body;
 
@@ -207,7 +205,7 @@ router.post('/recuperar', (req, res) => {
   connection.query(query, [email], (error, results) => {
     if (error) {
       console.error("Error al buscar el administrador general:", error);
-      return res.status(500).send("Error al iniciar sesión");
+      return res.status(500).send("Error al buscar el administrador general");
     }
     if (results.length === 0) {
       return res.status(404).send("Correo electrónico no encontrado");
@@ -218,12 +216,11 @@ router.post('/recuperar', (req, res) => {
     connection.query(updateQuery, [verificationCode, email], (error) => {
       if (error) {
         console.error("Error al actualizar el código de verificación:", error);
-        return res.status(500).send("Error al iniciar sesión");
+        return res.status(500).send("Error al actualizar el código de verificación");
       }
 
-      // Configuración de nodemailer
       const transporter = nodemailer.createTransport({
-        service: 'Gmail', // O el servicio que estés utilizando
+        service: 'Gmail',
         auth: {
           user: 'sebastianandryescalantemendoza@gmail.com',
           pass: 'aqoc cmjx cumo cclf'
@@ -234,7 +231,7 @@ router.post('/recuperar', (req, res) => {
       });
 
       const mailOptions = {
-        from: 'sebastianandryescalantemendoza@gmail.com',
+        from: '73274663@certus.edu.pe',
         to: email,
         subject: 'Código de verificación',
         text: `Tu código de verificación es: ${verificationCode}`
@@ -246,15 +243,14 @@ router.post('/recuperar', (req, res) => {
           return res.status(500).send("Error al enviar el correo");
         }
         res.status(200).send("Correo enviado");
+        console.log("Correo enviado");
       });
     });
   });
 });
 
-
-// Endpoint para validar el código y actualizar la contraseña
 router.post('/validarCodigo', (req, res) => {
-  const { email, code, newPassword } = req.body;
+  const { email, code } = req.body;
 
   const query = "SELECT * FROM admingeneral WHERE correo_electronico = ? AND verification_code = ?";
   connection.query(query, [email, code], (error, results) => {
@@ -266,16 +262,21 @@ router.post('/validarCodigo', (req, res) => {
       return res.status(404).send("Código de verificación incorrecto");
     }
 
-    const updateQuery = "UPDATE admingeneral SET password = ?, verification_code = NULL WHERE correo_electronico = ?";
-    connection.query(updateQuery, [newPassword, email], (error) => {
-      if (error) {
-        console.error("Error al actualizar la contraseña:", error);
-        return res.status(500).send("Error al actualizar la contraseña");
-      }
-      res.status(200).send("Contraseña actualizada");
-    });
+    res.status(200).send("Código de verificación correcto");
   });
 });
 
+router.post('/cambiarContra', (req, res) => {
+  const { email, newPassword } = req.body;
+
+  const updateQuery = "UPDATE admingeneral SET contraseña = ? WHERE correo_electronico = ?";
+  connection.query(updateQuery, [newPassword, email], (error) => {
+    if (error) {
+      console.error("Error al actualizar la contraseña:", error);
+      return res.status(500).send("Error al actualizar la contraseña");
+    }
+    res.status(200).send("Contraseña actualizada");
+  });
+});
 
 module.exports = router;

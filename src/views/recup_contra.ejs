@@ -20,49 +20,35 @@
     <div class="d-flex justify-content-center">
         <div class="content d-flex flex-column align-items-center">
             <h2 class="mb-4">Cambiar contraseña</h2>
-            <form action="/admin/recuperar" method="post" class="d-flex flex-column align-items-center"
-                id="recoverForm">
-                <div class="inputs mb-3">
-                    <input type="email" class="form-control" name="email" id="exampleInputEmail1" placeholder=" "
-                        required>
-                    <label for="exampleInputEmail1" class="form-control-placeholder">Correo electrónico</label>
+            <form action="/admin/recuperar" method="post" class="d-flex flex-column align-items-center" style="width: 350px;">
+                <div class="mb-3 w-100">
+                  <label for="exampleInputEmail1" class="form-label">Correo Electrónico</label>
+                  <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Correo">
                 </div>
-
-                <div class="key mb-4 mt-3 row justify-content-center text-center" id="codeSection"
-                    style="display: none;">
-                    <p>Ingrese el código</p>
-                    <input type="number" class="keys col" name="code1" required min="0" max="99">
-                    <input type="number" class="keys col" name="code2" required min="0" max="99">
-                    <input type="number" class="keys col" name="code3" required min="0" max="99">
-                    <input type="number" class="keys col" name="code4" required min="0" max="99">
-                    <input type="number" class="keys col" name="code5" required min="0" max="99">
+                <button type="button" id="sendEmailBtn" class="btn btn-primary mb-3">Enviar correo</button>
+                <div id="codeSection" style="display: none;">
+                  <h3>Ingresa el código</h3>
+                  <div class="code-inputs d-flex justify-content-between mb-3">
+                    <input type="text" class="form-control keys" maxlength="2" size="2">
+                    <input type="text" class="form-control keys" maxlength="2" size="2">
+                    <input type="text" class="form-control keys" maxlength="2" size="2">
+                    <input type="text" class="form-control keys" maxlength="2" size="2">
+                    <input type="text" class="form-control keys" maxlength="2" size="2">
+                  </div>
+                  <button type="button" id="validateCodeBtn" class="btn btn-primary mb-3" style="display: none;">Validar código</button>
                 </div>
-
-                <div class="new_contra mb-1 d-flex flex-column active_new_contra">
-                    <p>Ingrese su nueva contraseña</p>
-                    <div class="inputs mb-1">
-                        <input type="password" class="form-control" name="newPassword" id="exampleInputContraseña"
-                            placeholder=" " required>
-                        <label for="exampleInputContraseña" class="form-control-placeholder">Nueva contraseña</label>
-                    </div>
-                    <div class="inputs">
-                        <input type="password" class="form-control" name="confirmPassword"
-                            id="exampleInputConfirmContraseña" placeholder=" " required>
-                        <label for="exampleInputConfirmContraseña" class="form-control-placeholder">Confirme la nueva
-                            contraseña</label>
-                    </div>
+                <div id="passwordSection" style="display: none;">
+                  <div class="mb-3 w-100">
+                    <label for="exampleInputContraseña" class="form-label">Nueva Contraseña</label>
+                    <input type="password" class="form-control" id="exampleInputContraseña" placeholder="Contraseña">
+                  </div>
+                  <div class="mb-3 w-100">
+                    <label for="exampleInputConfirmContraseña" class="form-label">Confirmar Contraseña</label>
+                    <input type="password" class="form-control" id="exampleInputConfirmContraseña" placeholder="Confirmar Contraseña">
+                  </div>
+                  <button type="button" id="changePasswordBtn" class="btn btn-primary">Cambiar contraseña</button>
                 </div>
-
-                <button type="button" id="sendEmailBtn" class="btn btn-primary">Enviar correo</button>
-                <button type="button" id="validateCodeBtn" class="btn btn-primary active_key">Validar código</button>
-                <button type="button" id="changePasswordBtn" class="btn btn-primary active_new_contra">Cambiar
-                    contraseña</button>
-
-                <hr>
-
-                <a class="subastas" href="/user/subasta">Únete a una subasta</a>
-                <a class="inicioSesion mt-2" href="/admin/loginAdminG">Iniciar sesión</a>
-            </form>
+              </form>
         </div>
     </div>
 
