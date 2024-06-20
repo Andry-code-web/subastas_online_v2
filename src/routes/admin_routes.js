@@ -66,6 +66,44 @@ router.get("/adminG", (req, res) => {
   res.render("adminGeneral", { nombreUsuario });
 });
 
+router.get('/loginAdminV', (req, res) => {
+  res.render('login_adminV')
+});
+
+router.post('/loginAdminV', (req, res) => {
+  const { correo, contra } = req.body;
+
+  const query = "SELECT * FROM adminvendedor WHERE correo_electronico = ?";
+  connection.query(query, [correo], async (error, results) => {
+    if (error) {
+      console.error("Error al buscar el admin vendedor:", error);
+      return res.status(500).send("Error al iniciar sesión");
+    }
+
+    if (results.length === 0) {
+      return res.status(401).send("Correo electrónico no registrado");
+    }
+
+    const adminVendedor = results[0];
+
+    const isPasswordValid = await bcrypt.compare(contra, adminVendedor.contraseña);
+    if (!isPasswordValid) {
+      return res.status(401).send("Contraseña incorrecta");
+    }
+
+    req.session.adminVendedorId = adminVendedor.id;
+    req.session.adminVendedorNombreUsuario = adminVendedor.nombre_usuario;
+
+    req.session.save((err) => {
+      if (err) {
+        console.error("Error al guardar la sesión:", err);
+        return res.status(500).send("Error al iniciar sesión");
+      }
+      res.redirect("/admin/adminV");
+    });
+  });
+});
+
 router.post('/adminV', (req, res) => {
 
 });
@@ -178,6 +216,34 @@ router.post("/subir-inmueble", (req, res) => {
       }
     });
   });
+});
+
+// Método POST para crear un nuevo admin vendedor
+router.post("/crear-admin-vendedor", async (req, res) => {
+  const { nombre_usuario, contraseña } = req.body;
+  const id_admin_general = req.session.adminGeneralId;
+
+  if (!id_admin_general) {
+    return res.status(401).send("Debe iniciar sesión como administrador general para crear un administrador vendedor.");
+  }
+
+  try {
+    // Encriptar la contraseña
+    const hashedPassword = await bcrypt.hash(contraseña, 10);
+
+    const query = "INSERT INTO adminvendedor (id_admin_general, nombre_usuario, contraseña) VALUES (?, ?, ?)";
+
+    connection.query(query, [id_admin_general, nombre_usuario, hashedPassword], (error, results) => {
+      if (error) {
+        console.error("Error al crear el admin vendedor:", error);
+        return res.status(500).send("Error al crear el admin vendedor");
+      }
+      res.redirect("/ruta-a-la-que-quieres-redirigir-despues-de-crear");
+    });
+  } catch (error) {
+    console.error("Error al encriptar la contraseña:", error);
+    res.status(500).send("Error al crear el admin vendedor");
+  }
 });
 
 router.get("/test-session", (req, res) => {
