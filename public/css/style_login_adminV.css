@@ -67,7 +67,7 @@
     font-size: 2rem;
 }
 
-.content_form form input[name="correo"] {
+.content_form form input[name="usuario"] {
     width: 100%;
     height: 40px;
     border: none;
@@ -76,7 +76,7 @@
     box-shadow: 3px 5px 15px rgba(63, 63, 63, 0.411);
 }
 
-.content_form form input[name="correo"]:focus {
+.content_form form input[name="usuario"]:focus {
     outline: none;
 }
 

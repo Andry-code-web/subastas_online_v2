@@ -171,3 +171,25 @@ body {
     border-radius: 10px;
     padding: 20px;
 }
+
+.inputs {
+    width: auto;
+    height: auto;
+    position: relative;
+}
+
+.inputs button{
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mostarC{
+    padding: 0 !important;
+    position: absolute;
+    right: 5%;
+    top: 60%;
+    transform:  translateY(-50%);
+    cursor: pointer;
+}

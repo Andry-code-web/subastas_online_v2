@@ -1,13 +1,23 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
-const path = require("path");
-const fs = require("fs");
-const formidable = require("formidable");
 const crypto = require('crypto');
+const multer = require('multer');
+const path = require('path');
 const nodemailer = require('nodemailer');
 const connection = require("../database/db");
 
 const router = express.Router();
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+  }
+});
+
+const upload = multer({ storage: storage });
 
 router.get("/loginAdminG", (req, res) => {
   res.render("login_adminG");
@@ -71,10 +81,14 @@ router.get('/loginAdminV', (req, res) => {
 });
 
 router.post('/loginAdminV', (req, res) => {
-  const { correo, contra } = req.body;
+  const { usuario, contraseña } = req.body;
 
-  const query = "SELECT * FROM adminvendedor WHERE correo_electronico = ?";
-  connection.query(query, [correo], async (error, results) => {
+  if (!contraseña) {
+    return res.status(400).send("Contraseña no proporcionada");
+  }
+
+  const query = "SELECT * FROM adminvendedor WHERE nombre_usuario = ?";
+  connection.query(query, [usuario], async (error, results) => {
     if (error) {
       console.error("Error al buscar el admin vendedor:", error);
       return res.status(500).send("Error al iniciar sesión");
@@ -86,26 +100,42 @@ router.post('/loginAdminV', (req, res) => {
 
     const adminVendedor = results[0];
 
-    const isPasswordValid = await bcrypt.compare(contra, adminVendedor.contraseña);
-    if (!isPasswordValid) {
-      return res.status(401).send("Contraseña incorrecta");
+    if (!adminVendedor.contraseña) {
+      console.error("Contraseña no encontrada en la base de datos para el usuario:", usuario);
+      return res.status(500).send("Error al iniciar sesión");
     }
 
-    req.session.adminVendedorId = adminVendedor.id;
-    req.session.adminVendedorNombreUsuario = adminVendedor.nombre_usuario;
-
-    req.session.save((err) => {
-      if (err) {
-        console.error("Error al guardar la sesión:", err);
-        return res.status(500).send("Error al iniciar sesión");
+    try {
+      const isPasswordValid = await bcrypt.compare(contraseña, adminVendedor.contraseña);
+      if (!isPasswordValid) {
+        return res.status(401).send("Contraseña incorrecta");
       }
-      res.redirect("/admin/adminV");
-    });
+
+      req.session.adminVendedorId = adminVendedor.id;
+      req.session.adminVendedorNombreUsuario = adminVendedor.nombre_usuario;
+
+      req.session.save((err) => {
+        if (err) {
+          console.error("Error al guardar la sesión:", err);
+          return res.status(500).send("Error al iniciar sesión");
+        }
+        res.redirect("/admin/adminV");
+      });
+    } catch (compareError) {
+      console.error("Error al comparar la contraseña:", compareError);
+      return res.status(500).send("Error al iniciar sesión");
+    }
   });
 });
 
-router.post('/adminV', (req, res) => {
-
+router.get("/logoutAdminV", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.log("Error al cerrar sesión:", err);
+      return res.status(500).send("Error al cerrar sesión");
+    }
+    res.redirect("/admin/loginAdminV"); // Redirige al formulario de inicio de sesión del admin vendedor
+  });
 });
 
 router.get("/adminV", (req, res) => {
@@ -141,80 +171,46 @@ router.post("/adminV", (req, res) => {
   });
 });
 
-router.post("/subir-inmueble", (req, res) => {
-  const form = new formidable.IncomingForm();
+router.post("/subir-inmueble", upload.array('images', 4), (req, res) => {
+  const { nombre_propiedad, descripcion, categoria, direccion, precio_base, N_banos, N_cuartos, N_cocina, N_cocheras, patio } = req.body;
+  const imagenes = req.files;
 
-  // Especificar el directorio de carga de archivos
-  form.uploadDir = path.join(__dirname, "../uploads");
-  form.keepExtensions = true;
+  // Obtener el ID del administrador vendedor desde la sesión
+  const id_admin_vendedor = req.session.adminVendedorId;
 
-  form.parse(req, async (err, fields, files) => {
+  if (!id_admin_vendedor) {
+    return res.status(401).send("Debe iniciar sesión como administrador vendedor para subir un inmueble.");
+  }
+
+  console.log(req.body);
+
+  const insertQuery = `INSERT INTO subastas (nombre_propiedad, descripcion, categoria, direccion, precio_base, N_baños, N_cuartos, N_cocina, N_cocheras, patio, id_admin_vendedor) 
+                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  const values = [nombre_propiedad, descripcion, categoria, direccion, precio_base, N_banos, N_cuartos, N_cocina, N_cocheras, patio, id_admin_vendedor];
+
+  connection.query(insertQuery, values, (err, result) => {
     if (err) {
-      return res.status(500).send("Error al procesar la subida de archivos");
-    }
+      console.error("Error al insertar inmueble:", err);
+      res.status(500).send("Error al insertar inmueble");
+    } else {
+      const id_subasta = result.insertId;
 
-    // Procesar campos y archivos recibidos
-    const {
-      nombre_propiedad,
-      categoria,
-      direccion,
-      precio_base,
-      N_baños,
-      N_cuartos,
-      N_cocina,
-      N_cocheras,
-      patio,
-    } = fields;
+      if (imagenes && imagenes.length > 0) {
+        let insertImagenesQuery = 'INSERT INTO imagenes_propiedad (id_subasta, url_imagen) VALUES ?';
+        let imagenesData = imagenes.map(img => [id_subasta, img.filename]); // Usamos img.filename para obtener el nombre del archivo
 
-    // Guardar información de la propiedad en la base de datos
-    const subastaQuery = `
-          INSERT INTO subastaonline.subastas (nombre_propiedad, categoria, direccion, precio_base, N_baños, N_cuartos, N_cocina, N_cocheras, patio)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `;
-
-    const subastaValues = [
-      nombre_propiedad,
-      categoria,
-      direccion,
-      precio_base,
-      N_baños,
-      N_cuartos,
-      N_cocina,
-      N_cocheras,
-      patio,
-    ];
-
-    connection.query(subastaQuery, subastaValues, (err, result) => {
-      if (err) {
-        // Si hay un error al insertar en la base de datos, eliminar los archivos subidos (opcional)
-        if (files.imagenes) {
-          fs.unlinkSync(files.imagenes.path); // Elimina el archivo
-        }
-        return res.status(500).send(err);
-      }
-
-      const subastaId = result.insertId;
-
-      // Procesar archivos de imágenes subidos
-      if (files.imagenes) {
-        const imagenQuery = `
-                  INSERT INTO subastaonline.imagenes_propiedad (id_subasta, url_imagen)
-                  VALUES (?, ?)
-              `;
-        const imagenValues = [subastaId, files.imagenes.path];
-
-        connection.query(imagenQuery, imagenValues, (err, result) => {
+        connection.query(insertImagenesQuery, [imagenesData], (err, results) => {
           if (err) {
-            // Si hay un error al insertar la imagen en la base de datos, eliminar el archivo subido
-            fs.unlinkSync(files.imagenes.path); // Elimina el archivo
-            return res.status(500).send(err);
+            console.error("Error al insertar imágenes:", err);
+            res.status(500).send("Error al insertar imágenes");
+          } else {
+            res.status(200).send("Inmueble y imágenes subidos correctamente");
           }
-          res.send("Inmueble y su imagen subidos con éxito");
         });
       } else {
-        res.status(400).send("No se han subido archivos");
+        res.status(200).send("Inmueble subido correctamente (sin imágenes)");
       }
-    });
+    }
   });
 });
 
@@ -238,7 +234,7 @@ router.post("/crear-admin-vendedor", async (req, res) => {
         console.error("Error al crear el admin vendedor:", error);
         return res.status(500).send("Error al crear el admin vendedor");
       }
-      res.redirect("/ruta-a-la-que-quieres-redirigir-despues-de-crear");
+      res.redirect("/admin/loginAdminV");
     });
   } catch (error) {
     console.error("Error al encriptar la contraseña:", error);

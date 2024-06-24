@@ -33,10 +33,14 @@
       <!-- Perfil del usuario -->
       <div class="user-profile mt-auto d-flex align-items-center">
         <img src="https://placehold.co/40x40" alt="Profile Picture" class="rounded-circle me-2">
-        <div>
-          <strong>Admin Vendedor</strong><br>
-          <small>Vendedor</small>
+        <div class="d-flex flex-column">
+          <div>
+            <strong>Admin Vendedor</strong><br>
+            <small>Vendedor</small>
+          </div>
+          <a href="/admin/logoutAdminV" class="btn btn-danger btn-sm ms-2">Cerrar Sesión</a>
         </div>
+        
       </div>
     </div>
     <!-- Contenido principal -->
@@ -114,13 +118,11 @@
                         <label for="precio">Precio</label>
                         <input type="number" class="form-control" id="precio" name="precio_base" required>
                       </div>
-
                     </div>
                     <div class="col-md-6">
-
                       <div class="mb-3">
-                        <label for="N_baños">Número de Baños</label>
-                        <input type="number" class="form-control" id="N_baños" name="N_baños" required>
+                        <label for="N_banos">Número de Baños</label>
+                        <input type="number" class="form-control" id="N_banos" name="N_banos" required>
                       </div>
                       <div class="mb-3">
                         <label for="N_cuartos">Número de Cuartos</label>
@@ -144,13 +146,21 @@
                     </div>
                   </div>
                   <div class="mb-3">
-                    <label for="imagenes" class="form-label">Imágenes</label>
-                    <input type="file" class="form-control" id="imagenes" name="imagenes[]" multiple accept="image/*" required>
-                </div>
+                    <div class="row">
+                      <label for="imagenes" class="form-label">Imágenes</label>
+                      <input type="file" name="images" multiple>
+                    </div>
+                  </div>
+
                   <button type="submit" class="btn btn-primary">Subir Inmueble</button>
                 </div>
               </div>
             </form>
+            <!-- <form action="/admin/upload" method="post" enctype="multipart/form-data">
+              <input type="hidden" name="id_subasta" value="1"> 
+              <input type="file" name="images" multiple>
+              <button type="submit">Upload</button>
+            </form> -->
           </div>
         </div>
       </div>

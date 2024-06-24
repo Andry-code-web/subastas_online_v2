@@ -1,8 +1,18 @@
 const express = require('express');
 const session = require('express-session');
 const morgan = require('morgan');
+const multer = require('multer');
+const bodyParser = require('body-parser');
+const fs = require('fs')
 const path = require('path');
 require('dotenv').config();
+
+// Crear el directorio 'uploads' si no existe
+const uploadsDir = path.join(__dirname, 'uploads');
+
+if (!fs.existsSync(uploadsDir)){
+    fs.mkdirSync(uploadsDir);
+}
 
 // Base de datos
 const conection = require('./src/database/db');
@@ -13,6 +23,7 @@ const port = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false, limit: '10mb', parameterLimit: 5000000 }));
 app.use(express.json());
 app.use(morgan('dev'));
 
@@ -22,8 +33,8 @@ app.use(session({
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
-    cookie:{
-        maxAge: 1000 * 60 * 60 * 24 
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24
     }
 }))
 
