@@ -5,6 +5,7 @@ const multer = require('multer');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const connection = require("../database/db");
+const { error } = require("console");
 
 const router = express.Router();
 
@@ -16,9 +17,9 @@ const storage = multer.diskStorage({
     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
   }
 });
-
 const upload = multer({ storage: storage });
 
+/* ADMIN GENERAL */
 router.get("/loginAdminG", (req, res) => {
   res.render("login_adminG");
 });
@@ -73,19 +74,93 @@ router.get("/adminG", (req, res) => {
   }
 
   const nombreUsuario = req.session.adminGeneralNombreUsuario;
-  res.render("adminGeneral", { nombreUsuario });
+
+  const queryUsuarios = 'SELECT * FROM subastaonline.usuarios';
+  const queryAdminVendedores = 'SELECT * FROM subastaonline.adminvendedor';
+
+  // Ejecutar ambas consultas en paralelo usando Promise.all
+  Promise.all([
+    new Promise((resolve, reject) => {
+      connection.query(queryUsuarios, (error, resultadosUsuarios) => {
+        if (error) {
+          console.error("Error al obtener los usuarios: ", error);
+          reject(error);
+        } else {
+          resolve(resultadosUsuarios);
+        }
+      });
+    }),
+    new Promise((resolve, reject) => {
+      connection.query(queryAdminVendedores, (error, resultadosAdminVendedores) => {
+        if (error) {
+          console.error("Error al obtener los admin vendedores: ", error);
+          reject(error);
+        } else {
+          resolve(resultadosAdminVendedores);
+        }
+      });
+    })
+  ])
+    .then(([usuarios, adminVendedores]) => {
+      const numUsuarios = usuarios.length;
+      const numAdminVendedores = adminVendedores.length;
+
+      res.render("adminGeneral", {
+        nombreUsuario,
+        usuarios,
+        numUsuarios,
+        adminVendedores,
+        numAdminVendedores
+      });
+    })
+    .catch((error) => {
+      console.error("Error al obtener datos para la vista adminGeneral: ", error);
+      res.status(500).send("Error al obtener datos para la vista adminGeneral");
+    });
+});
+// Método POST para crear un nuevo admin vendedor
+router.post("/crear-admin-vendedor", async (req, res) => {
+  const { nombre_usuario, contraseña } = req.body;
+  const id_admin_general = req.session.adminGeneralId;
+
+  if (!id_admin_general) {
+    return res.status(401).send("Debe iniciar sesión como administrador general para crear un administrador vendedor.");
+  }
+
+  try {
+    // Encriptar la contraseña
+    const hashedPassword = await bcrypt.hash(contraseña, 10);
+
+    const query = "INSERT INTO adminvendedor (id_admin_general, nombre_usuario, contraseña) VALUES (?, ?, ?)";
+
+    connection.query(query, [id_admin_general, nombre_usuario, hashedPassword], (error, results) => {
+      if (error) {
+        console.error("Error al crear el admin vendedor:", error);
+        return res.status(500).send("Error al crear el admin vendedor");
+      }
+      res.redirect("/admin/loginAdminV");
+    });
+  } catch (error) {
+    console.error("Error al encriptar la contraseña:", error);
+    res.status(500).send("Error al crear el admin vendedor");
+  }
 });
 
+/* ADMIN VENDEDOR */
+// Middleware para verificar si el admin vendedor ha iniciado sesión
+function isAuthenticatedAdminV(req, res, next) {
+  if (req.session.adminVendedorId) {
+    return next();
+  }
+  res.redirect('/admin/loginAdminV');
+}
+
 router.get('/loginAdminV', (req, res) => {
-  res.render('login_adminV')
+  res.render('login_adminV');
 });
 
 router.post('/loginAdminV', (req, res) => {
   const { usuario, contraseña } = req.body;
-
-  if (!contraseña) {
-    return res.status(400).send("Contraseña no proporcionada");
-  }
 
   const query = "SELECT * FROM adminvendedor WHERE nombre_usuario = ?";
   connection.query(query, [usuario], async (error, results) => {
@@ -95,36 +170,26 @@ router.post('/loginAdminV', (req, res) => {
     }
 
     if (results.length === 0) {
-      return res.status(401).send("Correo electrónico no registrado");
+      return res.status(401).send("Usuario no registrado");
     }
 
     const adminVendedor = results[0];
 
-    if (!adminVendedor.contraseña) {
-      console.error("Contraseña no encontrada en la base de datos para el usuario:", usuario);
-      return res.status(500).send("Error al iniciar sesión");
+    const isPasswordValid = await bcrypt.compare(contraseña, adminVendedor.contraseña);
+    if (!isPasswordValid) {
+      return res.status(401).send("Contraseña incorrecta");
     }
 
-    try {
-      const isPasswordValid = await bcrypt.compare(contraseña, adminVendedor.contraseña);
-      if (!isPasswordValid) {
-        return res.status(401).send("Contraseña incorrecta");
+    req.session.adminVendedorId = adminVendedor.id;
+    req.session.adminVendedorNombreUsuario = adminVendedor.nombre_usuario;
+
+    req.session.save((err) => {
+      if (err) {
+        console.error("Error al guardar la sesión:", err);
+        return res.status(500).send("Error al iniciar sesión");
       }
-
-      req.session.adminVendedorId = adminVendedor.id;
-      req.session.adminVendedorNombreUsuario = adminVendedor.nombre_usuario;
-
-      req.session.save((err) => {
-        if (err) {
-          console.error("Error al guardar la sesión:", err);
-          return res.status(500).send("Error al iniciar sesión");
-        }
-        res.redirect("/admin/adminV");
-      });
-    } catch (compareError) {
-      console.error("Error al comparar la contraseña:", compareError);
-      return res.status(500).send("Error al iniciar sesión");
-    }
+      res.redirect("/admin/adminV");
+    });
   });
 });
 
@@ -132,45 +197,21 @@ router.get("/logoutAdminV", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       console.log("Error al cerrar sesión:", err);
-      return res.status(500).send("Error al cerrar sesión");
     }
     res.redirect("/admin/loginAdminV"); // Redirige al formulario de inicio de sesión del admin vendedor
   });
 });
+// Ruta protegida que requiere autenticación de admin vendedor
+router.get("/adminV", isAuthenticatedAdminV, (req, res) => {
+  if (!req.session.adminVendedorNombreUsuario) {
+    return res.redirect("/admin/loginAdminV");
+  }
 
-router.get("/adminV", (req, res) => {
-  res.render("adminVendedor");
+  const nombreUsuario = req.session.adminVendedorNombreUsuario;
+  res.render("adminVendedor", { nombreUsuario });
 });
 
-router.post("/adminV", (req, res) => {
-  const { nombre_usuario, contraseña } = req.body;
-  const query = "SELECT * FROM adminVendedor WHERE nombre_usuario = ?";
-
-  connection.query(query, [nombre_usuario], async (error, results) => {
-    if (error) {
-      console.error("Error al buscar el admin vendedor:", error);
-      return res.status(500).send("Error al iniciar sesión");
-    }
-
-    if (results.length === 0) {
-      return res.status(401).send("Usuario no encontrado");
-    }
-
-    const adminVendedor = results[0];
-
-    const isPasswordValid = await bcrypt.compare(
-      contraseña,
-      adminVendedor.contraseña
-    );
-    if (!isPasswordValid) {
-      return res.status(401).send("Contraseña incorrecta");
-    }
-
-    req.session.adminVendedorId = adminVendedor.id;
-    res.redirect("/adminV");
-  });
-});
-
+//Subir una subasta
 router.post("/subir-inmueble", upload.array('images', 4), (req, res) => {
   const { nombre_propiedad, descripcion, categoria, direccion, precio_base, N_banos, N_cuartos, N_cocina, N_cocheras, patio } = req.body;
   const imagenes = req.files;
@@ -214,44 +255,22 @@ router.post("/subir-inmueble", upload.array('images', 4), (req, res) => {
   });
 });
 
-// Método POST para crear un nuevo admin vendedor
-router.post("/crear-admin-vendedor", async (req, res) => {
-  const { nombre_usuario, contraseña } = req.body;
-  const id_admin_general = req.session.adminGeneralId;
-
-  if (!id_admin_general) {
-    return res.status(401).send("Debe iniciar sesión como administrador general para crear un administrador vendedor.");
-  }
-
-  try {
-    // Encriptar la contraseña
-    const hashedPassword = await bcrypt.hash(contraseña, 10);
-
-    const query = "INSERT INTO adminvendedor (id_admin_general, nombre_usuario, contraseña) VALUES (?, ?, ?)";
-
-    connection.query(query, [id_admin_general, nombre_usuario, hashedPassword], (error, results) => {
-      if (error) {
-        console.error("Error al crear el admin vendedor:", error);
-        return res.status(500).send("Error al crear el admin vendedor");
-      }
-      res.redirect("/admin/loginAdminV");
-    });
-  } catch (error) {
-    console.error("Error al encriptar la contraseña:", error);
-    res.status(500).send("Error al crear el admin vendedor");
-  }
-});
-
+/* TEST-SESIONS */
 router.get("/test-session", (req, res) => {
-  const adminGeneralId = req.session.adminGeneralId;
-  const adminVendedorId = req.session.adminVendedorId;
+  const adminGeneralId = req.session.adminGeneralId || "no hay admin general";
+  const adminVendedorId = req.session.adminVendedorId || "no hay admin vendedor";
 
-  res.send(
+  res.json({
+    adminGeneralId,
+    adminVendedorId,
+  });
+  /* res.send(
     `ID del admin general: ${adminGeneralId}, ID del admin vendedor: ${adminVendedorId}`
-  );
+  ); */
 });
 
-/* FUNCIONE PARA GENERAR CODIGO DE VERIFICACION */
+/* VALIDAR CODIGO DE SEGURIDAD */
+//funcion par generar codigo de verificacion
 function generateVerificationCode() {
   return Math.floor(1000000000 + Math.random() * 9000000000).toString(); // Genera un número aleatorio de 10 dígitos
 }

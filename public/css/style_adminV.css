@@ -149,6 +149,10 @@ body {
     color: #28a745;
 }
 
+.acciones a{
+    text-decoration: none;
+}
+
 .chart-container {
     position: relative;
     height: 300px;
