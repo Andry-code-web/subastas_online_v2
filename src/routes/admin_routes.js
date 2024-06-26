@@ -1,11 +1,10 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
-const crypto = require('crypto');
+/* const crypto = require('crypto'); */
 const multer = require('multer');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const connection = require("../database/db");
-const { error } = require("console");
 
 const router = express.Router();
 
@@ -18,6 +17,7 @@ const storage = multer.diskStorage({
   }
 });
 const upload = multer({ storage: storage });
+
 
 /* ADMIN GENERAL */
 router.get("/loginAdminG", (req, res) => {
@@ -77,8 +77,8 @@ router.get("/adminG", (req, res) => {
 
   const queryUsuarios = 'SELECT * FROM subastaonline.usuarios';
   const queryAdminVendedores = 'SELECT * FROM subastaonline.adminvendedor';
+  const querySubastas = 'SELECT * FROM subastaonline.subastas';
 
-  // Ejecutar ambas consultas en paralelo usando Promise.all
   Promise.all([
     new Promise((resolve, reject) => {
       connection.query(queryUsuarios, (error, resultadosUsuarios) => {
@@ -96,28 +96,49 @@ router.get("/adminG", (req, res) => {
           console.error("Error al obtener los admin vendedores: ", error);
           reject(error);
         } else {
-          resolve(resultadosAdminVendedores);
+          // Añadir estado "activo" basado en la sesión
+          const adminVendedoresConEstado = resultadosAdminVendedores.map(adminVendedor => {
+            return {
+              ...adminVendedor,
+              activo: adminVendedor.id === req.session.adminVendedorId && req.session.adminVendedorActivo
+            };
+          });
+          resolve(adminVendedoresConEstado);
+        }
+      });
+    }),
+    new Promise((resolve, reject) =>{
+      connection.query(querySubastas, (error, resultadoSubastas) => {
+        if (error) {
+          console.error("Error al obtener los datos de subasta", error);
+          reject(error);
+        } else {
+          resolve(resultadoSubastas);
         }
       });
     })
   ])
-    .then(([usuarios, adminVendedores]) => {
-      const numUsuarios = usuarios.length;
-      const numAdminVendedores = adminVendedores.length;
+  .then(([usuarios, adminVendedores, subastas]) => {
+    const numUsuarios = usuarios.length;
+    const numAdminVendedores = adminVendedores.length;
+    const numSubastas = subastas.length;
 
-      res.render("adminGeneral", {
-        nombreUsuario,
-        usuarios,
-        numUsuarios,
-        adminVendedores,
-        numAdminVendedores
-      });
-    })
-    .catch((error) => {
-      console.error("Error al obtener datos para la vista adminGeneral: ", error);
-      res.status(500).send("Error al obtener datos para la vista adminGeneral");
+    res.render("adminGeneral", {
+      nombreUsuario,
+      usuarios,
+      numUsuarios,
+      adminVendedores,
+      numAdminVendedores,
+      subastas,
+      numSubastas
     });
+  })
+  .catch((error) => {
+    console.error("Error al obtener datos para la vista adminGeneral: ", error);
+    res.status(500).send("Error al obtener datos para la vista adminGeneral");
+  });
 });
+
 // Método POST para crear un nuevo admin vendedor
 router.post("/crear-admin-vendedor", async (req, res) => {
   const { nombre_usuario, contraseña } = req.body;
@@ -146,6 +167,56 @@ router.post("/crear-admin-vendedor", async (req, res) => {
   }
 });
 
+//EDITAR EL USUARIO
+router.get('/editarUsuario/:id', (req, res) =>{
+  const userId = req.params.id;
+
+  const query = 'SELECT * FROM subastaonline.usuarios WHERE id = ?';
+  connection.query(query, [userId], (error, result) => {
+    if (error) {
+      console.error("Error al obtener el usuario para editar: ", error);
+      return res.status(500).send("Error el usuario para editar");
+    }
+
+    if (result.length === 0) {
+      return res.status(404).send("Usuario no encontrado");
+    }
+
+    const usuario = result[0];
+    res.render('editarUsuario', { usuario });
+  });
+});
+//prosesar la actualizacion de usuario
+router.post('/editarUsuario/:id', (req, res) => {
+  const userId = req.params.id;
+  const { nombre, apellidos, dni, correo_electronico } = req.body;
+
+  const query = 'UPDATE usuarios SET nombre = ?, apellidos = ?, dni = ?, correo_electronico = ? WHERE id = ?';
+  connection.query(query, [nombre, apellidos, dni, correo_electronico, userId], (error, result) => {
+    if (error) {
+      console.error('Error al actualizar el usuario', error);
+      return res.status(500).send('Error al actualizar el usuario');
+    }
+    res.redirect('/admin/adminG');
+  })
+});
+
+// Ruta para eliminar usuario
+router.delete('/eliminarUsuario/:id', (req, res) => {
+  const userId = req.params.id;
+
+  // Lógica para eliminar usuario en la base de datos
+  const query = 'DELETE FROM usuarios WHERE id = ?';
+  connection.query(query, [userId], (error, result) => {
+      if (error) {
+          console.error('Error al eliminar el usuario', error);
+          return res.status(500).send('Error al eliminar el usuario');
+      }
+      res.sendStatus(200); // Enviar una respuesta de éxito
+  });
+});
+
+
 /* ADMIN VENDEDOR */
 // Middleware para verificar si el admin vendedor ha iniciado sesión
 function isAuthenticatedAdminV(req, res, next) {
@@ -162,6 +233,10 @@ router.get('/loginAdminV', (req, res) => {
 router.post('/loginAdminV', (req, res) => {
   const { usuario, contraseña } = req.body;
 
+  if (!contraseña) {
+    return res.status(400).send("Contraseña no proporcionada");
+  }
+
   const query = "SELECT * FROM adminvendedor WHERE nombre_usuario = ?";
   connection.query(query, [usuario], async (error, results) => {
     if (error) {
@@ -175,32 +250,52 @@ router.post('/loginAdminV', (req, res) => {
 
     const adminVendedor = results[0];
 
-    const isPasswordValid = await bcrypt.compare(contraseña, adminVendedor.contraseña);
-    if (!isPasswordValid) {
-      return res.status(401).send("Contraseña incorrecta");
+    if (!adminVendedor.contraseña) {
+      console.error("Contraseña no encontrada en la base de datos para el usuario:", usuario);
+      return res.status(500).send("Error al iniciar sesión");
     }
 
-    req.session.adminVendedorId = adminVendedor.id;
-    req.session.adminVendedorNombreUsuario = adminVendedor.nombre_usuario;
-
-    req.session.save((err) => {
-      if (err) {
-        console.error("Error al guardar la sesión:", err);
-        return res.status(500).send("Error al iniciar sesión");
+    try {
+      const isPasswordValid = await bcrypt.compare(contraseña, adminVendedor.contraseña);
+      if (!isPasswordValid) {
+        return res.status(401).send("Contraseña incorrecta");
       }
-      res.redirect("/admin/adminV");
-    });
+
+      req.session.adminVendedorId = adminVendedor.id;
+      req.session.adminVendedorNombreUsuario = adminVendedor.nombre_usuario;
+      req.session.adminVendedorActivo = true; // Establecer como activo
+
+      req.session.save((err) => {
+        if (err) {
+          console.error("Error al guardar la sesión:", err);
+          return res.status(500).send("Error al iniciar sesión");
+        }
+        res.redirect("/admin/adminV");
+      });
+    } catch (compareError) {
+      console.error("Error al comparar la contraseña:", compareError);
+      return res.status(500).send("Error al iniciar sesión");
+    }
   });
 });
 
 router.get("/logoutAdminV", (req, res) => {
-  req.session.destroy((err) => {
+  req.session.adminVendedorActivo = false; // Establecer como inactivo
+  // Elimina solo las propiedades relacionadas con adminVendedor
+  delete req.session.adminVendedorId;
+  delete req.session.adminVendedorNombreUsuario;
+
+  // Si también tienes que eliminar otras propiedades relacionadas con adminVendedor, hazlo aquí
+  req.session.save((err) => {
     if (err) {
-      console.log("Error al cerrar sesión:", err);
+      console.log("Error al guardar la sesión:", err);
+      return res.status(500).send("Error al cerrar sesión");
     }
     res.redirect("/admin/loginAdminV"); // Redirige al formulario de inicio de sesión del admin vendedor
   });
 });
+
+
 // Ruta protegida que requiere autenticación de admin vendedor
 router.get("/adminV", isAuthenticatedAdminV, (req, res) => {
   if (!req.session.adminVendedorNombreUsuario) {
@@ -255,6 +350,7 @@ router.post("/subir-inmueble", upload.array('images', 4), (req, res) => {
   });
 });
 
+
 /* TEST-SESIONS */
 router.get("/test-session", (req, res) => {
   const adminGeneralId = req.session.adminGeneralId || "no hay admin general";
@@ -268,6 +364,7 @@ router.get("/test-session", (req, res) => {
     `ID del admin general: ${adminGeneralId}, ID del admin vendedor: ${adminVendedorId}`
   ); */
 });
+
 
 /* VALIDAR CODIGO DE SEGURIDAD */
 //funcion par generar codigo de verificacion
