@@ -216,6 +216,21 @@ router.delete('/eliminarUsuario/:id', (req, res) => {
   });
 });
 
+//Eliminar EL ADMIN VENDEDOR
+router.delete('/eliminarAdminVendedor/:id', (req, res) => {
+  const adminVendedorId = req.params.id;
+
+  const query = 'DELETE FROM subastaonline.adminvendedor WHERE id = ?';
+  connection.query(query, [adminVendedorId], (error, result) => {
+      if (error) {
+          console.error('Error al eliminar el adminVendedor', error);
+          return res.status(500).send('Error al eliminar el adminVendedor');
+      }
+      res.sendStatus(200);
+  });
+});
+
+
 
 /* ADMIN VENDEDOR */
 // Middleware para verificar si el admin vendedor ha iniciado sesión

@@ -151,7 +151,7 @@
                         <div class="graph-card new-subastas-card mb-4"
                             style="width: 50%; height: 450px; padding-bottom: 2rem; overflow-y: auto;">
                             <h6>
-                                Admins vendedor
+                                Admin vendedor
                                 <span style="font-size: 1.1rem; font-weight: 600; margin-left: .5rem;">
                                     <%= numAdminVendedores %>
                                 </span>
@@ -181,10 +181,8 @@
                                                     <%= adminVendedor.activo ? "Activo" : "Inactivo" %>
                                                 </td>
                                                 <td class="acciones">
-                                                    <a href="">
-                                                        <i class="bi bi-pencil-square text-primary"></i>
-                                                    </a>
-                                                    <a href="">
+                                                    <a href="#" class="eliminar-adminVendedor"
+                                                        data-id="<%= adminVendedor.id %>">
                                                         <i class="bi bi-trash3 text-danger"></i>
                                                     </a>
                                                 </td>
@@ -324,34 +322,33 @@
     <!-- logiaca eliminar -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const eliminarLinks = document.querySelectorAll('.eliminar-usuario');
+            const eliminarLinks = document.querySelectorAll('.eliminar-adminVendedor');
 
             eliminarLinks.forEach(link => {
                 link.addEventListener('click', (event) => {
                     event.preventDefault(); // Evita el comportamiento predeterminado de navegación
 
-                    const usuarioId = link.getAttribute('data-id');
-                    const confirmarEliminar = confirm('¿Estás seguro de que deseas eliminar este usuario?');
+                    const adminVendedorId = link.getAttribute('data-id');
+                    const confirmarEliminar = confirm('¿Estás seguro de que deseas eliminar este adminVendedor?');
 
                     if (confirmarEliminar) {
-                        fetch(`/admin/eliminarUsuario/${usuarioId}`, {
+                        fetch(`/admin/eliminarAdminVendedor/${adminVendedorId}`, {
                             method: 'DELETE'
                         })
                             .then(response => {
                                 if (response.ok) {
                                     // Operación de eliminación exitosa, actualizar la interfaz o mostrar mensaje
-                                    console.log('Usuario eliminado correctamente');
+                                    console.log('AdminVendedor eliminado correctamente');
                                     location.reload(); // Actualiza la página para reflejar los cambios
                                 } else {
-                                    throw new Error('Error al eliminar usuario');
+                                    throw new Error('Error al eliminar adminVendedor');
                                 }
                             })
-                            .catch(error => console.error('Error al eliminar usuario:', error));
+                            .catch(error => console.error('Error al eliminar adminVendedor:', error));
                     }
                 });
             });
         });
-
     </script>
 </body>
 

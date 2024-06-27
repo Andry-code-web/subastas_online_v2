@@ -6,27 +6,19 @@ const conexion = require('../database/db'); // Asegúrate de que el nombre del a
 router.use(bodyParser.urlencoded({ extended: true }));
 
 router.get('/', (req, res) => {
-    res.render('home');
+    const usuario = req.session.usuario;
+    res.render('home', { usuario });
 });
 
+
+
+/* LOGIN, LOGOUT GET POST */
 router.get('/login', (req, res) => {
     res.render('login');
 });
 
-router.get('/registro', (req, res) => {
-    res.render('registro');
-});
-
-router.get('/subasta', (req, res) => {
-    res.render('subastas');
-});
-
-router.get('/inmueble', (req, res) => {
-    res.render('inmueble');
-})
-
 router.post('/login', (req, res) => {
-    const consulta = 'SELECT nombre, contraseña FROM usuarios;';
+    const consulta = 'SELECT id, nombre, contraseña FROM usuarios;';
     const { usuario, contra } = req.body;
 
     conexion.query(consulta, function (err, result, fields) {
@@ -36,20 +28,37 @@ router.post('/login', (req, res) => {
             return;
         }
 
-        console.log('Datos de usuario:', usuario);
-        console.log('Datos de contraseña:', contra);
-        console.log('Resultado de la consulta:', result);
-
         // Comprobar si se encontró un usuario con la contraseña correcta
         const usuarioEncontrado = result.find(user => user.nombre === usuario && user.contraseña === contra);
         if (usuarioEncontrado) {
+            // Guardar información del usuario en la sesión
+            req.session.usuario = {
+                id: usuarioEncontrado.id,
+                nombre: usuarioEncontrado.nombre
+            };
             res.json({ success: true, redirect: '/user/' });
-            //res.render('home', { usuario });
         } else {
             console.log('Usuario o contraseña incorrectos');
             res.status(401).json({ message: 'Usuario o contraseña incorrectos' });
         }
     });
+});
+
+router.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            console.error('Error al cerrar sesión: ', err);
+            res.status(500).send('Error al cerrar sesión');
+        } else {
+            res.redirect('/user/');
+        }
+    });
+});
+
+
+/* REGISTRO GET POST */
+router.get('/registro', (req, res) => {
+    res.render('registro');
 });
 
 router.post('/registro', (req, res) => {
@@ -93,5 +102,17 @@ router.post('/registro', (req, res) => {
         res.render('login');
     });
 });
+
+
+router.get('/subasta', (req, res) => {
+    res.render('subastas');
+});
+
+router.get('/inmueble', (req, res) => {
+    res.render('inmueble');
+})
+
+
+
 
 module.exports = router;
