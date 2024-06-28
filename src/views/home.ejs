@@ -13,6 +13,7 @@
 </head>
 
 <body>
+    <!-- CABEZERA -->
     <header>
         <div class="logo"><img src="/img/logo.png" alt=""></div>
         <nav>
@@ -52,11 +53,11 @@
                                 <small>
                                     nombre User
                                 </small>
-                                <a href="/admin/logout" class="btn btn-danger btn-sm ms-2">Cerrar Sesión</a>
+                                <a href="/user/logout" class="btn btn-danger btn-sm ms-2">Cerrar Sesión</a>
                             </div>
-                            
+
                         </div>
-                        
+
                     </div>
                     </p>
                     <% } else { %>
@@ -121,82 +122,41 @@
         <div class="contenedor_subastass">
             <h2>Subastas esperadas</h2>
             <div class="content_card">
-                <div class="card">
-                    <img class="casa_img" src="/img/casas.png" alt="">
-                    <div class="info_like">
-                        <div class="info_card">
-                            <h3>Casa de campo</h3>
-                            <p class="depat">Lima</p>
-                            <p>
-                                <span><img src="/img/plata.svg" alt=""></span>
-                                <span>US$</span>
-                                <span>100,000</span>
-                            </p>
+                <% subastas.slice(0, 5).forEach(subasta => { %>
+                    <div class="card">
+                        <div class="conteneder_imagen">
+                            <% if (subasta.imagen_blob) { %>
+                                <img class="casa_img"
+                                    src="data:image/jpeg;base64,<%= subasta.imagen_blob.toString('base64') %>" alt="">
+                            <% } else { %>
+                                <img class="casa_img" src="/img/casas.png" alt="">
+                            <% } %>
                         </div>
-                        <div class="like">
-                            <button>
-                                <img src="/img/like.svg" alt="">
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <img class="casa_img" src="/img/casas.png" alt="">
-                    <div class="info_like">
-                        <div class="info_card">
-                            <h3>Casa de campo</h3>
-                            <p class="depat">Lima</p>
-                            <p>
-                                <span><img src="/img/plata.svg" alt=""></span>
-                                <span>US$</span>
-                                <span>100,000</span>
-                            </p>
-                        </div>
-                        <div class="like">
-                            <button>
-                                <img src="/img/like.svg" alt="">
-                            </button>
+                        <div class="info_like">
+                            <div class="info_card">
+                                <h3>
+                                    <%= subasta.categoria %>
+                                </h3>
+                                <p class="depat">
+                                    <%= subasta.direccion %>
+                                </p>
+                                <p>
+                                    <span><img src="/img/plata.svg" alt=""></span>
+                                    <span>US$</span>
+                                    <span>
+                                        <%= subasta.precio_base %>
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="like">
+                                <button>
+                                    <img src="/img/like.svg" alt="">
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="card">
-                    <img class="casa_img" src="/img/casas.png" alt="">
-                    <div class="info_like">
-                        <div class="info_card">
-                            <h3>Casa de campo</h3>
-                            <p class="depat">Lima</p>
-                            <p>
-                                <span><img src="/img/plata.svg" alt=""></span>
-                                <span>US$</span>
-                                <span>100,000</span>
-                            </p>
-                        </div>
-                        <div class="like">
-                            <button>
-                                <img src="/img/like.svg" alt="">
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <img class="casa_img" src="/img/casas.png" alt="">
-                    <div class="info_like">
-                        <div class="info_card">
-                            <h3>Casa de campo</h3>
-                            <p class="depat">Lima</p>
-                            <p>
-                                <span><img src="/img/plata.svg" alt=""></span>
-                                <span>US$</span>
-                                <span>100,000</span>
-                            </p>
-                        </div>
-                        <div class="like">
-                            <button>
-                                <img src="/img/like.svg" alt="">
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <% }); %>
+                
             </div>
         </div>
     </section>
@@ -204,7 +164,7 @@
     <!-- COMENTARIOS -->
     <section class="comentarios">
         <h2>
-            Testimonios
+            Comentarios
         </h2>
         <div class="Testimonio">
             <button id="back">

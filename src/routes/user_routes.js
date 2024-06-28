@@ -7,10 +7,54 @@ router.use(bodyParser.urlencoded({ extended: true }));
 
 router.get('/', (req, res) => {
     const usuario = req.session.usuario;
-    res.render('home', { usuario });
+
+    const querySubastas = `
+    SELECT s.*, 
+           (SELECT imagen 
+            FROM subastaonline.imagenes_propiedad ip 
+            WHERE s.id = ip.id_subasta 
+            LIMIT 1) AS imagen_blob
+    FROM subastaonline.subastas s
+`;
+
+
+
+    const queryComentario = 'SELECT * FROM subastaonline.comentarios';
+
+    Promise.all([
+        new Promise((resolve, reject) => {
+            conexion.query(querySubastas, (error, resultadoSubasta) => {
+                if (error) {
+                    console.error("Error al obtener las subastas: ", error);
+                    reject(error);
+                } else {
+                    resolve(resultadoSubasta);
+                }
+            });
+        }),
+        new Promise((resolve, reject) => {
+            conexion.query(queryComentario, (error, resultadoComentario) => {
+                if (error) {
+                    console.error("Error al obtener los comentarios", error);
+                    reject(error);
+                } else {
+                    resolve(resultadoComentario);
+                }
+            });
+        })
+    ])
+        .then(([subastas, comentarios]) => {
+            res.render('home', {
+                usuario,
+                subastas,
+                comentarios
+            });
+        })
+        .catch((error) => {
+            console.error("Error al obtener los datos para la vista principal: ", error);
+            res.status(500).send("Error al obtener datos para la vista principal");
+        });
 });
-
-
 
 /* LOGIN, LOGOUT GET POST */
 router.get('/login', (req, res) => {

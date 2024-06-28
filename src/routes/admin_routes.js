@@ -8,14 +8,8 @@ const connection = require("../database/db");
 
 const router = express.Router();
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/')
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
-  }
-});
+// Configuración de Multer para subida de archivos
+const storage = multer.memoryStorage(); // Almacenamiento en memoria para leer los archivos
 const upload = multer({ storage: storage });
 
 
@@ -107,7 +101,7 @@ router.get("/adminG", (req, res) => {
         }
       });
     }),
-    new Promise((resolve, reject) =>{
+    new Promise((resolve, reject) => {
       connection.query(querySubastas, (error, resultadoSubastas) => {
         if (error) {
           console.error("Error al obtener los datos de subasta", error);
@@ -118,25 +112,25 @@ router.get("/adminG", (req, res) => {
       });
     })
   ])
-  .then(([usuarios, adminVendedores, subastas]) => {
-    const numUsuarios = usuarios.length;
-    const numAdminVendedores = adminVendedores.length;
-    const numSubastas = subastas.length;
+    .then(([usuarios, adminVendedores, subastas]) => {
+      const numUsuarios = usuarios.length;
+      const numAdminVendedores = adminVendedores.length;
+      const numSubastas = subastas.length;
 
-    res.render("adminGeneral", {
-      nombreUsuario,
-      usuarios,
-      numUsuarios,
-      adminVendedores,
-      numAdminVendedores,
-      subastas,
-      numSubastas
+      res.render("adminGeneral", {
+        nombreUsuario,
+        usuarios,
+        numUsuarios,
+        adminVendedores,
+        numAdminVendedores,
+        subastas,
+        numSubastas
+      });
+    })
+    .catch((error) => {
+      console.error("Error al obtener datos para la vista adminGeneral: ", error);
+      res.status(500).send("Error al obtener datos para la vista adminGeneral");
     });
-  })
-  .catch((error) => {
-    console.error("Error al obtener datos para la vista adminGeneral: ", error);
-    res.status(500).send("Error al obtener datos para la vista adminGeneral");
-  });
 });
 
 // Método POST para crear un nuevo admin vendedor
@@ -168,7 +162,7 @@ router.post("/crear-admin-vendedor", async (req, res) => {
 });
 
 //EDITAR EL USUARIO
-router.get('/editarUsuario/:id', (req, res) =>{
+router.get('/editarUsuario/:id', (req, res) => {
   const userId = req.params.id;
 
   const query = 'SELECT * FROM subastaonline.usuarios WHERE id = ?';
@@ -208,11 +202,11 @@ router.delete('/eliminarUsuario/:id', (req, res) => {
   // Lógica para eliminar usuario en la base de datos
   const query = 'DELETE FROM usuarios WHERE id = ?';
   connection.query(query, [userId], (error, result) => {
-      if (error) {
-          console.error('Error al eliminar el usuario', error);
-          return res.status(500).send('Error al eliminar el usuario');
-      }
-      res.sendStatus(200); // Enviar una respuesta de éxito
+    if (error) {
+      console.error('Error al eliminar el usuario', error);
+      return res.status(500).send('Error al eliminar el usuario');
+    }
+    res.sendStatus(200); // Enviar una respuesta de éxito
   });
 });
 
@@ -222,11 +216,11 @@ router.delete('/eliminarAdminVendedor/:id', (req, res) => {
 
   const query = 'DELETE FROM subastaonline.adminvendedor WHERE id = ?';
   connection.query(query, [adminVendedorId], (error, result) => {
-      if (error) {
-          console.error('Error al eliminar el adminVendedor', error);
-          return res.status(500).send('Error al eliminar el adminVendedor');
-      }
-      res.sendStatus(200);
+    if (error) {
+      console.error('Error al eliminar el adminVendedor', error);
+      return res.status(500).send('Error al eliminar el adminVendedor');
+    }
+    res.sendStatus(200);
   });
 });
 
@@ -258,7 +252,7 @@ router.post('/loginAdminV', (req, res) => {
       console.error("Error al buscar el admin vendedor:", error);
       return res.status(500).send("Error al iniciar sesión");
     }
-
+    
     if (results.length === 0) {
       return res.status(401).send("Usuario no registrado");
     }
@@ -321,7 +315,7 @@ router.get("/adminV", isAuthenticatedAdminV, (req, res) => {
   res.render("adminVendedor", { nombreUsuario });
 });
 
-//Subir una subasta
+// Ruta para subir un inmueble con imágenes a la base de datos
 router.post("/subir-inmueble", upload.array('images', 4), (req, res) => {
   const { nombre_propiedad, descripcion, categoria, direccion, precio_base, N_banos, N_cuartos, N_cocina, N_cocheras, patio } = req.body;
   const imagenes = req.files;
@@ -347,8 +341,8 @@ router.post("/subir-inmueble", upload.array('images', 4), (req, res) => {
       const id_subasta = result.insertId;
 
       if (imagenes && imagenes.length > 0) {
-        let insertImagenesQuery = 'INSERT INTO imagenes_propiedad (id_subasta, url_imagen) VALUES ?';
-        let imagenesData = imagenes.map(img => [id_subasta, img.filename]); // Usamos img.filename para obtener el nombre del archivo
+        let insertImagenesQuery = 'INSERT INTO imagenes_propiedad (id_subasta, imagen) VALUES ?';
+        let imagenesData = imagenes.map(img => [id_subasta, img.buffer]); // Usamos img.buffer para obtener el contenido binario del archivo
 
         connection.query(insertImagenesQuery, [imagenesData], (err, results) => {
           if (err) {

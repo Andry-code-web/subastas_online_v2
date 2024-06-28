@@ -8,12 +8,12 @@ const path = require('path');
 require('dotenv').config();
 
 // Crear el directorio 'uploads' si no existe
-const uploadsDir = path.join(__dirname, 'uploads');
+/* const uploadsDir = path.join(__dirname, 'uploads');
 
 if (!fs.existsSync(uploadsDir)){
     fs.mkdirSync(uploadsDir);
 }
-
+ */
 // Base de datos
 const conection = require('./src/database/db');
 const sessionStore = require('./src/database/sessionStore');
