@@ -118,7 +118,94 @@ header .session p .btn_menu i {
   font-size: 1.2rem;
 }
 
+/* SUBASTAS */
+.detalles_subasta {
+  width: 100%;
+  margin-top: 2rem;
+}
 
-.detalles_subasta{
-    margin-top: 2rem;
+.property-detail {
+  width: 40%;
+  background-color: #fff;
+}
+
+.scroll-1::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scroll-1::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background: #888;
+}
+
+
+.content_galeria {
+  width: 100%;
+  /* Ajustado al ancho completo */
+}
+
+.imgen_principal {
+  width: 100%;
+  height: 45vh;
+  overflow: hidden;
+  /* Oculta el desbordamiento vertical */
+}
+
+.imgen_principal .img_principal {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Ajusta la imagen para cubrir el contenedor */
+}
+
+.galeria {
+  width: 100%;
+  overflow-x: auto;
+  /* Permite el desplazamiento horizontal */
+  white-space: nowrap;
+  /* Evita el salto de línea */
+  display: flex;
+  /* Cambia a flex para manejar las imágenes horizontalmente */
+  flex-wrap: nowrap;
+  /* Evita el salto de línea en el flexbox */
+  padding: 10px 0;
+  /* Añade relleno superior e inferior para espacio */
+}
+
+.img_wrapper {
+  width: auto;
+  /* Ancho automático para cada imagen */
+  flex: 0 0 auto;
+  /* Ancho automático pero no se estira */
+  margin-right: 10px;
+  /* Espacio entre las imágenes */
+}
+
+.imgs {
+  width: 100%;
+  /* Ajusta al ancho completo del contenedor */
+  height: auto;
+  /* Altura automática según la relación de aspecto */
+  max-height: 150px;
+  /* Altura máxima para controlar el tamaño */
+  cursor: pointer;
+  /* Cambia el cursor al pasar sobre las imágenes */
+  transition: transform 0.2s ease;
+  /* Transición suave al hacer hover */
+}
+
+.imgs:hover {
+  transform: scale(1.1);
+  /* Aumenta ligeramente al hacer hover */
+}
+
+.imgs:focus {
+  outline: none;
+  /* Elimina el contorno al enfocar */
+}
+
+.galeria .imgs.active {
+  border-color: #3182ce;
+  /* Color del borde cuando está activa */
 }

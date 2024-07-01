@@ -95,6 +95,8 @@ router.post("/login", (req, res) => {
   const consulta = "SELECT id, nombre, contraseña FROM usuarios;";
   const { usuario, contra } = req.body;
 
+  console.log(usuario, contra);
+
   conexion.query(consulta, function (err, result, fields) {
     if (err) {
       console.error("Error al realizar la consulta: ", err);
@@ -139,7 +141,8 @@ router.get("/registro", (req, res) => {
 router.post("/registro", (req, res) => {
   const consulta =
     "INSERT INTO subastaonline.usuarios (nombre, apellidos, dni, celular, correo_electronico, contraseña, boleta, factura, numero_factura, terminos_y_condiciones, uso_datos_personales) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-  const {
+
+  let {
     nombre,
     apellidos,
     dni,
@@ -152,6 +155,23 @@ router.post("/registro", (req, res) => {
     terminos_y_condiciones,
     uso_datos_personales,
   } = req.body;
+
+  // Eliminar espacios en blanco alrededor de cada campo
+  nombre = nombre.trim();
+  apellidos = apellidos.trim();
+  dni = dni.trim();
+  celular = celular.trim();
+  correo_electronico = correo_electronico.trim();
+  contraseña = contraseña.trim();
+  numero_factura = numero_factura ? numero_factura.trim() : null;
+
+  // Convertir valores de boleta y factura a 0 o 1
+  boleta = boleta ? 1 : 0;
+  factura = factura ? 1 : 0;
+
+  // Convertir valores de terminos_y_condiciones y uso_datos_personales a 0 o 1
+  terminos_y_condiciones = terminos_y_condiciones ? 1 : 0;
+  uso_datos_personales = uso_datos_personales ? 1 : 0;
 
   const valores = [
     nombre,
@@ -179,9 +199,9 @@ router.post("/registro", (req, res) => {
   });
 });
 
-//Catalogo
+// Catalogo
 router.get("/catalogo", (req, res) => {
-  const querySubastas = "SELECT * FROM subastaonline.subastas";
+  const querySubastas = "SELECT * FROM subastaonline.subastas ORDER BY id ASC";
   const queryImagenes =
     "SELECT id_subasta, imagen FROM subastaonline.imagenes_propiedad";
 
@@ -208,10 +228,14 @@ router.get("/catalogo", (req, res) => {
         };
       });
 
-      res.render("catalogo", { subastas: subastasConImagenes });
+      res.render("catalogo", { 
+        usuario: req.session.usuario,
+        subastas: subastasConImagenes 
+      });
     });
   });
 });
+
 
 // Subastas
 router.get("/subasta/:id", isAuthenticated, (req, res) => {
