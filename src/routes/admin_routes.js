@@ -27,7 +27,7 @@ router.post("/loginAdminG", (req, res) => {
       console.error("Error al buscar el administrador general:", error);
       return res.status(500).send("Error al iniciar sesión");
     }
-
+x
     if (results.length === 0) {
       return res.status(401).send("Correo electrónico no registrado");
     }
@@ -304,16 +304,30 @@ router.get("/logoutAdminV", (req, res) => {
   });
 });
 
-
 // Ruta protegida que requiere autenticación de admin vendedor
 router.get("/adminV", isAuthenticatedAdminV, (req, res) => {
   if (!req.session.adminVendedorNombreUsuario) {
     return res.redirect("/admin/loginAdminV");
   }
-
   const nombreUsuario = req.session.adminVendedorNombreUsuario;
-  res.render("adminVendedor", { nombreUsuario });
+  const adminVendedorId = req.session.adminVendedorId; // ID del admin vendedor que inició sesión
+
+  const query = 'SELECT * FROM subastaonline.subastas WHERE id_admin_vendedor = ?';
+  connection.query(query, [adminVendedorId], (error, results) => {
+    if (error) {
+      console.error("Error al obtener los datos de subasta:", error);
+      return res.status(500).send("Error al obtener los datos de subasta");
+    }
+    const numSubastas = results.length;
+    res.render("adminVendedor", {
+      nombreUsuario,
+      numSubastas,
+      subastas: results
+    });
+  });
 });
+
+
 
 // Ruta para subir un inmueble con imágenes a la base de datos
 router.post("/subir-inmueble", upload.array('images', 4), (req, res) => {

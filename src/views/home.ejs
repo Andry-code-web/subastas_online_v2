@@ -2,330 +2,371 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="/img/footer_logo.svg" type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="/css/style_home.css">
-    <title>home</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="/img/footer_logo.svg" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/style_home.css">
+  <title>home</title>
 </head>
 
 <body>
-    <!-- CABEZERA -->
-    <header>
-        <div class="logo"><img src="/img/logo.png" alt=""></div>
-        <nav>
-            <a href="/user/">Inicio</a>
-            <a href="#about">About</a>
-            <a href="/user/subasta">Subastas</a>
-            <a href="#contacto">Contáctenos</a>
-        </nav>
-        <div class="session">
-            <img src="/img/session.svg" alt="">
-            <% if (usuario) { %>
-                <p class="d-flex align-items-center ">
-                    <span>Bienvenido, <%= usuario.nombre %></span>
-                    <button class="btn_menu ms-1" id="btn_menu">
-                        <i class="bi bi-list"></i>
-                    </button>
-                <div class="menu_desplegable d-flex flex-column justify-content-between">
-                    <div>
-                        <div class="cabezera_menu d-flex justify-content-between">
-                            <h3>Subastas</h3>
-                            <button id="btn_close">
-                                <i class="bi bi-x-lg"></i>
-                            </button>
-                        </div>
-                        <ul>
-                            <li><a href="/user/logout">Logout</a></li>
-                            <li><a href="/user/logout">Logout</a></li>
-                            <li><a href="/user/logout">Logout</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="perfil_user">
-                        <div class="d-flex flex-row">
-                            <img src="https://placehold.co/40x40" alt="Profile Picture" class="rounded-circle me-2">
-                            <div class="d-flex flex-column">
-                                <strong>Usuario</strong>
-                                <small>
-                                    nombre User
-                                </small>
-                                <a href="/user/logout" class="btn btn-danger btn-sm ms-2">Cerrar Sesión</a>
-                            </div>
-
-                        </div>
-
-                    </div>
-                    </p>
-                    <% } else { %>
-                        <p>
-                            <span>
-                                <a href="/user/login">Login</a>
-                            </span>
-                            <span>/</span>
-                            <span>
-                                <a href="/user/registro">Sign up</a>
-                            </span>
-                        </p>
-                        <% } %>
-                </div>
-    </header>
-
-    <!-- BANNER -->
-    <section class="banner" id="banner">
-        <img src="/img/Banner.png" alt="">
-        <div class="contenido">
-            <h1>Invierte en tu futuro con nuestras subastas de inmuebles.</h1>
-            <a href="#contacto">Contáctenos</a>
+  <!-- CABEZERA -->
+  <header>
+    <div class="logo"><img src="/img/logo.png" alt=""></div>
+    <nav>
+      <a href="/user/">Inicio</a>
+      <a href="#about">About</a>
+      <a href="/user/catalogo">Catalogo</a>
+      <a href="#contacto">Contáctenos</a>
+    </nav>
+    <div class="session">
+      <img src="/img/session.svg" alt="">
+      <% if (usuario) { %>
+      <p class="d-flex align-items-center ">
+        <span>Bienvenido, <%= usuario.nombre %></span>
+        <button class="btn_menu ms-1" id="btn_menu">
+          <i class="bi bi-list"></i>
+        </button>
+      <div class="menu_desplegable d-flex flex-column justify-content-between">
+        <div>
+          <div class="cabezera_menu d-flex justify-content-between">
+            <h3>Subastas</h3>
+            <button id="btn_close">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+          <ul>
+            <li><a href="/user/logout">Logout</a></li>
+            <li><a href="/user/logout">Logout</a></li>
+            <li><a href="/user/logout">Logout</a></li>
+          </ul>
         </div>
 
-    </section>
-
-    <!-- ABOUT -->
-    <section class="about" id="about">
-        <div class="image_social">
-            <img src="/img/about.svg" alt="">
-            <div class="social">
-                <a href="">
-                    <img class="face" src="/img/face.svg" alt="">
-                </a>
-                <a href="">
-                    <img class="you" src="/img/youtube.svg" alt="">
-                </a>
-                <a href="">
-                    <img class="mail" src="/img/mail.svg" alt="">
-                </a>
+        <div class="perfil_user">
+          <div class="d-flex flex-row">
+            <img src="https://placehold.co/40x40" alt="Profile Picture" class="rounded-circle me-2">
+            <div class="d-flex flex-column">
+              <strong>Usuario</strong>
+              <small>
+                nombre User
+              </small>
+              <a href="/user/logout" class="btn btn-danger btn-sm ms-2">Cerrar Sesión</a>
             </div>
+
+          </div>
+
         </div>
-        <div class="info">
-            <h2>Urbaniza Club</h2>
+        </p>
+        <% } else { %>
+        <p>
+          <span>
+            <a href="/user/login">Login</a>
+          </span>
+          <span>/</span>
+          <span>
+            <a href="/user/registro">Sign up</a>
+          </span>
+        </p>
+        <% } %>
+      </div>
+  </header>
+
+  <!-- BANNER -->
+  <section class="banner" id="banner">
+    <img src="/img/Banner.png" alt="">
+    <div class="contenido">
+      <h1>Invierte en tu futuro con nuestras subastas de inmuebles.</h1>
+      <a href="#contacto">Contáctenos</a>
+    </div>
+
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="image_social">
+      <img src="/img/about.svg" alt="">
+      <div class="social">
+        <a href="">
+          <img class="face" src="/img/face.svg" alt="">
+        </a>
+        <a href="">
+          <img class="you" src="/img/youtube.svg" alt="">
+        </a>
+        <a href="">
+          <img class="mail" src="/img/mail.svg" alt="">
+        </a>
+      </div>
+    </div>
+    <div class="info">
+      <h2>Urbaniza Club</h2>
+      <p>
+        Lorem ipsum dolor sit amet consectetur. Pellentesque tincidunt
+        id mauris tellus feugiat gravida pulvinar viverra lacus. Vitae
+        et scelerisque nunc cursus venenatis praesent sit lorem. Fermentum
+        mi ligula tempus tristique lobortis aenean. Blandit risus ut id turpis.
+        Vitae id vel suscipit felis. Morbi turpis diam in odio. Lorem nulla sodales
+        etiam arcu elit. Convallis commodo nibh sed montes augue.
+      </p>
+      <div class="btn_about">
+        <a href="#contacto">Contáctenos</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUBASTAS -->
+  <section class="subastas">
+    <img class="fondo" src="/img/fodo_subastas.png" alt="">
+    <div class="contenedor_subastass">
+      <h2>Subastas esperadas</h2>
+      <div class="content_card">
+        <% subastas.slice(0, 5).forEach(subasta => { %>
+        <div class="card">
+          <div class="conteneder_imagen">
+            <% if (subasta.imagen_blob) { %>
+            <img class="casa_img" src="data:image/jpeg;base64,<%= subasta.imagen_blob.toString('base64') %>" alt="">
+            <% } else { %>
+            <img class="casa_img" src="/img/casas.png" alt="">
+            <% } %>
+          </div>
+          <div class="info_like">
+            <div class="info_card">
+              <h3>
+                <%= subasta.categoria %>
+              </h3>
+              <p class="depat">
+                <%= subasta.direccion %>
+              </p>
+              <p>
+                <span><img src="/img/plata.svg" alt=""></span>
+                <span>US$</span>
+                <span>
+                  <%= subasta.precio_base %>
+                </span>
+              </p>
+            </div>
+            <div class="like">
+              <button>
+                <img src="/img/like.svg" alt="">
+              </button>
+            </div>
+          </div>
+        </div>
+        <% }); %>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- COMENTARIOS -->
+  <section>
+    <div class="comentarios">
+      <h2>Testimonios</h2>
+      <div class="Testimonio">
+        <button id="back">
+          <img src="/img/back.svg" alt="Back">
+        </button>
+        <div class="comentarios-container">
+          <% comentarios.forEach(comentario => { %>
+          <div class="comentario">
             <p>
-                Lorem ipsum dolor sit amet consectetur. Pellentesque tincidunt
-                id mauris tellus feugiat gravida pulvinar viverra lacus. Vitae
-                et scelerisque nunc cursus venenatis praesent sit lorem. Fermentum
-                mi ligula tempus tristique lobortis aenean. Blandit risus ut id turpis.
-                Vitae id vel suscipit felis. Morbi turpis diam in odio. Lorem nulla sodales
-                etiam arcu elit. Convallis commodo nibh sed montes augue.
+              <%= comentario.comentario %>
             </p>
-            <div class="btn_about">
-                <a href="#contacto">Contáctenos</a>
-            </div>
+            <p>
+              <% for (let i = 0; i < comentario.rating; i++) { %>
+              <i class="bi bi-star-fill"></i>
+              <% } %>
+              <% for (let i = comentario.rating; i < 5; i++) { %>
+              <i class="bi bi-star"></i>
+              <% } %>
+            </p>
+          </div>
+          <% }); %>
         </div>
-    </section>
+        <button id="next">
+          <img src="/img/next.svg" alt="Next">
+        </button>
+      </div>
+    </div>
+  </section>
 
-    <!-- SUBASTAS -->
-    <section class="subastas">
-        <img class="fondo" src="/img/fodo_subastas.png" alt="">
-        <div class="contenedor_subastass">
-            <h2>Subastas esperadas</h2>
-            <div class="content_card">
-                <% subastas.slice(0, 5).forEach(subasta => { %>
-                    <div class="card">
-                        <div class="conteneder_imagen">
-                            <% if (subasta.imagen_blob) { %>
-                                <img class="casa_img"
-                                    src="data:image/jpeg;base64,<%= subasta.imagen_blob.toString('base64') %>" alt="">
-                            <% } else { %>
-                                <img class="casa_img" src="/img/casas.png" alt="">
-                            <% } %>
-                        </div>
-                        <div class="info_like">
-                            <div class="info_card">
-                                <h3>
-                                    <%= subasta.categoria %>
-                                </h3>
-                                <p class="depat">
-                                    <%= subasta.direccion %>
-                                </p>
-                                <p>
-                                    <span><img src="/img/plata.svg" alt=""></span>
-                                    <span>US$</span>
-                                    <span>
-                                        <%= subasta.precio_base %>
-                                    </span>
-                                </p>
-                            </div>
-                            <div class="like">
-                                <button>
-                                    <img src="/img/like.svg" alt="">
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                <% }); %>
-                
-            </div>
+  <!-- REDES -->
+  <section class="redes_sociales">
+    <img class="img_fondo" src="/img/fondo_sociales.png" alt="">
+    <div class="contenedor_info_redes">
+      <div class="redes">
+        <div class="youtube">
+          <a href="">
+            <img src="/img/youtubec.svg" alt="">
+          </a>
         </div>
-    </section>
-
-    <!-- COMENTARIOS -->
-    <section class="comentarios">
-        <h2>
-            Comentarios
-        </h2>
-        <div class="Testimonio">
-            <button id="back">
-                <img src="/img/back.svg" alt="">
-            </button>
-
-            <div class="comentario">
-                <p>
-                    Lorem ipsum dolor sit amet consectetur. Fermentum
-                    vitae nisl dignissim lectus in natoque. Vel semper
-                    ut orci euismod pulvinar fermentum egestas.
-                </p>
-                <p>
-                    <span><img src="/img/estrella.svg" alt=""></span>
-                    <span><img src="/img/estrella.svg" alt=""></span>
-                    <span><img src="/img/estrella.svg" alt=""></span>
-                    <span><img src="/img/estrella.svg" alt=""></span>
-                    <span><img src="/img/estrella.svg" alt=""></span>
-                </p>
-            </div>
-
-            <button id="next">
-                <img src="/img/next.svg" alt="">
-            </button>
+        <div class="linea2">
+          <div class="tiktok">
+            <a href="">
+              <img src="/img/tiktok.svg" alt="">
+            </a>
+          </div>
+          <div class="faceboock">
+            <a href="">
+              <img src="/img/facebookc.svg" alt="">
+            </a>
+          </div>
+          <div class="twiter">
+            <a href="">
+              <img src="/img/twiter.svg" alt="">
+            </a>
+          </div>
         </div>
-    </section>
-
-    <!-- REDES -->
-    <section class="redes_sociales">
-        <img class="img_fondo" src="/img/fondo_sociales.png" alt="">
-        <div class="contenedor_info_redes">
-            <div class="redes">
-                <div class="youtube">
-                    <a href="">
-                        <img src="/img/youtubec.svg" alt="">
-                    </a>
-                </div>
-                <div class="linea2">
-                    <div class="tiktok">
-                        <a href="">
-                            <img src="/img/tiktok.svg" alt="">
-                        </a>
-                    </div>
-                    <div class="faceboock">
-                        <a href="">
-                            <img src="/img/facebookc.svg" alt="">
-                        </a>
-                    </div>
-                    <div class="twiter">
-                        <a href="">
-                            <img src="/img/twiter.svg" alt="">
-                        </a>
-                    </div>
-                </div>
-                <div class="liena3">
-                    <div class="instagram">
-                        <a href="">
-                            <img src="/img/instagram.svg" alt="">
-                        </a>
-                    </div>
-                    <div class="chat">
-                        <a href="">
-                            <img src="/img/whatsapp.svg" alt="">
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <h2>Redes Sociales</h2>
+        <div class="liena3">
+          <div class="instagram">
+            <a href="">
+              <img src="/img/instagram.svg" alt="">
+            </a>
+          </div>
+          <div class="chat">
+            <a href="">
+              <img src="/img/whatsapp.svg" alt="">
+            </a>
+          </div>
         </div>
+      </div>
+      <h2>Redes Sociales</h2>
+    </div>
 
-    </section>
+  </section>
 
-    <!-- CONTACTANOS -->
-    <section class="contacto" id="contacto">
-        <div class="info_cont">
-            <h2>Comentarios</h2>
-            <div class="contactos">
-                <ul>
-                    <li>
-                        <a href="">
-                            <img src="/img/map.svg" alt="">
-                            <p>
-                                <span>Av. Ejercito °N100</span> <br>
-                                <span>Arequipa - Perú</span>
-                            </p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="">
-                            <img src="/img/tel.svg" alt="">
-                            <p>+51 - 999999999</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="">
-                            <img src="/img/maill.svg" alt="">
-                            <p>subastas@urbaniza.club</p>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <form action="" method="post">
-                <input class="inputs" type="text" name="nombre" id="" placeholder="NOMBRE COMPLETO">
-                <textarea name="texto" id="" placeholder="COMENTARIO"></textarea>
-                <div class="rating">
-                    <input type="radio" name="rating" id="star5" value="5">
-                    <label for="star5" title="5 stars"></label>
-                    <input type="radio" name="rating" id="star4" value="4">
-                    <label for="star4" title="4 stars"></label>
-                    <input type="radio" name="rating" id="star3" value="3">
-                    <label for="star3" title="3 stars"></label>
-                    <input type="radio" name="rating" id="star2" value="2">
-                    <label for="star2" title="2 stars"></label>
-                    <input type="radio" name="rating" id="star1" value="1">
-                    <label for="star1" title="1 star"></label>
-                </div>
-                <button type="submit">Enviar</button>
-            </form>
+  <!-- CONTACTANOS -->
+  <section class="contacto" id="contacto">
+    <div class="info_cont">
+      <h2>Comentarios</h2>
+      <div class="contactos">
+        <ul>
+          <li>
+            <a href="">
+              <img src="/img/map.svg" alt="">
+              <p>
+                <span>Av. Ejercito °N100</span> <br>
+                <span>Arequipa - Perú</span>
+              </p>
+            </a>
+          </li>
+          <li>
+            <a href="">
+              <img src="/img/tel.svg" alt="">
+              <p>+51 - 999999999</p>
+            </a>
+          </li>
+          <li>
+            <a href="">
+              <img src="/img/maill.svg" alt="">
+              <p>subastas@urbaniza.club</p>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <form action="/user/" method="post">
+        <input class="inputs" type="text" name="nombre" id="" placeholder="NOMBRE COMPLETO">
+        <textarea name="texto" id="" placeholder="COMENTARIO"></textarea>
+        <div class="rating">
+          <input type="radio" name="rating" id="star5" value="5">
+          <label for="star5" title="5 stars"></label>
+          <input type="radio" name="rating" id="star4" value="4">
+          <label for="star4" title="4 stars"></label>
+          <input type="radio" name="rating" id="star3" value="3">
+          <label for="star3" title="3 stars"></label>
+          <input type="radio" name="rating" id="star2" value="2">
+          <label for="star2" title="2 stars"></label>
+          <input type="radio" name="rating" id="star1" value="1">
+          <label for="star1" title="1 star"></label>
         </div>
-        <div class="mapa">
-            <img src="/img/mapa.png" alt="">
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+    <div class="mapa">
+      <img src="/img/mapa.png" alt="">
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <img class="img_footer" src="/img/footer.png" alt="">
+    <div class="contenedor_superior">
+      <div class="contet_footer">
+        <img class="img_logo" src="/img/footer_logo.svg" alt="">
+        <div class="redes_footer">
+          <a href="">
+            <img src="/img/face_footer.svg" alt="">
+          </a>
+          <a href="">
+            <img src="/img/whatsapp_footer.svg" alt="">
+          </a>
         </div>
-    </section>
+        <a href="/admin/LoginAdminV" class="subastar">Quieres subastar tus propiedades <span>Click</span></a>
+        <p>COPYRIGHT @ SUBASTAS.COM 2024</p>
+      </div>
+    </div>
 
-    <!-- FOOTER -->
-    <footer>
-        <img class="img_footer" src="/img/footer.png" alt="">
-        <div class="contenedor_superior">
-            <div class="contet_footer">
-                <img class="img_logo" src="/img/footer_logo.svg" alt="">
-                <div class="redes_footer">
-                    <a href="">
-                        <img src="/img/face_footer.svg" alt="">
-                    </a>
-                    <a href="">
-                        <img src="/img/whatsapp_footer.svg" alt="">
-                    </a>
-                </div>
-                <a href="/admin/LoginAdminV" class="subastar">Quieres subastar tus propiedades <span>Click</span></a>
-                <p>COPYRIGHT @ SUBASTAS.COM 2024</p>
-            </div>
-        </div>
+  </footer>
 
-    </footer>
+  <!-- SCRIPTS -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const botonActivar = document.getElementById("btn_menu");
+      const botonCerrar = document.getElementById("btn_close");
+      const contenederMenu = document.getElementsByClassName("menu_desplegable")[0];
 
-    <!-- SCRIPTS -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const botonActivar = document.getElementById("btn_menu");
-            const botonCerrar = document.getElementById("btn_close");
-            const contenederMenu = document.getElementsByClassName("menu_desplegable")[0];
+      botonActivar.addEventListener('click', () => {
+        contenederMenu.classList.add("active");
+      });
 
-            botonActivar.addEventListener('click', () => {
-                contenederMenu.classList.add("active");
-            });
+      botonCerrar.addEventListener('click', () => {
+        contenederMenu.classList.remove("active");
+      });
+    });
+  </script>
 
-            botonCerrar.addEventListener('click', () => {
-                contenederMenu.classList.remove("active");
-            });
-        });
-    </script>
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.comentario');
+    const totalSlides = slides.length;
+
+    document.getElementById('next').addEventListener('click', nextSlide);
+    document.getElementById('back').addEventListener('click', prevSlide);
+
+    function showSlide(index) {
+      const container = document.querySelector('.comentarios-container');
+      if (index >= totalSlides) {
+        currentSlide = 0;
+      } else if (index < 0) {
+        currentSlide = totalSlides - 1;
+      } else {
+        currentSlide = index;
+      }
+      container.style.transform = 'translateX(' + (-currentSlide * 100) + '%)';
+    }
+
+    function nextSlide() {
+      showSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      showSlide(currentSlide - 1);
+    }
+
+    // Autoplay
+    let autoPlayInterval = setInterval(nextSlide, 3000);
+
+    // Pause autoplay on hover
+    document.querySelector('.Testimonio').addEventListener('mouseover', () => {
+      clearInterval(autoPlayInterval);
+    });
+
+    document.querySelector('.Testimonio').addEventListener('mouseout', () => {
+      autoPlayInterval = setInterval(nextSlide, 3000);
+    });
+  </script>
 </body>
 
 </html>

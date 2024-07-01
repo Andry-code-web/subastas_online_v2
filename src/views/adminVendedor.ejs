@@ -43,7 +43,7 @@
           </div>
           <a href="/admin/logoutAdminV" class="btn btn-danger btn-sm">Cerrar Sesión</a>
         </div>
-        
+
       </div>
     </div>
     <!-- Contenido principal -->
@@ -65,7 +65,9 @@
         <div class="col-md-3">
           <div class="stats-card">
             <h6>Total Subastas</h6>
-            <h3>48</h3>
+            <h3>
+              <%= numSubastas %>
+            </h3>
             <!-- Datos estadísticos -->
           </div>
         </div>
@@ -75,20 +77,65 @@
       <div class="row mb-4">
         <!-- Gráfico de visitantes y tarjeta de nuevas subastas -->
         <div class="col-md-8">
-          <div class="graph-card new-subastas-card mb-4">
-            <h6>Nuevas Subastas</h6>
-            <h3>7</h3>
-            <!-- Datos de nuevas subastas -->
-            <div class="chart-container">
-              <canvas id="newSubastasChart"></canvas>
-            </div>
-          </div>
-
           <div class="graph-card">
-            <h5>Subastas y Ofertas</h5>
+            <h5>Subastas</h5>
             <!-- Gráfico de subastas y ofertas -->
             <div class="chart-container ">
-              <canvas id="subastaOfertaChart"></canvas>
+              <div style="overflow-y: auto; max-height: 350px;">
+                <!-- Establece la altura máxima y habilita el desplazamiento vertical -->
+                <table class="table-bordered" style="width: 100%; text-align: center;">
+                  <thead style="font-weight: 600; font-size: .9rem;">
+                    <tr>
+                      <td>Nombre prop.</td>
+                      <td>Descipción</td>
+                      <td>Categoria</td>
+                      <td>Direccion</td>
+                      <td>Precio</td>
+                      <td>N° Cuartos</td>
+                      <td>N° Baños</td>
+                      <td>N° Cosina</td>
+                      <td>N° Cochera</td>
+                      <td>Patio</td>
+                    </tr>
+                  </thead>
+                  <tbody style="font-size: .9rem;">
+                    <% subastas.forEach(subasta=> { %>
+                    <tr>
+                      <td>
+                        <%= subasta.nombre_propiedad %>
+                      </td>
+                      <td class="truncate">
+                        <%= subasta.descripcion %>
+                      </td>
+                      <td>
+                        <%= subasta.categoria %>
+                      </td>
+                      <td>
+                        <%= subasta.direccion %>
+                      </td>
+                      <td>
+                        <%= subasta.precio_base %>
+                      </td>
+                      <td>
+                        <%= subasta.N_cuartos %>
+                      </td>
+                      <td>
+                        <%= subasta.N_baños %>
+                      </td>
+                      <td>
+                        <%= subasta.N_cocina %>
+                      </td>
+                      <td>
+                        <%= subasta.N_cocheras %>
+                      </td>
+                      <td>
+                        <%= subasta.patio %>
+                      </td>
+                    </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
