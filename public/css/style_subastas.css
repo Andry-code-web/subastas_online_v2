@@ -2,6 +2,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Modern+Antiqua&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Scope+One&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Arsenal+SC:ital,wght@0,400;0,700;1,400;1,700&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
   --font--banner--semi: "Barlow";
@@ -11,6 +12,9 @@
   --font--testimoni: "Modern Antiqua";
   --font--about: "BioRhyme";
   --font--cont: "Scope One";
+  --font--sub--title: "Arsenal SC";
+  --font--sub--title--2: "Roboto Condensed";
+  --font--sub--title--3: "Kanit";
   --bg--botones: #a29060;
   --color--sub: #c5ac75;
 }
@@ -122,11 +126,13 @@ header .session p .btn_menu i {
 .detalles_subasta {
   width: 100%;
   margin-top: 2rem;
+  gap: 3rem;
 }
 
 .property-detail {
-  width: 40%;
-  background-color: #fff;
+  width: 35%;
+  background-color: #f0f0f0;
+  padding: 1rem;
 }
 
 .scroll-1::-webkit-scrollbar {
@@ -139,17 +145,15 @@ header .session p .btn_menu i {
   background: #888;
 }
 
-
 .content_galeria {
   width: 100%;
-  /* Ajustado al ancho completo */
 }
 
 .imgen_principal {
   width: 100%;
   height: 45vh;
   overflow: hidden;
-  /* Oculta el desbordamiento vertical */
+  border-radius: 5px;
 }
 
 .imgen_principal .img_principal {
@@ -208,4 +212,182 @@ header .session p .btn_menu i {
 .galeria .imgs.active {
   border-color: #3182ce;
   /* Color del borde cuando está activa */
+}
+
+.property-details-content{
+  background-color: #fff;
+  border-radius: 5px;
+}
+
+.property-details-content .content_title{
+  width: 100%;
+  text-align: center;
+  padding-top: 1.5rem;
+}
+
+.property-details-content h4{
+  display: inline-block;
+  color: var(--color--sub);
+  font-size: 1rem;
+  font-family: var(--font--sub--title--2);
+  font-weight: 400;
+  position: relative;
+  padding: 10px 15px 10px 15px;
+}
+
+.property-details-content h4::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 7%;
+  height: 30%;
+  border-top: 3px solid var(--bg--botones);
+  border-left: 3px solid var(--bg--botones);
+}
+
+.property-details-content h4::after{
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 7%;
+  height: 30%;
+  border-bottom: 3px solid var(--bg--botones);
+  border-right: 3px solid var(--bg--botones);
+}
+.content_info_subastas p{
+  border-bottom: 1px solid #dddddd;
+}
+
+.content_info_subastas p span:first-child{
+  font-family: var(--font--sub--title--3);
+  color: #990000;
+}
+
+.nombre_tipo{
+  width: 80%;
+  height: auto;
+}
+
+.nombre_tipo h3{
+  font-size: 1.1rem;
+  font-weight: 400;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #dddddd;
+}
+
+.nombre_tipo h3 span:first-child{
+  font-family: var(--font--sub--title--3);
+  color: #BD0000;
+}
+
+.features,
+.imagenes{
+  width: 80%;
+}
+
+.content_descripcion{
+  width: 80%;
+}
+
+.content_descripcion h5{
+  color: var(--color--sub);
+  font-weight: 400;
+  font-family: var(--font--sub--title--2);
+  font-size: 1.5rem;
+}
+.content_descripcion p{
+  border: none !important;
+}
+
+.content_descripcion p span{
+  height: auto;
+  color: #000 !important;
+  font-weight: 200 !important;
+}
+
+
+
+
+.card {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  height: 400px;
+  font-family: Arial, sans-serif;
+}
+
+.card-header {
+  background-color: var(--color--sub);
+  color: white;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-header p {
+  margin: 0;
+}
+
+.card-header .heart-icon {
+  font-size: 1.5rem;
+}
+
+.card-body {
+  padding: 1rem;
+  text-align: center;
+  display: block;
+}
+
+.card-body.active{
+  display: none;
+}
+
+.card-body h2 {
+  color: #f97316;
+  margin: 1rem 0;
+}
+
+.card-body button {
+  background-color: #f97316;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.card-body button:hover {
+  background-color: #ea580c;
+}
+
+.price {
+  color: #16a34a;
+  font-size: 1.5rem;
+  margin: 1rem 0;
+}
+
+
+.chat {
+  display: none;
+}
+
+.chat.active{
+  display: block;
+  border: 1px solid #ccc;
+  padding: 10px;
+  width: 300px;
+  height: 400px;
+  overflow-y: scroll;
+}
+
+#messageInput {
+  width: calc(100% - 20px);
+  margin: 10px 0;
 }

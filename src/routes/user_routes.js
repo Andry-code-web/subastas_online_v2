@@ -243,7 +243,11 @@ router.get("/subasta/:id", isAuthenticated, (req, res) => {
   const querySubasta = 'SELECT * FROM subastaonline.subastas WHERE id = ?';
   const queryImagenes = 'SELECT imagen FROM subastaonline.imagenes_propiedad WHERE id_subasta = ?';
 
-  conexion.query(querySubasta, [subastaId], (error, resultadoSubasta) => {
+  function formatNumber(num) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  conexion.query(querySubasta, [subastaId], (error, resultadoSubasta, ) => {
     if (error) {
       console.error("Error al obtener datos de subasta", error);
       return res.status(500).send("Error al obtener datos de subasta");
@@ -266,7 +270,8 @@ router.get("/subasta/:id", isAuthenticated, (req, res) => {
 
       res.render("subasta", {
         subasta,
-        usuario: req.session.usuario
+        usuario: req.session.usuario,
+        formatNumber
       });
     });
   });

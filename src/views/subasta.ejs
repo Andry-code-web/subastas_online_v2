@@ -14,20 +14,6 @@
   <link rel="stylesheet" href="/css/style_subastas.css">
   <title>Inmueble || subasta</title>
   <script src="/socket.io/socket.io.js"></script>
-  <style>
-    #chat {
-      border: 1px solid #ccc;
-      padding: 10px;
-      width: 300px;
-      height: 400px;
-      overflow-y: scroll;
-    }
-
-    #messageInput {
-      width: calc(100% - 20px);
-      margin: 10px 0;
-    }
-  </style>
 </head>
 
 <body>
@@ -92,14 +78,11 @@
         </div>
   </header>
 
-
-
-
   <div class="detalles_subasta d-flex justify-content-center">
     <div class="property-detail">
       <!-- Carrusel e información del inmueble -->
       <div id="carouselExample<%= subasta.id %>" class="carousel slide slider">
-        <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden content_galeria">
+        <div class="max-w-4xl mx-auto rounded-lg overflow-hidden content_galeria">
           <div id="imagen_principal" class="imgen_principal">
             <img class="img_principal rounded-lg" src="" alt="">
           </div>
@@ -117,69 +100,121 @@
 
       </div>
       <div class="property-details-content">
-        <h4>Información general</h4>
-
-        <p class="ubicacion">
-          <%= subasta.direccion %>
-        </p>
-        <div class="nombre_tipo">
-          <h3>
-            <%= subasta.nombre_propiedad %>
-          </h3>
-          <p>
-            <%= subasta.categoria.toUpperCase() %>
-          </p>
+        <div class="content_title">
+          <h4>Información general</h4>
         </div>
-        
-        <p>
-          <%= subasta.descripcion %>
-        </p>
-        <p class="precio">
-          Precio Base:
-          <span class="price">US$<%= subasta.precio_base %></span>
-        </p>
-        <div class="features">
-          <div class="imgenes">
-            <img src="/img/baño.svg" alt="">
-            <p>
-              <%= subasta.N_baños %>
+
+        <div class="d-flex flex-column align-items-center content_info_subastas">
+          <div class="nombre_tipo">
+            <h3 class="d-flex justify-content-between">
+              <span>Propiedad:</span>
+              <span>
+                <%= subasta.nombre_propiedad %>
+              </span>
+            </h3>
+            <p class="d-flex justify-content-between">
+              <span>Categoria:</span>
+              <span>
+                <%= subasta.categoria %>
+              </span>
             </p>
           </div>
-          <div class="imgenes">
-            <img src="/img/cama.svg" alt="">
-            <p>
-              <%= subasta.N_cuartos %>
+
+          <div class="features">
+            <div class="imgenes">
+              <p class="d-flex justify-content-between">
+                <span>N° Baños</span>
+                <span>
+                  <%= subasta.N_baños %>
+                </span>
+              </p>
+            </div>
+            <div class="imgenes">
+              <p class="d-flex justify-content-between">
+                <span>N° Cuartos</span>
+                <span>
+                  <%= subasta.N_cuartos %>
+                </span>
+              </p>
+            </div>
+            <div class="imgenes">
+              <p class="d-flex justify-content-between">
+                <span>N° Cocinas</span>
+                <span>
+                  <%= subasta.N_cocina %>
+                </span>
+              </p>
+            </div>
+            <div class="imgenes">
+              <p class="d-flex justify-content-between">
+                <span>N° Cuartos</span>
+                <span>
+                  <%= subasta.N_cocheras %>
+                </span>
+              </p>
+            </div>
+            <div class="imgenes">
+              <p class="d-flex justify-content-between">
+                <span>Patio</span>
+                <span>
+                  <%= subasta.patio%>
+                </span>
+              </p>
+            </div>
+          </div>
+
+          <div class="imagenes">
+            <p class="d-flex justify-content-between">
+              <span>Unicacion</span>
+              <span>
+                <%= subasta.direccion %>
+              </span>
             </p>
           </div>
-          <div class="imgenes">
-            <img src="/img/cosina.svg" alt="">
+
+          <div class="content_descripcion">
+            <h5>
+              Descripcion de propiedad
+            </h5>
             <p>
-              <%= subasta.N_cocina %>
-            </p>
-          </div>
-          <div class="imgenes">
-            <img src="/img/garaje.svg" alt="">
-            <p>
-              <%= subasta.N_cocheras %>
-            </p>
-          </div>
-          <div class="imgenes">
-            <img src="/img/patio.svg" alt="">
-            <p>
-              <%= subasta.patio==='si' ? '1' : '0' %>
+              <span>
+                <%= subasta.descripcion %>
+              </span>
             </p>
           </div>
         </div>
       </div>
     </div>
-    <!-- Chat de pujas -->
-    <div id="chat">
-      <h3>Chat de Pujas</h3>
-      <div id="messages"></div>
-      <input type="text" id="messageInput" placeholder="Ingrese su puja" />
-      <button id="sendButton">Enviar</button>
+
+
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <p>Inicia<br>VIERNES 05</p>
+        </div>
+        <div>
+          <p>02:00 pm</p>
+        </div>
+      </div>
+      <div class="card-body" id="body_card">
+        <h2>¡Oportunidad para el que sabe!</h2>
+        <button id="participar">PARTICIPA</button>
+        <p class="precio">
+          Precio Base:
+          <span class="price">US$<%= formatNumber(subasta.precio_base) %></span>
+        </p>
+
+      </div>
+      <!-- Chat de pujas -->
+      <div id="chat" class="chat">
+        <h3>Chat de Pujas</h3>
+        <div id="messages"></div>
+        <input type="text" id="messageInput" placeholder="Ingrese su puja" />
+        <button id="sendButton">Enviar</button>
+      </div>
     </div>
   </div>
+
 
   <script>
     const socket = io();
@@ -188,19 +223,31 @@
     const messageInput = document.getElementById('messageInput');
     const sendButton = document.getElementById('sendButton');
 
+    // Función para formatear números con separadores de miles
+    function formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
     // Unirse a la sala de la subasta específica
     const auctionRoom = '<%= subasta.id %>';
     socket.emit('joinRoom', auctionRoom);
 
+    // Obtener el precio base desde el servidor y sumar $100
+    const precioBase = <%= subasta.precio_base %>;
+    const precioBaseConIncremento = precioBase + 100;
+
+    // Establecer el valor inicial del input con el precio base sumado y formateado
+    messageInput.value = formatNumber(precioBaseConIncremento);
+
     socket.on('newBid', function (data) {
       const messageElement = document.createElement('div');
-      messageElement.textContent = `Puja de $${data.bid} por ${data.user}`;
+      messageElement.textContent = `Puja de $${formatNumber(data.bid)} por ${data.user}`;
       messages.appendChild(messageElement);
       messages.scrollTop = messages.scrollHeight; // Scroll to the bottom
     });
 
     sendButton.addEventListener('click', function () {
-      const bid = messageInput.value;
+      const bid = messageInput.value.replace(/,/g, ''); // Eliminar comas antes de enviar
       socket.emit('bid', {
         user: '<%= usuario ? usuario.nombre : "Invitado" %>',
         bid: bid,
@@ -215,6 +262,7 @@
       }
     });
   </script>
+
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -257,10 +305,25 @@
           mainImage.alt = image.alt;
 
           // Desplaza la ventana para mostrar la imagen principal
-          mainImage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          //mainImage.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
       });
     });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btnIniciarChat = document.getElementById('participar');
+      const chat = document.getElementById('chat');
+      const cardBody = document.getElementById('body_card');
+
+      btnIniciarChat.addEventListener('click', () => {
+        console.log('se realizo click');
+        chat.classList.add('active');
+        cardBody.classList.add('active');
+      });
+
+    })
   </script>
 </body>
 
