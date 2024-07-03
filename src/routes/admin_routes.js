@@ -27,7 +27,7 @@ router.post("/loginAdminG", (req, res) => {
       console.error("Error al buscar el administrador general:", error);
       return res.status(500).send("Error al iniciar sesión");
     }
-x
+
     if (results.length === 0) {
       return res.status(401).send("Correo electrónico no registrado");
     }

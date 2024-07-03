@@ -46,6 +46,10 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'src', 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Estado de la subasta
+let auctionEnded = false;
+let currentWinner = null;
+
 // Socket.io
 io.on('connection', (socket) => {
     console.log('Nuevo cliente conectado');
@@ -53,11 +57,24 @@ io.on('connection', (socket) => {
     socket.on('joinRoom', (room) => {
         socket.join(room);
         console.log(`Cliente unido a la sala: ${room}`);
+        
+        // Notificar al cliente sobre el estado de la subasta
+        if (auctionEnded) {
+            socket.emit('auctionEnded', { winner: currentWinner });
+        }
     });
   
     socket.on('bid', (data) => {
+        if (auctionEnded) return; // No aceptar nuevas pujas si la subasta ha terminado
+
         console.log('Nueva puja recibida:', data);
+        currentWinner = data.user; // Actualizar el ganador actual
         io.to(data.room).emit('newBid', data); // Emitir la nueva puja a la sala específica
+    });
+
+    socket.on('endAuction', (room) => {
+        auctionEnded = true;
+        io.to(room).emit('auctionEnded', { winner: currentWinner });
     });
 
     socket.on('disconnect', () => {
