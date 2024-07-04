@@ -209,6 +209,11 @@ header {
     width: 30%;
 }
 
+.filtro-seleccionado {
+    border: 2px solid #000;
+  }
+  
+
 .content_filtro h2{
     font-family: var(--font--banner--bool);
     font-size: .95rem;
