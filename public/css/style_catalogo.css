@@ -3,7 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Scope+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
-:root{
+:root {
     --font--banner--semi: "Barlow";
     --font--banner--bool: "Roboto";
     --font--parrafo: "Space Mono";
@@ -15,7 +15,7 @@
     --color--sub: #C5AC75;
 }
 
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -30,63 +30,63 @@ header {
     align-items: center;
     justify-content: space-around;
     z-index: 100;
-  }
-  
-  .session {
+}
+
+.session {
     position: relative;
-  }
-  
-  .session p {
+}
+
+.session p {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: #fff;
     font-size: 1rem;
-  }
-  
-  .session p span a {
+}
+
+.session p span a {
     font-size: 1rem;
     font-family: var(--font--parrafo);
     color: #fff;
     text-decoration: none;
     transition: all 0.5s;
-  }
-  
-  .session p span a:hover {
+}
+
+.session p span a:hover {
     font-weight: 900;
-  }
-  
-  header nav {
+}
+
+header nav {
     display: flex;
     gap: 2rem;
-  }
-  
-  header nav a {
+}
+
+header nav a {
     font-size: 1.1rem;
     font-family: var(--font--header);
     text-decoration: none;
     color: #fff;
     transition: all 0.3s;
-  }
-  
-  header nav a:hover {
+}
+
+header nav a:hover {
     transform: scale(1.1);
-  }
-  
-  header .session p .btn_menu {
+}
+
+header .session p .btn_menu {
     background: none;
     border: none;
     cursor: pointer;
-  }
-  
-  header .session p .btn_menu i {
+}
+
+header .session p .btn_menu i {
     font-size: 1.5rem;
     font-weight: 600;
     color: #fff;
-  }
-  
-  .menu_desplegable {
+}
+
+.menu_desplegable {
     min-width: 300px;
     height: 100vh;
     position: fixed;
@@ -97,33 +97,33 @@ header {
     visibility: hidden;
     opacity: 0;
     transition: visibility 0.5s,
-      opacity 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53),
-      transform 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53);
+        opacity 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53),
+        transform 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53);
     transform: translateX(100%);
-  }
-  
-  .menu_desplegable.active {
+}
+
+.menu_desplegable.active {
     visibility: visible;
     opacity: 1;
     transform: translateX(0);
     transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-      transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-  
-  .cabezera_menu h3 {
+        transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.cabezera_menu h3 {
     color: #fff;
-  }
-  
-  .cabezera_menu button {
+}
+
+.cabezera_menu button {
     background: none;
     border: none;
     transition: ease 0.3s;
     color: #fff;
-  }
-  
-  .cabezera_menu button:hover {
+}
+
+.cabezera_menu button:hover {
     font-size: 1.2rem;
-  }
+}
 
 /* Estilos del título y la imagen del encabezado */
 .header {
@@ -151,16 +151,16 @@ header {
 }
 
 .header .overlay h1,
-.header .overlay p{
+.header .overlay p {
     margin-left: 5rem;
 }
 
-.header .overlay h1{
+.header .overlay h1 {
     font-size: 3rem;
     font-family: var(--font--banner--bool);
 }
 
-.header .overlay p{
+.header .overlay p {
     font-size: 1rem;
     font-family: var(--font--banner--semi);
 }
@@ -177,16 +177,20 @@ header {
 
 .search-form input[type="text"] {
     width: 15%;
-    padding: 0.5rem 5rem 0.5rem 1rem; /* Ajusta el espaciado para dejar espacio para la imagen */
+    padding: 0.5rem 5rem 0.5rem 1rem;
+    /* Ajusta el espaciado para dejar espacio para la imagen */
     border: none;
     border-radius: 0.25rem;
     outline: none;
     transition: border-color 0.3s ease;
     box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.30);
-    background-image: url("/img/search.png"); /* Establece la imagen como fondo */
+    background-image: url("/img/search.png");
+    /* Establece la imagen como fondo */
     background-repeat: no-repeat;
-    background-position: right 10px center;  /* Ajusta la posición de la imagen */
-    background-size: 20px; /* Ajusta el tamaño de la imagen */
+    background-position: right 10px center;
+    /* Ajusta la posición de la imagen */
+    background-size: 20px;
+    /* Ajusta el tamaño de la imagen */
 }
 
 .search-form input[type="text"]:focus {
@@ -205,36 +209,38 @@ header {
     width: 100%;
 }
 
-.content_filtro{
+.content_filtro {
     width: 30%;
 }
 
 .filtro-seleccionado {
     border: 2px solid #000;
-  }
-  
+}
 
-.content_filtro h2{
+.content_filtro h2 {
     font-family: var(--font--banner--bool);
     font-size: .95rem;
     font-weight: 400;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .filtro {
-    width: 200px; /* Ancho fijo */
-    height: 120px; /* Altura fija */
+    width: 200px;
+    /* Ancho fijo */
+    height: 120px;
+    /* Altura fija */
     border: 1px solid #ccc;
     border-radius: 3px;
     margin-bottom: 2rem;
     text-align: center;
     padding: .5rem;
     cursor: pointer;
-    position: relative; /* Para posicionar correctamente las imágenes dentro del filtro */
-    overflow: hidden; /* Evita que el contenido se desborde */
+    position: relative;
+    /* Para posicionar correctamente las imágenes dentro del filtro */
+    overflow: hidden;
+    /* Evita que el contenido se desborde */
     transition: ease-in-out .2s;
 }
-
 
 
 .filtro p {
@@ -249,14 +255,14 @@ header {
     align-items: center;
 }
 
-.filtro p span{
+.filtro p span {
     width: 30px;
     height: 30px;
     display: flex;
     align-items: center;
 }
 
-.filtro:hover{
+.filtro:hover {
     background: #fff;
     border: none;
     box-shadow: 0px 0px 15px rgb(0, 0, 0, 0.30);
@@ -264,7 +270,7 @@ header {
     border-radius: 0;
 }
 
-.filtro:hover p{
+.filtro:hover p {
     color: #000;
     font-weight: 600;
 }
@@ -277,6 +283,11 @@ header {
     stroke: #000;
 }
 
+.filtro:hover .svg_todo .cls-1 {
+    fill: #000;
+}
+
+
 .property-card {
     height: 30vh;
     background-color: #fff;
@@ -286,24 +297,24 @@ header {
     display: flex;
 }
 
-.slider{
+.slider {
     width: 40%;
     height: 100%;
 }
 
-.carousel-inner{
+.carousel-inner {
     height: 100%;
 }
 
-.carousel-item{
+.carousel-item {
     height: 100%;
 }
 
-.carousel img{
+.carousel img {
     height: 100%;
 }
 
-.img_flechas img{
+.img_flechas img {
     width: 25px;
 }
 
@@ -314,7 +325,7 @@ header {
     padding: 3rem;
 }
 
-.content_info{
+.content_info {
     width: 70%;
     display: flex;
     flex-direction: column;
@@ -322,12 +333,12 @@ header {
     gap: 1rem;
 }
 
-.nombre_tipo h3{
+.nombre_tipo h3 {
     font-size: 1.1rem;
     font-family: var(--font--banner--bool);
 }
 
-.nombre_tipo p{
+.nombre_tipo p {
     font-size: .8rem;
     font-family: var(--font--banner--semi);
     margin-top: -.7rem;
@@ -335,13 +346,13 @@ header {
     font-weight: 600;
 }
 
-.content_info .ubicacion{
+.content_info .ubicacion {
     font-family: var(--font--parrafo);
     letter-spacing: -.01rem;
     font-size: .9rem;
 }
 
-.content_info .precio{
+.content_info .precio {
     font-size: 1rem;
     font-weight: 300;
     font-family: var(--font--banner--bool);
@@ -372,7 +383,7 @@ header {
     row-gap: 1rem;
 }
 
-.property-card-content .features .imgenes{
+.property-card-content .features .imgenes {
     width: 50px;
     height: 50px;
     display: flex;
@@ -381,7 +392,7 @@ header {
     gap: .5rem;
 }
 
-.property-card-content .features .imgenes p{
+.property-card-content .features .imgenes p {
     font-size: 1rem;
     font-family: var(--font--parrafo);
 }

@@ -201,11 +201,19 @@ router.post("/registro", (req, res) => {
 
 // Catalogo
 router.get("/catalogo", (req, res) => {
-  const querySubastas = "SELECT * FROM subastaonline.subastas ORDER BY id ASC";
-  const queryImagenes =
-    "SELECT id_subasta, imagen FROM subastaonline.imagenes_propiedad";
+  const { categoria } = req.query;
+  let querySubastas = "SELECT * FROM subastaonline.subastas";
+  const queryParams = [];
 
-  conexion.query(querySubastas, (error, subastas) => {
+  if (categoria) {
+    querySubastas += " WHERE categoria = ?";
+    queryParams.push(categoria);
+  }
+  querySubastas += " ORDER BY id ASC";
+
+  const queryImagenes = "SELECT id_subasta, imagen FROM subastaonline.imagenes_propiedad";
+
+  conexion.query(querySubastas, queryParams, (error, subastas) => {
     if (error) {
       console.error("Error al obtener datos de subasta", error);
       return res.status(500).send("Error al obtener datos de subasta");
@@ -230,11 +238,15 @@ router.get("/catalogo", (req, res) => {
 
       res.render("catalogo", { 
         usuario: req.session.usuario,
-        subastas: subastasConImagenes 
+        subastas: subastasConImagenes,
+        categoria // Pasar la categoría seleccionada a la plantilla
       });
     });
   });
 });
+
+
+
 
 
 // Subastas
@@ -247,7 +259,7 @@ router.get("/subasta/:id", isAuthenticated, (req, res) => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
-  conexion.query(querySubasta, [subastaId], (error, resultadoSubasta, ) => {
+  conexion.query(querySubasta, [subastaId], (error, resultadoSubasta,) => {
     if (error) {
       console.error("Error al obtener datos de subasta", error);
       return res.status(500).send("Error al obtener datos de subasta");

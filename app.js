@@ -46,11 +46,10 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'src', 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Estado de las subastas
 const auctions = {}; // Objeto para almacenar el estado de cada subasta
-const HEARTBEAT_TIMEOUT = 15000; // Tiempo en milisegundos para considerar que un cliente se desconectó (15 segundos)
+const HEARTBEAT_TIMEOUT = 5000; // Tiempo en milisegundos para considerar que un cliente se desconectó (5 segundos)
+const lastHeartbeat = {}; // Mantener un registro del último latido recibido por cada sala (subasta)
 
-// Socket.io - Manejo de subastas y persistencia en la base de datos
 io.on('connection', (socket) => {
     console.log('Nuevo cliente conectado');
 
@@ -62,7 +61,9 @@ io.on('connection', (socket) => {
         if (!auctions[room]) {
             auctions[room] = {
                 auctionEnded: false,
-                currentWinner: null
+                currentWinner: null,
+                clientDisconnected: false,
+                winnerNotified: false // Controlar si el ganador ha sido notificado
             };
         }
 
@@ -90,7 +91,7 @@ io.on('connection', (socket) => {
 
     socket.on('bid', (data) => {
         const room = data.room;
-        if (auctions[room].auctionEnded) return; // No aceptar nuevas pujas si la subasta ha terminado
+        if (auctions[room].auctionEnded || auctions[room].clientDisconnected) return; // No aceptar nuevas pujas si la subasta ha terminado o el cliente está desconectado
 
         console.log('Nueva puja recibida:', data);
         auctions[room].currentWinner = data.user; // Actualizar el ganador actual
@@ -110,26 +111,38 @@ io.on('connection', (socket) => {
     });
 
     socket.on('endAuction', (room) => {
-        auctions[room].auctionEnded = true;
+        if (!auctions[room].auctionEnded) {
+            auctions[room].auctionEnded = true;
 
-        const updateQuery = "UPDATE subastas SET auctionEnded = true WHERE id = ?";
-        conexion.query(updateQuery, [room], (error, results) => {
-            if (error) {
-                console.error("Error al marcar la subasta como finalizada:", error);
-                return;
-            }
-            io.to(room).emit('auctionEnded', { winner: auctions[room].currentWinner });
-            console.log(`Subasta ${room} marcada como finalizada.`);
-        });
-
+            const updateQuery = "UPDATE subastas SET auctionEnded = true WHERE id = ?";
+            conexion.query(updateQuery, [room], (error, results) => {
+                if (error) {
+                    console.error("Error al marcar la subasta como finalizada:", error);
+                    return;
+                }
+                io.to(room).emit('auctionEnded', { winner: auctions[room].currentWinner });
+                auctions[room].winnerNotified = true; // Marcar que el ganador ha sido notificado
+                console.log(`Subasta ${room} marcada como finalizada.`);
+            });
+        }
     });
 
     // Manejar latidos de corazón para mantener la subasta activa
-    let lastHeartbeat = {}; // Mantener un registro del último latido recibido por cada sala (subasta)
-
     socket.on('heartbeat', (room) => {
         console.log(`Latido recibido de la sala ${room}`);
+        
+        // Inicializar el estado de la subasta si no existe en la memoria
+        if (!auctions[room]) {
+            auctions[room] = {
+                auctionEnded: false,
+                currentWinner: null,
+                clientDisconnected: false,
+                winnerNotified: false
+            };
+        }
+
         lastHeartbeat[room] = Date.now(); // Actualizar el tiempo del último latido recibido para esta sala
+        auctions[room].clientDisconnected = false; // Marcar al cliente como conectado
     });
 
     // Verificar el estado de los latidos de corazón y manejar desconexiones
@@ -138,8 +151,10 @@ io.on('connection', (socket) => {
             const timeSinceLastHeartbeat = Date.now() - lastHeartbeat[room];
             if (timeSinceLastHeartbeat > HEARTBEAT_TIMEOUT) {
                 console.log(`Cliente en la sala ${room} desconectado`);
-                // Puedes agregar lógica adicional aquí, como notificar que el cliente se desconectó
-                // y manejar la lógica de la subasta según tus requerimientos.
+                auctions[room].clientDisconnected = true; // Marcar al cliente como desconectado
+
+                // Notificar a todos los clientes en la sala que un cliente se desconectó
+                io.to(room).emit('clientDisconnected', { message: `Cliente desconectado de la subasta ${room}` });
             }
         });
     }, 5000); // Verificar cada 5 segundos el estado de los latidos de corazón (ajusta según tus necesidades)
@@ -148,6 +163,7 @@ io.on('connection', (socket) => {
         console.log('Cliente desconectado');
     });
 });
+
 
 
 // Iniciar el servidor
