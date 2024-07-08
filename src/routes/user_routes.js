@@ -245,10 +245,6 @@ router.get("/catalogo", (req, res) => {
   });
 });
 
-
-
-
-
 // Subastas
 router.get("/subasta/:id", isAuthenticated, (req, res) => {
   const subastaId = req.params.id;
