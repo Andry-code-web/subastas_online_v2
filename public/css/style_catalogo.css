@@ -110,6 +110,23 @@ header .session p .btn_menu i {
         transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
+.menu_desplegable div ul{
+    list-style: none;
+}
+
+.menu_desplegable div ul li a{
+    text-decoration: none;
+    color: #fff;
+    font-family: var(--font--banner--bool);
+    font-weight: 400;
+    transition: ease-in .3s;
+}
+
+.menu_desplegable div ul li a:hover{
+    font-size: 1.1rem;
+    border-bottom: 2px solid #fff;
+}
+
 .cabezera_menu h3 {
     color: #fff;
 }
@@ -124,6 +141,7 @@ header .session p .btn_menu i {
 .cabezera_menu button:hover {
     font-size: 1.2rem;
 }
+
 
 /* Estilos del título y la imagen del encabezado */
 .header {

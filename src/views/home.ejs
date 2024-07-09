@@ -24,53 +24,48 @@
     <div class="session">
       <img src="/img/session.svg" alt="">
       <% if (usuario) { %>
-      <p class="d-flex align-items-center ">
-        <span>Bienvenido, <%= usuario.nombre %></span>
-        <button class="btn_menu ms-1" id="btn_menu">
-          <i class="bi bi-list"></i>
-        </button>
-      <div class="menu_desplegable d-flex flex-column justify-content-between">
-        <div>
-          <div class="cabezera_menu d-flex justify-content-between">
-            <h3>Subastas</h3>
-            <button id="btn_close">
-              <i class="bi bi-x-lg"></i>
-            </button>
-          </div>
-          <ul>
-            <li><a href="/user/logout">Logout</a></li>
-            <li><a href="/user/logout">Logout</a></li>
-            <li><a href="/user/logout">Logout</a></li>
-          </ul>
-        </div>
-
-        <div class="perfil_user">
-          <div class="d-flex flex-row">
-            <img src="https://placehold.co/40x40" alt="Profile Picture" class="rounded-circle me-2">
-            <div class="d-flex flex-column">
-              <strong>Usuario</strong>
-              <small>
-                nombre User
-              </small>
-              <a href="/user/logout" class="btn btn-danger btn-sm ms-2">Cerrar Sesión</a>
+        <p class="d-flex align-items-center ">
+          <span>Bienvenido, <%= usuario.nombre %></span>
+          <button class="btn_menu ms-1" id="btn_menu">
+            <i class="bi bi-list"></i>
+          </button>
+        <div class="menu_desplegable d-flex flex-column justify-content-between">
+          <div>
+            <div class="cabezera_menu d-flex justify-content-between">
+              <h3>Subastas</h3>
+              <button id="btn_close">
+                <i class="bi bi-x-lg"></i>
+              </button>
             </div>
-
+            <ul>
+              <li><a href="/user/logout">Catalogo</a></li>
+            </ul>
           </div>
-
+          <div class="perfil_user">
+            <div class="d-flex flex-row">
+              <i class="bi bi-person-bounding-box" style="font-size: 2.5rem; color: #fff; margin-right: 1rem;"></i>
+              <div class="d-flex flex-column">
+                <strong>Usuario</strong>
+                <small>
+                  <%= usuario.nombre %>
+                </small>
+                <a href="/user/logout" class="btn btn-danger btn-sm ms-2">Cerrar Sesión</a>
+              </div>
+            </div>
+          </div>
+          </p>
+          <% } else { %>
+            <p>
+              <span>
+                <a href="/user/login">Login</a>
+              </span>
+              <span>/</span>
+              <span>
+                <a href="/user/registro">Sign up</a>
+              </span>
+            </p>
+            <% } %>
         </div>
-        </p>
-        <% } else { %>
-        <p>
-          <span>
-            <a href="/user/login">Login</a>
-          </span>
-          <span>/</span>
-          <span>
-            <a href="/user/registro">Sign up</a>
-          </span>
-        </p>
-        <% } %>
-      </div>
   </header>
 
   <!-- BANNER -->

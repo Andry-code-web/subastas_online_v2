@@ -3,6 +3,7 @@ SELECT * FROM subastaonline.subastas;
 
 DELETE FROM subastaonline.subastas WHERE id > 0;
 
+
 ALTER TABLE subastas
 ADD COLUMN descripcion TEXT;
 
@@ -17,9 +18,11 @@ TRUNCATE TABLE subastas;
 SET FOREIGN_KEY_CHECKS = 1;
 ALTER TABLE subastas AUTO_INCREMENT = 1;
 
-
 ALTER TABLE subastas ADD COLUMN auctionEnded BOOLEAN DEFAULT false;
 ALTER TABLE subastas ADD COLUMN currentWinner VARCHAR(255) DEFAULT NULL;
+ALTER TABLE subastas ADD COLUMN hora_subasta TIME AFTER fecha_subasta;
+
+ALTER TABLE subastas MODIFY COLUMN fecha_subasta DATE AFTER patio;
 
 --IMAGENES_PROPIEDAD
 

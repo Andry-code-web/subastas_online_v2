@@ -100,39 +100,39 @@
                   </thead>
                   <tbody style="font-size: .9rem;">
                     <% subastas.forEach(subasta=> { %>
-                    <tr>
-                      <td>
-                        <%= subasta.nombre_propiedad %>
-                      </td>
-                      <td class="truncate">
-                        <%= subasta.descripcion %>
-                      </td>
-                      <td>
-                        <%= subasta.categoria %>
-                      </td>
-                      <td>
-                        <%= subasta.direccion %>
-                      </td>
-                      <td>
-                        <%= subasta.precio_base %>
-                      </td>
-                      <td>
-                        <%= subasta.N_cuartos %>
-                      </td>
-                      <td>
-                        <%= subasta.N_baños %>
-                      </td>
-                      <td>
-                        <%= subasta.N_cocina %>
-                      </td>
-                      <td>
-                        <%= subasta.N_cocheras %>
-                      </td>
-                      <td>
-                        <%= subasta.patio %>
-                      </td>
-                    </tr>
-                    <% }); %>
+                      <tr>
+                        <td>
+                          <%= subasta.nombre_propiedad %>
+                        </td>
+                        <td class="truncate">
+                          <%= subasta.descripcion %>
+                        </td>
+                        <td>
+                          <%= subasta.categoria %>
+                        </td>
+                        <td>
+                          <%= subasta.direccion %>
+                        </td>
+                        <td>
+                          <%= subasta.precio_base %>
+                        </td>
+                        <td>
+                          <%= subasta.N_cuartos %>
+                        </td>
+                        <td>
+                          <%= subasta.N_baños %>
+                        </td>
+                        <td>
+                          <%= subasta.N_cocina %>
+                        </td>
+                        <td>
+                          <%= subasta.N_cocheras %>
+                        </td>
+                        <td>
+                          <%= subasta.patio %>
+                        </td>
+                      </tr>
+                      <% }); %>
                   </tbody>
                 </table>
               </div>
@@ -170,12 +170,13 @@
                         <label for="precio">Precio</label>
                         <input type="number" class="form-control" id="precio" name="precio_base" required>
                       </div>
-                    </div>
-                    <div class="col-md-6">
                       <div class="mb-3">
                         <label for="N_banos">Número de Baños</label>
                         <input type="number" class="form-control" id="N_banos" name="N_banos" required>
                       </div>
+                    </div>
+                    <div class="col-md-6">
+
                       <div class="mb-3">
                         <label for="N_cuartos">Número de Cuartos</label>
                         <input type="number" class="form-control" id="N_cuartos" name="N_cuartos" required>
@@ -195,6 +196,14 @@
                           <option value="no">No</option>
                         </select>
                       </div>
+                      <div class="mb-3">
+                        <label for="">fecha</label>
+                        <input type="date" class="form-control calendario" name="" id="">
+                      </div>
+                      <div class="mb-3">
+                        <label for="">Hora</label>
+                        <input type="time" class="form-control" name="" id="">
+                      </div>
                     </div>
                   </div>
                   <div class="mb-3">
@@ -208,16 +217,16 @@
                 </div>
               </div>
             </form>
-            <!-- <form action="/admin/upload" method="post" enctype="multipart/form-data">
-              <input type="hidden" name="id_subasta" value="1"> 
-              <input type="file" name="images" multiple>
-              <button type="submit">Upload</button>
-            </form> -->
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- SCRIPTS -->
+  <script>
+
+  </script>
 </body>
 
 </html>
