@@ -225,7 +225,6 @@ router.delete('/eliminarAdminVendedor/:id', (req, res) => {
 });
 
 
-
 /* ADMIN VENDEDOR */
 // Middleware para verificar si el admin vendedor ha iniciado sesión
 function isAuthenticatedAdminV(req, res, next) {
@@ -328,10 +327,8 @@ router.get("/adminV", isAuthenticatedAdminV, (req, res) => {
 });
 
 
-
-// Ruta para subir un inmueble con imágenes a la base de datos
 router.post("/subir-inmueble", upload.array('images', 4), (req, res) => {
-  const { nombre_propiedad, descripcion, categoria, direccion, precio_base, N_banos, N_cuartos, N_cocina, N_cocheras, patio } = req.body;
+  const { nombre_propiedad, descripcion, categoria, direccion, precio_base, N_banos, N_cuartos, N_cocina, N_cocheras, patio, fecha_subasta, hora_subasta } = req.body;
   const imagenes = req.files;
 
   // Obtener el ID del administrador vendedor desde la sesión
@@ -343,9 +340,9 @@ router.post("/subir-inmueble", upload.array('images', 4), (req, res) => {
 
   console.log(req.body);
 
-  const insertQuery = `INSERT INTO subastas (nombre_propiedad, descripcion, categoria, direccion, precio_base, N_baños, N_cuartos, N_cocina, N_cocheras, patio, id_admin_vendedor) 
-                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-  const values = [nombre_propiedad, descripcion, categoria, direccion, precio_base, N_banos, N_cuartos, N_cocina, N_cocheras, patio, id_admin_vendedor];
+  const insertQuery = `INSERT INTO subastas (nombre_propiedad, descripcion, categoria, direccion, precio_base, N_baños, N_cuartos, N_cocina, N_cocheras, patio, fecha_subasta, hora_subasta, id_admin_vendedor) 
+                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  const values = [nombre_propiedad, descripcion, categoria, direccion, precio_base, N_banos, N_cuartos, N_cocina, N_cocheras, patio, fecha_subasta, hora_subasta, id_admin_vendedor];
 
   connection.query(insertQuery, values, (err, result) => {
     if (err) {
@@ -372,6 +369,7 @@ router.post("/subir-inmueble", upload.array('images', 4), (req, res) => {
     }
   });
 });
+
 
 
 /* TEST-SESIONS */

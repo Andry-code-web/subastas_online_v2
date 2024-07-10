@@ -245,7 +245,6 @@ router.get("/catalogo", (req, res) => {
   });
 });
 
-// Subastas
 router.get("/subasta/:id", isAuthenticated, (req, res) => {
   const subastaId = req.params.id;
   const querySubasta = 'SELECT * FROM subastaonline.subastas WHERE id = ?';
@@ -255,7 +254,22 @@ router.get("/subasta/:id", isAuthenticated, (req, res) => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
-  conexion.query(querySubasta, [subastaId], (error, resultadoSubasta,) => {
+  function formatearFecha(fecha) {
+    const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+    const diaSemana = diasSemana[fecha.getDay()];
+    const diaMes = fecha.getDate();
+    return `${diaSemana} ${diaMes}`;
+  }
+
+  function formatearHora(hora) {
+    const [horas, minutos] = hora.split(':');
+    const horasInt = parseInt(horas, 10);
+    const periodo = horasInt >= 12 ? 'PM' : 'AM';
+    const horas12 = horasInt % 12 || 12;
+    return `${horas12}:${minutos} ${periodo}`;
+  }
+
+  conexion.query(querySubasta, [subastaId], (error, resultadoSubasta) => {
     if (error) {
       console.error("Error al obtener datos de subasta", error);
       return res.status(500).send("Error al obtener datos de subasta");
@@ -265,6 +279,10 @@ router.get("/subasta/:id", isAuthenticated, (req, res) => {
       return res.status(404).send("Subasta no encontrada");
     }
 
+    const subastaData = resultadoSubasta[0];
+    subastaData.fecha_subasta_formateada = formatearFecha(new Date(subastaData.fecha_subasta));
+    subastaData.hora_subasta_formateada = formatearHora(subastaData.hora_subasta);
+
     conexion.query(queryImagenes, [subastaId], (error, resultadoImagenes) => {
       if (error) {
         console.error("Error al obtener imágenes de subasta", error);
@@ -272,7 +290,7 @@ router.get("/subasta/:id", isAuthenticated, (req, res) => {
       }
 
       const subasta = {
-        ...resultadoSubasta[0],
+        ...subastaData,
         imagenes: resultadoImagenes.map(img => img.imagen.toString('base64'))
       };
 
@@ -284,6 +302,8 @@ router.get("/subasta/:id", isAuthenticated, (req, res) => {
     });
   });
 });
+
+
 
 
 module.exports = router;

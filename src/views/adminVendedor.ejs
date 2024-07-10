@@ -197,12 +197,12 @@
                         </select>
                       </div>
                       <div class="mb-3">
-                        <label for="">fecha</label>
-                        <input type="date" class="form-control calendario" name="" id="">
+                        <label for="">fecha subasta</label>
+                        <input type="date" class="form-control calendario" name="fecha_subasta" id="fecha_subasta">
                       </div>
                       <div class="mb-3">
-                        <label for="">Hora</label>
-                        <input type="time" class="form-control" name="" id="">
+                        <label for="">Hora subasta</label>
+                        <input type="time" class="form-control" name="hora_subasta" id="hora_subasta">
                       </div>
                     </div>
                   </div>
@@ -226,7 +226,30 @@
   <!-- SCRIPTS -->
   <script>
 
+    var inputHora = document.getElementById("hora_subasta");
+
+    function MedirTiempo() {
+      var TimeSplit = inputHora.value.split(":"),
+        hours,
+        minutes,
+        meridean;
+      hours = TimeSplit[0];
+      minutes = TimeSplit[1];
+      if (hours > 12) {
+        meridean = 'PM';
+        hours -= 12;
+      } else if (hours < 12) {
+        meridean = 'AM';
+        if (hours == 0) {
+          hours = 12;
+        }
+      } else {
+        meridean = 'PM'
+      }
+      alert(hours + ':' + minutes + ':' + meridean);
+    }
   </script>
+
 </body>
 
 </html>
