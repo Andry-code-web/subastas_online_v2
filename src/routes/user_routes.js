@@ -245,28 +245,17 @@ router.get("/catalogo", (req, res) => {
   });
 });
 
+// Subastas
 router.get("/subasta/:id", isAuthenticated, (req, res) => {
   const subastaId = req.params.id;
-  const querySubasta = 'SELECT * FROM subastaonline.subastas WHERE id = ?';
+  const querySubasta = `
+    SELECT *, DATE_FORMAT(fecha_subasta, '%d/%m/%Y') AS fecha_formateada 
+    FROM subastaonline.subastas 
+    WHERE id = ?`;
   const queryImagenes = 'SELECT imagen FROM subastaonline.imagenes_propiedad WHERE id_subasta = ?';
 
   function formatNumber(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  }
-
-  function formatearFecha(fecha) {
-    const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-    const diaSemana = diasSemana[fecha.getDay()];
-    const diaMes = fecha.getDate();
-    return `${diaSemana} ${diaMes}`;
-  }
-
-  function formatearHora(hora) {
-    const [horas, minutos] = hora.split(':');
-    const horasInt = parseInt(horas, 10);
-    const periodo = horasInt >= 12 ? 'PM' : 'AM';
-    const horas12 = horasInt % 12 || 12;
-    return `${horas12}:${minutos} ${periodo}`;
   }
 
   conexion.query(querySubasta, [subastaId], (error, resultadoSubasta) => {
@@ -279,10 +268,6 @@ router.get("/subasta/:id", isAuthenticated, (req, res) => {
       return res.status(404).send("Subasta no encontrada");
     }
 
-    const subastaData = resultadoSubasta[0];
-    subastaData.fecha_subasta_formateada = formatearFecha(new Date(subastaData.fecha_subasta));
-    subastaData.hora_subasta_formateada = formatearHora(subastaData.hora_subasta);
-
     conexion.query(queryImagenes, [subastaId], (error, resultadoImagenes) => {
       if (error) {
         console.error("Error al obtener imágenes de subasta", error);
@@ -290,7 +275,7 @@ router.get("/subasta/:id", isAuthenticated, (req, res) => {
       }
 
       const subasta = {
-        ...subastaData,
+        ...resultadoSubasta[0],
         imagenes: resultadoImagenes.map(img => img.imagen.toString('base64'))
       };
 
@@ -302,8 +287,6 @@ router.get("/subasta/:id", isAuthenticated, (req, res) => {
     });
   });
 });
-
-
 
 
 module.exports = router;
