@@ -21,7 +21,7 @@ router.get("/loginAdminG", (req, res) => {
 router.post("/loginAdminG", (req, res) => {
   const { correo, contraseña } = req.body;
 
-  const query = "SELECT * FROM adminGeneral WHERE correo_electronico = ?";
+  const query = "SELECT * FROM iqjcontm_subastaDB.admingeneral WHERE correo_electronico = ?";
   connection.query(query, [correo], (error, results) => {
     if (error) {
       console.error("Error al buscar el administrador general:", error);
@@ -32,14 +32,14 @@ router.post("/loginAdminG", (req, res) => {
       return res.status(401).send("Correo electrónico no registrado");
     }
 
-    const adminGeneral = results[0];
+    const admingeneral = results[0];
 
-    if (contraseña.trim() !== adminGeneral.contraseña.trim()) {
+    if (contraseña.trim() !== admingeneral.contraseña.trim()) {
       return res.status(401).send("Contraseña incorrecta");
     }
 
-    req.session.adminGeneralId = adminGeneral.id;
-    req.session.adminGeneralNombreUsuario = adminGeneral.nombre_usuario;
+    req.session.admingeneralId = admingeneral.id;
+    req.session.admingeneralNombreUsuario = admingeneral.nombre_usuario;
 
     // Redirige al usuario después de que la sesión se haya actualizado
     req.session.save((err) => {
@@ -63,15 +63,15 @@ router.get("/logout", function (req, res) {
 
 router.get("/adminG", (req, res) => {
   // Middleware para asegurarse de que la sesión se haya actualizado
-  if (!req.session.adminGeneralNombreUsuario) {
+  if (!req.session.admingeneralNombreUsuario) {
     return res.redirect("/admin/loginAdminG");
   }
 
-  const nombreUsuario = req.session.adminGeneralNombreUsuario;
+  const nombreUsuario = req.session.admingeneralNombreUsuario;
 
-  const queryUsuarios = 'SELECT * FROM subastaonline.usuarios';
-  const queryAdminVendedores = 'SELECT * FROM subastaonline.adminvendedor';
-  const querySubastas = 'SELECT * FROM subastaonline.subastas';
+  const queryUsuarios = 'SELECT * FROM iqjcontm_subastaDB.usuarios';
+  const queryAdminVendedores = 'SELECT * FROM iqjcontm_subastaDB.adminvendedor';
+  const querySubastas = 'SELECT * FROM iqjcontm_subastaDB.subastas';
 
   Promise.all([
     new Promise((resolve, reject) => {
@@ -117,7 +117,7 @@ router.get("/adminG", (req, res) => {
       const numAdminVendedores = adminVendedores.length;
       const numSubastas = subastas.length;
 
-      res.render("adminGeneral", {
+      res.render("admingeneral", {
         nombreUsuario,
         usuarios,
         numUsuarios,
@@ -128,15 +128,15 @@ router.get("/adminG", (req, res) => {
       });
     })
     .catch((error) => {
-      console.error("Error al obtener datos para la vista adminGeneral: ", error);
-      res.status(500).send("Error al obtener datos para la vista adminGeneral");
+      console.error("Error al obtener datos para la vista admingeneral: ", error);
+      res.status(500).send("Error al obtener datos para la vista admingeneral");
     });
 });
 
 // Método POST para crear un nuevo admin vendedor
 router.post("/crear-admin-vendedor", async (req, res) => {
   const { nombre_usuario, contraseña } = req.body;
-  const id_admin_general = req.session.adminGeneralId;
+  const id_admin_general = req.session.admingeneralId;
 
   if (!id_admin_general) {
     return res.status(401).send("Debe iniciar sesión como administrador general para crear un administrador vendedor.");
@@ -165,7 +165,7 @@ router.post("/crear-admin-vendedor", async (req, res) => {
 router.get('/editarUsuario/:id', (req, res) => {
   const userId = req.params.id;
 
-  const query = 'SELECT * FROM subastaonline.usuarios WHERE id = ?';
+  const query = 'SELECT * FROM iqjcontm_subastaDB.usuarios WHERE id = ?';
   connection.query(query, [userId], (error, result) => {
     if (error) {
       console.error("Error al obtener el usuario para editar: ", error);
@@ -214,7 +214,7 @@ router.delete('/eliminarUsuario/:id', (req, res) => {
 router.delete('/eliminarAdminVendedor/:id', (req, res) => {
   const adminVendedorId = req.params.id;
 
-  const query = 'DELETE FROM subastaonline.adminvendedor WHERE id = ?';
+  const query = 'DELETE FROM iqjcontm_subastaDB.adminvendedor WHERE id = ?';
   connection.query(query, [adminVendedorId], (error, result) => {
     if (error) {
       console.error('Error al eliminar el adminVendedor', error);
@@ -311,7 +311,7 @@ router.get("/adminV", isAuthenticatedAdminV, (req, res) => {
   const nombreUsuario = req.session.adminVendedorNombreUsuario;
   const adminVendedorId = req.session.adminVendedorId; // ID del admin vendedor que inició sesión
 
-  const query = 'SELECT * FROM subastaonline.subastas WHERE id_admin_vendedor = ?';
+  const query = 'SELECT * FROM iqjcontm_subastaDB.subastas WHERE id_admin_vendedor = ?';
   connection.query(query, [adminVendedorId], (error, results) => {
     if (error) {
       console.error("Error al obtener los datos de subasta:", error);
@@ -374,15 +374,15 @@ router.post("/subir-inmueble", upload.array('images', 4), (req, res) => {
 
 /* TEST-SESIONS */
 router.get("/test-session", (req, res) => {
-  const adminGeneralId = req.session.adminGeneralId || "no hay admin general";
+  const admingeneralId = req.session.admingeneralId || "no hay admin general";
   const adminVendedorId = req.session.adminVendedorId || "no hay admin vendedor";
 
   res.json({
-    adminGeneralId,
+    admingeneralId,
     adminVendedorId,
   });
   /* res.send(
-    `ID del admin general: ${adminGeneralId}, ID del admin vendedor: ${adminVendedorId}`
+    `ID del admin general: ${admingeneralId}, ID del admin vendedor: ${adminVendedorId}`
   ); */
 });
 
