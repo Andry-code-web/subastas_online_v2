@@ -9,7 +9,7 @@ const isAuthenticated = (req, res, next) => {
   if (req.session && req.session.usuario) {
     return next();
   } else {
-    res.redirect('/user/login');
+    res.redirect('/login');
   }
 };
 
@@ -19,13 +19,13 @@ router.get("/", (req, res) => {
   const querySubastas = `
     SELECT s.*, 
            (SELECT imagen 
-            FROM iqjcontm_subastaDB.imagenes_propiedad ip 
+            FROM subastaonline.imagenes_propiedad ip 
             WHERE s.id = ip.id_subasta 
             LIMIT 1) AS imagen_blob
-    FROM iqjcontm_subastaDB.subastas s
+    FROM subastaonline.subastas s
 `;
 
-  const queryComentario = "SELECT * FROM iqjcontm_subastaDB.comentarios";
+  const queryComentario = "SELECT * FROM subastaonline.comentarios";
 
   Promise.all([
     new Promise((resolve, reject) => {
@@ -74,7 +74,7 @@ router.post("/", (req, res) => {
   }
 
   const query =
-    "INSERT INTO iqjcontm_subastaDB.comentarios (nombre, comentario, rating) VALUES (?, ?, ?)";
+    "INSERT INTO subastaonline.comentarios (nombre, comentario, rating) VALUES (?, ?, ?)";
   const values = [nombre, texto, rating];
 
   conexion.query(query, values, (error, results) => {
@@ -82,7 +82,7 @@ router.post("/", (req, res) => {
       console.error("Error al subir los datos del formulario:", error);
       return res.status(500).send("Error al subir los datos del formulario");
     }
-    res.redirect("/user/");
+    res.redirect("/");
   });
 });
 
@@ -114,7 +114,7 @@ router.post("/login", (req, res) => {
         id: usuarioEncontrado.id,
         nombre: usuarioEncontrado.nombre,
       };
-      res.json({ success: true, redirect: "/user/" });
+      res.json({ success: true, redirect: "/" });
     } else {
       console.log("Usuario o contraseña incorrectos");
       res.status(401).json({ message: "Usuario o contraseña incorrectos" });
@@ -128,7 +128,7 @@ router.get("/logout", (req, res) => {
       console.error("Error al cerrar sesión: ", err);
       res.status(500).send("Error al cerrar sesión");
     } else {
-      res.redirect("/user/");
+      res.redirect("/");
     }
   });
 });
@@ -140,7 +140,7 @@ router.get("/registro", (req, res) => {
 
 router.post("/registro", (req, res) => {
   const consulta =
-    "INSERT INTO iqjcontm_subastaDB.usuarios (nombre, apellidos, dni, celular, correo_electronico, contraseña, boleta, factura, numero_factura, terminos_y_condiciones, uso_datos_personales) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    "INSERT INTO subastaonline.usuarios (nombre, apellidos, dni, celular, correo_electronico, contraseña, boleta, factura, numero_factura, terminos_y_condiciones, uso_datos_personales) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
   let {
     nombre,
@@ -202,7 +202,7 @@ router.post("/registro", (req, res) => {
 // Catalogo
 router.get("/catalogo", (req, res) => {
   const { categoria } = req.query;
-  let querySubastas = "SELECT * FROM iqjcontm_subastaDB.subastas";
+  let querySubastas = "SELECT * FROM subastaonline.subastas";
   const queryParams = [];
 
   if (categoria) {
@@ -211,7 +211,7 @@ router.get("/catalogo", (req, res) => {
   }
   querySubastas += " ORDER BY id ASC";
 
-  const queryImagenes = "SELECT id_subasta, imagen FROM iqjcontm_subastaDB.imagenes_propiedad";
+  const queryImagenes = "SELECT id_subasta, imagen FROM subastaonline.imagenes_propiedad";
 
   conexion.query(querySubastas, queryParams, (error, subastas) => {
     if (error) {
@@ -250,9 +250,9 @@ router.get("/subasta/:id", isAuthenticated, (req, res) => {
   const subastaId = req.params.id;
   const querySubasta = `
     SELECT *, DATE_FORMAT(fecha_subasta, '%d/%m/%Y') AS fecha_formateada 
-    FROM iqjcontm_subastaDB.subastas 
+    FROM subastaonline.subastas 
     WHERE id = ?`;
-  const queryImagenes = 'SELECT imagen FROM iqjcontm_subastaDB.imagenes_propiedad WHERE id_subasta = ?';
+  const queryImagenes = 'SELECT imagen FROM subastaonline.imagenes_propiedad WHERE id_subasta = ?';
 
   function formatNumber(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');

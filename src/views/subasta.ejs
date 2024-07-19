@@ -21,10 +21,10 @@
   <header>
     <div class="logo"><img src="/img/logo.png" alt=""></div>
     <nav>
-      <a href="/user/">Inicio</a>
+      <a href="/">Inicio</a>
       <a href="#about">About</a>
-      <a href="/user/catalogo">Catalogo</a>
-      <a href="/user#contacto">Contáctenos</a>
+      <a href="/catalogo">Catalogo</a>
+      <a href="/#contacto">Contáctenos</a>
     </nav>
     <div class="session">
       <img src="/img/session.svg" alt="">
@@ -43,7 +43,7 @@
               </button>
             </div>
             <ul>
-              <li><a href="/user/logout">Catalogo</a></li>
+              <li><a href="/logout">Catalogo</a></li>
             </ul>
           </div>
           <div class="perfil_user">
@@ -54,7 +54,7 @@
                 <small>
                   <%= usuario.nombre %>
                 </small>
-                <a href="/user/logout" class="btn btn-danger btn-sm ms-2">Cerrar Sesión</a>
+                <a href="/logout" class="btn btn-danger btn-sm ms-2">Cerrar Sesión</a>
               </div>
             </div>
           </div>
@@ -62,11 +62,11 @@
           <% } else { %>
             <p>
               <span>
-                <a href="/user/login">Login</a>
+                <a href="/login">Login</a>
               </span>
               <span>/</span>
               <span>
-                <a href="/user/registro">Sign up</a>
+                <a href="/registro">Sign up</a>
               </span>
             </p>
             <% } %>

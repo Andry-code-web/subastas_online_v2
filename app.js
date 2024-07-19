@@ -38,7 +38,7 @@ app.use(session({
 const usersRouter = require('./src/routes/user_routes');
 const adminRouter = require('./src/routes/admin_routes');
 
-app.use('/user', usersRouter);
+app.use('/', usersRouter);
 app.use('/admin', adminRouter);
 
 // Configuración de vistas

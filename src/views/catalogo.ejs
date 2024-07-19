@@ -34,10 +34,10 @@
   <header>
     <div class="logo"><img src="/img/logo.png" alt=""></div>
     <nav>
-      <a href="/user/">Inicio</a>
+      <a href="/">Inicio</a>
       <a href="/user#about">About</a>
-      <a href="/user/catalogo">Catalogo</a>
-      <a href="/user#contacto">Contáctenos</a>
+      <a href="/catalogo">Catalogo</a>
+      <a href="/#contacto">Contáctenos</a>
     </nav>
     <div class="session">
       <img src="/img/session.svg" alt="">
@@ -56,7 +56,7 @@
               </button>
             </div>
             <ul>
-              <li><a href="/user/logout">Catalogo</a></li>
+              <li><a href="/catalogo">Catalogo</a></li>
             </ul>
           </div>
           <div class="perfil_user">
@@ -67,7 +67,7 @@
                 <small>
                   <%= usuario.nombre %>
                 </small>
-                <a href="/user/logout" class="btn btn-danger btn-sm ms-2">Cerrar Sesión</a>
+                <a href="/logout" class="btn btn-danger btn-sm ms-2">Cerrar Sesión</a>
               </div>
             </div>
           </div>
@@ -75,11 +75,11 @@
           <% } else { %>
             <p>
               <span>
-                <a href="/user/login">Login</a>
+                <a href="/login">Login</a>
               </span>
               <span>/</span>
               <span>
-                <a href="/user/registro">Sign up</a>
+                <a href="/registro">Sign up</a>
               </span>
             </p>
             <% } %>
@@ -97,7 +97,7 @@
 
   <!-- Search Bar 
 <div class="search-form">
-  <form action="/user/buscar" method="GET">
+  <form action="/buscar" method="GET">
     <input type="text" name="q" placeholder="Ingresa dirección, código postal">
     <button type="submit">Buscar</button>
   </form>
@@ -112,7 +112,7 @@
       <h2>TIPO DE PROPIEDAD</h2>
       <!-- Filtros -->
       <div class="filtros ">
-        <form id="filterForm" action="/user/catalogo" method="GET">
+        <form id="filterForm" action="/catalogo" method="GET">
           <button class="filtro" type="submit" name="categoria" value="" <%=!categoria ? 'class="active"' : '' %>>
             <p>
               Todas
@@ -259,7 +259,7 @@
     <div class="property-listing">
       <% subastas.forEach(subasta=> { %>
         <div class="property-card mt-4">
-          <a href="/user/subasta/<%= subasta.id %>">click</a>
+          <a href="/subasta/<%= subasta.id %>">click</a>
           <div id="carouselExample<%= subasta.id %>" class="carousel slide slider">
             <div class="carousel-inner">
               <% subasta.imagenes.forEach((imagen, index)=> { %>

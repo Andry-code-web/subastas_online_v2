@@ -14,7 +14,7 @@
 <body>
     <div class="contenedor">
         <div class="imagen slideInLeft">
-            <a class="regreso" href="/user/">
+            <a class="regreso" href="/">
                 <img src="/img/regresar.svg" alt="">
             </a>
             <img class="imagen_fondo " src="/img/imagen_login.svg" alt="">
@@ -22,7 +22,7 @@
         <div class="fondo  ">
             <div class="content_form slideInLeft">
                 <h2>Inicia sesión</h2>
-                <form action="/user/login" class="slideInLeft" method="POST" id="loginForm">
+                <form action="/login" class="slideInLeft" method="POST" id="loginForm">
                     <label for="usuario">Usuario*</label>
                     <input type="text" name="usuario" id="usuario" placeholder="Ingresa tu Usuario" required>
                     <div class="content_contra">
@@ -39,7 +39,7 @@
                     <p>
                         <span>No tienes una cuenta?</span>
                         <span>
-                            <a href="/user/registro">Sign up</a>
+                            <a href="/registro">Sign up</a>
                         </span>
                     </p>
                     <a href="/admin/loginAdminG" class="subastar" id="subastarLink">Quieres subastar tus propiedades
@@ -63,7 +63,7 @@
             };
 
             try {
-                const response = await fetch('/user/login', {
+                const response = await fetch('/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
