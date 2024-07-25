@@ -2,10 +2,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Modern+Antiqua&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Scope+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@100..900&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-:root{
+:root {
     --font--banner--semi: "Heebo";
-    --font--banner--bool: url("/fonts/segoeuithibd.ttf");
+    --font--banner--bool: "Kanit";
     --font--parrafo: "Space Mono";
     --font--header: "Sedan";
     --font--testimoni: "Modern Antiqua";
@@ -16,16 +17,16 @@
     --color--inactivo--nav: #b62a46;
 }
 
-*{
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
 
-.contenedor_general{
+.contenedor_general {
     width: 100%;
     height: 100vh;
-    padding: 4rem;
+    padding: 4rem 6rem 4rem 6rem;
 }
 
 .contenedor_general_a {
@@ -42,7 +43,44 @@
     border-radius: 2rem 0rem 0rem 2rem;
 }
 
-.titulo h2{
+.banner_registro h1{
+    font-family: var(--font--banner--bool);
+    font-size: 4rem;
+    font-weight: 600;
+}
+
+.banner_registro p{
+    width: 60%;
+    font-family: var(--font--banner--semi);
+    font-size: .9rem;
+    color: #797979;
+    font-weight: 500;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.tipo_persona{
+    width: 70%;
+    text-align: center;
+}
+
+.tipo_persona button{
+    padding: 6px 18px 4px 18px;
+    background: none;
+    border: 2px solid #a8dcff;
+    border-radius: 8px;
+    font-family: var(--font--banner--semi);
+    font-size: .9rem;
+    color: #686868;
+    transition: ease-in .2s;
+}
+
+.tipo_persona button:hover{
+    transform: scale(1.1);
+    border: 2px solid #fff;
+}
+
+.titulo h2 {
     font-size: 2.5rem;
     font-family: var(--font--banner--semi);
     font-weight: 700;
@@ -50,7 +88,7 @@
     position: relative;
 }
 
-.titulo h2::before{
+.titulo h2::before {
     content: '';
     position: absolute;
     bottom: 0;
@@ -60,14 +98,14 @@
     background: var(--color--activo--nav);
 }
 
-.navegador{
+.navegador {
     width: 60%;
     height: auto;
     gap: 1rem;
     margin-bottom: 2rem;
 }
 
-.nav_datos{
+.nav_datos {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -75,20 +113,23 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    color: #ccc;
 }
 
-.nav_datos.active{
+.nav_datos.active {
     background-color: var(--color--activo--nav);
+    color: #fff;
 }
 
-.nav_datos p{
+.nav_datos p {
     margin: 0;
     padding: 0;
-    color: #fff;
     font-family: var(--font--banner--semi);
     font-weight: 600;
     font-size: 1.2rem;
 }
+
+
 
 .contenedor_de_datos {
     width: 60%;
@@ -97,22 +138,22 @@
     border-radius: 0rem 2rem 2rem 0rem;
 }
 
-.contenedor_datos_natural{
+.contenedor_datos_natural {
     width: 60%;
     height: 50%;
 }
 
-.contenedor_datos_natural form{
+.contenedor_datos_natural form {
     width: 100%;
 }
 
-.espacioT{
+.espacioT {
     width: 100%;
     height: auto;
     margin: 0;
 }
 
-.espacioT input{
+.espacioT input {
     height: 37px;
     margin-left: 1rem;
     margin-right: 1rem;
@@ -124,16 +165,16 @@
     font-size: .9rem;
 }
 
-.espacioT input:focus{
+.espacioT input:focus {
     outline: none;
 }
 
-.espacioT input::placeholder{
+.espacioT input::placeholder {
     font-size: .8rem;
     color: #888888;
 }
 
-.espacioT select{
+.espacioT select {
     height: 35px;
     margin-left: 1rem;
     margin-right: 1rem;
@@ -145,18 +186,108 @@
     background: none;
 }
 
-.espacioT select:focus{
+.espacioT select:focus {
     outline: none;
 }
 
-.botones{
+.botones {
     width: 100%;
-    margin-top: 1rem;
+    margin-top: 2rem;
     text-align: end;
 }
 
-.botones button{
-    margin-right: 1rem;
+.botones button {
+    min-width: 110px;
+    height: 30px;
+    border: none;
+    background-color: #b62a46;
+    color: #fff;
+    font-family: var(--font--banner--semi);
+    font-size: .9rem;
+    font-weight: 600;
+    margin-right: 1.5rem;
+    padding-top: 3px;
+    border-radius: 5px;
+}
+
+.espacioI input {
+    min-width: 300px;
+    height: 37px;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4rem;
+    background: none;
+    color: #4b4b4b;
+    font-size: .9rem;
+    padding-left: 1rem;
+}
+
+.espacioI input:focus {
+    outline: none;
+}
+
+.terminoss{
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    gap: .5rem;
+}
+
+.terminoss input {
+    width: 25px;
+    height: 17px;
+    appearance: none;
+    border: 1px solid #df405f;
+    border-radius: 3px;
+    position: relative;
+}
+
+.terminoss input:checked {
+    background-color: #df405f;
+    border-color: #df405f;
+}
+
+.terminoss input:checked::after {
+    content: '✓'; /* Símbolo de check */
+    color: white;
+    font-size: 12px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.terminoss label{
+    font-size: .8rem;
+    font-family: var(--font--banner--semi);
+    color: #686868;
+}
+
+.boton_final{
+    width: 100%;
+    height: auto;
+    text-align: center;
+}
+
+.boton_final button{
+    min-width: 120px;
+    height: 30px;
+    border-radius: 5px;
+    border: none;
+    background-color: var(--color--activo--nav);
+    color: #fff;
+    font-family: var(--font--banner--semi);
+    font-size: .85rem;
+    font-weight: 400;
+}
+
+
+.step{
+    display: none;
+}
+
+.step.active{
+    display: block;
 }
 
 .contenedor_datos_juridica {
