@@ -138,66 +138,117 @@ router.get("/registro", (req, res) => {
   res.render("registro");
 });
 
-router.post("/registro", (req, res) => {
-  const consulta =
-    "INSERT INTO subastaonline.usuarios (nombre, apellidos, dni, celular, correo_electronico, contraseña, boleta, factura, numero_factura, terminos_y_condiciones, uso_datos_personales) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+router.post('/registro', (req, res) => {
+  const datos = req.body;
 
-  let {
-    nombre,
-    apellidos,
-    dni,
-    celular,
-    correo_electronico,
-    contraseña,
-    boleta,
-    factura,
-    numero_factura,
-    terminos_y_condiciones,
-    uso_datos_personales,
-  } = req.body;
+  // Determinar el tipo de persona y asignar valores predeterminados
+  if (datos.tipo_persona === 'natural') {
+      // Persona Natural
+      const valores = {
+          tipo_persona: datos.tipo_persona,
+          email: datos.email || '0',
+          confirmacion_email: datos.confirmacion_email || '0',
+          celular: datos.celular || '0',
+          telefono: datos.telefono || '0',
+          nombre_apellidos: datos.nombre_apellidos || '0',
+          dni_ce: datos.dni_ce || '0',
+          fecha_nacimiento: datos.fecha_nacimiento || '0000-00-00',
+          sexo: datos.sexo || '0',
+          estado_civil: datos.estado_civil || '0',
+          ruc: null,
+          nombre_comercial: null,
+          actividad_comercial: null,
+          departamento: datos.departamento || '0',
+          provincia: datos.provincia || '0',
+          distrito: datos.distrito || '0',
+          direccion: datos.direccion || '0',
+          numero: datos.numero || '0',
+          complemento: datos.complemento || '0',
+          usuario: datos.usuario || '0',
+          contraseña: datos.contraseña || '0',
+          terminos_y_condiciones: datos.terminos_y_condiciones ? 1 : 0
+      };
 
-  // Eliminar espacios en blanco alrededor de cada campo
-  nombre = nombre.trim();
-  apellidos = apellidos.trim();
-  dni = dni.trim();
-  celular = celular.trim();
-  correo_electronico = correo_electronico.trim();
-  contraseña = contraseña.trim();
-  numero_factura = numero_factura ? numero_factura.trim() : null;
+      const sql = `
+          INSERT INTO subastaonline.usuarios (
+              tipo_persona, email, confirmacion_email, celular, telefono,
+              nombre_apellidos, dni_ce, fecha_nacimiento, sexo, estado_civil,
+              ruc, nombre_comercial, actividad_comercial,
+              departamento, provincia, distrito, direccion, numero, complemento,
+              usuario, contraseña, terminos_y_condiciones
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `;
 
-  // Convertir valores de boleta y factura a 0 o 1
-  boleta = boleta ? 1 : 0;
-  factura = factura ? 1 : 0;
+      conexion.query(sql, [
+          valores.tipo_persona, valores.email, valores.confirmacion_email, valores.celular, valores.telefono,
+          valores.nombre_apellidos, valores.dni_ce, valores.fecha_nacimiento, valores.sexo, valores.estado_civil,
+          valores.ruc, valores.nombre_comercial, valores.actividad_comercial,
+          valores.departamento, valores.provincia, valores.distrito, valores.direccion, valores.numero, valores.complemento,
+          valores.usuario, valores.contraseña, valores.terminos_y_condiciones
+      ], (err, results) => {
+          if (err) {
+              console.error('Error al realizar la inserción:', err);
+              return res.status(500).send('Error al realizar la inserción');
+          }
+          res.redirect('/success');
+      });
+  } else if (datos.tipo_persona === 'juridica') {
+      // Persona Jurídica
+      const valores = {
+          tipo_persona: datos.tipo_persona,
+          email: datos.email || '0',
+          confirmacion_email: datos.confirmacion_email || '0',
+          celular: datos.celular || '0',
+          telefono: datos.telefono || '0',
+          nombre_apellidos: null,
+          dni_ce: null,
+          fecha_nacimiento: null,
+          sexo: null,
+          estado_civil: null,
+          ruc: datos.ruc || '0',
+          nombre_comercial: datos.nombre_comercial || '0',
+          actividad_comercial: datos.actividad_comercial || '0',
+          departamento: datos.departamento || '0',
+          provincia: datos.provincia || '0',
+          distrito: datos.distrito || '0',
+          direccion: datos.direccion || '0',
+          numero: datos.numero || '0',
+          complemento: datos.complemento || '0',
+          usuario: datos.usuario || '0',
+          contraseña: datos.contraseña || '0',
+          terminos_y_condiciones: datos.terminos_y_condiciones ? 1 : 0
+      };
 
-  // Convertir valores de terminos_y_condiciones y uso_datos_personales a 0 o 1
-  terminos_y_condiciones = terminos_y_condiciones ? 1 : 0;
-  uso_datos_personales = uso_datos_personales ? 1 : 0;
+      const sql = `
+          INSERT INTO subastaonline.usuarios (
+              tipo_persona, email, confirmacion_email, celular, telefono,
+              nombre_apellidos, dni_ce, fecha_nacimiento, sexo, estado_civil,
+              ruc, nombre_comercial, actividad_comercial,
+              departamento, provincia, distrito, direccion, numero, complemento,
+              usuario, contraseña, terminos_y_condiciones
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `;
 
-  const valores = [
-    nombre,
-    apellidos,
-    dni,
-    celular,
-    correo_electronico,
-    contraseña,
-    boleta,
-    factura,
-    numero_factura,
-    terminos_y_condiciones,
-    uso_datos_personales,
-  ];
-
-  conexion.query(consulta, valores, function (err, result, fields) {
-    if (err) {
-      console.error("Error al realizar la inserción: ", err);
-      res.status(500).send("Error interno del servidor");
-      return;
-    }
-
-    console.log("Registro insertado correctamente:", result);
-    res.render("login");
-  });
+      conexion.query(sql, [
+          valores.tipo_persona, valores.email, valores.confirmacion_email, valores.celular, valores.telefono,
+          valores.nombre_apellidos, valores.dni_ce, valores.fecha_nacimiento, valores.sexo, valores.estado_civil,
+          valores.ruc, valores.nombre_comercial, valores.actividad_comercial,
+          valores.departamento, valores.provincia, valores.distrito, valores.direccion, valores.numero, valores.complemento,
+          valores.usuario, valores.contraseña, valores.terminos_y_condiciones
+      ], (err, results) => {
+          if (err) {
+              console.error('Error al realizar la inserción:', err);
+              return res.status(500).send('Error al realizar la inserción');
+          }
+          res.redirect('/success');
+      });
+  } else {
+      res.status(400).send('Tipo de persona no válido');
+  }
 });
+
+
+
 
 // Catalogo
 router.get("/catalogo", (req, res) => {

@@ -21,9 +21,13 @@
                 <h1>Bienvenido</h1>
                 <p> Podrás ver todos los detalles de las propiedades y participar en las subastas activas.</p>
                 <div class="tipo_persona">
-                    <button class="me-3">Persona natural</button>
-                    <button>Persona juridica</button>
+                    <button class="me-3" onclick="PersonaNatural()">Persona natural</button>
+                    <button onclick="PersonaJuridica()">Persona juridica</button>
                 </div>
+                <p class="login">
+                    Ya me encuentro registrado
+                    <a href="">Iniciar sesion</a>
+                </p>
             </div>
             <div class="contenedor_de_datos d-flex flex-column justify-content-center align-items-center">
                 <div class="titulo">
@@ -42,34 +46,37 @@
                 </div>
 
                 <!-- FORM PERSONA NATURAL -->
-                <div class="contenedor_datos_natural d-flex flex-column align-items-center">
-                    <form action="" method="post">
+                <div class="contenedor_datos_natural d-flex flex-column align-items-center d-block" id="persNatural">
+                    <form action="/registro" method="post">
+                        <input type="hidden" name="tipo_persona" value="natural">
                         <div class="datos_personales step active">
-                            <h5>Datos Personales</h5>
+                            <h5>Datos Personales Persona Natural</h5>
                             <div class="espacioT nombre row">
-                                <input class="col" type="text" placeholder="Nombre y Apellidos">
-                                <input class="col" type="text" placeholder="DNI/CE">
+                                <input class="col" type="text" name="nombre_apellidos" placeholder="Nombre y Apellidos">
+                                <input class="col" type="text" name="dni_ce" placeholder="DNI/CE">
                             </div>
                             <div class="espacioT email row">
-                                <input class="col" type="email" placeholder="Email">
-                                <input class="col" type="email" placeholder="Confirmacion Email">
+                                <input class="col" type="email" name="email" placeholder="Email">
+                                <input class="col" type="email" name="confirmacion_email"
+                                    placeholder="Confirmacion Email">
                             </div>
                             <div class="espacioT sexo_fecha row">
-                                <input class="col" type="number" placeholder="Fecha de Nacimiento">
+                                <input class="col" type="date" name="fecha_nacimiento"
+                                    placeholder="Fecha de Nacimiento">
                                 <select class="col" name="sexo">
                                     <option value="M">Masculino</option>
                                     <option value="F">Femenino</option>
                                 </select>
                                 <select class="col" name="estado_civil">
-                                    <option value="">Soltero(a)</option>
-                                    <option value="">Casado(a)</option>
-                                    <option value="">Divorciado(a)</option>
-                                    <option value="">Viudo(a)</option>
+                                    <option value="soltero">Soltero(a)</option>
+                                    <option value="casado">Casado(a)</option>
+                                    <option value="divorciado">Divorciado(a)</option>
+                                    <option value="viudo">Viudo(a)</option>
                                 </select>
                             </div>
                             <div class="espacioT celular row">
-                                <input class="col" type="tel" placeholder="Celular">
-                                <input class="col" type="tel" placeholder="Telefono">
+                                <input class="col" type="tel" name="celular" placeholder="Celular">
+                                <input class="col" type="tel" name="telefono" placeholder="Telefono">
                             </div>
                             <div class="botones">
                                 <button type="button" onclick="nextStep(1)">
@@ -81,18 +88,18 @@
                         <div class="datos_direccion step">
                             <h5>Direccion</h5>
                             <div class="row espacioT">
-                                <input class="col" type="text" placeholder="Departamento">
-                                <input class="col" type="text" placeholder="Provincia">
+                                <input class="col" type="text" name="departamento" placeholder="Departamento">
+                                <input class="col" type="text" name="provincia" placeholder="Provincia">
                             </div>
                             <div class="row espacioT">
-                                <input class="col-4" type="text" placeholder="Distrito">
-                                <input class="col" type="text" placeholder="Direccion">
+                                <input class="col-4" type="text" name="distrito" placeholder="Distrito">
+                                <input class="col" type="text" name="direccion" placeholder="Direccion">
                             </div>
                             <div class="row espacioT">
-                                <input class="col-3" type="text" placeholder="Numero">
-                                <input class="col" type="text" placeholder="Complemento (piso, dpto, manzana, etc)">
+                                <input class="col-3" type="text" name="numero" placeholder="Numero">
+                                <input class="col" type="text" name="complemento"
+                                    placeholder="Complemento (piso, dpto, manzana, etc)">
                             </div>
-
                             <div class="botones">
                                 <button type="button" onclick="nextStep(2)">
                                     Siguiente <i class="bi bi-chevron-double-right"></i>
@@ -103,16 +110,15 @@
                         <div class="datos_acceso step">
                             <h5>Datos de acceso</h5>
                             <div class="col espacioI mt-4">
-                                <input class="row" type="text" placeholder="Usuario">
-                                <input class="row" type="password" placeholder="Contraseña">
+                                <input class="row" type="text" name="usuario" placeholder="Usuario">
+                                <input class="row" type="password" name="contraseña" placeholder="Contraseña">
                             </div>
                             <div class="terminoss d-flex">
                                 <input type="checkbox" name="terminos_y_condiciones" id="terminos_y_condiciones"
                                     value="1" required>
                                 <label for="terminos_y_condiciones">
                                     He leído, conozco las condiciones para el tratamiento de mis datos personales y doy
-                                    mi consentimiento, tal
-                                    y como se describe en
+                                    mi consentimiento, tal y como se describe en
                                     <a target="_blank" href="#">nuestros términos de uso</a>
                                 </label>
                             </div>
@@ -123,75 +129,85 @@
                     </form>
                 </div>
 
+
+
                 <!-- FORM PERSONA JURIDICA -->
-                <div class="contenedor_datos_juridica">
-                    <form action="" method="post">
-                        <div class="datos-personales">
-                            <input type="email" placeholder="Email">
-                            <input type="email" placeholder="Confirmacion Email">
-                            <input type="number" placeholder="RUC">
-                            <input type="text" placeholder="Nombre Comercial">
-                            <input type="text" placeholder="Actividad Comercial">
-                            <input type="tel" placeholder="Celular">
-                            <input type="tel" placeholder="Telefono">
-                            <button type="button">Siguiente</button>
+                <div class="contenedor_datos_juridica d-none" id="persJuridica">
+                    <form action="/registro" method="post">
+                        <input type="hidden" name="tipo_persona" value="juridica">
+                        <div class="datos-personales step_j active">
+                            <h5>Datos Personales Persona Juridica</h5>
+                            <div class="espacioT row">
+                                <input class="col" type="email" name="email" placeholder="Email">
+                                <input class="col" type="email" name="confirmacion_email"
+                                    placeholder="Confirmacion Email">
+                            </div>
+                            <div class="espacioT row">
+                                <input class="col" type="text" name="ruc" placeholder="RUC">
+                                <input class="col" type="text" name="nombre_comercial" placeholder="Nombre Comercial">
+                            </div>
+                            <div class="espacioT row">
+                                <input class="col" type="text" name="actividad_comercial"
+                                    placeholder="Actividad Comercial">
+                            </div>
+                            <div class="espacioT row">
+                                <input class="col" type="tel" name="celular" placeholder="Celular">
+                                <input class="col" type="tel" name="telefono" placeholder="Telefono">
+                            </div>
+                            <div class="botones">
+                                <button type="button" onclick="nextStepJ(1)">
+                                    Siguiente <i class="bi bi-chevron-double-right"></i>
+                                </button>
+                            </div>
                         </div>
-                        <div class="datos_direccion">
-                            <input type="text" placeholder="Departamento">
-                            <input type="text" placeholder="Provincia">
-                            <input type="text" placeholder="Distrito">
-                            <input type="text" placeholder="Direccion">
-                            <input type="text" placeholder="Numero">
-                            <input type="text" placeholder="Complemento (piso, dpto, manzana, etc)">
-                            <button type="button">Siguiente</button>
+                        <div class="datos_direccion step_j">
+                            <h5>Direccion</h5>
+                            <div class="espacioT row">
+                                <input class="col" type="text" name="departamento" placeholder="Departamento">
+                                <input class="col" type="text" name="provincia" placeholder="Provincia">
+                            </div>
+                            <div class="espacioT row">
+                                <input class="col" type="text" name="distrito" placeholder="Distrito">
+                                <input class="col" type="text" name="direccion" placeholder="Direccion">
+                            </div>
+                            <div class="espacioT row">
+                                <input class="col-3" type="text" name="numero" placeholder="Numero">
+                                <input class="col" type="text" name="complemento"
+                                    placeholder="Complemento (piso, dpto, manzana, etc)">
+                            </div>
+                            <div class="botones">
+                                <button type="button" onclick="nextStepJ(2)">
+                                    Siguiente <i class="bi bi-chevron-double-right"></i>
+                                </button>
+                            </div>
                         </div>
-                        <div class="datos_acceso">
-                            <input type="text" placeholder="Login/Usuario">
-                            <input type="password" placeholder="Contraseña">
-                            <p>terminos</p>
-                            <button type="submit">Finalizar</button>
+                        <div class="datos_acceso step_j">
+                            <h5>Datos de acceso</h5>
+                            <div class="col espacioI mt-4">
+                                <input class="row" type="text" name="usuario" placeholder="Usuario">
+                                <input class="row" type="password" name="contraseña" placeholder="Contraseña">
+                            </div>
+                            <div class="terminoss d-flex">
+                                <input type="checkbox" name="terminos_y_condiciones" id="terminos_y_condiciones"
+                                    value="1" required>
+                                <label for="terminos_y_condiciones">
+                                    He leído, conozco las condiciones para el tratamiento de mis datos personales y doy
+                                    mi consentimiento, tal y como se describe en
+                                    <a target="_blank" href="#">nuestros términos de uso</a>
+                                </label>
+                            </div>
+                            <div class="boton_final">
+                                <button type="submit"> Finalizar</button>
+                            </div>
                         </div>
                     </form>
                 </div>
+
+
             </div>
         </div>
     </div>
 
-    <script>
-        function toggleNumeroFactura() {
-            var facturaCheckbox = document.getElementById("factura");
-            var numeroFacturaInput = document.getElementById("numero_factura");
-            var hiddenFacturaInput = document.getElementById("hidden_factura");
-
-            if (facturaCheckbox.checked) {
-                numeroFacturaInput.disabled = false;
-                hiddenFacturaInput.value = "1"; // Cambiar el valor del campo oculto a 1 si el checkbox está marcado
-            } else {
-                numeroFacturaInput.disabled = true;
-                numeroFacturaInput.value = ""; // Limpiar el valor del campo de número de factura si el checkbox no está marcado
-                hiddenFacturaInput.value = "0"; // Cambiar el valor del campo oculto a 0 si el checkbox no está marcado
-            }
-        }
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const boletaCheckbox = document.getElementById("boleta");
-            const facturaCheckbox = document.getElementById("factura");
-
-            // Función para deseleccionar el otro checkbox al seleccionar uno
-            function toggleCheckboxes(event) {
-                if (event.target === boletaCheckbox && boletaCheckbox.checked) {
-                    facturaCheckbox.checked = false;
-                } else if (event.target === facturaCheckbox && facturaCheckbox.checked) {
-                    boletaCheckbox.checked = false;
-                }
-            }
-
-            // Agregar el evento 'change' a los checkboxes
-            boletaCheckbox.addEventListener("change", toggleCheckboxes);
-            facturaCheckbox.addEventListener("change", toggleCheckboxes);
-        });
-    </script>
 
     <script>
         document.getElementById('signupForm').addEventListener('submit', function (event) {
@@ -266,6 +282,32 @@
 
     <!-- SCRIPTS -->
     <script>
+
+        function PersonaNatural() {
+            const contDivNatural = document.getElementById('persNatural');
+            const contDivJuridica = document.getElementById('persJuridica');
+
+            contDivNatural.classList.add('d-block');
+            contDivNatural.classList.remove('d-none');
+            contDivJuridica.classList.add('d-none');
+            contDivJuridica.classList.remove('d-block');
+
+            nextStep(0); // Reiniciar el formulario de persona natural al primer paso
+        }
+
+        function PersonaJuridica() {
+            const contDivNatural = document.getElementById('persNatural');
+            const contDivJuridica = document.getElementById('persJuridica');
+
+            contDivNatural.classList.add('d-none');
+            contDivNatural.classList.remove('d-block');
+            contDivJuridica.classList.add('d-block');
+            contDivJuridica.classList.remove('d-none');
+
+            nextStepJ(0); // Reiniciar el formulario de persona jurídica al primer paso
+        }
+
+
         function nextStep(step) {
             //ocultar las secciones
             let steps = document.querySelectorAll('.step');
@@ -284,10 +326,49 @@
 
             navItems[step].classList.add('active');
         }
+
+
+        function nextStepJ(step_j) {
+            // ocultar las secciones
+            let stepsJ = document.querySelectorAll('.step_j');
+            stepsJ.forEach((steps_J) => {
+                steps_J.classList.remove('active');
+            });
+
+            // mostrar la siguiente seccion
+            stepsJ[step_j].classList.add('active');
+
+            // actualizar el navegador
+            let navItems = document.querySelectorAll('.nav_datos');
+            navItems.forEach((item) => {
+                item.classList.remove('active');
+            });
+
+            navItems[step_j].classList.add('active');
+        }
+
+
         // Inicializa el primer paso y el primer elemento del navegador como activos
         document.addEventListener('DOMContentLoaded', () => {
             nextStep(0);
         });
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const persNaturalBtn = document.querySelector("button[onclick='PersonaNatural()']");
+            const persJuridicaBtn = document.querySelector("button[onclick='PersonaJuridica()']");
+
+            persNaturalBtn.addEventListener("click", function () {
+                document.getElementById('persNatural').classList.remove('d-none');
+                document.getElementById('persJuridica').classList.add('d-none');
+            });
+
+            persJuridicaBtn.addEventListener("click", function () {
+                document.getElementById('persNatural').classList.add('d-none');
+                document.getElementById('persJuridica').classList.remove('d-none');
+            });
+        });
+
     </script>
 </body>
 

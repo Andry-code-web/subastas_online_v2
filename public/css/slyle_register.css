@@ -26,7 +26,10 @@
 .contenedor_general {
     width: 100%;
     height: 100vh;
-    padding: 4rem 6rem 4rem 6rem;
+    padding: 5rem 15rem 5rem 15rem;
+    background-image: url("../img/registro_img.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .contenedor_general_a {
@@ -39,7 +42,7 @@
 .banner_registro {
     width: 40%;
     height: 100%;
-    background-color: #c1f6fd;
+    background-color: #FFECC2;
     border-radius: 2rem 0rem 0rem 2rem;
 }
 
@@ -67,17 +70,32 @@
 .tipo_persona button{
     padding: 6px 18px 4px 18px;
     background: none;
-    border: 2px solid #a8dcff;
+    border: 2px solid #fff;
     border-radius: 8px;
     font-family: var(--font--banner--semi);
     font-size: .9rem;
     color: #686868;
-    transition: ease-in .2s;
+    transition: ease-in .3s;
 }
 
 .tipo_persona button:hover{
     transform: scale(1.1);
     border: 2px solid #fff;
+    color: #000;
+}
+
+.banner_registro .login{
+    margin-top: 1rem;
+    font-size: .7rem;
+}
+
+.banner_registro .login a{
+    color: #df405f;
+    font-size: .75rem;
+}
+
+.banner_registro .login:hover a{
+    color: #b62a46;
 }
 
 .titulo h2 {
@@ -129,8 +147,6 @@
     font-size: 1.2rem;
 }
 
-
-
 .contenedor_de_datos {
     width: 60%;
     height: 100%;
@@ -139,7 +155,7 @@
 }
 
 .contenedor_datos_natural {
-    width: 60%;
+    width: 65%;
     height: 50%;
 }
 
@@ -281,7 +297,6 @@
     font-weight: 400;
 }
 
-
 .step{
     display: none;
 }
@@ -291,5 +306,14 @@
 }
 
 .contenedor_datos_juridica {
+    width: 65%;
+    height: 50%;
+}
+
+.step_j{
     display: none;
+}
+
+.step_j.active{
+    display: block;
 }
