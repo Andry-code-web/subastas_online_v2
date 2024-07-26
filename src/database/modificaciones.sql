@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `subastaonline`.`usuarios` (
   `dni_ce` VARCHAR(20) NULL,
   `fecha_nacimiento` DATE NULL,
   `sexo` ENUM('M', 'F') NULL,
-  `estado_civil` ENUM('Soltero(a)', 'Casado(a)', 'Divorciado(a)', 'Viudo(a)') NULL,
+  `estado_civil` ENUM('soltero', 'casado', 'divorciado', 'viudo') NULL,
   
   -- Campos para persona jurídica
   `ruc` VARCHAR(20) NULL,
@@ -88,6 +88,30 @@ CREATE TABLE IF NOT EXISTS `subastaonline`.`usuarios` (
   
   PRIMARY KEY (`id`)
 )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+
+-- -----------------------------------------------------
+-- Table `subastaonline`.`ofertas`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `subastaonline`.`ofertas` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `id_usuario` INT NOT NULL,
+  `id_subasta` INT NOT NULL,
+  `monto_oferta` DECIMAL(10,2) NOT NULL,
+  `fecha_oferta` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `id_usuario` (`id_usuario` ASC) VISIBLE,
+  INDEX `id_subasta` (`id_subasta` ASC) VISIBLE,
+  CONSTRAINT `ofertas_ibfk_1`
+    FOREIGN KEY (`id_usuario`)
+    REFERENCES `subastaonline`.`usuarios` (`id`),
+  CONSTRAINT `ofertas_ibfk_2`
+    FOREIGN KEY (`id_subasta`)
+    REFERENCES `subastaonline`.`subastas` (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
