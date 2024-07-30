@@ -115,3 +115,27 @@ CREATE TABLE IF NOT EXISTS `subastaonline`.`ofertas` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `subastaonline`.`likes`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `subastaonline`.`likes` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `subasta_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `user_id` (`user_id` ASC) VISIBLE,
+  INDEX `subasta_id` (`subasta_id` ASC) VISIBLE,
+  CONSTRAINT `likes_ibfk_1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `subastaonline`.`usuarios` (`id`)
+    ON DELETE CASCADE,
+  CONSTRAINT `likes_ibfk_2`
+    FOREIGN KEY (`subasta_id`)
+    REFERENCES `subastaonline`.`subastas` (`id`)
+    ON DELETE CASCADE
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;

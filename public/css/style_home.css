@@ -307,7 +307,6 @@ header .session p .btn_menu i {
 .subastas {
   width: 100%;
   height: 100vh;
-  /* padding: 3rem; */
   position: relative;
 }
 
@@ -349,64 +348,110 @@ header .session p .btn_menu i {
   margin-top: 5rem;
 }
 
+/* New Card Styles */
 .card {
-  width: 250px;
-  height: 400px;
-  background-color: #fff;
-  border-radius: 10px 10px 10px 10px;
-  border-bottom: solid 7px var(--color--sub);
+  background-color: white;
+  color: black;
+  width: 300px;
+  max-height: 330px;
+  border-radius: 8px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
 }
 
-.conteneder_imagen {
-  width: 100%;
-  height: 50%;
-}
-
-.card .conteneder_imagen .casa_img {
-  width: 100%;
-  height: 100%;
-  border-radius: 10px 10px 0px 0px;
-}
-
-.info_like {
-  padding: 1rem;
+.card-img {
+  position: relative;
+  top: -20px;
+  height: 150px;
   display: flex;
+  justify-content: center;
+}
+
+.card-img img {
+  height: 150px;
+  width: 90%;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.project-info {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  top: -10px;
+}
+
+.project-title {
+  font-weight: 500;
+  font-size: 1.5em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: black;
+}
+
+.lighter {
+  font-size: 0.9em;
+}
+
+.flex {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
-.info_card {
-  padding: 0.7rem;
+.tag {
+  font-weight: lighter;
+  color: grey;
 }
 
-.info_card h3 {
-  font-size: 1.4rem;
-  font-family: var(--font--about);
-  font-weight: 600;
+.view-details-button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: var(--color--sub);
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
 }
 
-.info_card .depat {
-  font-size: 1.06rem;
-  font-family: var(--font--about);
+.view-details-button:hover {
+  background-color: darken(var(--color--sub), 10%);
 }
 
-.info_card p {
-  font-size: 1.2rem;
-  font-family: var(--font--about);
-  font-weight: 600;
-  margin-top: 0.5rem;
+.detalle_like{
+  display: flex;
+  justify-content: space-between;
 }
 
-.info_card span img {
-  width: 1.9rem;
-}
-
-.like button {
-  background-color: #fff;
-  border-radius: 50%;
+/* Estilos adicionales para el botón de "Me gusta" */
+.like-button {
+  background: none;
+  color: white;
   border: none;
-  box-shadow: 1px 2px 3px #00000081;
+  border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
+
+.like-button .like-icon {
+  font-size: 1.5rem;
+  margin-right: 1rem;
+}
+
+/* Corazón lleno */
+.like-button .like-filled {
+  color: red;
+}
+
+/* Corazón vacío */
+.like-button .like-empty {
+  color: grey; /* Cambia el color si lo deseas */
+}
+
 
 /* COMENTARIOS */
 .comentarios {

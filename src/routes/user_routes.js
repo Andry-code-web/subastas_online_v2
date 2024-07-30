@@ -21,9 +21,13 @@ router.get("/", (req, res) => {
            (SELECT imagen 
             FROM subastaonline.imagenes_propiedad ip 
             WHERE s.id = ip.id_subasta 
-            LIMIT 1) AS imagen_blob
+            LIMIT 1) AS imagen_blob,
+           COUNT(l.id) AS like_count
     FROM subastaonline.subastas s
-`;
+    LEFT JOIN subastaonline.likes l ON s.id = l.subasta_id
+    GROUP BY s.id
+    ORDER BY like_count DESC
+  `;
 
   const queryComentario = "SELECT * FROM subastaonline.comentarios";
 
@@ -65,6 +69,7 @@ router.get("/", (req, res) => {
     });
 });
 
+
 router.post("/", (req, res) => {
   const { nombre, texto, rating } = req.body;
 
@@ -92,7 +97,7 @@ router.get("/login", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-  const consulta = "SELECT id, nombre, contraseña FROM usuarios;";
+  const consulta = "SELECT id, usuario, contraseña FROM usuarios;";
   const { usuario, contra } = req.body;
 
   console.log(usuario, contra);
@@ -106,16 +111,16 @@ router.post("/login", (req, res) => {
 
     // Comprobar si se encontró un usuario con la contraseña correcta
     const usuarioEncontrado = result.find(
-      (user) => user.nombre === usuario && user.contraseña === contra
+      (user) => user.usuario === usuario && user.contraseña === contra
     );
     if (usuarioEncontrado) {
       // Guardar información del usuario en la sesión
       req.session.usuario = {
         id: usuarioEncontrado.id,
-        nombre: usuarioEncontrado.nombre,
+        nombre: usuarioEncontrado.usuario,
       };
       res.json({ success: true, redirect: "/" });
-    } else {
+    }else {
       console.log("Usuario o contraseña incorrectos");
       res.status(401).json({ message: "Usuario o contraseña incorrectos" });
     }
@@ -166,8 +171,10 @@ router.post('/registro', (req, res) => {
           complemento: datos.complemento || '0',
           usuario: datos.usuario || '0',
           contraseña: datos.contraseña || '0',
-          terminos_y_condiciones: datos.terminos_y_condiciones ? 1 : 0
+          terminos_y_condiciones: parseInt(datos.terminos_y_condiciones) ? 1 : 0
       };
+
+      console.log(typeof(valores.terminos_y_condiciones));
 
       const sql = `
           INSERT INTO subastaonline.usuarios (
@@ -176,7 +183,7 @@ router.post('/registro', (req, res) => {
               ruc, nombre_comercial, actividad_comercial,
               departamento, provincia, distrito, direccion, numero, complemento,
               usuario, contraseña, terminos_y_condiciones
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
 
       conexion.query(sql, [
@@ -190,7 +197,7 @@ router.post('/registro', (req, res) => {
               console.error('Error al realizar la inserción:', err);
               return res.status(500).send('Error al realizar la inserción');
           }
-          res.redirect('/success');
+          res.redirect('/login');
       });
   } else if (datos.tipo_persona === 'juridica') {
       // Persona Jurídica
@@ -216,7 +223,7 @@ router.post('/registro', (req, res) => {
           complemento: datos.complemento || '0',
           usuario: datos.usuario || '0',
           contraseña: datos.contraseña || '0',
-          terminos_y_condiciones: datos.terminos_y_condiciones ? 1 : 0
+          terminos_y_condiciones: parseInt(datos.terminos_y_condiciones) ? 1 : 0
       };
 
       const sql = `
@@ -226,7 +233,7 @@ router.post('/registro', (req, res) => {
               ruc, nombre_comercial, actividad_comercial,
               departamento, provincia, distrito, direccion, numero, complemento,
               usuario, contraseña, terminos_y_condiciones
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
 
       conexion.query(sql, [
@@ -240,14 +247,12 @@ router.post('/registro', (req, res) => {
               console.error('Error al realizar la inserción:', err);
               return res.status(500).send('Error al realizar la inserción');
           }
-          res.redirect('/success');
+          res.redirect('/login');
       });
   } else {
       res.status(400).send('Tipo de persona no válido');
   }
 });
-
-
 
 
 // Catalogo
@@ -336,6 +341,42 @@ router.get("/subasta/:id", isAuthenticated, (req, res) => {
         formatNumber
       });
     });
+  });
+});
+
+router.post("/like", (req, res) => {
+  const { subasta_id } = req.body;
+  const usuario_id = req.session.usuario.id;
+
+  // Verificar si el usuario ya ha dado like a la subasta
+  const checkLikeQuery = "SELECT * FROM subastaonline.likes WHERE user_id = ? AND subasta_id = ?";
+  conexion.query(checkLikeQuery, [usuario_id, subasta_id], (error, results) => {
+    if (error) {
+      console.error("Error al verificar el like:", error);
+      return res.status(500).json({ success: false });
+    }
+
+    if (results.length > 0) {
+      // El usuario ya ha dado like, eliminar el like
+      const deleteLikeQuery = "DELETE FROM subastaonline.likes WHERE user_id = ? AND subasta_id = ?";
+      conexion.query(deleteLikeQuery, [usuario_id, subasta_id], (error) => {
+        if (error) {
+          console.error("Error al eliminar el like:", error);
+          return res.status(500).json({ success: false });
+        }
+        res.json({ success: true });
+      });
+    } else {
+      // El usuario no ha dado like, agregar el like
+      const addLikeQuery = "INSERT INTO subastaonline.likes (user_id, subasta_id) VALUES (?, ?)";
+      conexion.query(addLikeQuery, [usuario_id, subasta_id], (error) => {
+        if (error) {
+          console.error("Error al agregar el like:", error);
+          return res.status(500).json({ success: false });
+        }
+        res.json({ success: true });
+      });
+    }
   });
 });
 
