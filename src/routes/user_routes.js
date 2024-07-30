@@ -258,6 +258,9 @@ router.post('/registro', (req, res) => {
 // Catalogo
 router.get("/catalogo", (req, res) => {
   const { categoria } = req.query;
+  const usuario = req.session.usuario;
+  const usuario_id = usuario ? usuario.id : null;
+
   let querySubastas = "SELECT * FROM subastaonline.subastas";
   const queryParams = [];
 
@@ -268,38 +271,78 @@ router.get("/catalogo", (req, res) => {
   querySubastas += " ORDER BY id ASC";
 
   const queryImagenes = "SELECT id_subasta, imagen FROM subastaonline.imagenes_propiedad";
+  const queryLikes = "SELECT subasta_id, COUNT(*) AS like_count FROM subastaonline.likes GROUP BY subasta_id";
+  const queryUserLikes = "SELECT subasta_id FROM subastaonline.likes WHERE user_id = ?";
 
-  conexion.query(querySubastas, queryParams, (error, subastas) => {
-    if (error) {
-      console.error("Error al obtener datos de subasta", error);
-      return res.status(500).send("Error al obtener datos de subasta");
-    }
-
-    conexion.query(queryImagenes, (error, imagenes) => {
-      if (error) {
-        console.error("Error al obtener imágenes de subasta", error);
-        return res.status(500).send("Error al obtener imágenes de subasta");
-      }
-
-      // Combinamos las imágenes con las subastas
-      const subastasConImagenes = subastas.map((subasta) => {
-        const imagenesSubasta = imagenes.filter(
-          (imagen) => imagen.id_subasta === subasta.id
-        );
-        return {
-          ...subasta,
-          imagenes: imagenesSubasta.map((img) => img.imagen.toString("base64")),
-        };
+  Promise.all([
+    new Promise((resolve, reject) => {
+      conexion.query(querySubastas, queryParams, (error, subastas) => {
+        if (error) {
+          console.error("Error al obtener datos de subasta", error);
+          reject(error);
+        } else {
+          resolve(subastas);
+        }
       });
-
-      res.render("catalogo", { 
-        usuario: req.session.usuario,
-        subastas: subastasConImagenes,
-        categoria // Pasar la categoría seleccionada a la plantilla
+    }),
+    new Promise((resolve, reject) => {
+      conexion.query(queryImagenes, (error, imagenes) => {
+        if (error) {
+          console.error("Error al obtener imágenes de subasta", error);
+          reject(error);
+        } else {
+          resolve(imagenes);
+        }
       });
+    }),
+    new Promise((resolve, reject) => {
+      conexion.query(queryLikes, (error, likes) => {
+        if (error) {
+          console.error("Error al obtener likes de subasta", error);
+          reject(error);
+        } else {
+          resolve(likes);
+        }
+      });
+    }),
+    new Promise((resolve, reject) => {
+      conexion.query(queryUserLikes, [usuario_id], (error, userLikes) => {
+        if (error) {
+          console.error("Error al obtener likes del usuario", error);
+          reject(error);
+        } else {
+          resolve(userLikes);
+        }
+      });
+    })
+  ])
+  .then(([subastas, imagenes, likes, userLikes]) => {
+    // Mapeamos las subastas con sus imágenes y likes
+    const subastasConDatos = subastas.map((subasta) => {
+      const imagenesSubasta = imagenes.filter(imagen => imagen.id_subasta === subasta.id);
+      const subastaLikes = likes.find(like => like.subasta_id === subasta.id) || { like_count: 0 };
+      const userHasLiked = userLikes.some(userLike => userLike.subasta_id === subasta.id);
+
+      return {
+        ...subasta,
+        imagenes: imagenesSubasta.map(img => img.imagen.toString("base64")),
+        like_count: subastaLikes.like_count,
+        liked_by_user: userHasLiked
+      };
     });
+
+    res.render("catalogo", {
+      usuario,
+      subastas: subastasConDatos,
+      categoria // Pasar la categoría seleccionada a la plantilla
+    });
+  })
+  .catch(error => {
+    console.error("Error al obtener datos para la vista del catálogo: ", error);
+    res.status(500).send("Error al obtener datos para la vista del catálogo");
   });
 });
+
 
 // Subastas
 router.get("/subasta/:id", isAuthenticated, (req, res) => {
@@ -344,7 +387,13 @@ router.get("/subasta/:id", isAuthenticated, (req, res) => {
   });
 });
 
+
+// Like
 router.post("/like", (req, res) => {
+  if (!req.session.usuario) {
+    return res.status(401).json({ success: false, message: "Usuario no autenticado", redirect: "/login" });
+  }
+
   const { subasta_id } = req.body;
   const usuario_id = req.session.usuario.id;
 
@@ -357,28 +406,49 @@ router.post("/like", (req, res) => {
     }
 
     if (results.length > 0) {
-      // El usuario ya ha dado like, eliminar el like
+      // El usuario ya ha dado like, eliminar el like y decrementar el like_count
       const deleteLikeQuery = "DELETE FROM subastaonline.likes WHERE user_id = ? AND subasta_id = ?";
       conexion.query(deleteLikeQuery, [usuario_id, subasta_id], (error) => {
         if (error) {
           console.error("Error al eliminar el like:", error);
           return res.status(500).json({ success: false });
         }
-        res.json({ success: true });
+
+        // Decrementar el like_count solo si es mayor que 0
+        const decrementLikeCountQuery = "UPDATE subastaonline.subastas SET like_count = GREATEST(like_count - 1, 0) WHERE id = ?";
+        conexion.query(decrementLikeCountQuery, [subasta_id], (error) => {
+          if (error) {
+            console.error("Error al decrementar el like_count:", error);
+            return res.status(500).json({ success: false });
+          }
+          res.json({ success: true });
+        });
       });
     } else {
-      // El usuario no ha dado like, agregar el like
+      // El usuario no ha dado like, agregar el like y incrementar el like_count
       const addLikeQuery = "INSERT INTO subastaonline.likes (user_id, subasta_id) VALUES (?, ?)";
       conexion.query(addLikeQuery, [usuario_id, subasta_id], (error) => {
         if (error) {
           console.error("Error al agregar el like:", error);
           return res.status(500).json({ success: false });
         }
-        res.json({ success: true });
+
+        const incrementLikeCountQuery = "UPDATE subastaonline.subastas SET like_count = like_count + 1 WHERE id = ?";
+        conexion.query(incrementLikeCountQuery, [subasta_id], (error) => {
+          if (error) {
+            console.error("Error al incrementar el like_count:", error);
+            return res.status(500).json({ success: false });
+          }
+          res.json({ success: true });
+        });
       });
     }
   });
 });
+
+
+
+
 
 
 module.exports = router;
