@@ -14,61 +14,59 @@ const isAuthenticated = (req, res, next) => {
 };
 
 router.get("/", (req, res) => {
-  const usuario = req.session.usuario;
-
-  const querySubastas = `
-    SELECT s.*, 
-           (SELECT imagen 
-            FROM subastaonline.imagenes_propiedad ip 
-            WHERE s.id = ip.id_subasta 
-            LIMIT 1) AS imagen_blob,
-           COUNT(l.id) AS like_count
+  let querySubastas = `
+    SELECT s.*, IFNULL(l.like_count, 0) AS like_count
     FROM subastaonline.subastas s
-    LEFT JOIN subastaonline.likes l ON s.id = l.subasta_id
-    GROUP BY s.id
-    ORDER BY like_count DESC
+    LEFT JOIN (
+      SELECT subasta_id, COUNT(*) AS like_count
+      FROM subastaonline.likes
+      GROUP BY subasta_id
+    ) l ON s.id = l.subasta_id
+    ORDER BY like_count DESC, s.id ASC
+    LIMIT 5
   `;
 
-  const queryComentario = "SELECT * FROM subastaonline.comentarios";
+  const queryImagenes = "SELECT id_subasta, imagen FROM subastaonline.imagenes_propiedad";
+  const queryComentarios = "SELECT * FROM subastaonline.comentarios ORDER BY id DESC";
 
-  Promise.all([
-    new Promise((resolve, reject) => {
-      conexion.query(querySubastas, (error, resultadoSubasta) => {
+  conexion.query(querySubastas, (error, subastas) => {
+    if (error) {
+      console.error("Error al obtener datos de subasta", error);
+      return res.status(500).send("Error al obtener datos de subasta");
+    }
+
+    conexion.query(queryImagenes, (error, imagenes) => {
+      if (error) {
+        console.error("Error al obtener imágenes de subasta", error);
+        return res.status(500).send("Error al obtener imágenes de subasta");
+      }
+
+      conexion.query(queryComentarios, (error, comentarios) => {
         if (error) {
-          console.error("Error al obtener las subastas: ", error);
-          reject(error);
-        } else {
-          resolve(resultadoSubasta);
+          console.error("Error al obtener comentarios de subasta", error);
+          return res.status(500).send("Error al obtener comentarios de subasta");
         }
+
+        // Combinamos las imágenes con las subastas
+        const subastasConImagenes = subastas.map((subasta) => {
+          const imagenesSubasta = imagenes.filter(
+            (imagen) => imagen.id_subasta === subasta.id
+          );
+          return {
+            ...subasta,
+            imagenes: imagenesSubasta.map((img) => img.imagen.toString("base64")),
+          };
+        });
+
+        res.render("home", { 
+          usuario: req.session.usuario,
+          subastas: subastasConImagenes,
+          comentarios: comentarios
+        });
       });
-    }),
-    new Promise((resolve, reject) => {
-      conexion.query(queryComentario, (error, resultadoComentario) => {
-        if (error) {
-          console.error("Error al obtener los comentarios", error);
-          reject(error);
-        } else {
-          resolve(resultadoComentario);
-        }
-      });
-    }),
-  ])
-    .then(([subastas, comentarios]) => {
-      res.render("home", {
-        usuario,
-        subastas,
-        comentarios,
-      });
-    })
-    .catch((error) => {
-      console.error(
-        "Error al obtener los datos para la vista principal: ",
-        error
-      );
-      res.status(500).send("Error al obtener datos para la vista principal");
     });
+  });
 });
-
 
 router.post("/", (req, res) => {
   const { nombre, texto, rating } = req.body;
@@ -254,12 +252,10 @@ router.post('/registro', (req, res) => {
   }
 });
 
-
 // Catalogo
 router.get("/catalogo", (req, res) => {
   const { categoria } = req.query;
-  const usuario = req.session.usuario;
-  const usuario_id = usuario ? usuario.id : null;
+  const usuario_id = req.session.usuario ? req.session.usuario.id : null;
 
   let querySubastas = "SELECT * FROM subastaonline.subastas";
   const queryParams = [];
@@ -271,78 +267,60 @@ router.get("/catalogo", (req, res) => {
   querySubastas += " ORDER BY id ASC";
 
   const queryImagenes = "SELECT id_subasta, imagen FROM subastaonline.imagenes_propiedad";
-  const queryLikes = "SELECT subasta_id, COUNT(*) AS like_count FROM subastaonline.likes GROUP BY subasta_id";
-  const queryUserLikes = "SELECT subasta_id FROM subastaonline.likes WHERE user_id = ?";
 
-  Promise.all([
-    new Promise((resolve, reject) => {
-      conexion.query(querySubastas, queryParams, (error, subastas) => {
-        if (error) {
-          console.error("Error al obtener datos de subasta", error);
-          reject(error);
-        } else {
-          resolve(subastas);
-        }
-      });
-    }),
-    new Promise((resolve, reject) => {
-      conexion.query(queryImagenes, (error, imagenes) => {
-        if (error) {
-          console.error("Error al obtener imágenes de subasta", error);
-          reject(error);
-        } else {
-          resolve(imagenes);
-        }
-      });
-    }),
-    new Promise((resolve, reject) => {
-      conexion.query(queryLikes, (error, likes) => {
-        if (error) {
-          console.error("Error al obtener likes de subasta", error);
-          reject(error);
-        } else {
-          resolve(likes);
-        }
-      });
-    }),
-    new Promise((resolve, reject) => {
-      conexion.query(queryUserLikes, [usuario_id], (error, userLikes) => {
-        if (error) {
-          console.error("Error al obtener likes del usuario", error);
-          reject(error);
-        } else {
-          resolve(userLikes);
-        }
-      });
-    })
-  ])
-  .then(([subastas, imagenes, likes, userLikes]) => {
-    // Mapeamos las subastas con sus imágenes y likes
-    const subastasConDatos = subastas.map((subasta) => {
-      const imagenesSubasta = imagenes.filter(imagen => imagen.id_subasta === subasta.id);
-      const subastaLikes = likes.find(like => like.subasta_id === subasta.id) || { like_count: 0 };
-      const userHasLiked = userLikes.some(userLike => userLike.subasta_id === subasta.id);
+  conexion.query(querySubastas, queryParams, (error, subastas) => {
+    if (error) {
+      console.error("Error al obtener datos de subasta", error);
+      return res.status(500).send("Error al obtener datos de subasta");
+    }
 
-      return {
-        ...subasta,
-        imagenes: imagenesSubasta.map(img => img.imagen.toString("base64")),
-        like_count: subastaLikes.like_count,
-        liked_by_user: userHasLiked
-      };
+    conexion.query(queryImagenes, (error, imagenes) => {
+      if (error) {
+        console.error("Error al obtener imágenes de subasta", error);
+        return res.status(500).send("Error al obtener imágenes de subasta");
+      }
+
+      const subastasConImagenes = subastas.map((subasta) => {
+        const imagenesSubasta = imagenes.filter(
+          (imagen) => imagen.id_subasta === subasta.id
+        );
+        return {
+          ...subasta,
+          imagenes: imagenesSubasta.map((img) => img.imagen.toString("base64")),
+        };
+      });
+
+      if (usuario_id) {
+        // Consulta adicional para verificar los likes del usuario
+        const queryLikes = "SELECT subasta_id FROM subastaonline.likes WHERE user_id = ?";
+        conexion.query(queryLikes, [usuario_id], (error, likes) => {
+          if (error) {
+            console.error("Error al obtener likes del usuario", error);
+            return res.status(500).send("Error al obtener likes del usuario");
+          }
+
+          const likedSubastas = likes.map((like) => like.subasta_id);
+
+          subastasConImagenes.forEach((subasta) => {
+            subasta.liked_by_user = likedSubastas.includes(subasta.id);
+          });
+
+          res.render("catalogo", { 
+            usuario: req.session.usuario,
+            subastas: subastasConImagenes,
+            categoria
+          });
+        });
+      } else {
+        res.render("catalogo", { 
+          usuario: req.session.usuario,
+          subastas: subastasConImagenes,
+          categoria
+        });
+      }
     });
-
-    res.render("catalogo", {
-      usuario,
-      subastas: subastasConDatos,
-      categoria // Pasar la categoría seleccionada a la plantilla
-    });
-  })
-  .catch(error => {
-    console.error("Error al obtener datos para la vista del catálogo: ", error);
-    res.status(500).send("Error al obtener datos para la vista del catálogo");
   });
 });
-
 
 // Subastas
 router.get("/subasta/:id", isAuthenticated, (req, res) => {
@@ -386,7 +364,6 @@ router.get("/subasta/:id", isAuthenticated, (req, res) => {
     });
   });
 });
-
 
 // Like
 router.post("/like", (req, res) => {
@@ -445,10 +422,5 @@ router.post("/like", (req, res) => {
     }
   });
 });
-
-
-
-
-
 
 module.exports = router;

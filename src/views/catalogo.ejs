@@ -311,48 +311,50 @@
     });
   </script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.like-button').forEach(button => {
-        button.addEventListener('click', async () => {
-          const subastaId = button.dataset.subastaId;
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.like-button').forEach(button => {
+      button.addEventListener('click', async () => {
+        const subastaId = button.dataset.subastaId;
 
-          try {
-            const response = await fetch('/like', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                subasta_id: subastaId
-              })
-            });
+        try {
+          const response = await fetch('/like', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              subasta_id: subastaId
+            })
+          });
 
-            const data = await response.json();
-            if (data.success) {
-              // Actualizar el botón de like
-              const heartIcon = button.querySelector('.like-icon');
-              const likeCount = button.nextElementSibling;
+          const data = await response.json();
+          if (data.success) {
+            // Actualizar el botón de like
+            const heartFilledIcon = button.querySelector('.bi-heart-fill');
+            const heartEmptyIcon = button.querySelector('.bi-heart');
+            const likeCount = button.nextElementSibling;
 
-              if (heartIcon.classList.contains('like-empty')) {
-                heartIcon.classList.remove('like-empty');
-                heartIcon.classList.add('like-filled');
-                likeCount.textContent = parseInt(likeCount.textContent) + 1;
-              } else {
-                heartIcon.classList.remove('like-filled');
-                heartIcon.classList.add('like-empty');
-                likeCount.textContent = parseInt(likeCount.textContent) - 1;
-              }
+            if (heartEmptyIcon.classList.contains('d-none')) {
+              heartFilledIcon.classList.add('d-none');
+              heartEmptyIcon.classList.remove('d-none');
+              likeCount.textContent = parseInt(likeCount.textContent) - 1;
             } else {
-              console.error('Error al dar like:', data.message);
+              heartFilledIcon.classList.remove('d-none');
+              heartEmptyIcon.classList.add('d-none');
+              likeCount.textContent = parseInt(likeCount.textContent) + 1;
             }
-          } catch (error) {
-            console.error('Error en la solicitud:', error);
+          } else {
+            console.error('Error al dar like:', data.message);
           }
-        });
+        } catch (error) {
+          console.error('Error en la solicitud:', error);
+        }
       });
     });
-  </script>
+  });
+</script>
+
 </body>
 
 </html>

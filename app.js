@@ -91,22 +91,29 @@ io.on('connection', (socket) => {
 
     socket.on('bid', (data) => {
         const room = data.room;
-        if (auctions[room].auctionEnded || auctions[room].clientDisconnected) return; // No aceptar nuevas pujas si la subasta ha terminado o el cliente está desconectado
-
+        const bidValue = parseInt(data.bid);
+        
+        // Verificar que la puja no sea menor que la puja mínima permitida
+        if (auctions[room].auctionEnded || auctions[room].clientDisconnected || bidValue < (auctions[room].currentBid || 0)) {
+            console.log('Puja inválida o subasta terminada.');
+            return; // No aceptar nuevas pujas si la subasta ha terminado o si la puja es menor que la actual
+        }
+    
         console.log('Nueva puja recibida:', data);
         auctions[room].currentWinner = data.user; // Actualizar el ganador actual
-
+        auctions[room].currentBid = bidValue; // Actualizar la puja actual
+    
         // Emitir la nueva puja a todos los clientes en la sala específica
         io.to(room).emit('newBid', data);
-
+    
         // Actualizar el estado de la subasta en la base de datos
-        const updateQuery = "UPDATE subastas SET currentWinner = ? WHERE id = ?";
-        conexion.query(updateQuery, [data.user, room], (error, results) => {
+        const updateQuery = "UPDATE subastas SET currentWinner = ?, currentBid = ? WHERE id = ?";
+        conexion.query(updateQuery, [data.user, data.bid, room], (error, results) => {
             if (error) {
                 console.error("Error al actualizar el ganador de la subasta:", error);
                 return;
             }
-            console.log(`Ganador actualizado en la subasta ${room}:`, data.user);
+            console.log(`Ganador y puja actualizados en la subasta ${room}:`, data.user, data.bid);
         });
     });
 

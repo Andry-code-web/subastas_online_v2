@@ -226,7 +226,10 @@
   </div>
 
 
-  <!-- SCRIPTS -->
+  <!-- SCRIPT -->
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <script>
     const socket = io();
 
@@ -237,6 +240,9 @@
     const btnMenos = document.getElementById('menos');
     const progressBar = document.getElementById('progressBar');
 
+    let currentBid = parseInt('<%= subasta.precio_base %>');
+    let minBid = currentBid; // Guardar la puja mínima permitida
+
     // Función para enviar latidos al servidor cada 5 segundos
     setInterval(() => {
       socket.emit('heartbeat', auctionRoom); // Enviar un latido al servidor
@@ -245,11 +251,7 @@
     const auctionRoom = '<%= subasta.id %>';
     socket.emit('joinRoom', auctionRoom);
 
-    const precioBase = '<%= subasta.precio_base %>';
-    const precioNum = parseInt(precioBase);
-    const precioBaseConIncremento = precioNum + 100;
-
-    messageInput.value = formatNumber(precioBaseConIncremento);
+    messageInput.value = formatNumber(currentBid + 100);
 
     let progressInterval;
     let progressValue = 100;
@@ -304,31 +306,44 @@
     btnMas.addEventListener('click', function () {
       if (auctionEnded) return; // No permitir cambios si la subasta ha terminado
 
-      let currentBid = parseInt(messageInput.value.replace(/,/g, ''));
-      currentBid += 100;
-      messageInput.value = formatNumber(currentBid);
+      let currentBidValue = parseInt(messageInput.value.replace(/,/g, ''));
+      currentBidValue += 100;
+      messageInput.value = formatNumber(currentBidValue);
+      minBid = currentBidValue; // Actualizar la puja mínima permitida
     });
 
     btnMenos.addEventListener('click', function () {
       if (auctionEnded) return; // No permitir cambios si la subasta ha terminado
 
-      let currentBid = parseInt(messageInput.value.replace(/,/g, ''));
-      if (currentBid > precioNum) {
-        currentBid -= 100;
-        if (currentBid < precioNum) {
-          currentBid = precioNum;
+      let currentBidValue = parseInt(messageInput.value.replace(/,/g, ''));
+      if (currentBidValue > minBid) {
+        currentBidValue -= 100;
+        if (currentBidValue < minBid) {
+          currentBidValue = minBid;
         }
-        messageInput.value = formatNumber(currentBid);
+        messageInput.value = formatNumber(currentBidValue);
       }
     });
 
     sendButton.addEventListener('click', function () {
       if (auctionEnded) return; // No permitir envíos si la subasta ha terminado
 
-      const bid = messageInput.value.replace(/,/g, '');
+      let bidValue = parseInt(messageInput.value.replace(/,/g, ''));
+
+      // Verificar que la puja no sea menor que la puja mínima permitida
+      if (bidValue < minBid) {
+
+        Swal.fire({
+          title: `La puja debe ser al menos $${formatNumber(minBid)}.`,
+          icon: "warning",
+
+        });
+        return;
+      }
+
       socket.emit('bid', {
         user: '<%= usuario ? usuario.nombre : "Invitado" %>',
-        bid: bid,
+        bid: bidValue,
         room: auctionRoom
       });
       startProgressBar();
@@ -337,17 +352,32 @@
     socket.on('newBid', function (data) {
       if (auctionEnded) return; // No aceptar nuevas pujas si la subasta ha terminado
 
+      currentBid = parseInt(data.bid); // Actualizar la puja actual
+      minBid = currentBid; // Actualizar la puja mínima permitida
+
       const messageElement = document.createElement('div');
       messageElement.textContent = `Puja de $${formatNumber(data.bid)} por ${data.user}`;
       messages.appendChild(messageElement);
       messages.scrollTop = messages.scrollHeight;
+
+      // Actualizar el input de todos los clientes
+      messageInput.value = formatNumber(currentBid);
       clearInterval(progressInterval);
       startProgressBar();
     });
 
     socket.on('auctionEnded', function (data) {
       const messageElement = document.createElement('div');
-      messageElement.textContent = `¡Subasta ganada por ${data.winner}!`;
+      Swal.fire({
+    icon: 'success',
+    title: `¡Subasta ganada por ${data.winner}!`,
+    text: 'Felicidades, vamos por otra subasta',
+    confirmButtonText: 'Ir al catálogo'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.href = '/catalogo'; // Redirige a /catalogo
+    }
+  });
       messages.appendChild(messageElement);
       messages.scrollTop = messages.scrollHeight;
       disableButtons(); // Desactivar los botones
@@ -369,6 +399,7 @@
     function formatNumber(num) {
       return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
+
   </script>
 
   <script>
@@ -439,11 +470,11 @@
 
       if (fechaSubasta == fechaFormateada) {
         console.log("estas en fecha de subasta");
-      }else if (fechaSubasta > fechaFormateada) {
+      } else if (fechaSubasta > fechaFormateada) {
         console.log("faltan dias para la subasta");
-      }else if (fechaSubasta < fechaFormateada) {
+      } else if (fechaSubasta < fechaFormateada) {
         console.log("paso la fecha de la subasta");
-      }else{
+      } else {
         console.log("no se optuvo la fecha");
       }
 

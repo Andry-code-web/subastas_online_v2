@@ -1,10 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=BioRhyme:wght@200..800&family=Sedan:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Modern+Antiqua&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Scope+One&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
 :root {
-  --font--banner--semi: url("/fonts/segoeuithibd.ttf");
-  --font--banner--bool: url("/fonts/segoeuithibd.ttf");
+  --font--banner--semi: "Barlow";
+  --font--banner--bool: "Roboto";
   --font--parrafo: "Space Mono";
   --font--header: "Sedan";
   --font--testimoni: "Modern Antiqua";
@@ -353,7 +354,7 @@ header .session p .btn_menu i {
   background-color: white;
   color: black;
   width: 300px;
-  max-height: 330px;
+  height: auto;
   border-radius: 8px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
 }
@@ -390,21 +391,35 @@ header .session p .btn_menu i {
   text-overflow: ellipsis;
   white-space: nowrap;
   color: black;
+  font-family: var(--font--parrafo);
+  font-weight: 600;
+  text-transform: capitalize;
 }
 
 .lighter {
   font-size: 0.9em;
-}
-
-.flex {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  margin-left: .5rem;
 }
 
 .tag {
-  font-weight: lighter;
+  font-weight: 500;
   color: grey;
+
+}
+
+.precio_base{
+  font-family: var(--font--cont);
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #B20000;
+}
+
+.precio_base i{
+  font-size: 1.8rem;
+}
+
+.precio_base span{
+  font-size: 1.2rem;
 }
 
 .view-details-button {
@@ -419,39 +434,62 @@ header .session p .btn_menu i {
 }
 
 .view-details-button:hover {
-  background-color: darken(var(--color--sub), 10%);
+  background-color: var(--bg--botones);
 }
 
 .detalle_like{
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  margin-left: .5rem;
 }
 
-/* Estilos adicionales para el botón de "Me gusta" */
-.like-button {
-  background: none;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.like-button .like-icon {
-  font-size: 1.5rem;
+.like-count {
   margin-right: 1rem;
+  position: relative; /* Asegura que el span se posicione relativo al i */
 }
 
-/* Corazón lleno */
-.like-button .like-filled {
-  color: red;
+.like-count i {
+  font-size: 2rem;
+  color: #d30000;
+  position: relative; /* Necesario para el posicionamiento absoluto del span */
+  display: flex; /* Centra el contenido del i */
+  align-items: center; /* Centra verticalmente */
+  justify-content: center; /* Centra horizontalmente */
 }
 
-/* Corazón vacío */
-.like-button .like-empty {
-  color: grey; /* Cambia el color si lo deseas */
+.like-count i span {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white; /* Para que el número sea visible sobre el corazón */
+  font-size: 1.2rem; /* Ajusta según necesites */
+  font-family: var(--font--about);
+  font-weight: 600;
 }
 
+.verMas{
+  width: 100%;
+  text-align: center;
+  margin-top: 5rem;
+}
+
+.verMas a{
+  padding: 1rem 2rem 1rem 2rem;
+  background-color: #c5ac75;
+  border-radius: 5px;
+  text-decoration: none;
+  color: #fff;
+  font-family: var(--font--banner--bool);
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: ease-in .3s;
+}
+
+.verMas a:hover{
+  font-size: 1.2rem;
+}
 
 /* COMENTARIOS */
 .comentarios {
