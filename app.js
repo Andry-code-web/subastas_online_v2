@@ -171,8 +171,6 @@ io.on('connection', (socket) => {
     });
 });
 
-
-
 // Iniciar el servidor
 server.listen(port, () => {
     console.log(`El servidor está corriendo en el puerto ${port}`);

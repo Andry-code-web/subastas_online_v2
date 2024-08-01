@@ -225,10 +225,11 @@
     </div>
   </div>
 
-
   <!-- SCRIPT -->
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2"></script>
+
 
   <script>
     const socket = io();
@@ -368,16 +369,72 @@
 
     socket.on('auctionEnded', function (data) {
       const messageElement = document.createElement('div');
+
+      // Verificar que data.winner no sea null o undefined
+      const winnerName = data.winner || 'un participante desconocido';
+
       Swal.fire({
-    icon: 'success',
-    title: `¡Subasta ganada por ${data.winner}!`,
-    text: 'Felicidades, vamos por otra subasta',
-    confirmButtonText: 'Ir al catálogo'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      window.location.href = '/catalogo'; // Redirige a /catalogo
-    }
-  });
+        icon: 'success',
+        title: `¡Subasta ganada por ${winnerName}!`,
+        text: 'Felicidades, vamos por otra subasta',
+        confirmButtonText: 'Ir al catálogo',
+        didOpen: () => {
+          // Crear el contenedor para las partículas
+          const particlesContainer = document.createElement('div');
+          particlesContainer.id = 'particles-js';
+          particlesContainer.style.position = 'absolute';
+          particlesContainer.style.top = '0';
+          particlesContainer.style.left = '0';
+          particlesContainer.style.width = '100%';
+          particlesContainer.style.height = '100%';
+          particlesContainer.style.zIndex = '-1'; // Asegurar que las partículas estén detrás de la alerta
+
+          document.querySelector('.swal2-container').appendChild(particlesContainer);
+
+          // Inicializar las partículas
+          tsParticles.load('particles-js', {
+            particles: {
+              number: {
+                value: 100,
+              },
+              color: {
+                value: ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF'],
+              },
+              shape: {
+                type: 'circle',
+              },
+              opacity: {
+                value: 1,
+                random: true,
+              },
+              size: {
+                value: 5,
+                random: true,
+              },
+              move: {
+                enable: true,
+                direction: 'bottom', // Mover partículas de arriba hacia abajo
+                outMode: 'out',
+                speed: 2,
+              },
+            },
+            interactivity: {
+              events: {
+                onClick: {
+                  enable: true,
+                  mode: 'push',
+                },
+              },
+            },
+            detectRetina: true,
+          });
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = '/catalogo'; // Redirige a /catalogo
+        }
+      });
+
       messages.appendChild(messageElement);
       messages.scrollTop = messages.scrollHeight;
       disableButtons(); // Desactivar los botones
@@ -455,7 +512,42 @@
       const chat = document.getElementById('chat');
       const cardBody = document.getElementById('body_card');
 
-      const fechaSubasta = '<%= subasta.fecha_formateada %>';
+      btnIniciarChat.addEventListener('click', async () => {
+        console.log('se realizó clic');
+
+        // Mostrar SweetAlert2 para los términos y condiciones
+        const { value: accept } = await Swal.fire({
+          title: "Términos y condiciones",
+          html: `<iframe src="/img/TÉRMINOS Y CONDICIONES PARA EL PROCESO DE REMATE ELECTRÓNICO (1).pdf" frameborder="0" style="width: 100%; height: 500px;"></iframe>
+        <br>
+        <input type="checkbox" id="terms-checkbox">
+        <label for="terms-checkbox">Acepto los términos y condiciones</label>`,
+          showCancelButton: true,
+          confirmButtonText: 'Continuar&nbsp;<i class="fa fa-arrow-right"></i>',
+          cancelButtonText: 'Cancelar',
+          preConfirm: () => {
+            const checkbox = document.querySelector('#terms-checkbox');
+            if (!checkbox.checked) {
+              Swal.showValidationMessage("Debes aceptar los términos y condiciones");
+            }
+            return checkbox.checked;
+          },
+          customClass: {
+            htmlContainer: 'custom-html-container'
+          }
+        });
+
+        // Si el usuario aceptó los términos, activa el chat
+        if (accept) {
+          Swal.fire("Vamos por la subasta");
+          chat.classList.add('active');
+          cardBody.classList.add('active');
+        } else {
+          Swal.fire("No has aceptado los términos y condiciones");
+        }
+      });
+
+      /* const fechaSubasta = '<%= subasta.fecha_formateada %>';
 
       console.log(`Fecha de DB: ${fechaSubasta}`);
 
@@ -465,10 +557,10 @@
       const año = fechaActual.getFullYear();
 
       const fechaFormateada = `${dia}/${mes}/${año}`;
-      console.log(`Fecha de JS: ${fechaFormateada}`);
+      console.log(`Fecha de JS: ${fechaFormateada}`); */
 
 
-      if (fechaSubasta == fechaFormateada) {
+      /* if (fechaSubasta == fechaFormateada) {
         console.log("estas en fecha de subasta");
       } else if (fechaSubasta > fechaFormateada) {
         console.log("faltan dias para la subasta");
@@ -476,13 +568,9 @@
         console.log("paso la fecha de la subasta");
       } else {
         console.log("no se optuvo la fecha");
-      }
+      } */
 
-      btnIniciarChat.addEventListener('click', () => {
-        console.log('se realizo click');
-        chat.classList.add('active');
-        cardBody.classList.add('active');
-      });
+
 
     });
   </script>

@@ -107,11 +107,11 @@ header .session p .btn_menu i {
     transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.menu_desplegable div ul{
+.menu_desplegable div ul {
   list-style: none;
 }
 
-.menu_desplegable div ul li a{
+.menu_desplegable div ul li a {
   text-decoration: none;
   color: #fff;
   font-family: var(--font--banner--bool);
@@ -119,7 +119,7 @@ header .session p .btn_menu i {
   transition: ease-in .3s;
 }
 
-.menu_desplegable div ul li a:hover{
+.menu_desplegable div ul li a:hover {
   font-size: 1.1rem;
   border-bottom: 2px solid #fff;
 }
@@ -159,8 +159,8 @@ header .session p .btn_menu i {
 
 .scroll-1::-webkit-scrollbar-thumb {
   border-radius: 20px;
-  background: rgb(204,180,120);
-background: linear-gradient(90deg, rgba(204,180,120,1) 0%, rgba(214,198,165,1) 100%);
+  background: rgb(204, 180, 120);
+  background: linear-gradient(90deg, rgba(204, 180, 120, 1) 0%, rgba(214, 198, 165, 1) 100%);
 }
 
 .content_galeria {
@@ -232,18 +232,18 @@ background: linear-gradient(90deg, rgba(204,180,120,1) 0%, rgba(214,198,165,1) 1
   /* Color del borde cuando está activa */
 }
 
-.property-details-content{
+.property-details-content {
   background-color: #fff;
   border-radius: 5px;
 }
 
-.property-details-content .content_title{
+.property-details-content .content_title {
   width: 100%;
   text-align: center;
   padding-top: 1.5rem;
 }
 
-.property-details-content h4{
+.property-details-content h4 {
   display: inline-block;
   color: var(--color--sub);
   font-size: 1rem;
@@ -253,7 +253,7 @@ background: linear-gradient(90deg, rgba(204,180,120,1) 0%, rgba(214,198,165,1) 1
   padding: 10px 15px 10px 15px;
 }
 
-.property-details-content h4::before{
+.property-details-content h4::before {
   content: '';
   position: absolute;
   top: 0;
@@ -264,7 +264,7 @@ background: linear-gradient(90deg, rgba(204,180,120,1) 0%, rgba(214,198,165,1) 1
   border-left: 3px solid var(--bg--botones);
 }
 
-.property-details-content h4::after{
+.property-details-content h4::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -274,52 +274,54 @@ background: linear-gradient(90deg, rgba(204,180,120,1) 0%, rgba(214,198,165,1) 1
   border-bottom: 3px solid var(--bg--botones);
   border-right: 3px solid var(--bg--botones);
 }
-.content_info_subastas p{
+
+.content_info_subastas p {
   border-bottom: 1px solid #dddddd;
 }
 
-.content_info_subastas p span:first-child{
+.content_info_subastas p span:first-child {
   font-family: var(--font--sub--title--3);
   color: #990000;
 }
 
-.nombre_tipo{
+.nombre_tipo {
   width: 80%;
   height: auto;
 }
 
-.nombre_tipo h3{
+.nombre_tipo h3 {
   font-size: 1.1rem;
   font-weight: 400;
   padding-bottom: 5px;
   border-bottom: 1px solid #dddddd;
 }
 
-.nombre_tipo h3 span:first-child{
+.nombre_tipo h3 span:first-child {
   font-family: var(--font--sub--title--3);
   color: #BD0000;
 }
 
 .features,
-.imagenes{
+.imagenes {
   width: 80%;
 }
 
-.content_descripcion{
+.content_descripcion {
   width: 80%;
 }
 
-.content_descripcion h5{
+.content_descripcion h5 {
   color: var(--color--sub);
   font-weight: 400;
   font-family: var(--font--sub--title--2);
   font-size: 1.5rem;
 }
-.content_descripcion p{
+
+.content_descripcion p {
   border: none !important;
 }
 
-.content_descripcion p span{
+.content_descripcion p span {
   height: auto;
   color: #000 !important;
   font-weight: 200 !important;
@@ -360,7 +362,7 @@ background: linear-gradient(90deg, rgba(204,180,120,1) 0%, rgba(214,198,165,1) 1
   display: block;
 }
 
-.card-body.active{
+.card-body.active {
   display: none;
 }
 
@@ -388,16 +390,16 @@ background: linear-gradient(90deg, rgba(204,180,120,1) 0%, rgba(214,198,165,1) 1
   background-color: #ffa928;
 }
 
-.precio{
+.precio {
   gap: .5rem;
 }
 
-.precio i{
+.precio i {
   font-size: 1.5rem;
   color: #00722a;
 }
 
-.precio .precio_base{
+.precio .precio_base {
   color: #00722a !important;
   font-family: var(--font--sub--title--2) !important;
   font-weight: 300 !important;
@@ -427,7 +429,8 @@ background: linear-gradient(90deg, rgba(204,180,120,1) 0%, rgba(214,198,165,1) 1
 }
 
 .messages {
-  height: calc(100% - 80px); /* Ajustar según la altura de .content_acciones y .progress */
+  height: calc(100% - 80px);
+  /* Ajustar según la altura de .content_acciones y .progress */
   overflow-y: scroll;
   padding: 10px;
   border: 1px solid #ddd;
@@ -503,6 +506,16 @@ background: linear-gradient(90deg, rgba(204,180,120,1) 0%, rgba(214,198,165,1) 1
 }
 
 
-.btn_enviar{
+.btn_enviar {
   width: 23%;
+}
+
+#particles-js {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  /* Asegurar que las partículas estén detrás de la alerta */
 }
