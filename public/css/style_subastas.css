@@ -519,3 +519,11 @@ header .session p .btn_menu i {
   z-index: -1;
   /* Asegurar que las partículas estén detrás de la alerta */
 }
+
+.bg-btn-alert2{
+  background-color: #BD0000;
+}
+
+.bg-btn-alert2:focus-visible{
+  box-shadow: none;
+}

@@ -226,9 +226,10 @@
   </div>
 
   <!-- SCRIPT -->
-
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/tsparticles@2"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
+
 
 
   <script>
@@ -378,56 +379,43 @@
         title: `¡Subasta ganada por ${winnerName}!`,
         text: 'Felicidades, vamos por otra subasta',
         confirmButtonText: 'Ir al catálogo',
+        allowOutsideClick: false,
+        customClass: {
+          confirmButton: 'bg-btn-alert2',
+        },
         didOpen: () => {
-          // Crear el contenedor para las partículas
-          const particlesContainer = document.createElement('div');
-          particlesContainer.id = 'particles-js';
-          particlesContainer.style.position = 'absolute';
-          particlesContainer.style.top = '0';
-          particlesContainer.style.left = '0';
-          particlesContainer.style.width = '100%';
-          particlesContainer.style.height = '100%';
-          particlesContainer.style.zIndex = '-1'; // Asegurar que las partículas estén detrás de la alerta
+          const end = Date.now() + 15 * 1000;
+          const colors = ["#ff0000", "#fbff00", "#04ff04"];
 
-          document.querySelector('.swal2-container').appendChild(particlesContainer);
+          (function frame() {
+            confetti({
+              particleCount: 2,
+              angle: 60,
+              spread: 55,
+              origin: { x: 0 },
+              colors: colors,
+            });
 
-          // Inicializar las partículas
-          tsParticles.load('particles-js', {
-            particles: {
-              number: {
-                value: 100,
-              },
-              color: {
-                value: ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF'],
-              },
-              shape: {
-                type: 'circle',
-              },
-              opacity: {
-                value: 1,
-                random: true,
-              },
-              size: {
-                value: 5,
-                random: true,
-              },
-              move: {
-                enable: true,
-                direction: 'bottom', // Mover partículas de arriba hacia abajo
-                outMode: 'out',
-                speed: 2,
-              },
-            },
-            interactivity: {
-              events: {
-                onClick: {
-                  enable: true,
-                  mode: 'push',
-                },
-              },
-            },
-            detectRetina: true,
-          });
+            confetti({
+              particleCount: 2,
+              angle: 120,
+              spread: 55,
+              origin: { x: 1 },
+              colors: colors,
+            });
+
+            confetti({
+              particleCount: 2,
+              angle: 180,
+              apread: 55,
+              origin: { x: 2},
+              colors: colors,
+            });
+
+            if (Date.now() < end) {
+              requestAnimationFrame(frame);
+            }
+          })();
         },
       }).then((result) => {
         if (result.isConfirmed) {
