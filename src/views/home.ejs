@@ -160,15 +160,15 @@
       </a>
       <a href="#" class="content_img">
         <div class="iconos_cuentas">
-          <span class="icono">
+          <span class="icono piezas">
             <img src="/img/icon_accesorios.png" alt="">
           </span>
-          <span class="contador">
+          <span class="contador piesas">
             30
           </span>
         </div>
         <span>
-          Partes y piezas
+          Piezas
         </span>
       </a>
     </div>
@@ -259,34 +259,32 @@
   <!-- COMENTARIOS -->
   <section>
     <div class="comentarios">
-      <h2>Comentarios</h2>
-      <div class="Testimonio">
-        <button id="back">
-          <img src="/img/back.svg" alt="Back">
-        </button>
-        <div class="comentarios-container">
-          <% comentarios.forEach(comentario=> { %>
-          <div class="comentario">
-            <p>
-              <%= comentario.comentario %>
-            </p>
-            <p>
-              <% for (let i=0; i < comentario.rating; i++) { %>
-              <i class="bi bi-star-fill"></i>
-              <% } %>
-              <% for (let i=comentario.rating; i < 5; i++) { %>
-              <i class="bi bi-star"></i>
-              <% } %>
-            </p>
-          </div>
-          <% }); %>
+        <h2>Comentarios</h2>
+        <div class="Testimonio">
+            <button id="back">
+                <img src="/img/back.svg" alt="Back">
+            </button>
+            <div class="comentarios-container">
+                <% comentarios.forEach(comentario => { %>
+                    <div class="comentario">
+                        <p><%= comentario.comentario %></p>
+                        <p>
+                            <% for (let i = 0; i < comentario.rating; i++) { %>
+                                <i class="bi bi-star-fill"></i>
+                            <% } %>
+                            <% for (let i = comentario.rating; i < 5; i++) { %>
+                                <i class="bi bi-star"></i>
+                            <% } %>
+                        </p>
+                    </div>
+                <% }); %>
+            </div>
+            <button id="next">
+                <img src="/img/next.svg" alt="Next">
+            </button>
         </div>
-        <button id="next">
-          <img src="/img/next.svg" alt="Next">
-        </button>
-      </div>
     </div>
-  </section>
+</section>
 
   <!-- REDES -->
   <section class="redes_sociales">
@@ -424,47 +422,50 @@
     });
   </script>
 
-  <script>
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.comentario');
-    const totalSlides = slides.length;
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.comentario');
+  const totalSlides = slides.length;
+  const container = document.querySelector('.comentarios-container');
 
-    document.getElementById('next').addEventListener('click', nextSlide);
-    document.getElementById('back').addEventListener('click', prevSlide);
+  document.getElementById('next').addEventListener('click', nextSlide);
+  document.getElementById('back').addEventListener('click', prevSlide);
 
-    function showSlide(index) {
-      const container = document.querySelector('.comentarios-container');
+  function showSlide(index) {
       if (index >= totalSlides) {
-        currentSlide = 0;
+          currentSlide = 0;
       } else if (index < 0) {
-        currentSlide = totalSlides - 1;
+          currentSlide = totalSlides - 1;
       } else {
-        currentSlide = index;
+          currentSlide = index;
       }
       container.style.transform = 'translateX(' + (-currentSlide * 100) + '%)';
-    }
+  }
 
-    function nextSlide() {
+  function nextSlide() {
       showSlide(currentSlide + 1);
-    }
+      console.log("adelanta");
+      
+  }
 
-    function prevSlide() {
+  function prevSlide() {
       showSlide(currentSlide - 1);
-    }
+      console.log("atras");
+      
+  }
 
-    // Autoplay
-    let autoPlayInterval = setInterval(nextSlide, 3000);
+  // Autoplay
+  let autoPlayInterval = setInterval(nextSlide, 3000);
 
-    // Pause autoplay on hover
-    document.querySelector('.Testimonio').addEventListener('mouseover', () => {
+  // Pause autoplay on hover
+  document.querySelector('.Testimonio').addEventListener('mouseover', () => {
       clearInterval(autoPlayInterval);
-    });
+  });
 
-    document.querySelector('.Testimonio').addEventListener('mouseout', () => {
+  document.querySelector('.Testimonio').addEventListener('mouseout', () => {
       autoPlayInterval = setInterval(nextSlide, 3000);
-    });
-  </script>
-
+  });
+</script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     $(document).ready(function() {

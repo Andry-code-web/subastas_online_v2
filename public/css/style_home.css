@@ -286,7 +286,7 @@ header .session p .btn_menu i {
 }
 
 .iconos_cuentas{
-  width: 80px;
+  width: 70px;
   height: auto;
   position: relative;
 }
@@ -295,6 +295,10 @@ header .session p .btn_menu i {
   width: 90%;
   -webkit-filter: grayscale(0.5);
   filter: opacity(50%);
+}
+
+.piezas img{
+  width: 70% !important;
 }
 
 .iconos_cuentas .contador{
@@ -310,8 +314,12 @@ header .session p .btn_menu i {
   font-size: 1rem !important;
 }
 
+.piesas{
+  top: 5px !important;
+}
+
 /* ABOUT */
-.about {
+/* .about {
   width: 100%;
   height: 90vh;
   display: flex;
@@ -402,13 +410,13 @@ header .session p .btn_menu i {
   background-color: var(--bg--botones);
   border-radius: 0px 10px 0px 15px;
   color: #fff;
-}
+} */
 
 /* SUBASTAS */
 .subastas {
   width: 100%;
   height: 100vh;
-  position: relative;
+  /* position: relative; */
 }
 
 .subastas .fondo {
@@ -418,7 +426,7 @@ header .session p .btn_menu i {
   z-index: -1;
 }
 
-.subastas::before {
+/* .subastas::before {
   content: "";
   position: absolute;
   top: 109.5%;
@@ -427,7 +435,7 @@ header .session p .btn_menu i {
   width: 5px;
   height: 20%;
   background-color: #000;
-}
+} */
 
 .contenedor_subastass {
   width: 100%;
@@ -599,7 +607,7 @@ header .session p .btn_menu i {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-top: 10rem;
+  margin-top: 5rem;
 }
 
 .comentarios h2 {
@@ -645,8 +653,8 @@ header .session p .btn_menu i {
 }
 
 .comentario p:nth-child(2) i {
-    font-size: 2rem;
-    color: var(--color--sub);
+  font-size: 2rem;
+  color: var(--color--sub);
 }
 
 .Testimonio button {
