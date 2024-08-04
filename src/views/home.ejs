@@ -30,52 +30,51 @@
     <div class="session">
       <!--       <img src="/img/session.svg" alt=""> -->
       <% if (usuario) { %>
-        <p class="d-flex align-items-center ">
-          <span>Bienvenido, <%= usuario.nombre %></span>
-          <button class="btn_menu ms-1" id="btn_menu">
-            <i class="bi bi-list"></i>
-          </button>
-        <div class="menu_desplegable d-flex flex-column justify-content-between">
-          <div>
-            <div class="cabezera_menu d-flex justify-content-between">
-              <h3>Subastas</h3>
-              <button id="btn_close">
-                <i class="bi bi-x-lg"></i>
-              </button>
-            </div>
-            <ul>
-              <li><a href="/catalogo">Catalogo</a></li>
-            </ul>
+      <p class="d-flex align-items-center ">
+        <button class="btn_menu ms-1" id="btn_menu">
+          <i class="bi bi-list"></i>
+        </button>
+        <span><%= usuario.nombre %></span>
+      <div class="menu_desplegable d-flex flex-column justify-content-between">
+        <div>
+          <div class="cabezera_menu d-flex justify-content-between">
+            <h3>Subastas</h3>
+            <button id="btn_close">
+              <i class="bi bi-x-lg"></i>
+            </button>
           </div>
-          <div class="perfil_user">
-            <div class="d-flex flex-row">
-              <i class="bi bi-person-bounding-box" style="font-size: 2.5rem; color: #fff; margin-right: 1rem;"></i>
-              <div class="d-flex flex-column">
-                <strong>Usuario</strong>
-                <small>
-                  <%= usuario.nombre %>
-                </small>
-                <a href="/logout" class="btn btn-danger btn-sm ms-2">Cerrar Sesión</a>
-              </div>
+          <ul>
+            <li><a href="/catalogo">Catalogo</a></li>
+          </ul>
+        </div>
+        <div class="perfil_user">
+          <div class="d-flex flex-row">
+            <i class="bi bi-person-bounding-box" style="font-size: 2.5rem; color: #fff; margin-right: 1rem;"></i>
+            <div class="d-flex flex-column">
+              <strong>Usuario</strong>
+              <small>
+                <%= usuario.nombre %>
+              </small>
+              <a href="/logout" class="btn btn-danger btn-sm ms-2">Cerrar Sesión</a>
             </div>
           </div>
-          </p>
-          <% } else { %>
-            <p class="ingresar">
-              <span>
-                <i class="bi bi-person"></i>
-              </span>
-              <span>
-                <a href="/login">Ingresar</a>
-              </span>
+        </div>
+        <% } else { %>
+        <p class="ingresar">
+          <span>
+            <i class="bi bi-person"></i>
+          </span>
+          <span>
+            <a href="/login">Ingresar</a>
+          </span>
 
-              <!-- <span>/</span>
+          <!-- <span>/</span>
               <span>
                 <a href="/registro">Sign up</a>
               </span> -->
-            </p>
-            <% } %>
-        </div>
+        </p>
+        <% } %>
+      </div>
   </header>
 
   <!-- BANNER -->
@@ -83,13 +82,16 @@
     <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active" data-bs-interval="2000">
-          <img src="/img/WhatsApp Image 2024-08-02 at 12.21.32 PM.jpeg" class="d-block w-100" alt="...">
+          <img src="/img/banner_slider1.jpeg" class="d-block w-100" alt="...">
         </div>
         <div class="carousel-item" data-bs-interval="2000">
           <img src="/img/banner_slider2.jpeg" class="d-block w-100" alt="...">
         </div>
         <div class="carousel-item">
-          <img src="/img/banner_slider2.jpeg" class="d-block w-100" alt="...">
+          <img src="/img/banner_slider3.jpeg" class="d-block w-100" alt="...">
+        </div>
+        <div class="carousel-item">
+          <img src="/img/banner_slider4.jpeg" class="d-block w-100" alt="...">
         </div>
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
@@ -105,7 +107,7 @@
         <span class="visually-hidden">Next</span>
       </button>
     </div>
-    
+
     <!-- <div class="contenido">
       <h1>Invierte en tu futuro con nuestras subastas de inmuebles.</h1>
       <a href="#contacto">Contáctenos</a>
@@ -113,7 +115,64 @@
 
   </section>
 
-  
+  <!-- CATEGORÍAS -->
+  <section class="categoria" id="cartegoria">
+    <h2>Navega por las categorías</h2>
+    <div class="categorias d-flex flex-row">
+      <a href="#" class="content_img">
+        <div class="iconos_cuentas">
+          <span class="icono">
+            <img src="/img/icon_camioneta.png" alt="">
+          </span>
+          <span class="contador">
+            30
+          </span>
+        </div>
+        <span>
+          Camionetas
+        </span>
+      </a>
+      <a href="#" class="content_img">
+        <div class="iconos_cuentas">
+          <span class="icono">
+            <img src="/img/icon_auto.png" alt="">
+          </span>
+          <span class="contador">
+            30
+          </span>
+        </div>
+        <span>
+          Autos
+        </span>
+      </a>
+      <a href="#" class="content_img">
+        <div class="iconos_cuentas">
+          <span class="icono">
+            <img src="/img/icon_moto.png" alt="">
+          </span>
+          <span class="contador">
+            30
+          </span>
+        </div>
+        <span>
+          Motos
+        </span>
+      </a>
+      <a href="#" class="content_img">
+        <div class="iconos_cuentas">
+          <span class="icono">
+            <img src="/img/icon_accesorios.png" alt="">
+          </span>
+          <span class="contador">
+            30
+          </span>
+        </div>
+        <span>
+          Partes y piezas
+        </span>
+      </a>
+    </div>
+  </section>
 
   <!-- ABOUT -->
   <!-- <section class="about" id="about">
@@ -154,41 +213,41 @@
       <h2>Subastas esperadas</h2>
       <div class="content_card">
         <% subastas.forEach(subasta=> { %>
-          <article class="card">
-            <div class="card-img">
-              <% if (subasta.imagenes && subasta.imagenes.length> 0) { %>
-                <img src="data:image/jpeg;base64,<%= subasta.imagenes[0] %>" alt="Subasta Image">
-                <% } else { %>
-                  <img src="/img/casas.png" alt="Default Image">
-                  <% } %>
-            </div>
-            <div class="project-info">
-              <div class="flex flex-column">
-                <div class="project-title">
-                  <%= subasta.nombre_propiedad %>
-                </div>
-                <span class="tag">
-                  <%= subasta.categoria %>
-                </span>
+        <article class="card">
+          <div class="card-img">
+            <% if (subasta.imagenes && subasta.imagenes.length> 0) { %>
+            <img src="data:image/jpeg;base64,<%= subasta.imagenes[0] %>" alt="Subasta Image">
+            <% } else { %>
+            <img src="/img/casas.png" alt="Default Image">
+            <% } %>
+          </div>
+          <div class="project-info">
+            <div class="flex flex-column">
+              <div class="project-title">
+                <%= subasta.nombre_propiedad %>
               </div>
-              <span class="lighter precio_base">
-                <i class="bi bi-cash-stack"></i>
-                <span>US$</span>
-                <%= subasta.precio_base %>
+              <span class="tag">
+                <%= subasta.categoria %>
               </span>
-              <div class="detalle_like">
-                <a href="/subasta/<%= subasta.id %>" class="view-details-button">Ver detalles</a>
-                <span class="like-count">
-                  <i class="bi bi-heart-fill">
-                    <span>
-                      <%= subasta.like_count %>
-                    </span>
-                  </i>
-                </span>
-              </div>
             </div>
-          </article>
-          <% }) %>
+            <span class="lighter precio_base">
+              <i class="bi bi-cash-stack"></i>
+              <span>US$</span>
+              <%= subasta.precio_base %>
+            </span>
+            <div class="detalle_like">
+              <a href="/subasta/<%= subasta.id %>" class="view-details-button">Ver detalles</a>
+              <span class="like-count">
+                <i class="bi bi-heart-fill">
+                  <span>
+                    <%= subasta.like_count %>
+                  </span>
+                </i>
+              </span>
+            </div>
+          </div>
+        </article>
+        <% }) %>
       </div>
       <div class="verMas">
         <a href="/catalogo">Ver catalogo</a>
@@ -207,20 +266,20 @@
         </button>
         <div class="comentarios-container">
           <% comentarios.forEach(comentario=> { %>
-            <div class="comentario">
-              <p>
-                <%= comentario.comentario %>
-              </p>
-              <p>
-                <% for (let i=0; i < comentario.rating; i++) { %>
-                  <i class="bi bi-star-fill"></i>
-                  <% } %>
-                    <% for (let i=comentario.rating; i < 5; i++) { %>
-                      <i class="bi bi-star"></i>
-                      <% } %>
-              </p>
-            </div>
-            <% }); %>
+          <div class="comentario">
+            <p>
+              <%= comentario.comentario %>
+            </p>
+            <p>
+              <% for (let i=0; i < comentario.rating; i++) { %>
+              <i class="bi bi-star-fill"></i>
+              <% } %>
+              <% for (let i=comentario.rating; i < 5; i++) { %>
+              <i class="bi bi-star"></i>
+              <% } %>
+            </p>
+          </div>
+          <% }); %>
         </div>
         <button id="next">
           <img src="/img/next.svg" alt="Next">
@@ -408,15 +467,15 @@
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
-    $(document).ready(function () {
-      $(".like-button").on("click", function () {
+    $(document).ready(function() {
+      $(".like-button").on("click", function() {
         const $button = $(this);
         const subastaId = $button.data("subasta-id");
 
         // Enviar una solicitud al servidor para guardar el estado del like
         $.post("/like", {
           subasta_id: subastaId
-        }, function (response) {
+        }, function(response) {
           if (response.success) {
             // Alternar la visibilidad de los íconos
             $button.find(".bi-heart-fill").toggleClass("d-none");
@@ -427,7 +486,7 @@
           } else {
             alert("Error al realizar la acción.");
           }
-        }).fail(function (jqXHR) {
+        }).fail(function(jqXHR) {
           if (jqXHR.status === 401) {
             // Redirigir al usuario a la página de inicio de sesión
             window.location.href = jqXHR.responseJSON.redirect;
