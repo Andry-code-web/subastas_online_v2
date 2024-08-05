@@ -374,53 +374,88 @@ router.post("/like", (req, res) => {
   const { subasta_id } = req.body;
   const usuario_id = req.session.usuario.id;
 
-  // Verificar si el usuario ya ha dado like a la subasta
-  const checkLikeQuery = "SELECT * FROM subastaonline.likes WHERE user_id = ? AND subasta_id = ?";
-  conexion.query(checkLikeQuery, [usuario_id, subasta_id], (error, results) => {
-    if (error) {
-      console.error("Error al verificar el like:", error);
+  conexion.beginTransaction((err) => {
+    if (err) {
+      console.error("Error al iniciar la transacción:", err);
       return res.status(500).json({ success: false });
     }
 
-    if (results.length > 0) {
-      // El usuario ya ha dado like, eliminar el like y decrementar el like_count
-      const deleteLikeQuery = "DELETE FROM subastaonline.likes WHERE user_id = ? AND subasta_id = ?";
-      conexion.query(deleteLikeQuery, [usuario_id, subasta_id], (error) => {
-        if (error) {
-          console.error("Error al eliminar el like:", error);
+    // Verificar si el usuario ya ha dado like a la subasta
+    const checkLikeQuery = "SELECT * FROM subastaonline.likes WHERE user_id = ? AND subasta_id = ?";
+    conexion.query(checkLikeQuery, [usuario_id, subasta_id], (error, results) => {
+      if (error) {
+        return conexion.rollback(() => {
+          console.error("Error al verificar el like:", error);
           return res.status(500).json({ success: false });
-        }
-
-        // Decrementar el like_count solo si es mayor que 0
-        const decrementLikeCountQuery = "UPDATE subastaonline.subastas SET like_count = GREATEST(like_count - 1, 0) WHERE id = ?";
-        conexion.query(decrementLikeCountQuery, [subasta_id], (error) => {
-          if (error) {
-            console.error("Error al decrementar el like_count:", error);
-            return res.status(500).json({ success: false });
-          }
-          res.json({ success: true });
         });
-      });
-    } else {
-      // El usuario no ha dado like, agregar el like y incrementar el like_count
-      const addLikeQuery = "INSERT INTO subastaonline.likes (user_id, subasta_id) VALUES (?, ?)";
-      conexion.query(addLikeQuery, [usuario_id, subasta_id], (error) => {
-        if (error) {
-          console.error("Error al agregar el like:", error);
-          return res.status(500).json({ success: false });
-        }
+      }
 
-        const incrementLikeCountQuery = "UPDATE subastaonline.subastas SET like_count = like_count + 1 WHERE id = ?";
-        conexion.query(incrementLikeCountQuery, [subasta_id], (error) => {
+      if (results.length > 0) {
+        // El usuario ya ha dado like, eliminar el like y decrementar el like_count
+        const deleteLikeQuery = "DELETE FROM subastaonline.likes WHERE user_id = ? AND subasta_id = ?";
+        conexion.query(deleteLikeQuery, [usuario_id, subasta_id], (error) => {
           if (error) {
-            console.error("Error al incrementar el like_count:", error);
-            return res.status(500).json({ success: false });
+            return conexion.rollback(() => {
+              console.error("Error al eliminar el like:", error);
+              return res.status(500).json({ success: false });
+            });
           }
-          res.json({ success: true });
+
+          const decrementLikeCountQuery = "UPDATE subastaonline.subastas SET like_count = GREATEST(like_count - 1, 0) WHERE id = ?";
+          conexion.query(decrementLikeCountQuery, [subasta_id], (error) => {
+            if (error) {
+              return conexion.rollback(() => {
+                console.error("Error al decrementar el like_count:", error);
+                return res.status(500).json({ success: false });
+              });
+            }
+
+            conexion.commit((err) => {
+              if (err) {
+                return conexion.rollback(() => {
+                  console.error("Error al hacer commit:", err);
+                  return res.status(500).json({ success: false });
+                });
+              }
+              res.json({ success: true });
+            });
+          });
         });
-      });
-    }
+      } else {
+        // El usuario no ha dado like, agregar el like y incrementar el like_count
+        const addLikeQuery = "INSERT INTO subastaonline.likes (user_id, subasta_id) VALUES (?, ?)";
+        conexion.query(addLikeQuery, [usuario_id, subasta_id], (error) => {
+          if (error) {
+            return conexion.rollback(() => {
+              console.error("Error al agregar el like:", error);
+              return res.status(500).json({ success: false });
+            });
+          }
+
+          const incrementLikeCountQuery = "UPDATE subastaonline.subastas SET like_count = like_count + 1 WHERE id = ?";
+          conexion.query(incrementLikeCountQuery, [subasta_id], (error) => {
+            if (error) {
+              return conexion.rollback(() => {
+                console.error("Error al incrementar el like_count:", error);
+                return res.status(500).json({ success: false });
+              });
+            }
+
+            conexion.commit((err) => {
+              if (err) {
+                return conexion.rollback(() => {
+                  console.error("Error al hacer commit:", err);
+                  return res.status(500).json({ success: false });
+                });
+              }
+              res.json({ success: true });
+            });
+          });
+        });
+      }
+    });
   });
 });
+
 
 module.exports = router;

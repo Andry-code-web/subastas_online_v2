@@ -230,8 +230,6 @@
   <!-- <script src="https://cdn.jsdelivr.net/npm/tsparticles@2"></script> -->
   <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
 
-
-
   <script>
     const socket = io();
 
@@ -408,7 +406,7 @@
               particleCount: 2,
               angle: 180,
               apread: 55,
-              origin: { x: 2},
+              origin: { x: 2 },
               colors: colors,
             });
 
@@ -426,6 +424,23 @@
       messages.appendChild(messageElement);
       messages.scrollTop = messages.scrollHeight;
       disableButtons(); // Desactivar los botones
+    });
+
+    const currentUserId = '<%= usuario ? usuario.id : "null" %>';
+    console.log('Current User ID:', currentUserId);
+
+    socket.on('intentosActivados', function (data) {
+      console.log('Evento intentosActivados recibido con datos:', data);
+      const usuarioId = data.usuarioId;
+
+      if (usuarioId === currentUserId) {
+        Swal.fire({
+          title: 'Intentos Activados',
+          text: 'Tus intentos para participar en las subastas han sido activados.',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+      }
     });
 
     messageInput.addEventListener('keypress', function (event) {
@@ -507,9 +522,9 @@
         const { value: accept } = await Swal.fire({
           title: "Términos y condiciones",
           html: `<iframe src="/img/TÉRMINOS Y CONDICIONES PARA EL PROCESO DE REMATE ELECTRÓNICO (1).pdf" frameborder="0" style="width: 100%; height: 500px;"></iframe>
-        <br>
-        <input type="checkbox" id="terms-checkbox">
-        <label for="terms-checkbox">Acepto los términos y condiciones</label>`,
+    <br>
+    <input type="checkbox" id="terms-checkbox">
+    <label for="terms-checkbox">Acepto los términos y condiciones</label>`,
           showCancelButton: true,
           confirmButtonText: 'Continuar&nbsp;<i class="fa fa-arrow-right"></i>',
           cancelButtonText: 'Cancelar',
@@ -525,17 +540,61 @@
           }
         });
 
-        // Si el usuario aceptó los términos, activa el chat
+        // Si el usuario aceptó los términos, muestra el aviso sobre los intentos
         if (accept) {
-          Swal.fire("Vamos por la subasta");
-          chat.classList.add('active');
-          cardBody.classList.add('active');
+          const attemptsAvailable = await checkAttempts(); // Función que verifica los intentos
+
+          if (attemptsAvailable) {
+            Swal.fire({
+              title: 'Bienvenido a la Subasta',
+              text: 'Ya tienes tus oportunidades para participar en la subasta.',
+              icon: 'success',
+              confirmButtonText: 'Ir a la subasta'
+            }).then(() => {
+              chat.classList.add('active');
+              cardBody.classList.add('active');
+            });
+          } else {
+            Swal.fire({
+              title: 'Espera',
+              text: 'No tienes intentos disponibles aún. Te notificaremos cuando tengas intentos para participar.',
+              icon: 'info',
+              confirmButtonText: 'Ir al catálogo'
+            }).then(() => {
+              window.location.href = '/catalogo'; // Redirige al catálogo
+            });
+          }
         } else {
           Swal.fire("No has aceptado los términos y condiciones");
         }
       });
 
-      /* const fechaSubasta = '<%= subasta.fecha_formateada %>';
+      // Función simulada para verificar intentos disponibles
+      async function checkAttempts() {
+        // Simula la verificación de intentos disponibles. En un escenario real, aquí realizarías una solicitud al servidor.
+        // Retorna true o false según el estado de los intentos del usuario.
+        // Por ejemplo, puedes usar una API para verificar el estado real de los intentos.
+
+        // Para efectos de demostración, se puede ajustar esto según sea necesario
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            const hasAttempts = confirm("¿Simulación: ¿Tienes al menos un intento disponible?"); // Simulación
+            resolve(hasAttempts);
+          }, 1000);
+        });
+      }
+
+
+
+
+
+
+    });
+  </script>
+
+
+</body>
+<!--       /* const fechaSubasta = '<%= subasta.fecha_formateada %>';
 
       console.log(`Fecha de DB: ${fechaSubasta}`);
 
@@ -557,11 +616,6 @@
       } else {
         console.log("no se optuvo la fecha");
       } */
-
-
-
-    });
-  </script>
-</body>
+ -->
 
 </html>

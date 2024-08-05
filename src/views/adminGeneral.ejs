@@ -116,35 +116,40 @@
                                         </tr>
                                     </thead>
                                     <tbody style="font-size: .9rem;">
-                                        <% usuarios.forEach(usuario=> { %>
-                                            <tr>
-                                                <td>
-                                                    <i class="bi bi-person-circle text-warning"
-                                                        style="font-size: 1.5rem;"></i>
-                                                </td>
-                                                <td>
-                                                    <%= usuario.nombre + " " + usuario.apellidos %>
-                                                </td>
-                                                <td>
-                                                    <%= usuario.dni %>
-                                                </td>
-                                                <td>
-                                                    <%= usuario.correo_electronico %>
-                                                </td>
-                                                <td class="acciones">
-                                                    <a href="/admin/editarUsuario/<%= usuario.id %>"
-                                                        class="text-primary">
-                                                        <i class="bi bi-pencil-square"></i>
-                                                    </a>
-                                                    <a href="#" class="text-danger eliminar-usuario"
-                                                        data-id="<%= usuario.id %>">
-                                                        <i class="bi bi-trash3"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <% }); %>
+                                        <% usuarios.forEach(usuario => { %>
+                                        <tr>
+                                            <td>
+                                                <i class="bi bi-person-circle text-warning" style="font-size: 1.5rem;"></i>
+                                            </td>
+                                            <td>
+                                                <%= usuario.nombre + " " + usuario.apellidos %>
+                                            </td>
+                                            <td>
+                                                <%= usuario.dni %>
+                                            </td>
+                                            <td>
+                                                <%= usuario.correo_electronico %>
+                                            </td>
+                                            <td class="acciones">
+                                                <a href="/admin/editarUsuario/<%= usuario.id %>" class="text-primary">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </a>
+                                                <a href="#" class="text-danger eliminar-usuario" data-id="<%= usuario.id %>">
+                                                    <i class="bi bi-trash3"></i>
+                                                </a>
+                                                <% if (!usuario.intentos_activados) { %>
+                                                <form action="/admin/activar-intentos/<%= usuario.id %>" method="post" style="display:inline;">
+                                                    <button type="submit" class="btn btn-success">Activar Intentos</button>
+                                                </form>
+                                                <% } else { %>
+                                                <button type="button" class="btn btn-secondary" disabled>Intentos Activados</button>
+                                                <% } %>
+                                            </td>
+                                        </tr>
+                                        <% }); %>
                                     </tbody>
                                 </table>
+                                
                             </div>
                         </div>
 
