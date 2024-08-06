@@ -261,7 +261,7 @@ header .session p .btn_menu i {
 
 .categoria h2{
   font-family: var(--font--banner--semi);
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: #707070;
 }
@@ -281,8 +281,8 @@ header .session p .btn_menu i {
   color: #6d6d6d;
   text-decoration: none;
   font-family: var(--font--banner--bool);
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 400;
 }
 
 .iconos_cuentas{
@@ -316,6 +316,9 @@ header .session p .btn_menu i {
 
 .piesas{
   top: 5px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* ABOUT */
