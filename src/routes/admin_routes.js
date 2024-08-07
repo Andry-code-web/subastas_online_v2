@@ -224,24 +224,30 @@ router.delete('/eliminarAdminVendedor/:id', (req, res) => {
   });
 });
 
-//Activar los intentos
-// Ruta para activar los intentos del cliente
-router.post('/activar-intentos/:id', (req, res) => {
+// Ruta para activar oportunidades
+router.post('/activarOportunidades/:id', (req, res) => {
   const usuarioId = req.params.id;
-  const query = 'UPDATE usuarios SET intentos_activados = TRUE, oportunidades = 3 WHERE id = ?';
 
-  connection.query(query, [usuarioId], (error, resultado) => {
-      if (error) {
-          console.error('Error al activar intentos del cliente:', error);
-          return res.status(500).send('Error al activar intentos del cliente');
+  // Consulta para activar oportunidades
+  connection.query(
+      'UPDATE usuarios SET oportunidades = oportunidades + 3 WHERE id = ?',
+      [usuarioId],
+      (error, results) => {
+          if (error) {
+              console.error('Error al activar oportunidades:', error);
+              return res.status(500).json({ success: false, message: 'Error al activar oportunidades' });
+          }
+
+          // Verifica si se afectaron filas (opcional)
+          if (results.affectedRows > 0) {
+              res.json({ success: true });
+          } else {
+              res.json({ success: false, message: 'Usuario no encontrado' });
+          }
       }
-
-      // Emitir evento para notificar al cliente que sus intentos han sido activados
-      req.app.get('io').emit('intentosActivados', { usuarioId });
-
-      res.redirect('/admin/adminG');
-  });
+  );
 });
+
 
 
 /* ADMIN VENDEDOR */

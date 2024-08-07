@@ -232,50 +232,50 @@
 
   <script>
     const socket = io();
-
+  
     const messages = document.getElementById('messages');
     const messageInput = document.getElementById('messageInput');
     const sendButton = document.getElementById('sendButton');
     const btnMas = document.getElementById('mas');
     const btnMenos = document.getElementById('menos');
     const progressBar = document.getElementById('progressBar');
-
+  
     let currentBid = parseInt('<%= subasta.precio_base %>');
     let minBid = currentBid; // Guardar la puja mínima permitida
-
+  
     // Función para enviar latidos al servidor cada 5 segundos
     setInterval(() => {
       socket.emit('heartbeat', auctionRoom); // Enviar un latido al servidor
     }, 5000); // Enviar cada 5 segundos
-
+  
     const auctionRoom = '<%= subasta.id %>';
     socket.emit('joinRoom', auctionRoom);
-
+  
     messageInput.value = formatNumber(currentBid + 100);
-
+  
     let progressInterval;
     let progressValue = 100;
     let auctionCount = 0;
     let auctionInProgress = false; // Variable para controlar si la subasta está en progreso
     let auctionEnded = false; // Variable para controlar si la subasta ha terminado
-
+  
     function startProgressBar() {
       if (auctionEnded) return; // No iniciar la barra de progreso si la subasta ha terminado
-
+  
       progressValue = 100;
       auctionCount = 0;
       progressBar.style.width = `${progressValue}%`;
-
+  
       if (progressInterval) {
         clearInterval(progressInterval);
       }
-
+  
       auctionInProgress = true; // Indicar que la subasta está en progreso
-
+  
       progressInterval = setInterval(() => {
         progressValue -= 1;
         progressBar.style.width = `${progressValue}%`;
-
+  
         if (progressValue <= 50 && auctionCount === 0) {
           auctionCount = 1;
           addAuctionMessage("a la 1");
@@ -295,26 +295,26 @@
         }
       }, 50); // Ajusta la velocidad de la barra de progreso según sea necesario
     }
-
+  
     function addAuctionMessage(text) {
       const messageElement = document.createElement('div');
       messageElement.textContent = text;
       messages.appendChild(messageElement);
       messages.scrollTop = messages.scrollHeight;
     }
-
+  
     btnMas.addEventListener('click', function () {
       if (auctionEnded) return; // No permitir cambios si la subasta ha terminado
-
+  
       let currentBidValue = parseInt(messageInput.value.replace(/,/g, ''));
       currentBidValue += 100;
       messageInput.value = formatNumber(currentBidValue);
       minBid = currentBidValue; // Actualizar la puja mínima permitida
     });
-
+  
     btnMenos.addEventListener('click', function () {
       if (auctionEnded) return; // No permitir cambios si la subasta ha terminado
-
+  
       let currentBidValue = parseInt(messageInput.value.replace(/,/g, ''));
       if (currentBidValue > minBid) {
         currentBidValue -= 100;
@@ -324,23 +324,21 @@
         messageInput.value = formatNumber(currentBidValue);
       }
     });
-
+  
     sendButton.addEventListener('click', function () {
       if (auctionEnded) return; // No permitir envíos si la subasta ha terminado
-
+  
       let bidValue = parseInt(messageInput.value.replace(/,/g, ''));
-
+  
       // Verificar que la puja no sea menor que la puja mínima permitida
       if (bidValue < minBid) {
-
         Swal.fire({
           title: `La puja debe ser al menos $${formatNumber(minBid)}.`,
           icon: "warning",
-
         });
         return;
       }
-
+  
       socket.emit('bid', {
         user: '<%= usuario ? usuario.nombre : "Invitado" %>',
         bid: bidValue,
@@ -348,30 +346,50 @@
       });
       startProgressBar();
     });
-
+  
     socket.on('newBid', function (data) {
       if (auctionEnded) return; // No aceptar nuevas pujas si la subasta ha terminado
-
+  
       currentBid = parseInt(data.bid); // Actualizar la puja actual
       minBid = currentBid; // Actualizar la puja mínima permitida
-
+  
       const messageElement = document.createElement('div');
       messageElement.textContent = `Puja de $${formatNumber(data.bid)} por ${data.user}`;
       messages.appendChild(messageElement);
       messages.scrollTop = messages.scrollHeight;
-
+  
       // Actualizar el input de todos los clientes
       messageInput.value = formatNumber(currentBid);
       clearInterval(progressInterval);
       startProgressBar();
     });
-
+  
+    async function actualizarOportunidades() {
+      const usuarioId = obtenerIdUsuarioDesdeSesion(); // Implementa esta función para obtener el ID del usuario desde la sesión
+      
+      if (usuarioId) {
+        try {
+          const response = await fetch(`/oportunidades/${usuarioId}`);
+          const data = await response.json();
+          
+          if (data.success) {
+            const oportunidades = data.oportunidades;
+            document.getElementById('numero-oportunidades').innerText = oportunidades;
+          } else {
+            console.error(data.message);
+          }
+        } catch (error) {
+          console.error('Error al actualizar oportunidades:', error);
+        }
+      }
+    }
+  
     socket.on('auctionEnded', function (data) {
       const messageElement = document.createElement('div');
-
+  
       // Verificar que data.winner no sea null o undefined
       const winnerName = data.winner || 'un participante desconocido';
-
+  
       Swal.fire({
         icon: 'success',
         title: `¡Subasta ganada por ${winnerName}!`,
@@ -384,7 +402,7 @@
         didOpen: () => {
           const end = Date.now() + 15 * 1000;
           const colors = ["#ff0000", "#fbff00", "#04ff04"];
-
+  
           (function frame() {
             confetti({
               particleCount: 2,
@@ -393,7 +411,7 @@
               origin: { x: 0 },
               colors: colors,
             });
-
+  
             confetti({
               particleCount: 2,
               angle: 120,
@@ -401,15 +419,15 @@
               origin: { x: 1 },
               colors: colors,
             });
-
+  
             confetti({
               particleCount: 2,
               angle: 180,
-              apread: 55,
+              spread: 55,
               origin: { x: 2 },
               colors: colors,
             });
-
+  
             if (Date.now() < end) {
               requestAnimationFrame(frame);
             }
@@ -420,47 +438,34 @@
           window.location.href = '/catalogo'; // Redirige a /catalogo
         }
       });
-
+  
       messages.appendChild(messageElement);
       messages.scrollTop = messages.scrollHeight;
       disableButtons(); // Desactivar los botones
+  
+      // Actualizar la cantidad de oportunidades en la UI
+      actualizarOportunidades();
     });
 
-    const currentUserId = '<%= usuario ? usuario.id : "null" %>';
-    console.log('Current User ID:', currentUserId);
-
-    socket.on('intentosActivados', function (data) {
-      console.log('Evento intentosActivados recibido con datos:', data);
-      const usuarioId = data.usuarioId;
-
-      if (usuarioId === currentUserId) {
-        Swal.fire({
-          title: 'Intentos Activados',
-          text: 'Tus intentos para participar en las subastas han sido activados.',
-          icon: 'success',
-          confirmButtonText: 'OK'
-        });
-      }
-    });
-
+  
     messageInput.addEventListener('keypress', function (event) {
       if (event.key === 'Enter') {
         sendButton.click();
       }
     });
-
+  
     function disableButtons() {
       btnMas.disabled = true;
       btnMenos.disabled = true;
       sendButton.disabled = true;
       messageInput.disabled = true;
     }
-
+  
     function formatNumber(num) {
       return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
-
   </script>
+  
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -510,87 +515,157 @@
   </script>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const btnIniciarChat = document.getElementById('participar');
-      const chat = document.getElementById('chat');
-      const cardBody = document.getElementById('body_card');
+   document.addEventListener('DOMContentLoaded', () => {
+  const btnIniciarChat = document.getElementById('participar');
+  const chat = document.getElementById('chat');
+  const cardBody = document.getElementById('body_card');
 
-      btnIniciarChat.addEventListener('click', async () => {
-        console.log('se realizó clic');
+  async function obtenerIdUsuario() {
+    try {
+      const response = await fetch('/usuario');
+      const data = await response.json();
 
-        // Mostrar SweetAlert2 para los términos y condiciones
-        const { value: accept } = await Swal.fire({
-          title: "Términos y condiciones",
-          html: `<iframe src="/img/TÉRMINOS Y CONDICIONES PARA EL PROCESO DE REMATE ELECTRÓNICO (1).pdf" frameborder="0" style="width: 100%; height: 500px;"></iframe>
-    <br>
-    <input type="checkbox" id="terms-checkbox">
-    <label for="terms-checkbox">Acepto los términos y condiciones</label>`,
-          showCancelButton: true,
-          confirmButtonText: 'Continuar&nbsp;<i class="fa fa-arrow-right"></i>',
-          cancelButtonText: 'Cancelar',
-          preConfirm: () => {
-            const checkbox = document.querySelector('#terms-checkbox');
-            if (!checkbox.checked) {
-              Swal.showValidationMessage("Debes aceptar los términos y condiciones");
-            }
-            return checkbox.checked;
-          },
-          customClass: {
-            htmlContainer: 'custom-html-container'
-          }
-        });
+      if (data.success) {
+        return data.id;
+      } else {
+        console.error('Error al obtener ID del usuario:', data.message);
+        return null;
+      }
+    } catch (error) {
+      console.error('Error al obtener ID del usuario:', error);
+      return null;
+    }
+  }
 
-        // Si el usuario aceptó los términos, muestra el aviso sobre los intentos
-        if (accept) {
-          const attemptsAvailable = await checkAttempts(); // Función que verifica los intentos
+  btnIniciarChat.addEventListener('click', async () => {
+    console.log('se realizó clic');
 
-          if (attemptsAvailable) {
-            Swal.fire({
-              title: 'Bienvenido a la Subasta',
-              text: 'Ya tienes tus oportunidades para participar en la subasta.',
-              icon: 'success',
-              confirmButtonText: 'Ir a la subasta'
-            }).then(() => {
-              chat.classList.add('active');
-              cardBody.classList.add('active');
-            });
-          } else {
-            Swal.fire({
-              title: 'Espera',
-              text: 'No tienes intentos disponibles aún. Te notificaremos cuando tengas intentos para participar.',
-              icon: 'info',
-              confirmButtonText: 'Ir al catálogo'
-            }).then(() => {
-              window.location.href = '/catalogo'; // Redirige al catálogo
-            });
-          }
-        } else {
-          Swal.fire("No has aceptado los términos y condiciones");
+    const { value: accept } = await Swal.fire({
+      title: "Términos y condiciones",
+      html: `<iframe src="/img/TÉRMINOS Y CONDICIONES PARA EL PROCESO DE REMATE ELECTRÓNICO (1).pdf" frameborder="0" style="width: 100%; height: 500px;"></iframe>
+      <br>
+      <input type="checkbox" id="terms-checkbox">
+      <label for="terms-checkbox">Acepto los términos y condiciones</label>`,
+      showCancelButton: true,
+      confirmButtonText: 'Continuar&nbsp;<i class="fa fa-arrow-right"></i>',
+      cancelButtonText: 'Cancelar',
+      preConfirm: () => {
+        const checkbox = document.querySelector('#terms-checkbox');
+        if (!checkbox.checked) {
+          Swal.showValidationMessage("Debes aceptar los términos y condiciones");
+        }
+        return checkbox.checked;
+      },
+      customClass: {
+        htmlContainer: 'custom-html-container'
+      },
+      onDismiss: () => {
+        window.location.href = '/catalogo';
+      }
+    });
+
+    if (accept) {
+      const { value: deposit } = await Swal.fire({
+        title: "Depósito requerido",
+        text: "Debes depositar 200 dólares para participar en la subasta.",
+        showCancelButton: true,
+        confirmButtonText: 'Ya deposité',
+        cancelButtonText: 'No deposité',
+        onDismiss: () => {
+          window.location.href = '/catalogo';
         }
       });
 
-      // Función simulada para verificar intentos disponibles
-      async function checkAttempts() {
-        // Simula la verificación de intentos disponibles. En un escenario real, aquí realizarías una solicitud al servidor.
-        // Retorna true o false según el estado de los intentos del usuario.
-        // Por ejemplo, puedes usar una API para verificar el estado real de los intentos.
+      if (deposit) {
+        const usuarioId = await obtenerIdUsuario();
 
-        // Para efectos de demostración, se puede ajustar esto según sea necesario
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            const hasAttempts = confirm("¿Simulación: ¿Tienes al menos un intento disponible?"); // Simulación
-            resolve(hasAttempts);
-          }, 1000);
+        if (usuarioId) {
+          const response = await fetch(`/oportunidades/${usuarioId}`);
+          const data = await response.json();
+
+          if (data.success) {
+            const intentosDisponibles = data.oportunidades;
+
+            if (intentosDisponibles > 0) {
+              Swal.fire("Puedes ingresar a la subasta");
+              chat.classList.add('active');
+              cardBody.classList.add('active');
+            } else {
+              Swal.fire({
+                title: "No tienes intentos disponibles",
+                text: "Debes depositar 200 dólares para obtener más intentos.",
+                showCancelButton: true,
+                confirmButtonText: 'Depositar',
+                cancelButtonText: 'Ir al catálogo'
+              }).then(result => {
+                if (result.isConfirmed) {
+                  // Muestra la alerta de información de depósito
+                  Swal.fire({
+                    title: "Información de depósito",
+                    html: `<p>Por favor, realiza el depósito en el siguiente número de cuenta y envía el comprobante a soporteSubastasur@correo.com.</p>
+                    <img src="/img/qr.png" alt="QR Code" style="width: 200px; height: auto;">`,
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya envié',
+                    cancelButtonText: 'Regresar'
+                  }).then(depositResult => {
+                    if (depositResult.isConfirmed) {
+                      Swal.fire({
+                        title: "Proceso en curso",
+                        text: "Se está procesando el depósito. Por favor, espera...",
+                        confirmButtonText: 'Ok'
+                      }).then(() => {
+                        window.location.href = '/catalogo';
+                      });
+                    } else {
+                      window.location.href = '/catalogo';
+                    }
+                  });
+                } else {
+                  window.location.href = '/catalogo';
+                }
+              });
+            }
+          } else {
+            Swal.fire("Error al obtener oportunidades");
+          }
+        } else {
+          Swal.fire("No se pudo obtener el ID del usuario");
+        }
+      } else {
+        Swal.fire({
+          title: "Información de depósito",
+          html: `<p>Por favor, realiza el depósito en el siguiente número de cuenta y envía el comprobante a soporteSubastasur@correo.com.</p>
+          <img src="/img/qr.png" alt="QR Code" style="width: 200px; height: auto;">`,
+          showCancelButton: true,
+          confirmButtonText: 'Ya envié',
+          cancelButtonText: 'Regresar',
+          onDismiss: () => {
+            window.location.href = '/catalogo';
+          }
+        }).then(result => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              title: "Proceso en curso",
+              text: "Se está procesando el depósito. Por favor, espera...",
+              confirmButtonText: 'Ok',
+              onDismiss: () => {
+                window.location.href = '/catalogo';
+              }
+            });
+          } else {
+            window.location.href = '/catalogo';
+          }
         });
       }
+    } else {
+      Swal.fire("No has aceptado los términos y condiciones");
+    }
+  });
+});
 
-
-
-
-
-
-    });
   </script>
+
+
 
 
 </body>

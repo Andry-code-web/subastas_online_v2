@@ -112,43 +112,46 @@
                                             <td>Nombre</td>
                                             <td>DNI</td>
                                             <td>Correo</td>
+                                            <td>Oportunidades</td> <!-- Nueva columna -->
                                             <td>Acciones</td>
                                         </tr>
                                     </thead>
                                     <tbody style="font-size: .9rem;">
                                         <% usuarios.forEach(usuario => { %>
-                                        <tr>
-                                            <td>
-                                                <i class="bi bi-person-circle text-warning" style="font-size: 1.5rem;"></i>
-                                            </td>
-                                            <td>
-                                                <%= usuario.nombre + " " + usuario.apellidos %>
-                                            </td>
-                                            <td>
-                                                <%= usuario.dni %>
-                                            </td>
-                                            <td>
-                                                <%= usuario.correo_electronico %>
-                                            </td>
-                                            <td class="acciones">
-                                                <a href="/admin/editarUsuario/<%= usuario.id %>" class="text-primary">
-                                                    <i class="bi bi-pencil-square"></i>
-                                                </a>
-                                                <a href="#" class="text-danger eliminar-usuario" data-id="<%= usuario.id %>">
-                                                    <i class="bi bi-trash3"></i>
-                                                </a>
-                                                <% if (!usuario.intentos_activados) { %>
-                                                <form action="/admin/activar-intentos/<%= usuario.id %>" method="post" style="display:inline;">
-                                                    <button type="submit" class="btn btn-success">Activar Intentos</button>
-                                                </form>
-                                                <% } else { %>
-                                                <button type="button" class="btn btn-secondary" disabled>Intentos Activados</button>
-                                                <% } %>
-                                            </td>
-                                        </tr>
+                                            <tr>
+                                                <td>
+                                                    <i class="bi bi-person-circle text-warning" style="font-size: 1.5rem;"></i>
+                                                </td>
+                                                <td>
+                                                    <%= usuario.nombre + " " + usuario.apellidos %>
+                                                </td>
+                                                <td>
+                                                    <%= usuario.dni %>
+                                                </td>
+                                                <td>
+                                                    <%= usuario.correo_electronico %>
+                                                </td>
+                                                <td>
+                                                    <%= usuario.oportunidades %> <!-- Muestra las oportunidades -->
+                                                </td>
+                                                <td class="acciones">
+                                                    <a href="/admin/editarUsuario/<%= usuario.id %>" class="text-primary">
+                                                        <i class="bi bi-pencil-square"></i>
+                                                    </a>
+                                                    <a href="#" class="text-danger eliminar-usuario" data-id="<%= usuario.id %>">
+                                                        <i class="bi bi-trash3"></i>
+                                                    </a>
+                                                    <!-- Enlace para activar oportunidades -->
+                                                    <a href="" class="btn btn-success activar-oportunidades" data-id="<%= usuario.id %>">
+                                                        Activar oportunidades
+                                                    </a>
+                                                </td>
+                                            </tr>
                                         <% }); %>
                                     </tbody>
                                 </table>
+                                
+                                
                                 
                             </div>
                         </div>
@@ -308,6 +311,10 @@
         </div>
     </div>
 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         function mostrar() {
             const contra = document.getElementById('contraseña');
@@ -355,6 +362,52 @@
             });
         });
     </script>
+
+    <!-- Logica activar oportunidades -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.activar-oportunidades').forEach(link => {
+                link.addEventListener('click', async (event) => {
+                    event.preventDefault(); // Evita la acción por defecto del enlace
+                    const usuarioId = link.getAttribute('data-id');
+                    
+                    // Confirmar la acción con el usuario
+                    const confirm = await Swal.fire({
+                        title: 'Confirmar',
+                        text: '¿Estás seguro de que deseas activar 3 oportunidades para este usuario?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sí, activar',
+                        cancelButtonText: 'Cancelar'
+                    });
+    
+                    if (confirm.isConfirmed) {
+                        try {
+                            // Enviar solicitud para activar oportunidades
+                            const response = await fetch(`/admin/activarOportunidades/${usuarioId}`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' }
+                            });
+                            const result = await response.json();
+                            
+                            if (result.success) {
+                                Swal.fire('Éxito', 'Se han activado 3 oportunidades para el usuario.', 'success');
+                                // Actualizar la tabla si es necesario
+                                location.reload(); // Recargar la página para reflejar los cambios
+                            } else {
+                                Swal.fire('Error', result.message, 'error');
+                            }
+                        } catch (error) {
+                            console.error('Error al activar oportunidades:', error);
+                            Swal.fire('Error', 'Hubo un problema al activar oportunidades', 'error');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+    
+    
 </body>
 
 </html>

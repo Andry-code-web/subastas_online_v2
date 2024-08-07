@@ -94,7 +94,8 @@ router.get("/login", (req, res) => {
   res.render("login");
 });
 
-router.post("/login", (req, res) => {
+// Ruta de inicio de sesión
+router.post('/login', (req, res) => {
   const consulta = "SELECT id, usuario, contraseña FROM usuarios;";
   const { usuario, contra } = req.body;
 
@@ -107,23 +108,31 @@ router.post("/login", (req, res) => {
       return;
     }
 
-    // Comprobar si se encontró un usuario con la contraseña correcta
     const usuarioEncontrado = result.find(
       (user) => user.usuario === usuario && user.contraseña === contra
     );
     if (usuarioEncontrado) {
-      // Guardar información del usuario en la sesión
       req.session.usuario = {
         id: usuarioEncontrado.id,
         nombre: usuarioEncontrado.usuario,
       };
       res.json({ success: true, redirect: "/" });
-    }else {
+    } else {
       console.log("Usuario o contraseña incorrectos");
       res.status(401).json({ message: "Usuario o contraseña incorrectos" });
     }
   });
 });
+
+// Ruta para obtener información del usuario
+router.get('/usuario', (req, res) => {
+  if (req.session.usuario) {
+    res.json({ success: true, id: req.session.usuario.id });
+  } else {
+    res.status(401).json({ success: false, message: 'No estás autenticado' });
+  }
+});
+
 
 router.get("/logout", (req, res) => {
   req.session.destroy((err) => {
@@ -365,6 +374,68 @@ router.get("/subasta/:id", isAuthenticated, (req, res) => {
   });
 });
 
+// Ruta para actualizar oportunidades cuando el cliente gana una subasta
+/* router.post('/ganarSubasta/:idSubasta', (req, res) => {
+  const usuarioId = req.session.usuario.id; // Obtener el ID del usuario desde la sesión
+  const subastaId = req.params.idSubasta;
+
+  // Primero, marca la subasta como ganada en la base de datos
+  conexion.query(
+    'UPDATE subastas SET estado = "ganada", id_ganador = ? WHERE id = ?',
+    [usuarioId, subastaId],
+    (error, results) => {
+      if (error) {
+        console.error('Error al marcar la subasta como ganada:', error);
+        return res.status(500).json({ success: false, message: 'Error al marcar la subasta como ganada' });
+      }
+
+      // Luego, resta una oportunidad al usuario que ganó
+      conexion.query(
+        'UPDATE usuarios SET oportunidades = oportunidades - 1 WHERE id = ? AND oportunidades > 0',
+        [usuarioId],
+        (error, results) => {
+          if (error) {
+            console.error('Error al actualizar oportunidades:', error);
+            return res.status(500).json({ success: false, message: 'Error al actualizar oportunidades' });
+          }
+
+          if (results.affectedRows > 0) {
+            res.json({ success: true, message: 'Subasta ganada y oportunidad restada' });
+          } else {
+            res.json({ success: false, message: 'No se pudo actualizar las oportunidades' });
+          }
+        }
+      );
+    }
+  );
+}); */
+
+
+// Ruta para obtener oportunidades
+router.get('/oportunidades/:id', (req, res) => {
+  const usuarioId = req.params.id;
+
+  // Consulta para obtener el número de oportunidades
+  conexion.query(
+    'SELECT oportunidades FROM usuarios WHERE id = ?',
+    [usuarioId],
+    (error, results) => {
+      if (error) {
+        console.error('Error al obtener oportunidades:', error);
+        return res.status(500).json({ success: false, message: 'Error al obtener oportunidades' });
+      }
+
+      if (results.length > 0) {
+        res.json({ success: true, oportunidades: results[0].oportunidades });
+      } else {
+        res.json({ success: false, message: 'Usuario no encontrado' });
+      }
+    }
+  );
+});
+
+
+
 // Like
 router.post("/like", (req, res) => {
   if (!req.session.usuario) {
@@ -456,6 +527,7 @@ router.post("/like", (req, res) => {
     });
   });
 });
+
 
 
 module.exports = router;

@@ -120,19 +120,76 @@ io.on('connection', (socket) => {
     socket.on('endAuction', (room) => {
         if (!auctions[room].auctionEnded) {
             auctions[room].auctionEnded = true;
-
+    
+            // Marca la subasta como finalizada en la base de datos
             const updateQuery = "UPDATE subastas SET auctionEnded = true WHERE id = ?";
             conexion.query(updateQuery, [room], (error, results) => {
                 if (error) {
                     console.error("Error al marcar la subasta como finalizada:", error);
                     return;
                 }
+                
+                // Obtener el nombre de usuario del ganador
+                const username = auctions[room].currentWinner;
+    
+                // Consulta para obtener el ID del usuario basado en su nombre de usuario
+                const getUserIdQuery = "SELECT id FROM usuarios WHERE usuario = ?";
+                conexion.query(getUserIdQuery, [username], (error, results) => {
+                    if (error) {
+                        console.error('Error al obtener el ID del usuario:', error);
+                        return;
+                    }
+    
+                    if (results.length > 0) {
+                        const userId = results[0].id;
+    
+                        // Actualizar oportunidades
+                        const updateOpportunitiesQuery = "UPDATE usuarios SET oportunidades = oportunidades - 1 WHERE id = ? AND oportunidades > 0";
+                        conexion.query(updateOpportunitiesQuery, [userId], (error, results) => {
+                            if (error) {
+                                console.error('Error al actualizar oportunidades:', error);
+                                return;
+                            }
+    
+                            // Verificar si se realizó la actualización
+                            if (results.affectedRows > 0) {
+                                console.log('Oportunidad restada correctamente.');
+    
+                                // Consultar el número de oportunidades restantes
+                                const getOpportunitiesQuery = "SELECT oportunidades FROM usuarios WHERE id = ?";
+                                conexion.query(getOpportunitiesQuery, [userId], (error, results) => {
+                                    if (error) {
+                                        console.error('Error al obtener el número de oportunidades restantes:', error);
+                                        return;
+                                    }
+    
+                                    if (results.length > 0) {
+                                        const remainingOpportunities = results[0].oportunidades;
+                                        console.log(`El usuario con ID ${userId} ahora tiene ${remainingOpportunities} oportunidades restantes.`);
+                                    } else {
+                                        console.log('No se encontró el usuario para obtener las oportunidades restantes.');
+                                    }
+                                });
+                            } else {
+                                console.log('No se pudo restar la oportunidad o el usuario no tenía oportunidades.');
+                            }
+                        });
+                    } else {
+                        console.error('No se encontró el usuario con el nombre de usuario:', username);
+                    }
+                });
+    
+                // Notificar a todos los clientes que la subasta ha terminado
                 io.to(room).emit('auctionEnded', { winner: auctions[room].currentWinner });
                 auctions[room].winnerNotified = true; // Marcar que el ganador ha sido notificado
                 console.log(`Subasta ${room} marcada como finalizada.`);
             });
         }
     });
+    
+    
+    
+    
 
     // Manejar latidos de corazón para mantener la subasta activa
     socket.on('heartbeat', (room) => {
