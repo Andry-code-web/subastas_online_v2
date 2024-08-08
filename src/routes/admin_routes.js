@@ -352,9 +352,10 @@ router.get("/adminV", isAuthenticatedAdminV, (req, res) => {
 });
 
 
-router.post("/subir-inmueble", upload.array('images', 4), (req, res) => {
+router.post("/subir-inmueble", upload.fields([{ name: 'images', maxCount: 4 }, { name: 'anexos', maxCount: 5 }]), (req, res) => {
   const { nombre_propiedad, descripcion, categoria, direccion, precio_base, N_banos, N_cuartos, N_cocina, N_cocheras, patio, fecha_subasta, hora_subasta } = req.body;
-  const imagenes = req.files;
+  const imagenes = req.files['images'];
+  const anexos = req.files['anexos'];
 
   // Obtener el ID del administrador vendedor desde la sesión
   const id_admin_vendedor = req.session.adminVendedorId;
@@ -363,37 +364,68 @@ router.post("/subir-inmueble", upload.array('images', 4), (req, res) => {
     return res.status(401).send("Debe iniciar sesión como administrador vendedor para subir un inmueble.");
   }
 
-  console.log(req.body);
-
+  // Inserción del inmueble en la base de datos
   const insertQuery = `INSERT INTO subastas (nombre_propiedad, descripcion, categoria, direccion, precio_base, N_baños, N_cuartos, N_cocina, N_cocheras, patio, fecha_subasta, hora_subasta, id_admin_vendedor) 
-                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   const values = [nombre_propiedad, descripcion, categoria, direccion, precio_base, N_banos, N_cuartos, N_cocina, N_cocheras, patio, fecha_subasta, hora_subasta, id_admin_vendedor];
 
   connection.query(insertQuery, values, (err, result) => {
     if (err) {
       console.error("Error al insertar inmueble:", err);
-      res.status(500).send("Error al insertar inmueble");
+      return res.status(500).send("Error al insertar inmueble");
+    } 
+
+    const id_subasta = result.insertId;
+
+    // Guardar las imágenes en la base de datos
+    if (imagenes && imagenes.length > 0) {
+      const insertImagenesQuery = 'INSERT INTO imagenes_propiedad (id_subasta, imagen) VALUES ?';
+      const imagenesData = imagenes.map(img => [id_subasta, img.buffer]); // Usar buffer para imágenes
+      
+      connection.query(insertImagenesQuery, [imagenesData], (err) => {
+        if (err) {
+          console.error("Error al insertar imágenes:", err);
+          return res.status(500).send("Error al insertar imágenes");
+        }
+
+        // Guardar los anexos en la base de datos
+        if (anexos && anexos.length > 0) {
+          const insertAnexosQuery = 'INSERT INTO anexos_propiedad (id_subasta, anexo) VALUES ?';
+          const anexosData = anexos.map(anexo => [id_subasta, anexo.buffer]); // Usar buffer para PDFs
+
+          connection.query(insertAnexosQuery, [anexosData], (err) => {
+            if (err) {
+              console.error("Error al insertar anexos:", err);
+              return res.status(500).send("Error al insertar anexos");
+            }
+
+            res.status(200).send("Inmueble, imágenes y anexos subidos correctamente");
+          });
+        } else {
+          res.status(200).send("Inmueble y imágenes subidos correctamente (sin anexos)");
+        }
+      });
     } else {
-      const id_subasta = result.insertId;
+      // Si no hay imágenes
+      if (anexos && anexos.length > 0) {
+        const insertAnexosQuery = 'INSERT INTO anexos_propiedad (id_subasta, anexo) VALUES ?';
+        const anexosData = anexos.map(anexo => [id_subasta, anexo.buffer]); // Usar buffer para PDFs
 
-      if (imagenes && imagenes.length > 0) {
-        let insertImagenesQuery = 'INSERT INTO imagenes_propiedad (id_subasta, imagen) VALUES ?';
-        let imagenesData = imagenes.map(img => [id_subasta, img.buffer]); // Usamos img.buffer para obtener el contenido binario del archivo
-
-        connection.query(insertImagenesQuery, [imagenesData], (err, results) => {
+        connection.query(insertAnexosQuery, [anexosData], (err) => {
           if (err) {
-            console.error("Error al insertar imágenes:", err);
-            res.status(500).send("Error al insertar imágenes");
-          } else {
-            res.status(200).send("Inmueble y imágenes subidos correctamente");
+            console.error("Error al insertar anexos:", err);
+            return res.status(500).send("Error al insertar anexos");
           }
+
+          res.status(200).send("Inmueble y anexos subidos correctamente (sin imágenes)");
         });
       } else {
-        res.status(200).send("Inmueble subido correctamente (sin imágenes)");
+        res.status(200).send("Inmueble subido correctamente (sin imágenes ni anexos)");
       }
     }
   });
 });
+
 
 
 

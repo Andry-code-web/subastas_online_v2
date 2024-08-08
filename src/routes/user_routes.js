@@ -334,11 +334,13 @@ router.get("/catalogo", (req, res) => {
 // Subastas
 router.get("/subasta/:id", isAuthenticated, (req, res) => {
   const subastaId = req.params.id;
+
   const querySubasta = `
     SELECT *, DATE_FORMAT(fecha_subasta, '%d/%m/%Y') AS fecha_formateada 
     FROM subastaonline.subastas 
     WHERE id = ?`;
   const queryImagenes = 'SELECT imagen FROM subastaonline.imagenes_propiedad WHERE id_subasta = ?';
+  const queryAnexos = 'SELECT id, nombre_anexo FROM subastaonline.anexos_propiedad WHERE id_subasta = ?';
 
   function formatNumber(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -360,19 +362,51 @@ router.get("/subasta/:id", isAuthenticated, (req, res) => {
         return res.status(500).send("Error al obtener imágenes de subasta");
       }
 
-      const subasta = {
-        ...resultadoSubasta[0],
-        imagenes: resultadoImagenes.map(img => img.imagen.toString('base64'))
-      };
+      conexion.query(queryAnexos, [subastaId], (error, resultadoAnexos) => {
+        if (error) {
+          console.error("Error al obtener anexos de subasta", error);
+          return res.status(500).send("Error al obtener anexos de subasta");
+        }
 
-      res.render("subasta", {
-        subasta,
-        usuario: req.session.usuario,
-        formatNumber
+        const subasta = {
+          ...resultadoSubasta[0],
+          imagenes: resultadoImagenes.map(img => img.imagen.toString('base64')),
+          anexos: resultadoAnexos // Incluimos los anexos en los datos de la subasta
+        };
+
+        res.render("subasta", {
+          subasta,
+          usuario: req.session.usuario,
+          formatNumber
+        });
       });
     });
   });
 });
+
+//descargar el anexo
+router.get('/descargar-anexo/:id', (req, res) => {
+  const anexoId = req.params.id;
+  
+  const query = 'SELECT nombre_anexo, anexo FROM subastaonline.anexos_propiedad WHERE id = ?';
+  conexion.query(query, [anexoId], (err, results) => {
+    if (err) {
+      console.error('Error al obtener el anexo:', err);
+      return res.status(500).send('Error al obtener el anexo');
+    }
+    
+    if (results.length > 0) {
+      const { nombre_anexo, anexo } = results[0];
+
+      res.setHeader('Content-Disposition', `attachment; filename=${nombre_anexo}`);
+      res.setHeader('Content-Type', 'application/octet-stream');
+      res.send(anexo);
+    } else {
+      res.status(404).send('Anexo no encontrado');
+    }
+  });
+});
+
 
 // Ruta para actualizar oportunidades cuando el cliente gana una subasta
 /* router.post('/ganarSubasta/:idSubasta', (req, res) => {

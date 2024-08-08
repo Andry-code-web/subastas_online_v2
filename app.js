@@ -186,10 +186,6 @@ io.on('connection', (socket) => {
             });
         }
     });
-    
-    
-    
-    
 
     // Manejar latidos de corazón para mantener la subasta activa
     socket.on('heartbeat', (room) => {
