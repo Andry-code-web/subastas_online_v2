@@ -21,37 +21,53 @@
 
 /* HEADER */
 header {
+  /* position: absolute; */
   width: 100%;
-  height: 86px;
+  height: 95px;
   display: flex;
   align-items: center;
   justify-content: space-around;
   z-index: 100;
 }
 
-.session {
-  position: relative;
+.logo{
+  width: 7%;
+}
+
+.logo img{
+  width: 100%;
 }
 
 .session p {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   color: #fff;
   font-size: 1rem;
+  margin: 0;
+  padding: 0;
 }
 
-.session p span a {
+.ingresar{
+  padding: .1rem .6rem .2rem .6rem !important;
+  background-color: #B20000;
+  border-radius: 5px;
+}
+
+.ingresar:hover{
+  background-color: #d30000;
+}
+
+.ingresar span i{
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.ingresar span a {
+  text-decoration: none;
   font-size: 1rem;
   font-family: var(--font--parrafo);
   color: #fff;
   text-decoration: none;
   transition: all 0.5s;
-}
-
-.session p span a:hover {
-  font-weight: 900;
+  font-weight: 600;
 }
 
 header nav {
@@ -71,6 +87,12 @@ header nav a:hover {
   transform: scale(1.1);
 }
 
+.session{
+  padding: .1rem .6rem .2rem .6rem !important;
+  background-color: #B20000;
+  border-radius: 5px;
+}
+
 header .session p .btn_menu {
   background: none;
   border: none;
@@ -81,6 +103,7 @@ header .session p .btn_menu i {
   font-size: 1.5rem;
   font-weight: 600;
   color: #fff;
+  margin-right: .5rem;
 }
 
 .menu_desplegable {
@@ -97,6 +120,7 @@ header .session p .btn_menu i {
     opacity 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53),
     transform 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53);
   transform: translateX(100%);
+  z-index: 100;
 }
 
 .menu_desplegable.active {
@@ -107,11 +131,11 @@ header .session p .btn_menu i {
     transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.menu_desplegable div ul {
+.menu_desplegable div ul{
   list-style: none;
 }
 
-.menu_desplegable div ul li a {
+.menu_desplegable div ul li a{
   text-decoration: none;
   color: #fff;
   font-family: var(--font--banner--bool);
@@ -119,7 +143,7 @@ header .session p .btn_menu i {
   transition: ease-in .3s;
 }
 
-.menu_desplegable div ul li a:hover {
+.menu_desplegable div ul li a:hover{
   font-size: 1.1rem;
   border-bottom: 2px solid #fff;
 }
@@ -138,6 +162,7 @@ header .session p .btn_menu i {
 .cabezera_menu button:hover {
   font-size: 1.2rem;
 }
+
 
 /* SUBASTAS */
 .detalles_subasta {
@@ -526,4 +551,32 @@ header .session p .btn_menu i {
 
 .bg-btn-alert2:focus-visible{
   box-shadow: none;
+}
+
+.contet_pdf{
+  transition: ease-in .2s;
+  cursor: pointer;
+}
+
+.contet_pdf:hover{
+  background-color: #ccc;
+}
+
+.archivo_pdf{
+  width: 100%;
+  height: auto;
+  font-size: .9rem;
+  text-decoration: none;
+  color: #000;
+  margin-left: .8rem;
+  transition: ease-in .1s;
+}
+
+.archivo_pdf i{
+  font-size: 1.5rem !important;
+  color: #990000 !important;
+}
+
+.contet_pdf:hover a.archivo_pdf {
+  text-decoration: underline;
 }

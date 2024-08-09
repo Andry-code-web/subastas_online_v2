@@ -29,58 +29,63 @@
 
 <body>
   <header>
-    <div class="logo"><img src="/img/logo.png" alt=""></div>
+    <div class="logo"><img src="/img/SUBASTA-SUR-COLOR-ROJO-SIN-FONDO.png" alt=""></div>
     <nav>
       <a href="/">Inicio</a>
-      <a href="/user#about">About</a>
+
       <a href="/catalogo">Catalogo</a>
       <a href="/#contacto">Contáctenos</a>
     </nav>
     <div class="session">
-      <img src="/img/session.svg" alt="">
       <% if (usuario) { %>
-      <p class="d-flex align-items-center ">
-        <span>Bienvenido, <%= usuario.nombre %></span>
-        <button class="btn_menu ms-1" id="btn_menu">
-          <i class="bi bi-list"></i>
-        </button>
-      <div class="menu_desplegable d-flex flex-column justify-content-between">
-        <div>
-          <div class="cabezera_menu d-flex justify-content-between">
-            <h3>Subastas</h3>
-            <button id="btn_close">
-              <i class="bi bi-x-lg"></i>
-            </button>
+        <p class="d-flex align-items-center ">
+          <button class="btn_menu ms-1" id="btn_menu">
+            <i class="bi bi-list"></i>
+          </button>
+          <span>
+            <%= usuario.nombre %>
+          </span>
+        <div class="menu_desplegable d-flex flex-column justify-content-between">
+          <div>
+            <div class="cabezera_menu d-flex justify-content-between">
+              <h3>Subastas</h3>
+              <button id="btn_close">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+            <ul>
+              <li><a href="/catalogo">Catalogo</a></li>
+            </ul>
           </div>
-          <ul>
-            <li><a href="/catalogo">Catalogo</a></li>
-          </ul>
-        </div>
-        <div class="perfil_user">
-          <div class="d-flex flex-row">
-            <i class="bi bi-person-bounding-box" style="font-size: 2.5rem; color: #fff; margin-right: 1rem;"></i>
-            <div class="d-flex flex-column">
-              <strong>Usuario</strong>
-              <small>
-                <%= usuario.nombre %>
-              </small>
-              <a href="/logout" class="btn btn-danger btn-sm ms-2">Cerrar Sesión</a>
+          <div class="perfil_user">
+            <div class="d-flex flex-row">
+              <i class="bi bi-person-bounding-box" style="font-size: 2.5rem; color: #fff; margin-right: 1rem;"></i>
+              <div class="d-flex flex-column">
+                <strong>Usuario</strong>
+                <small>
+                  <%= usuario.nombre %>
+                </small>
+                <a href="/logout" class="btn btn-danger btn-sm ms-2">Cerrar Sesión</a>
+              </div>
             </div>
           </div>
+          <% } else { %>
+            <p class="ingresar">
+              <span>
+                <i class="bi bi-person"></i>
+              </span>
+              <span>
+                <a href="/login">Ingresar</a>
+              </span>
+
+              <!-- <span>/</span>
+              <span>
+                <a href="/registro">Sign up</a>
+              </span> -->
+            </p>
+            <% } %>
         </div>
-        </p>
-        <% } else { %>
-        <p>
-          <span>
-            <a href="/login">Login</a>
-          </span>
-          <span>/</span>
-          <span>
-            <a href="/registro">Sign up</a>
-          </span>
-        </p>
-        <% } %>
-      </div>
+    </div>
   </header>
 
   <!-- Header Image and Title -->

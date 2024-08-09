@@ -340,7 +340,7 @@ router.get("/subasta/:id", isAuthenticated, (req, res) => {
     FROM subastaonline.subastas 
     WHERE id = ?`;
   const queryImagenes = 'SELECT imagen FROM subastaonline.imagenes_propiedad WHERE id_subasta = ?';
-  const queryAnexos = 'SELECT id, nombre_anexo FROM subastaonline.anexos_propiedad WHERE id_subasta = ?';
+  const queryAnexos = 'SELECT id FROM subastaonline.anexos_propiedad WHERE id_subasta = ?'; // Elimina nombre_anexo
 
   function formatNumber(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -384,28 +384,33 @@ router.get("/subasta/:id", isAuthenticated, (req, res) => {
   });
 });
 
+
 //descargar el anexo
 router.get('/descargar-anexo/:id', (req, res) => {
   const anexoId = req.params.id;
-  
-  const query = 'SELECT nombre_anexo, anexo FROM subastaonline.anexos_propiedad WHERE id = ?';
+
+  const query = 'SELECT anexo FROM subastaonline.anexos_propiedad WHERE id = ?';
   conexion.query(query, [anexoId], (err, results) => {
     if (err) {
       console.error('Error al obtener el anexo:', err);
       return res.status(500).send('Error al obtener el anexo');
     }
-    
-    if (results.length > 0) {
-      const { nombre_anexo, anexo } = results[0];
 
-      res.setHeader('Content-Disposition', `attachment; filename=${nombre_anexo}`);
-      res.setHeader('Content-Type', 'application/octet-stream');
+    if (results.length > 0) {
+      const { anexo } = results[0];
+
+      // Enviar el archivo para descarga con un nombre predeterminado
+      res.setHeader('Content-Disposition', 'attachment; filename=archivo.pdf');
+      res.setHeader('Content-Type', 'application/pdf');
       res.send(anexo);
     } else {
       res.status(404).send('Anexo no encontrado');
     }
   });
 });
+
+
+
 
 
 // Ruta para actualizar oportunidades cuando el cliente gana una subasta

@@ -19,7 +19,7 @@ const port = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
-app.use(bodyParser.urlencoded({ extended: false, limit: '10mb', parameterLimit: 5000000 }));
+app.use(bodyParser.urlencoded({ extended: false, limit: '120mb', parameterLimit: 5000000 }));
 app.use(express.json());
 app.use(morgan('dev'));
 

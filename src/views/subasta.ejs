@@ -20,21 +20,21 @@
 <body>
 
   <header>
-    <div class="logo"><img src="/img/logo.png" alt=""></div>
+    <div class="logo"><img src="/img/SUBASTA-SUR-COLOR-ROJO-SIN-FONDO.png" alt=""></div>
     <nav>
       <a href="/">Inicio</a>
-      <a href="#about">About</a>
       <a href="/catalogo">Catalogo</a>
       <a href="/#contacto">Contáctenos</a>
     </nav>
     <div class="session">
-      <img src="/img/session.svg" alt="">
       <% if (usuario) { %>
         <p class="d-flex align-items-center ">
-          <span>Bienvenido, <%= usuario.nombre %></span>
           <button class="btn_menu ms-1" id="btn_menu">
             <i class="bi bi-list"></i>
           </button>
+          <span>
+            <%= usuario.nombre %>
+          </span>
         <div class="menu_desplegable d-flex flex-column justify-content-between">
           <div>
             <div class="cabezera_menu d-flex justify-content-between">
@@ -44,7 +44,7 @@
               </button>
             </div>
             <ul>
-              <li><a href="/logout">Catalogo</a></li>
+              <li><a href="/catalogo">Catalogo</a></li>
             </ul>
           </div>
           <div class="perfil_user">
@@ -59,19 +59,23 @@
               </div>
             </div>
           </div>
-          </p>
           <% } else { %>
-            <p>
+            <p class="ingresar">
               <span>
-                <a href="/login">Login</a>
+                <i class="bi bi-person"></i>
               </span>
-              <span>/</span>
+              <span>
+                <a href="/login">Ingresar</a>
+              </span>
+
+              <!-- <span>/</span>
               <span>
                 <a href="/registro">Sign up</a>
-              </span>
+              </span> -->
             </p>
             <% } %>
         </div>
+    </div>
   </header>
 
   <div class="detalles_subasta d-flex justify-content-center">
@@ -192,11 +196,10 @@
               </div>
             </div>
           </div>
-          <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+          <div class="tab-pane fade contet_pdf" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
             <% subasta.anexos.forEach(anexo => { %>
-              <a href="/descargar-anexo/<%= anexo.id %>">
-                <i class="bi bi-file-pdf-fill"></i>
-                <%= anexo.nombre_anexo %>
+              <a href="/descargar-anexo/<%= anexo.id %>" download class="archivo_pdf">
+                <i class="bi bi-file-pdf-fill"></i> Anexos
               </a><br>
             <% }) %>
           </div>
@@ -655,7 +658,7 @@
                       Swal.fire({
                         title: "Información de depósito",
                         html: `<p>Por favor, realiza el depósito en el siguiente número de cuenta y envía el comprobante a soporteSubastasur@correo.com.</p>
-                    <img src="/img/qr.png" alt="QR Code" style="width: 200px; height: auto;">`,
+                    <img src="/img/Commons_QR_code.png" alt="QR Code" style="width: 200px; height: auto;">`,
                         showCancelButton: true,
                         confirmButtonText: 'Ya envié',
                         cancelButtonText: 'Regresar'
@@ -687,7 +690,7 @@
             Swal.fire({
               title: "Información de depósito",
               html: `<p>Por favor, realiza el depósito en el siguiente número de cuenta y envía el comprobante a soporteSubastasur@correo.com.</p>
-          <img src="/img/qr.png" alt="QR Code" style="width: 200px; height: auto;">`,
+          <img src="/img/Commons_QR_code.png" alt="QR Code" style="width: 200px; height: auto;">`,
               showCancelButton: true,
               confirmButtonText: 'Ya envié',
               cancelButtonText: 'Regresar',
@@ -716,9 +719,6 @@
     });
 
   </script>
-
-
-
 
 </body>
 <!--       /* const fechaSubasta = '<%= subasta.fecha_formateada %>';
