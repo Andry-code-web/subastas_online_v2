@@ -86,55 +86,65 @@
                 <table class="table-bordered" style="width: 100%; text-align: center;">
                   <thead style="font-weight: 600; font-size: .9rem;">
                     <tr>
-                      <td>Nombre prop.</td>
-                      <td>Descipción</td>
-                      <td>Categoria</td>
-                      <td>Direccion</td>
-                      <td>Precio</td>
-                      <td>N° Cuartos</td>
-                      <td>N° Baños</td>
-                      <td>N° Cosina</td>
-                      <td>N° Cochera</td>
-                      <td>Patio</td>
+                      <td>Marca</td>
+                      <td>Modelo</td>
+                      <td>Descripción</td>
+                      <td>Categoría</td>
+                      <td>Año</td>
+                      <td>Precio Base</td>
+                      <td>Placa</td>
+                      <td>Tarjeta de Propiedad</td>
+                      <td>Llave</td>
+                      <td>Ubicación</td>
+                      <td>Estado</td>
+                      <td>Importante</td>
                     </tr>
                   </thead>
                   <tbody style="font-size: .9rem;">
                     <% subastas.forEach(subasta=> { %>
                       <tr>
                         <td>
-                          <%= subasta.nombre_propiedad %>
+                          <%= subasta.marca %>
                         </td>
-                        <td class="truncate">
+                        <td>
+                          <%= subasta.modelo %>
+                        </td>
+                        <td class="descripcion-corta">
                           <%= subasta.descripcion %>
                         </td>
                         <td>
                           <%= subasta.categoria %>
                         </td>
                         <td>
-                          <%= subasta.direccion %>
+                          <%= subasta.anio %>
                         </td>
                         <td>
-                          <%= subasta.precio_base %>
+                          $<%= subasta.precio_base %>
                         </td>
                         <td>
-                          <%= subasta.N_cuartos %>
+                          <%= subasta.placa %>
                         </td>
                         <td>
-                          <%= subasta.N_baños %>
+                          <%= subasta.tarjeta_propiedad %>
                         </td>
                         <td>
-                          <%= subasta.N_cocina %>
+                          <%= subasta.llave %>
                         </td>
                         <td>
-                          <%= subasta.N_cocheras %>
+                          <%= subasta.ubicacion %>
                         </td>
                         <td>
-                          <%= subasta.patio %>
+                          <%= subasta.estado %>
+                        </td>
+                        <td class="truncate">
+                          <%= subasta.importante %>
                         </td>
                       </tr>
                       <% }); %>
                   </tbody>
                 </table>
+
+
               </div>
             </div>
           </div>
@@ -142,66 +152,84 @@
         <div class="col-md-4">
           <!-- Formulario para crear nueva subasta -->
           <div class="card">
-            <form action="/admin/subir-inmueble" method="POST" enctype="multipart/form-data">
+            <form action="/admin/subir-vehiculo" method="POST" enctype="multipart/form-data">
               <div class="card">
                 <div class="card-header">
-                  <h5 class="card-title">Subir Inmueble</h5>
+                  <h5 class="card-title">Subir Vehículo</h5>
                 </div>
                 <div class="card-body">
                   <div class="row">
                     <div class="col-md-6">
                       <div class="mb-3">
-                        <label for="titulo">Título del Inmueble</label>
-                        <input type="text" class="form-control" id="titulo" name="nombre_propiedad" required>
+                        <label for="Marca">Marca</label>
+                        <input type="text" class="form-control" id="marca" name="marca" required>
+                      </div>
+                      <div class="mb-3">
+                        <label for="Modelo">Modelo</label>
+                        <input type="text" class="form-control" id="modelo" name="modelo" required>
                       </div>
                       <div class="mb-3">
                         <label for="descripcion">Descripción</label>
                         <textarea class="form-control" id="descripcion" name="descripcion" rows="2" required></textarea>
                       </div>
                       <div class="mb-3">
-                        <label for="titulo">Categoria</label>
-                        <input type="text" class="form-control" id="titulo" name="categoria" required>
+                        <label for="Categoria">Categoría</label>
+                        <select class="form-select" id="categoria" name="categoria" required>
+                          <option value="auto">Auto</option>
+                          <option value="camioneta">Camioneta</option>
+                          <option value="moto">Moto</option>
+                          <option value="piezas">Piezas</option>
+                        </select>
                       </div>
                       <div class="mb-3">
-                        <label for="direccion">Dirección</label>
-                        <input type="text" class="form-control" id="direccion" name="direccion" required>
+                        <label for="Año">Año</label>
+                        <input type="text" class="form-control" id="anio" name="anio" required>
                       </div>
                       <div class="mb-3">
-                        <label for="precio">Precio</label>
-                        <input type="number" class="form-control" id="precio" name="precio_base" required>
+                        <label for="precio">Precio Base</label>
+                        <input type="number" class="form-control" id="precio_base" name="precio_base" required>
                       </div>
                       <div class="mb-3">
-                        <label for="N_banos">Número de Baños</label>
-                        <input type="number" class="form-control" id="N_banos" name="N_banos" required>
+                        <label for="Placa">Placa</label>
+                        <input type="text" class="form-control" id="placa" name="placa" required>
                       </div>
                     </div>
                     <div class="col-md-6">
-
                       <div class="mb-3">
-                        <label for="N_cuartos">Número de Cuartos</label>
-                        <input type="number" class="form-control" id="N_cuartos" name="N_cuartos" required>
-                      </div>
-                      <div class="mb-3">
-                        <label for="N_cocina">Número de Cocinas</label>
-                        <input type="number" class="form-control" id="N_cocina" name="N_cocina" required>
-                      </div>
-                      <div class="mb-3">
-                        <label for="N_cocheras">Número de Cocheras</label>
-                        <input type="number" class="form-control" id="N_cocheras" name="N_cocheras" required>
-                      </div>
-                      <div class="mb-3">
-                        <label for="patio">Patio</label>
-                        <select class="form-select" id="patio" name="patio" required>
+                        <label for="Tarjeta_propiedad">Tarjeta de Propiedad</label>
+                        <select class="form-select" id="tarjeta_propiedad" name="tarjeta_propiedad" required>
                           <option value="si">Sí</option>
                           <option value="no">No</option>
                         </select>
                       </div>
                       <div class="mb-3">
-                        <label for="">fecha subasta</label>
-                        <input type="date" class="form-control calendario" name="fecha_subasta" id="fecha_subasta">
+                        <label for="Llave">Llave</label>
+                        <select class="form-select" id="llave" name="llave" required>
+                          <option value="si">Sí</option>
+                          <option value="no">No</option>
+                        </select>
                       </div>
                       <div class="mb-3">
-                        <label for="">Hora subasta</label>
+                        <label for="Ubicación">Ubicación</label>
+                        <input type="text" class="form-control" id="ubicacion" name="ubicacion" required>
+                      </div>
+                      <div class="mb-3">
+                        <label for="Estado">Estado</label>
+                        <select class="form-select" id="estado" name="estado" required>
+                          <option value="SINIESTRADO">Siniestrado</option>
+                          <option value="USADO">Usado</option>
+                        </select>
+                      </div>
+                      <div class="mb-3">
+                        <label for="Importante">Importante</label>
+                        <input type="text" class="form-control" id="importante" name="importante" required>
+                      </div>
+                      <div class="mb-3">
+                        <label for="fecha_subasta">Fecha Subasta</label>
+                        <input type="date" class="form-control" name="fecha_subasta" id="fecha_subasta">
+                      </div>
+                      <div class="mb-3">
+                        <label for="hora_subasta">Hora Subasta</label>
                         <input type="time" class="form-control" name="hora_subasta" id="hora_subasta">
                       </div>
                     </div>
@@ -212,15 +240,16 @@
                       <input type="file" name="images" multiple>
                     </div>
                     <div class="row mt-2">
-                      <label for="archivo" class="form-label">Anexos</label>
+                      <label for="anexos" class="form-label">Anexos</label>
                       <input type="file" name="anexos" multiple>
                     </div>
                   </div>
 
-                  <button type="submit" class="btn btn-primary">Subir Inmueble</button>
+                  <button type="submit" class="btn btn-primary">Subir Vehículo</button>
                 </div>
               </div>
             </form>
+
           </div>
         </div>
       </div>

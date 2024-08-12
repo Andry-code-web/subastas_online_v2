@@ -214,18 +214,18 @@
 
   <!-- SUBASTAS MAS LIKEADAS -->
   <section class="subastas">
-    <img class="fondo" src="/img/fodo_subastas.png" alt="">
+    <!-- Camionetas -->
     <div class="contenedor_subastass">
-      <h2>Subastas esperadas</h2>
+      <h2>Camionetas</h2>
       <div class="content_card">
-        <% subastas.forEach(subasta=> { %>
+        <% camionetas.forEach(subasta => { %>
           <article class="card">
             <div class="card-img">
-              <% if (subasta.imagenes && subasta.imagenes.length> 0) { %>
+              <% if (subasta.imagenes && subasta.imagenes.length > 0) { %>
                 <img src="data:image/jpeg;base64,<%= subasta.imagenes[0] %>" alt="Subasta Image">
-                <% } else { %>
-                  <img src="/img/casas.png" alt="Default Image">
-                  <% } %>
+              <% } else { %>
+                <img src="/img/casas.png" alt="Default Image">
+              <% } %>
             </div>
             <div class="project-info">
               <div class="flex flex-column">
@@ -253,16 +253,107 @@
               </div>
             </div>
           </article>
-          <% }) %>
+        <% }) %>
       </div>
       <div class="verMas">
-        <a href="/catalogo">Ver catalogo</a>
+        <a href="/catalogo">Ver catálogo</a>
       </div>
+    </div>
 
+    <!-- Autos -->
+    <div class="contenedor_subastass">
+      <h2>Autos</h2>
+      <div class="content_card">
+        <% autos.forEach(subasta => { %>
+          <article class="card">
+            <div class="card-img">
+              <% if (subasta.imagenes && subasta.imagenes.length > 0) { %>
+                <img src="data:image/jpeg;base64,<%= subasta.imagenes[0] %>" alt="Subasta Image">
+              <% } else { %>
+                <img src="/img/casas.png" alt="Default Image">
+              <% } %>
+            </div>
+            <div class="project-info">
+              <div class="flex flex-column">
+                <div class="project-title">
+                  <%= subasta.nombre_propiedad %>
+                </div>
+                <span class="tag">
+                  <%= subasta.categoria %>
+                </span>
+              </div>
+              <span class="lighter precio_base">
+                <i class="bi bi-cash-stack"></i>
+                <span>US$</span>
+                <%= subasta.precio_base %>
+              </span>
+              <div class="detalle_like">
+                <a href="/subasta/<%= subasta.id %>" class="view-details-button">Ver detalles</a>
+                <span class="like-count">
+                  <i class="bi bi-heart-fill">
+                    <span>
+                      <%= subasta.like_count %>
+                    </span>
+                  </i>
+                </span>
+              </div>
+            </div>
+          </article>
+        <% }) %>
+      </div>
+      <div class="verMas">
+        <a href="/catalogo">Ver catálogo</a>
+      </div>
+    </div>
+
+    <!-- Motos -->
+    <div class="contenedor_subastass">
+      <h2>Motos</h2>
+      <div class="content_card">
+        <% motos.forEach(subasta => { %>
+          <article class="card">
+            <div class="card-img">
+              <% if (subasta.imagenes && subasta.imagenes.length > 0) { %>
+                <img src="data:image/jpeg;base64,<%= subasta.imagenes[0] %>" alt="Subasta Image">
+              <% } else { %>
+                <img src="/img/casas.png" alt="Default Image">
+              <% } %>
+            </div>
+            <div class="project-info">
+              <div class="flex flex-column">
+                <div class="project-title">
+                  <%= subasta.nombre_propiedad %>
+                </div>
+                <span class="tag">
+                  <%= subasta.categoria %>
+                </span>
+              </div>
+              <span class="lighter precio_base">
+                <i class="bi bi-cash-stack"></i>
+                <span>US$</span>
+                <%= subasta.precio_base %>
+              </span>
+              <div class="detalle_like">
+                <a href="/subasta/<%= subasta.id %>" class="view-details-button">Ver detalles</a>
+                <span class="like-count">
+                  <i class="bi bi-heart-fill">
+                    <span>
+                      <%= subasta.like_count %>
+                    </span>
+                  </i>
+                </span>
+              </div>
+            </div>
+          </article>
+        <% }) %>
+      </div>
+      <div class="verMas">
+        <a href="/catalogo">Ver catálogo</a>
+      </div>
     </div>
   </section>
 
-  <!-- COMENTARIOS -->
+  <!-- COMENTARIOS 
   <section>
     <div class="comentarios">
       <h2>Comentarios</h2>
@@ -292,9 +383,9 @@
         </button>
       </div>
     </div>
-  </section>
+  </section>-->
 
-  <!-- REDES -->
+  <!-- REDES 
   <section class="redes_sociales">
     <img class="img_fondo" src="/img/fondo_sociales.png" alt="">
     <div class="contenedor_info_redes">
@@ -337,9 +428,9 @@
       <h2>Redes Sociales</h2>
     </div>
 
-  </section>
+  </section>-->
 
-  <!-- CONTACTANOS -->
+  <!-- CONTACTANOS 
   <section class="contacto" id="contacto">
     <div class="info_cont">
       <h2>Comentarios</h2>
@@ -390,7 +481,7 @@
     <div class="mapa">
       <img src="/img/mapa.png" alt="">
     </div>
-  </section>
+  </section>-->
 
   <!-- FOOTER -->
   <footer>
@@ -412,6 +503,7 @@
     </div>
 
   </footer>
+
 
   <!-- SCRIPTS -->
   <script>
@@ -474,7 +566,9 @@
       autoPlayInterval = setInterval(nextSlide, 3000);
     });
   </script>
+
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
   <script>
     $(document).ready(function () {
       $(".like-button").on("click", function () {

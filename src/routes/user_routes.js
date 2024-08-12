@@ -23,7 +23,7 @@ router.get("/", (req, res) => {
       GROUP BY subasta_id
     ) l ON s.id = l.subasta_id
     ORDER BY like_count DESC, s.id ASC
-    LIMIT 5
+    LIMIT 15  -- Obtén más de 5 para categorizar después
   `;
 
   const queryImagenes = "SELECT id_subasta, imagen FROM subastaonline.imagenes_propiedad";
@@ -47,7 +47,7 @@ router.get("/", (req, res) => {
           return res.status(500).send("Error al obtener comentarios de subasta");
         }
 
-        // Combinamos las imágenes con las subastas
+        // Combina las imágenes con las subastas
         const subastasConImagenes = subastas.map((subasta) => {
           const imagenesSubasta = imagenes.filter(
             (imagen) => imagen.id_subasta === subasta.id
@@ -58,15 +58,23 @@ router.get("/", (req, res) => {
           };
         });
 
+        // Filtra subastas por categoría
+        const camionetas = subastasConImagenes.filter(subasta => subasta.categoria === 'camioneta');
+        const autos = subastasConImagenes.filter(subasta => subasta.categoria === 'auto');
+        const motos = subastasConImagenes.filter(subasta => subasta.categoria === 'moto');
+
         res.render("home", { 
           usuario: req.session.usuario,
-          subastas: subastasConImagenes,
-          comentarios: comentarios
+          camionetas,
+          autos,
+          motos,
+          comentarios
         });
       });
     });
   });
 });
+
 
 router.post("/", (req, res) => {
   const { nombre, texto, rating } = req.body;

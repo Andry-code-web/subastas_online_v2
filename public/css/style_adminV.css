@@ -149,7 +149,7 @@ body {
     color: #28a745;
 }
 
-.acciones a{
+.acciones a {
     text-decoration: none;
 }
 
@@ -182,20 +182,52 @@ body {
     position: relative;
 }
 
-.inputs button{
+.inputs button {
     background: none;
     border: none;
     padding: 0;
     margin: 0;
 }
 
-.mostarC{
+.mostarC {
     padding: 0 !important;
     position: absolute;
     right: 5%;
     top: 60%;
-    transform:  translateY(-50%);
+    transform: translateY(-50%);
     cursor: pointer;
 }
 
 
+.table-bordered td {
+    vertical-align: middle;
+    /* Centra verticalmente el contenido de la celda */
+}
+
+.descripcion-corta {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* Número de líneas a mostrar */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2em;
+    /* Ajusta según la altura de una línea de texto */
+    max-height: 2.4em;
+    /* Ajusta según la altura de dos líneas de texto */
+    text-align: center;
+    /* Centra el texto horizontalmente */
+    display: flex;
+    align-items: center;
+}
+
+.truncate {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* Número de líneas a mostrar */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    /* Centra el texto horizontalmente */
+}

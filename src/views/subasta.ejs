@@ -84,27 +84,22 @@
       <div id="carouselExample<%= subasta.id %>" class="carousel slide slider">
         <div class="max-w-4xl mx-auto rounded-lg overflow-hidden content_galeria">
           <div id="imagen_principal" class="imgen_principal">
-            <img class="img_principal rounded-lg" src="" alt="">
+            <img class="img_principal rounded-lg" src="data:image/jpeg;base64, <%= subasta.imagenes[0] %>" alt="">
           </div>
           <div class="galeria scroll-1">
-            <% subasta.imagenes.forEach((imagen, index)=> { %>
+            <% subasta.imagenes.forEach((imagen, index) => { %>
               <div class="img_wrapper">
                 <img class="imgs rounded-lg" src="data:image/jpeg;base64, <%= imagen %>" alt="">
               </div>
-              <% }); %>
+            <% }); %>
           </div>
         </div>
-
-
-
-
       </div>
-
+  
       <div class="property-details-content">
-
         <ul class="nav nav-tabs" id="myTab" role="tablist">
           <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Descripcion detallada</button>
+            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Descripción detallada</button>
           </li>
           <li class="nav-item" role="presentation">
             <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Anexos</button>
@@ -115,87 +110,62 @@
             <div class="content_title">
               <h4>Información general</h4>
             </div>
-    
+  
             <div class="d-flex flex-column align-items-center content_info_subastas">
               <div class="nombre_tipo">
                 <h3 class="d-flex justify-content-between">
-                  <span>Propiedad:</span>
-                  <span>
-                    <%= subasta.nombre_propiedad %>
-                  </span>
+                  <span>Marca:</span>
+                  <span><%= subasta.marca %></span>
                 </h3>
                 <p class="d-flex justify-content-between">
-                  <span>Categoria:</span>
-                  <span>
-                    <%= subasta.categoria %>
-                  </span>
+                  <span>Modelo:</span>
+                  <span><%= subasta.modelo %></span>
                 </p>
-              </div>
-    
-              <div class="features">
-                <div class="imgenes">
-                  <p class="d-flex justify-content-between">
-                    <span>N° Baños</span>
-                    <span>
-                      <%= subasta.N_baños %>
-                    </span>
-                  </p>
-                </div>
-                <div class="imgenes">
-                  <p class="d-flex justify-content-between">
-                    <span>N° Cuartos</span>
-                    <span>
-                      <%= subasta.N_cuartos %>
-                    </span>
-                  </p>
-                </div>
-                <div class="imgenes">
-                  <p class="d-flex justify-content-between">
-                    <span>N° Cocinas</span>
-                    <span>
-                      <%= subasta.N_cocina %>
-                    </span>
-                  </p>
-                </div>
-                <div class="imgenes">
-                  <p class="d-flex justify-content-between">
-                    <span>N° Cuartos</span>
-                    <span>
-                      <%= subasta.N_cocheras %>
-                    </span>
-                  </p>
-                </div>
-                <div class="imgenes">
-                  <p class="d-flex justify-content-between">
-                    <span>Patio</span>
-                    <span>
-                      <%= subasta.patio%>
-                    </span>
-                  </p>
-                </div>
-              </div>
-    
-              <div class="imagenes">
                 <p class="d-flex justify-content-between">
-                  <span>Unicacion</span>
-                  <span>
-                    <%= subasta.direccion %>
-                  </span>
+                  <span>Categoría:</span>
+                  <span><%= subasta.categoria %></span>
                 </p>
-              </div>
-    
-              <div class="content_descripcion">
-                <h5>
-                  Descripcion de propiedad
-                </h5>
-                <p>
-                  <span>
-                    <%= subasta.descripcion %>
-                  </span>
+                <p class="d-flex justify-content-between">
+                  <span>Año:</span>
+                  <span><%= subasta.anio %></span>
+                </p>
+                <p class="d-flex justify-content-between">
+                  <span>Precio Base:</span>
+                  <span><%= formatNumber(subasta.precio_base) %></span>
+                </p>
+                <p class="d-flex justify-content-between">
+                  <span>Placa:</span>
+                  <span><%= subasta.placa %></span>
+                </p>
+                <p class="d-flex justify-content-between">
+                  <span>Tarjeta de Propiedad:</span>
+                  <span><%= subasta.tarjeta_propiedad %></span>
+                </p>
+                <p class="d-flex justify-content-between">
+                  <span>Llave:</span>
+                  <span><%= subasta.llave %></span>
+                </p>
+                <p class="d-flex justify-content-between">
+                  <span>Ubicación:</span>
+                  <span><%= subasta.ubicacion %></span>
+                </p>
+                <p class="d-flex justify-content-between">
+                  <span>Estado:</span>
+                  <span><%= subasta.estado %></span>
+                </p>
+                <p class="d-flex justify-content-between importante">
+                  <span>Importante:</span>
+                  <span><%= subasta.importante %></span>
+                </p>
+                <p class="d-flex justify-content-between descripcion">
+                  <span>Descripción:</span>
+                  <span><%= subasta.descripcion %></span>
                 </p>
               </div>
             </div>
           </div>
+
+          <!-- ANEXOS -->
           <div class="tab-pane fade contet_pdf" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
             <% subasta.anexos.forEach(anexo => { %>
               <a href="/descargar-anexo/<%= anexo.id %>" download class="archivo_pdf">
@@ -204,13 +174,9 @@
             <% }) %>
           </div>
         </div>
-
-
-
-
-        
       </div>
     </div>
+  
 
 
     <div class="card">

@@ -169,6 +169,7 @@ header .session p .btn_menu i {
   width: 100%;
   margin-top: 2rem;
   gap: 3rem;
+  padding-bottom: 3rem;
 }
 
 .property-detail {
@@ -352,6 +353,13 @@ header .session p .btn_menu i {
   font-weight: 200 !important;
 }
 
+.importante span:last-child ,
+.descripcion span:last-child {
+  font-size: .6rem;
+  text-align: end;
+}
+
+/* CHAT */
 
 .card {
   background-color: white;

@@ -23,9 +23,12 @@
 
 /* HEADER */
 header {
-  /* position: absolute; */
+  position: fixed;
+  top: 0;
   width: 100%;
   height: 95px;
+  background-color: #fff;
+  box-shadow: 0px 2px 10px #000;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -173,6 +176,7 @@ header .session p .btn_menu i {
   display: flex;
   justify-content: center;
   margin-bottom: 1rem;
+  margin-top: 6rem;
 }
 
 .carousel{
@@ -256,14 +260,13 @@ header .session p .btn_menu i {
   width: 100%;
   height: auto;
   padding: 1rem .5rem 1rem 2rem;
-  margin-bottom: 2rem;
 }
 
 .categoria h2{
   font-family: var(--font--banner--semi);
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #707070;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #535353;
 }
 
 .categorias{
@@ -278,10 +281,10 @@ header .session p .btn_menu i {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #6d6d6d;
+  color: #3b3b3b;
   text-decoration: none;
   font-family: var(--font--banner--bool);
-  font-size: 1rem;
+  font-size: .9rem;
   font-weight: 400;
 }
 
@@ -418,16 +421,15 @@ header .session p .btn_menu i {
 /* SUBASTAS */
 .subastas {
   width: 100%;
-  height: 100vh;
-  /* position: relative; */
+  height: auto;
 }
 
-.subastas .fondo {
+/* .subastas .fondo {
   width: 100%;
   height: 100vh;
   position: absolute;
   z-index: -1;
-}
+} */
 
 /* .subastas::before {
   content: "";
@@ -442,13 +444,14 @@ header .session p .btn_menu i {
 
 .contenedor_subastass {
   width: 100%;
-  padding: 3rem;
+  padding: 1rem 3rem 1em 3rem;
 }
 
 .subastas h2 {
-  font-size: 3rem;
-  font-family: var(--font--about);
+  font-size: 2rem;
+  font-family: var(--font--banner--semi);
   color: var(--color--sub);
+  font-weight: 500;
 }
 
 .content_card {
@@ -602,7 +605,7 @@ header .session p .btn_menu i {
   font-size: 1.2rem;
 }
 
-/* COMENTARIOS */
+/* COMENTARIOS
 .comentarios {
   width: 100%;
   height: 40vh;
@@ -668,9 +671,9 @@ header .session p .btn_menu i {
 
 .Testimonio button img {
   width: 1.5rem;
-}
+} */
 
-/* REDES */
+/* REDES 
 .redes_sociales {
   width: 100%;
   height: 100vh;
@@ -730,9 +733,9 @@ header .session p .btn_menu i {
   font-size: 3rem;
   font-family: var(--font--parrafo);
   color: var(--color--sub);
-}
+} */
 
-/* CONTACTANOS */
+/* CONTACTANOS
 .contacto {
   width: 100%;
   height: 80vh;
@@ -836,15 +839,12 @@ header .session p .btn_menu i {
   transform: scale(1.1);
 }
 
-/* Estilos para la calificación por estrellas */
 .rating {
   display: flex;
   flex-direction: row-reverse;
   justify-content: start;
   gap: 5px;
-  /* Espaciado entre las estrellas */
   margin-bottom: 1rem;
-  /* Alineado con otros inputs */
 }
 
 .rating input {
@@ -854,7 +854,6 @@ header .session p .btn_menu i {
 .rating label {
   font-size: 2.5rem;
   color: #ccc;
-  /* Color gris por defecto */
   cursor: pointer;
 }
 
@@ -866,11 +865,9 @@ header .session p .btn_menu i {
 .rating label:hover ~ label,
 .rating input:checked ~ label {
   color: var(--color--sub);
-  /* Color dorado al seleccionar */
-}
+} */
 
 /* FOOTER */
-
 footer {
   margin-top: 2rem;
   width: 100%;
