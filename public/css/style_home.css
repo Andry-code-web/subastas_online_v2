@@ -444,6 +444,7 @@ header .session p .btn_menu i {
 
 .contenedor_subastass {
   width: 100%;
+  height: auto;
   padding: 1rem 3rem 1em 3rem;
 }
 
@@ -463,125 +464,6 @@ header .session p .btn_menu i {
   margin-top: 5rem;
 }
 
-/* New Card Styles */
-.card {
-  background-color: white;
-  color: black;
-  width: 300px;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
-}
-
-.card-img {
-  position: relative;
-  top: -20px;
-  height: 150px;
-  display: flex;
-  justify-content: center;
-}
-
-.card-img img {
-  height: 150px;
-  width: 90%;
-  object-fit: cover;
-  border-radius: 8px;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-}
-
-.project-info {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  position: relative;
-  top: -10px;
-}
-
-.project-title {
-  font-weight: 500;
-  font-size: 1.5em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: black;
-  font-family: var(--font--parrafo);
-  font-weight: 600;
-  text-transform: capitalize;
-}
-
-.lighter {
-  font-size: 0.9em;
-  margin-left: .5rem;
-}
-
-.tag {
-  font-weight: 500;
-  color: grey;
-
-}
-
-.precio_base{
-  font-family: var(--font--cont);
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: #B20000;
-}
-
-.precio_base i{
-  font-size: 1.8rem;
-}
-
-.precio_base span{
-  font-size: 1.2rem;
-}
-
-.view-details-button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: var(--color--sub);
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-.view-details-button:hover {
-  background-color: var(--bg--botones);
-}
-
-.detalle_like{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-left: .5rem;
-}
-
-.like-count {
-  margin-right: 1rem;
-  position: relative; /* Asegura que el span se posicione relativo al i */
-}
-
-.like-count i {
-  font-size: 2rem;
-  color: #d30000;
-  position: relative; /* Necesario para el posicionamiento absoluto del span */
-  display: flex; /* Centra el contenido del i */
-  align-items: center; /* Centra verticalmente */
-  justify-content: center; /* Centra horizontalmente */
-}
-
-.like-count i span {
-  position: absolute;
-  top: 42%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white; /* Para que el número sea visible sobre el corazón */
-  font-size: 1.2rem; /* Ajusta según necesites */
-  font-family: var(--font--about);
-  font-weight: 600;
-}
 
 .verMas{
   width: 100%;
@@ -589,21 +471,258 @@ header .session p .btn_menu i {
   margin-top: 5rem;
 }
 
-.verMas a{
-  padding: 1rem 2rem 1rem 2rem;
-  background-color: #c5ac75;
-  border-radius: 5px;
+
+
+/* From Uiverse.io by adamgiebl */ 
+.cssbuttons-io-button {
+  background: #f07070;
+  color: white;
+  font-family: inherit;
+  padding: 0.35em;
+  padding-left: 1.2em;
+  font-size: 17px;
+  font-weight: 500;
+  border-radius: 0.9em;
+  border: none;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  box-shadow: inset 0 0 1.6em -0.6em #a64d4d;
+  overflow: hidden;
+  position: relative;
+  height: 2.8em;
+  padding-right: 3.3em;
+  cursor: pointer;
   text-decoration: none;
-  color: #fff;
-  font-family: var(--font--banner--bool);
-  font-size: 1.1rem;
-  font-weight: 600;
-  transition: ease-in .3s;
 }
 
-.verMas a:hover{
-  font-size: 1.2rem;
+.cssbuttons-io-button .icon {
+  background: white;
+  margin-left: 1em;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.2em;
+  width: 2.2em;
+  border-radius: 0.7em;
+  box-shadow: 0.1em 0.1em 0.6em 0.2em #b95252;
+  right: 0.3em;
+  transition: all 0.3s;
 }
+
+.cssbuttons-io-button:hover .icon {
+  width: calc(100% - 0.6em);
+}
+
+.cssbuttons-io-button .icon svg {
+  width: 1.1em;
+  transition: transform 0.3s;
+  color: #000000;
+}
+
+.cssbuttons-io-button:hover .icon svg {
+  transform: translateX(0.1em);
+}
+
+.cssbuttons-io-button:active .icon {
+  transform: scale(0.95);
+}
+
+
+.card_home {
+  width: 200px;
+  height: 320px;
+  padding: .8em;
+  background: #f5f5f5;
+  position: relative;
+  overflow: visible;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  border-radius: .3rem;
+}
+
+.card-img {
+  height: 40%;
+  width: 100%;
+  border-radius: .5rem;
+  transition: .3s ease;
+}
+
+.card-img img {
+  width: 100%;
+  height: 100%;
+  border-radius: .5rem;
+  object-fit: cover;
+}
+
+.card-info {
+  padding-top: 10%;
+}
+
+svg {
+  width: 20px;
+  height: 20px;
+}
+
+.card-footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 15px;
+  border-top: 1px solid #ddd;
+}
+
+/*Text*/
+.text-title {
+  font-weight: 900;
+  font-size: 1.2em;
+  line-height: 1.5;
+}
+
+.text-body {
+  font-size: .9em;
+  padding-bottom: 15px;
+  color: #9e9e9e !important;
+}
+
+.text-model {
+  font-weight: 400;
+  font-size: 1em;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+.informacion .info{
+  margin-bottom: 0;
+}
+
+.comment-react {
+  width: 30px;
+  height: fit-content;
+  display: grid;
+  grid-template-columns: auto;
+  margin: 0;
+  background-color: #ebebeb;
+  border-radius: 5px;
+}
+
+.comment-react .like {
+  width: 100%;
+  height: 25px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: 0;
+  outline: none;
+}
+
+.comment-react .like:after {
+  content: '';
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  left: -2.5px;
+  top: -2.5px;
+  background-color: #f5356e;
+  border-radius: 50%;
+  z-index: 0;
+  transform: scale(0);
+}
+
+
+.comment-react hr {
+  width: 80%;
+  height: 1px;
+  background-color: #a5a5a5;
+  margin: auto;
+  border: 0;
+}
+
+.comment-react span {
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  font-size: 13px;
+  font-weight: 600;
+  color: #707277;
+  cursor: default;
+}
+
+/*Button*/
+.button {
+  --black: #000000;
+  --ch-black: #141414;
+  --eer-black: #1b1b1b;
+  --night-rider: #414141;
+  --white: #ffffff;
+  --af-white: #f3f3f3;
+  --ch-white: #e1e1e1;
+  position: relative;
+  padding: 9px 11px;
+  border-radius: 5px;
+  color: var(--night-rider);
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0px;
+  background-color: var(--white);
+  border: solid 1px var(--ch-white);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  font-family: Montserrat;
+  text-decoration: none;
+}
+
+.button .button-text {
+  position: relative;
+  z-index: 2;
+}
+
+.button .fill-container {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  padding-bottom: 100%;
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.button .fill-container::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--af-white);
+  border-radius: 50px;
+  transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  transform: translateY(-100%);
+}
+
+.button:hover {
+  color: var(--black);
+  background: var(--af-white);
+}
+
+/*Hover*/
+.card-img:hover {
+  transform: translateY(-25%);
+  box-shadow: rgba(226, 63, 63, 0.151) 0px 13px 47px -5px, rgba(180, 71, 71, 0.144) 0px 5px 5px 5px;
+}
+
+
 
 /* COMENTARIOS
 .comentarios {

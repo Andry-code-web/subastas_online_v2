@@ -125,7 +125,7 @@
   <section class="categoria" id="cartegoria">
     <h2>Navega por las categorías</h2>
     <div class="categorias d-flex flex-row">
-      <a href="#" class="content_img">
+      <a href="/catalogo?categoria=camioneta" class="content_img">
         <div class="iconos_cuentas">
           <span class="icono">
             <img src="/img/icon_camioneta.png" alt="">
@@ -138,7 +138,7 @@
           Camionetas
         </span>
       </a>
-      <a href="#" class="content_img">
+      <a href="/catalogo?categoria=auto" class="content_img">
         <div class="iconos_cuentas">
           <span class="icono">
             <img src="/img/icon_auto.png" alt="">
@@ -151,7 +151,7 @@
           Autos
         </span>
       </a>
-      <a href="#" class="content_img">
+      <a href="/catalogo?categoria=moto" class="content_img">
         <div class="iconos_cuentas">
           <span class="icono">
             <img src="/img/icon_moto.png" alt="">
@@ -164,7 +164,7 @@
           Motos
         </span>
       </a>
-      <a href="#" class="content_img d-flex justify-content-between">
+      <a href="/catalogo" class="content_img d-flex justify-content-between">
         <div class="iconos_cuentas" style="margin-top: 7px; ">
           <span class="icono piezas">
             <img src="/img/icon_accesorios.png" alt="">
@@ -218,137 +218,174 @@
     <div class="contenedor_subastass">
       <h2>Camionetas</h2>
       <div class="content_card">
-        <% camionetas.forEach(subasta => { %>
-          <article class="card">
+        <% camionetas.forEach(subasta=> { %>
+          <div class="card_home">
+
             <div class="card-img">
-              <% if (subasta.imagenes && subasta.imagenes.length > 0) { %>
+              <% if (subasta.imagenes && subasta.imagenes.length> 0) { %>
                 <img src="data:image/jpeg;base64,<%= subasta.imagenes[0] %>" alt="Subasta Image">
-              <% } else { %>
-                <img src="/img/casas.png" alt="Default Image">
-              <% } %>
+                <% }else { %>
+                  <img src="/img/casa.png" alt="Default Image">
+                  <% } %>
             </div>
-            <div class="project-info">
-              <div class="flex flex-column">
-                <div class="project-title">
-                  <%= subasta.nombre_propiedad %>
-                </div>
-                <span class="tag">
+            <div class="card-info d-flex justify-content-between">
+              <div class="informacion">
+                <p class="info text-title">
+                  <%= subasta.marca %>
+                </p>
+                <p class="info text-body">
                   <%= subasta.categoria %>
-                </span>
+                </p>
+                <p class="text-model">
+                  Modelo: <%= subasta.modelo %>
+                </p>
               </div>
-              <span class="lighter precio_base">
-                <i class="bi bi-cash-stack"></i>
-                <span>US$</span>
-                <%= subasta.precio_base %>
-              </span>
-              <div class="detalle_like">
-                <a href="/subasta/<%= subasta.id %>" class="view-details-button">Ver detalles</a>
-                <span class="like-count">
-                  <i class="bi bi-heart-fill">
-                    <span>
-                      <%= subasta.like_count %>
-                    </span>
-                  </i>
+              <div class="comment-react">
+                <div class="like">
+                  <svg fill="none" viewBox="0 0 24 24" height="16" width="16" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#f5356e" stroke-linecap="round" stroke-width="2" stroke="none"
+                      d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z">
+                    </path>
+                  </svg>
+                </div>
+                <hr>
+                <span>
+                  <%= subasta.like_count %>
                 </span>
               </div>
             </div>
-          </article>
-        <% }) %>
+            <div class="card-footer">
+              <span class="text-title">$499.49</span>
+              <div class="card-button">
+                <a href="/subasta/<%= subasta.id %>" class="button">
+                  <span class="button-text">Detalles</span>
+                </a>
+              </div>
+            </div>
+
+          </div>
+          <% }) %>
       </div>
-      <div class="verMas">
-        <a href="/catalogo">Ver catálogo</a>
-      </div>
+
     </div>
 
     <!-- Autos -->
     <div class="contenedor_subastass">
       <h2>Autos</h2>
       <div class="content_card">
-        <% autos.forEach(subasta => { %>
-          <article class="card">
+        <% autos.forEach(subasta=> { %>
+          <div class="card_home">
             <div class="card-img">
-              <% if (subasta.imagenes && subasta.imagenes.length > 0) { %>
+              <% if (subasta.imagenes && subasta.imagenes.length> 0) { %>
                 <img src="data:image/jpeg;base64,<%= subasta.imagenes[0] %>" alt="Subasta Image">
-              <% } else { %>
-                <img src="/img/casas.png" alt="Default Image">
-              <% } %>
+                <% }else { %>
+                  <img src="/img/casa.png" alt="Default Image">
+                  <% } %>
             </div>
-            <div class="project-info">
-              <div class="flex flex-column">
-                <div class="project-title">
-                  <%= subasta.nombre_propiedad %>
-                </div>
-                <span class="tag">
+            <div class="card-info d-flex justify-content-between">
+              <div class="informacion">
+                <p class="info text-title">
+                  <%= subasta.marca %>
+                </p>
+                <p class="info text-body">
                   <%= subasta.categoria %>
-                </span>
+                </p>
+                <p class="text-model">
+                  Modelo: <%= subasta.modelo %>
+                </p>
               </div>
-              <span class="lighter precio_base">
-                <i class="bi bi-cash-stack"></i>
-                <span>US$</span>
-                <%= subasta.precio_base %>
-              </span>
-              <div class="detalle_like">
-                <a href="/subasta/<%= subasta.id %>" class="view-details-button">Ver detalles</a>
-                <span class="like-count">
-                  <i class="bi bi-heart-fill">
-                    <span>
-                      <%= subasta.like_count %>
-                    </span>
-                  </i>
+              <div class="comment-react">
+                <div class="like">
+                  <svg fill="none" viewBox="0 0 24 24" height="16" width="16" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#f5356e" stroke-linecap="round" stroke-width="2" stroke="none"
+                      d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z">
+                    </path>
+                  </svg>
+                </div>
+                <hr>
+                <span>
+                  <%= subasta.like_count %>
                 </span>
               </div>
             </div>
-          </article>
-        <% }) %>
+            <div class="card-footer">
+              <span class="text-title">$499.49</span>
+              <div class="card-button">
+                <a href="/subasta/<%= subasta.id %>" class="button">
+                  <span class="button-text">Detalles</span>
+                </a>
+              </div>
+            </div>
+
+          </div>
+          <% }) %>
       </div>
-      <div class="verMas">
-        <a href="/catalogo">Ver catálogo</a>
-      </div>
+
     </div>
 
     <!-- Motos -->
     <div class="contenedor_subastass">
       <h2>Motos</h2>
       <div class="content_card">
-        <% motos.forEach(subasta => { %>
-          <article class="card">
+        <% motos.forEach(subasta=> { %>
+          <div class="card_home">
             <div class="card-img">
-              <% if (subasta.imagenes && subasta.imagenes.length > 0) { %>
+              <% if (subasta.imagenes && subasta.imagenes.length> 0) { %>
                 <img src="data:image/jpeg;base64,<%= subasta.imagenes[0] %>" alt="Subasta Image">
-              <% } else { %>
-                <img src="/img/casas.png" alt="Default Image">
-              <% } %>
+                <% }else { %>
+                  <img src="/img/casa.png" alt="Default Image">
+                  <% } %>
             </div>
-            <div class="project-info">
-              <div class="flex flex-column">
-                <div class="project-title">
-                  <%= subasta.nombre_propiedad %>
-                </div>
-                <span class="tag">
+            <div class="card-info d-flex justify-content-between">
+              <div class="informacion">
+                <p class="info text-title">
+                  <%= subasta.marca %>
+                </p>
+                <p class="info text-body">
                   <%= subasta.categoria %>
-                </span>
+                </p>
+                <p class="text-model">
+                  Modelo: <%= subasta.modelo %>
+                </p>
               </div>
-              <span class="lighter precio_base">
-                <i class="bi bi-cash-stack"></i>
-                <span>US$</span>
-                <%= subasta.precio_base %>
-              </span>
-              <div class="detalle_like">
-                <a href="/subasta/<%= subasta.id %>" class="view-details-button">Ver detalles</a>
-                <span class="like-count">
-                  <i class="bi bi-heart-fill">
-                    <span>
-                      <%= subasta.like_count %>
-                    </span>
-                  </i>
+              <div class="comment-react">
+                <div class="like">
+                  <svg fill="none" viewBox="0 0 24 24" height="16" width="16" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#f5356e" stroke-linecap="round" stroke-width="2" stroke="none"
+                      d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z">
+                    </path>
+                  </svg>
+                </div>
+                <hr>
+                <span>
+                  <%= subasta.like_count %>
                 </span>
               </div>
             </div>
-          </article>
-        <% }) %>
+            <div class="card-footer">
+              <span class="text-title">$499.49</span>
+              <div class="card-button">
+                <a href="/subasta/<%= subasta.id %>" class="button">
+                  <span class="button-text">Detalles</span>
+                </a>
+              </div>
+            </div>
+
+          </div>
+          <% }) %>
       </div>
-      <div class="verMas">
-        <a href="/catalogo">Ver catálogo</a>
+
+      <div class="verMas d-flex justify-content-center">
+        <a href="/catalogo" class="cssbuttons-io-button">
+          Ver más subastas
+          <div class="icon">
+            <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0 0h24v24H0z" fill="none"></path>
+              <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+                fill="currentColor"></path>
+            </svg>
+          </div>
+        </a>
       </div>
     </div>
   </section>
