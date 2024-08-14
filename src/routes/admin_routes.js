@@ -5,6 +5,7 @@ const multer = require('multer');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const connection = require("../database/db");
+const moment = require('moment');
 
 const router = express.Router();
 
@@ -352,8 +353,13 @@ router.get("/adminV", isAuthenticatedAdminV, (req, res) => {
 });
 
 
+// Función para calcular la fecha y hora `DATETIME` de prórroga
+function calcularFechaProrroga(minutos) {
+  return moment().add(minutos, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+}
+
 router.post("/subir-vehiculo", upload.fields([{ name: 'images', maxCount: 4 }, { name: 'anexos', maxCount: 5 }]), (req, res) => {
-  const { marca, modelo, descripcion, categoria, anio, precio_base, placa, tarjeta_propiedad, llave, ubicacion, estado, importante, fecha_subasta, hora_subasta } = req.body;
+  const { marca, modelo, descripcion, categoria, anio, precio_base, placa, tarjeta_propiedad, llave, ubicacion, estado, importante, fecha_subasta, hora_subasta, prorroga } = req.body;
   const imagenes = req.files['images'];
   const anexos = req.files['anexos'];
 
@@ -364,10 +370,13 @@ router.post("/subir-vehiculo", upload.fields([{ name: 'images', maxCount: 4 }, {
     return res.status(401).send("Debe iniciar sesión como administrador vendedor para subir un vehículo.");
   }
 
+  // Calcular la fecha y hora de inicio de la prórroga
+  const fechaHoraInicioProrroga = calcularFechaProrroga(parseInt(prorroga, 10));
+
   // Inserción del vehículo en la base de datos
-  const insertQuery = `INSERT INTO subastas (marca, modelo, descripcion, categoria, anio, precio_base, placa, tarjeta_propiedad, llave, ubicacion, estado, importante, fecha_subasta, hora_subasta, id_admin_vendedor) 
-                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-  const values = [marca, modelo, descripcion, categoria, anio, precio_base, placa, tarjeta_propiedad, llave, ubicacion, estado, importante, fecha_subasta, hora_subasta, id_admin_vendedor];
+  const insertQuery = `INSERT INTO subastas (marca, modelo, descripcion, categoria, anio, precio_base, placa, tarjeta_propiedad, llave, ubicacion, estado, importante, fecha_subasta, hora_subasta, prorroga_inicio, id_admin_vendedor) 
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  const values = [marca, modelo, descripcion, categoria, anio, precio_base, placa, tarjeta_propiedad, llave, ubicacion, estado, importante, fecha_subasta, hora_subasta, fechaHoraInicioProrroga, id_admin_vendedor];
 
   connection.query(insertQuery, values, (err, result) => {
     if (err) {
@@ -425,8 +434,6 @@ router.post("/subir-vehiculo", upload.fields([{ name: 'images', maxCount: 4 }, {
     }
   });
 });
-
-
 
 
 

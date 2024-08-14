@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const router = express.Router();
+const moment = require('moment');
 const conexion = require("../database/db"); // Asegúrate de que el nombre del archivo y la ruta sean correctos
 
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -63,7 +64,7 @@ router.get("/", (req, res) => {
         const autos = subastasConImagenes.filter(subasta => subasta.categoria === 'auto');
         const motos = subastasConImagenes.filter(subasta => subasta.categoria === 'moto');
 
-        res.render("home", { 
+        res.render("home", {
           usuario: req.session.usuario,
           camionetas,
           autos,
@@ -163,35 +164,35 @@ router.post('/registro', (req, res) => {
 
   // Determinar el tipo de persona y asignar valores predeterminados
   if (datos.tipo_persona === 'natural') {
-      // Persona Natural
-      const valores = {
-          tipo_persona: datos.tipo_persona,
-          email: datos.email || '0',
-          confirmacion_email: datos.confirmacion_email || '0',
-          celular: datos.celular || '0',
-          telefono: datos.telefono || '0',
-          nombre_apellidos: datos.nombre_apellidos || '0',
-          dni_ce: datos.dni_ce || '0',
-          fecha_nacimiento: datos.fecha_nacimiento || '0000-00-00',
-          sexo: datos.sexo || '0',
-          estado_civil: datos.estado_civil || '0',
-          ruc: null,
-          nombre_comercial: null,
-          actividad_comercial: null,
-          departamento: datos.departamento || '0',
-          provincia: datos.provincia || '0',
-          distrito: datos.distrito || '0',
-          direccion: datos.direccion || '0',
-          numero: datos.numero || '0',
-          complemento: datos.complemento || '0',
-          usuario: datos.usuario || '0',
-          contraseña: datos.contraseña || '0',
-          terminos_y_condiciones: parseInt(datos.terminos_y_condiciones) ? 1 : 0
-      };
+    // Persona Natural
+    const valores = {
+      tipo_persona: datos.tipo_persona,
+      email: datos.email || '0',
+      confirmacion_email: datos.confirmacion_email || '0',
+      celular: datos.celular || '0',
+      telefono: datos.telefono || '0',
+      nombre_apellidos: datos.nombre_apellidos || '0',
+      dni_ce: datos.dni_ce || '0',
+      fecha_nacimiento: datos.fecha_nacimiento || '0000-00-00',
+      sexo: datos.sexo || '0',
+      estado_civil: datos.estado_civil || '0',
+      ruc: null,
+      nombre_comercial: null,
+      actividad_comercial: null,
+      departamento: datos.departamento || '0',
+      provincia: datos.provincia || '0',
+      distrito: datos.distrito || '0',
+      direccion: datos.direccion || '0',
+      numero: datos.numero || '0',
+      complemento: datos.complemento || '0',
+      usuario: datos.usuario || '0',
+      contraseña: datos.contraseña || '0',
+      terminos_y_condiciones: parseInt(datos.terminos_y_condiciones) ? 1 : 0
+    };
 
-      console.log(typeof(valores.terminos_y_condiciones));
+    console.log(typeof (valores.terminos_y_condiciones));
 
-      const sql = `
+    const sql = `
           INSERT INTO subastaonline.usuarios (
               tipo_persona, email, confirmacion_email, celular, telefono,
               nombre_apellidos, dni_ce, fecha_nacimiento, sexo, estado_civil,
@@ -201,47 +202,47 @@ router.post('/registro', (req, res) => {
           ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
 
-      conexion.query(sql, [
-          valores.tipo_persona, valores.email, valores.confirmacion_email, valores.celular, valores.telefono,
-          valores.nombre_apellidos, valores.dni_ce, valores.fecha_nacimiento, valores.sexo, valores.estado_civil,
-          valores.ruc, valores.nombre_comercial, valores.actividad_comercial,
-          valores.departamento, valores.provincia, valores.distrito, valores.direccion, valores.numero, valores.complemento,
-          valores.usuario, valores.contraseña, valores.terminos_y_condiciones
-      ], (err, results) => {
-          if (err) {
-              console.error('Error al realizar la inserción:', err);
-              return res.status(500).send('Error al realizar la inserción');
-          }
-          res.redirect('/login');
-      });
+    conexion.query(sql, [
+      valores.tipo_persona, valores.email, valores.confirmacion_email, valores.celular, valores.telefono,
+      valores.nombre_apellidos, valores.dni_ce, valores.fecha_nacimiento, valores.sexo, valores.estado_civil,
+      valores.ruc, valores.nombre_comercial, valores.actividad_comercial,
+      valores.departamento, valores.provincia, valores.distrito, valores.direccion, valores.numero, valores.complemento,
+      valores.usuario, valores.contraseña, valores.terminos_y_condiciones
+    ], (err, results) => {
+      if (err) {
+        console.error('Error al realizar la inserción:', err);
+        return res.status(500).send('Error al realizar la inserción');
+      }
+      res.redirect('/login');
+    });
   } else if (datos.tipo_persona === 'juridica') {
-      // Persona Jurídica
-      const valores = {
-          tipo_persona: datos.tipo_persona,
-          email: datos.email || '0',
-          confirmacion_email: datos.confirmacion_email || '0',
-          celular: datos.celular || '0',
-          telefono: datos.telefono || '0',
-          nombre_apellidos: null,
-          dni_ce: null,
-          fecha_nacimiento: null,
-          sexo: null,
-          estado_civil: null,
-          ruc: datos.ruc || '0',
-          nombre_comercial: datos.nombre_comercial || '0',
-          actividad_comercial: datos.actividad_comercial || '0',
-          departamento: datos.departamento || '0',
-          provincia: datos.provincia || '0',
-          distrito: datos.distrito || '0',
-          direccion: datos.direccion || '0',
-          numero: datos.numero || '0',
-          complemento: datos.complemento || '0',
-          usuario: datos.usuario || '0',
-          contraseña: datos.contraseña || '0',
-          terminos_y_condiciones: parseInt(datos.terminos_y_condiciones) ? 1 : 0
-      };
+    // Persona Jurídica
+    const valores = {
+      tipo_persona: datos.tipo_persona,
+      email: datos.email || '0',
+      confirmacion_email: datos.confirmacion_email || '0',
+      celular: datos.celular || '0',
+      telefono: datos.telefono || '0',
+      nombre_apellidos: null,
+      dni_ce: null,
+      fecha_nacimiento: null,
+      sexo: null,
+      estado_civil: null,
+      ruc: datos.ruc || '0',
+      nombre_comercial: datos.nombre_comercial || '0',
+      actividad_comercial: datos.actividad_comercial || '0',
+      departamento: datos.departamento || '0',
+      provincia: datos.provincia || '0',
+      distrito: datos.distrito || '0',
+      direccion: datos.direccion || '0',
+      numero: datos.numero || '0',
+      complemento: datos.complemento || '0',
+      usuario: datos.usuario || '0',
+      contraseña: datos.contraseña || '0',
+      terminos_y_condiciones: parseInt(datos.terminos_y_condiciones) ? 1 : 0
+    };
 
-      const sql = `
+    const sql = `
           INSERT INTO subastaonline.usuarios (
               tipo_persona, email, confirmacion_email, celular, telefono,
               nombre_apellidos, dni_ce, fecha_nacimiento, sexo, estado_civil,
@@ -251,21 +252,21 @@ router.post('/registro', (req, res) => {
           ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
 
-      conexion.query(sql, [
-          valores.tipo_persona, valores.email, valores.confirmacion_email, valores.celular, valores.telefono,
-          valores.nombre_apellidos, valores.dni_ce, valores.fecha_nacimiento, valores.sexo, valores.estado_civil,
-          valores.ruc, valores.nombre_comercial, valores.actividad_comercial,
-          valores.departamento, valores.provincia, valores.distrito, valores.direccion, valores.numero, valores.complemento,
-          valores.usuario, valores.contraseña, valores.terminos_y_condiciones
-      ], (err, results) => {
-          if (err) {
-              console.error('Error al realizar la inserción:', err);
-              return res.status(500).send('Error al realizar la inserción');
-          }
-          res.redirect('/login');
-      });
+    conexion.query(sql, [
+      valores.tipo_persona, valores.email, valores.confirmacion_email, valores.celular, valores.telefono,
+      valores.nombre_apellidos, valores.dni_ce, valores.fecha_nacimiento, valores.sexo, valores.estado_civil,
+      valores.ruc, valores.nombre_comercial, valores.actividad_comercial,
+      valores.departamento, valores.provincia, valores.distrito, valores.direccion, valores.numero, valores.complemento,
+      valores.usuario, valores.contraseña, valores.terminos_y_condiciones
+    ], (err, results) => {
+      if (err) {
+        console.error('Error al realizar la inserción:', err);
+        return res.status(500).send('Error al realizar la inserción');
+      }
+      res.redirect('/login');
+    });
   } else {
-      res.status(400).send('Tipo de persona no válido');
+    res.status(400).send('Tipo de persona no válido');
   }
 });
 
@@ -322,14 +323,14 @@ router.get("/catalogo", (req, res) => {
             subasta.liked_by_user = likedSubastas.includes(subasta.id);
           });
 
-          res.render("catalogo", { 
+          res.render("catalogo", {
             usuario: req.session.usuario,
             subastas: subastasConImagenes,
             categoria
           });
         });
       } else {
-        res.render("catalogo", { 
+        res.render("catalogo", {
           usuario: req.session.usuario,
           subastas: subastasConImagenes,
           categoria
@@ -340,20 +341,40 @@ router.get("/catalogo", (req, res) => {
 });
 
 // Subastas
-router.get("/subasta/:id", isAuthenticated, (req, res) => {
+router.get('/subasta/:id', isAuthenticated, (req, res) => {
   const subastaId = req.params.id;
 
+  // Consulta para obtener los datos de la subasta
   const querySubasta = `
-    SELECT *, DATE_FORMAT(fecha_subasta, '%d/%m/%Y') AS fecha_formateada 
+    SELECT *, 
+      DATE_FORMAT(fecha_subasta, '%W %d') AS fecha_formateada, 
+      DATE_FORMAT(hora_subasta, '%h:%i %p') AS hora_formateada, 
+      CONCAT(fecha_subasta, ' ', hora_subasta) AS fecha_hora_subasta,
+      prorroga_inicio
     FROM subastaonline.subastas 
     WHERE id = ?`;
+
   const queryImagenes = 'SELECT imagen FROM subastaonline.imagenes_propiedad WHERE id_subasta = ?';
-  const queryAnexos = 'SELECT id FROM subastaonline.anexos_propiedad WHERE id_subasta = ?'; // Elimina nombre_anexo
+  const queryAnexos = 'SELECT id FROM subastaonline.anexos_propiedad WHERE id_subasta = ?';
 
   function formatNumber(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
+  function translateDay(day) {
+    const days = {
+      'Sunday': 'Domingo',
+      'Monday': 'Lunes',
+      'Tuesday': 'Martes',
+      'Wednesday': 'Miércoles',
+      'Thursday': 'Jueves',
+      'Friday': 'Viernes',
+      'Saturday': 'Sábado'
+    };
+    return days[day] || day;
+  }
+
+  const now = moment(); // Obtiene la fecha y hora actuales
   conexion.query(querySubasta, [subastaId], (error, resultadoSubasta) => {
     if (error) {
       console.error("Error al obtener datos de subasta", error);
@@ -363,6 +384,17 @@ router.get("/subasta/:id", isAuthenticated, (req, res) => {
     if (resultadoSubasta.length === 0) {
       return res.status(404).send("Subasta no encontrada");
     }
+
+    const subasta = resultadoSubasta[0];
+    const fechaHoraSubasta = moment(subasta.fecha_hora_subasta);
+
+    // Verifica si la subasta está en curso
+    const estaEnCurso = fechaHoraSubasta.isSameOrBefore(now) && now.isBefore(fechaHoraSubasta.clone().add(1, 'hour'));
+
+    // Traducimos el día al español
+    const fechaFormateada = subasta.fecha_formateada;
+    const [day, dayNumber] = fechaFormateada.split(' ');
+    const fechaFormateadaEsp = `${translateDay(day)} ${dayNumber}`;
 
     conexion.query(queryImagenes, [subastaId], (error, resultadoImagenes) => {
       if (error) {
@@ -376,14 +408,17 @@ router.get("/subasta/:id", isAuthenticated, (req, res) => {
           return res.status(500).send("Error al obtener anexos de subasta");
         }
 
-        const subasta = {
-          ...resultadoSubasta[0],
+        const datosSubasta = {
+          ...subasta,
+          fecha_formateada: fechaFormateadaEsp, // Usamos la fecha traducida
           imagenes: resultadoImagenes.map(img => img.imagen.toString('base64')),
-          anexos: resultadoAnexos // Incluimos los anexos en los datos de la subasta
+          anexos: resultadoAnexos,
+          estaEnCurso, // Información de si la subasta está en curso
+          prorroga_inicio: subasta.prorroga_inicio // Incluimos prorroga_inicio
         };
 
-        res.render("subasta", {
-          subasta,
+        res.render('subasta', {
+          subasta: datosSubasta,
           usuario: req.session.usuario,
           formatNumber
         });
@@ -391,6 +426,7 @@ router.get("/subasta/:id", isAuthenticated, (req, res) => {
     });
   });
 });
+
 
 
 //descargar el anexo

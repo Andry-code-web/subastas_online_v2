@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="/img/footer_logo.svg" type="image/x-icon">
-  <title>Propiedades en Subasta</title>
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -13,6 +13,8 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
   <link rel="stylesheet" href="/css/style_catalogo.css">
+
+  <title>Subasta Sur || Catalogo</title>
 
   <style>
     .filtros button {
@@ -35,19 +37,18 @@
     <div class="logo"><img src="/img/SUBASTA-SUR-COLOR-ROJO-SIN-FONDO.png" alt=""></div>
     <nav>
       <a href="/">Inicio</a>
-
       <a href="/catalogo">Catalogo</a>
-      <a href="/#contacto">Contáctenos</a>
+      <a href="/admin/LoginAdminV">Vender</a>
     </nav>
     <div class="session">
       <% if (usuario) { %>
         <p class="d-flex align-items-center ">
-          <button class="btn_menu ms-1" id="btn_menu">
-            <i class="bi bi-list"></i>
-          </button>
           <span>
             <%= usuario.nombre %>
           </span>
+          <button class="btn_menu ms-1" id="btn_menu">
+            <i class="bi bi-list"></i>
+          </button>
         <div class="menu_desplegable d-flex flex-column justify-content-between">
           <div>
             <div class="cabezera_menu d-flex justify-content-between">
@@ -57,14 +58,14 @@
               </button>
             </div>
             <ul>
-              <li><a href="/catalogo">Catalogo</a></li>
+              <li><a href="#">Me gusta</a></li>
             </ul>
           </div>
           <div class="perfil_user">
             <div class="d-flex flex-row">
               <i class="bi bi-person-bounding-box" style="font-size: 2.5rem; color: #fff; margin-right: 1rem;"></i>
               <div class="d-flex flex-column">
-                <strong>Usuario</strong>
+                <strong>Cliente</strong>
                 <small>
                   <%= usuario.nombre %>
                 </small>
@@ -80,11 +81,6 @@
               <span>
                 <a href="/login">Ingresar</a>
               </span>
-
-              <!-- <span>/</span>
-              <span>
-                <a href="/registro">Sign up</a>
-              </span> -->
             </p>
             <% } %>
         </div>
@@ -93,9 +89,9 @@
 
   <!-- Header Image and Title -->
   <div class="header">
-    <img src="/img/fondo_subastas.png" alt="Header Image">
+    <img src="/img/banner_catalogo.jpeg" alt="Header Image">
     <div class="overlay">
-      <h1 class="text-4xl">Propiedades en subasta</h1>
+      <h1 class="text-4xl">Veiculos en subasta</h1>
       <p class="mt-2">Es tu sueño el que estamos construyendo</p>
     </div>
   </div>
@@ -321,11 +317,24 @@
             </div>
             <!-- Botón de Like en la vista general -->
             <div class="detalle_like">
-              <a href="/subasta/<%= subasta.id %>" class="view-details-button">Ver detalles</a>
+
+              <a href="/subasta/<%= subasta.id %>" class="button_a">
+                <span class="label">Entrar</span>
+                <span class="icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                    <path fill="none" d="M0 0h24v24H0z"></path>
+                    <path fill="currentColor"
+                      d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"></path>
+                  </svg>
+                </span>
+              </a>
               <button class="like-button" data-subasta-id="<%= subasta.id %>">
+                <p>Me gusta</p>
+                |
                 <i class="bi bi-heart-fill like-icon <%= subasta.liked_by_user ? 'like-filled' : 'd-none' %>"></i>
                 <i class="bi bi-heart like-icon <%= subasta.liked_by_user ? 'd-none' : 'like-empty' %>"></i>
               </button>
+
             </div>
           </div>
         </div>
@@ -374,19 +383,16 @@
 
             const data = await response.json();
             if (data.success) {
-              // Actualizar el botón de like
+              // Alternar el estado del botón de like
               const heartFilledIcon = button.querySelector('.bi-heart-fill');
               const heartEmptyIcon = button.querySelector('.bi-heart');
-              const likeCount = button.nextElementSibling;
 
               if (heartEmptyIcon.classList.contains('d-none')) {
                 heartFilledIcon.classList.add('d-none');
                 heartEmptyIcon.classList.remove('d-none');
-                likeCount.textContent = parseInt(likeCount.textContent) - 1;
               } else {
                 heartFilledIcon.classList.remove('d-none');
                 heartEmptyIcon.classList.add('d-none');
-                likeCount.textContent = parseInt(likeCount.textContent) + 1;
               }
             } else {
               console.error('Error al dar like:', data.message);
@@ -397,6 +403,7 @@
         });
       });
     });
+
   </script>
 
 </body>
