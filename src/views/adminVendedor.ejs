@@ -220,11 +220,10 @@
                           <option value="USADO">Usado</option>
                         </select>
                       </div>
-                      <div class="col-md-6">
-                        <div class="mb-3">
+                      <!-- <div class="mb-3">
                           <label for="prorroga">Prórroga (minutos)</label>
                           <input type="number" class="form-control" id="prorroga" name="prorroga" required>
-                        </div>
+                        </div> -->
                       <div class="mb-3">
                         <label for="Importante">Importante</label>
                         <input type="text" class="form-control" id="importante" name="importante" required>
@@ -238,21 +237,20 @@
                         <input type="time" class="form-control" name="hora_subasta" id="hora_subasta">
                       </div>
                     </div>
-                  </div>
-                  <div class="mb-3">
-                    <div class="row">
-                      <label for="imagenes" class="form-label">Imágenes</label>
-                      <input type="file" name="images" multiple>
+                    <div class="mb-3">
+                      <div class="row">
+                        <label for="imagenes" class="form-label">Imágenes</label>
+                        <input type="file" name="images" multiple>
+                      </div>
+                      <div class="row mt-2">
+                        <label for="anexos" class="form-label">Anexos</label>
+                        <input type="file" name="anexos" multiple>
+                      </div>
                     </div>
-                    <div class="row mt-2">
-                      <label for="anexos" class="form-label">Anexos</label>
-                      <input type="file" name="anexos" multiple>
-                    </div>
-                  </div>
 
-                  <button type="submit" class="btn btn-primary">Subir Vehículo</button>
+                    <button type="submit" class="btn btn-primary">Subir Vehículo</button>
+                  </div>
                 </div>
-              </div>
             </form>
 
           </div>
@@ -262,6 +260,8 @@
   </div>
 
   <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <script>
 
     var inputHora = document.getElementById("hora_subasta");
@@ -286,6 +286,43 @@
       }
       alert(hours + ':' + minutes + ':' + meridean);
     }
+  </script>
+
+  <script>
+    document.querySelector('form').addEventListener('submit', function (event) {
+      event.preventDefault(); // Evita que el formulario se envíe de forma tradicional
+
+      const formData = new FormData(this);
+
+      fetch('/admin/subir-vehiculo', {
+        method: 'POST',
+        body: formData
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Éxito',
+              text: data.message
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: data.message
+            });
+          }
+        })
+        .catch(error => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Ocurrió un error al enviar la solicitud.'
+          });
+          console.error('Error:', error);
+        });
+    });
   </script>
 
 </body>

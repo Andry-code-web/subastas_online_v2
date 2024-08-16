@@ -235,260 +235,194 @@
   <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
 
   <script>
-    const socket = io();
+    document.addEventListener('DOMContentLoaded', function() {
+        const socket = io();
+        const messages = document.getElementById('messages');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const btnMas = document.getElementById('mas');
+        const btnMenos = document.getElementById('menos');
+        const progressBar = document.getElementById('progressBar');
+        const numeroOportunidades = document.getElementById('numero-oportunidades');
 
-    const messages = document.getElementById('messages');
-    const messageInput = document.getElementById('messageInput');
-    const sendButton = document.getElementById('sendButton');
-    const btnMas = document.getElementById('mas');
-    const btnMenos = document.getElementById('menos');
-    const progressBar = document.getElementById('progressBar');
+        let currentBid = parseInt('<%= subasta.precio_base %>');
+        let minBid = currentBid; // Guardar la puja mínima permitida
 
-    let currentBid = parseInt('<%= subasta.precio_base %>');
-    let minBid = currentBid; // Guardar la puja mínima permitida
+        const auctionRoom = '<%= subasta.id %>';
+        socket.emit('joinRoom', auctionRoom);
 
-    const auctionRoom = '<%= subasta.id %>';
-    socket.emit('joinRoom', auctionRoom);
+        messageInput.value = formatNumber(currentBid + 100);
 
-    messageInput.value = formatNumber(currentBid + 100);
+        let progressInterval;
+        let progressValue = 100;
+        let auctionCount = 0;
+        let auctionInProgress = false; // Variable para controlar si la subasta está en progreso
+        let auctionEnded = false; // Variable para controlar si la subasta ha terminado
 
-    let progressInterval;
-    let progressValue = 100;
-    let auctionCount = 0;
-    let auctionInProgress = false; // Variable para controlar si la subasta está en progreso
-    let auctionEnded = false; // Variable para controlar si la subasta ha terminado
+        let generatedName; // Variable para almacenar el nombre generado
 
-    function startProgressBar() {
-        if (auctionEnded) return; // No iniciar la barra de progreso si la subasta ha terminado
+        function startProgressBar() {
+            if (auctionEnded) return; // No iniciar la barra de progreso si la subasta ha terminado
 
-        progressValue = 100;
-        auctionCount = 0;
-        progressBar.style.width = `${progressValue}%`;
-
-        if (progressInterval) {
-            clearInterval(progressInterval);
-        }
-
-        auctionInProgress = true; // Indicar que la subasta está en progreso
-
-        progressInterval = setInterval(() => {
-            progressValue -= 1;
+            progressValue = 100;
+            auctionCount = 0;
             progressBar.style.width = `${progressValue}%`;
 
-            if (progressValue <= 50 && auctionCount === 0) {
-                auctionCount = 1;
-                addAuctionMessage("a la 1");
-            } else if (progressValue <= 25 && auctionCount === 1) {
-                auctionCount = 2;
-                addAuctionMessage("a las 2");
-            } else if (progressValue <= 0 && auctionCount === 2) {
-                auctionCount = 3;
-                addAuctionMessage("a las 3");
+            if (progressInterval) {
                 clearInterval(progressInterval);
-                if (auctionInProgress) {
-                    auctionInProgress = false; // Finalizar la subasta
-                    auctionEnded = true; // Marcar la subasta como terminada
-                    socket.emit('endAuction', auctionRoom); // Notificar al servidor que la subasta ha terminado
-                    disableButtons(); // Desactivar los botones
-                }
-            }
-        }, 50); // Ajusta la velocidad de la barra de progreso según sea necesario
-    }
-
-    function addAuctionMessage(text) {
-        const messageElement = document.createElement('div');
-        messageElement.textContent = text;
-        messages.appendChild(messageElement);
-        messages.scrollTop = messages.scrollHeight;
-    }
-
-    btnMas.addEventListener('click', function () {
-        if (auctionEnded) return; // No permitir cambios si la subasta ha terminado
-
-        let currentBidValue = parseInt(messageInput.value.replace(/,/g, ''));
-        currentBidValue += 100;
-        messageInput.value = formatNumber(currentBidValue);
-        minBid = currentBidValue; // Actualizar la puja mínima permitida
-    });
-
-    btnMenos.addEventListener('click', function () {
-        if (auctionEnded) return; // No permitir cambios si la subasta ha terminado
-
-        let currentBidValue = parseInt(messageInput.value.replace(/,/g, ''));
-        if (currentBidValue > minBid) {
-            currentBidValue -= 100;
-            if (currentBidValue < minBid) {
-                currentBidValue = minBid;
-            }
-            messageInput.value = formatNumber(currentBidValue);
-        }
-    });
-
-    sendButton.addEventListener('click', function () {
-        if (auctionEnded) return; // No permitir envíos si la subasta ha terminado
-
-        let bidValue = parseInt(messageInput.value.replace(/,/g, ''));
-
-        // Verificar que la puja no sea menor que la puja mínima permitida
-        if (bidValue < minBid) {
-            Swal.fire({
-                title: `La puja debe ser al menos $${formatNumber(minBid)}.`,
-                icon: "warning",
-            });
-            return;
-        }
-
-        socket.emit('bid', {
-            user: '<%= usuario ? usuario.nombre : "Invitado" %>',
-            bid: bidValue,
-            room: auctionRoom
-        });
-        startProgressBar();
-    });
-
-    let generatedName; // Variable para almacenar el nombre generado
-    socket.on('newBid', function (data) {
-        if (auctionEnded) return; // No aceptar nuevas pujas si la subasta ha terminado
-
-        currentBid = parseInt(data.bid); // Actualizar la puja actual
-        minBid = currentBid; // Actualizar la puja mínima permitida
-
-        if (!generatedName) {
-            // Generar el nombre solo si no ha sido generado previamente
-            function newClienteName(data) {
-                const dbNameUser = data.user; // Traemos el usuario de la base de datos
-                const userArray = Array.from(dbNameUser); // Convertimos en un array el usuario
-                const NumUser = userArray.length; // Cuantos caracteres tiene el nombre del user
-
-                for (let i = 0; i < NumUser; i++) {
-                    const arrayNumeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-                    // Cambiamos el carácter actual por un número aleatorio
-                    userArray[i] = arrayNumeros[Math.floor(Math.random() * arrayNumeros.length)];
-                }
-
-                // Agregamos el número de caracteres al final del array
-                userArray.push(NumUser);
-
-                // Convertimos el array de vuelta a una cadena de texto
-                const nuevoNombre = userArray.join('');
-
-                return nuevoNombre;
             }
 
-            generatedName = newClienteName(data); // Almacenar el nombre generado
-        }
+            auctionInProgress = true; // Indicar que la subasta está en progreso
 
-        const messageElement = document.createElement('div');
-        messageElement.textContent = `Puja de $${formatNumber(data.bid)} por ${generatedName}`;
-        messages.appendChild(messageElement);
-        messages.scrollTop = messages.scrollHeight;
+            progressInterval = setInterval(() => {
+                progressValue -= 1;
+                progressBar.style.width = `${progressValue}%`;
 
-        // Actualizar el input de todos los clientes
-        messageInput.value = formatNumber(currentBid);
-        clearInterval(progressInterval);
-        startProgressBar();
-    });
-
-    async function actualizarOportunidades() {
-        const usuarioId = obtenerIdUsuarioDesdeSesion(); // Implementa esta función para obtener el ID del usuario desde la sesión
-
-        if (usuarioId) {
-            try {
-                const response = await fetch(`/oportunidades/${usuarioId}`);
-                const data = await response.json();
-
-                if (data.success) {
-                    const oportunidades = data.oportunidades;
-                    document.getElementById('numero-oportunidades').innerText = oportunidades;
-                } else {
-                    console.error(data.message);
-                }
-            } catch (error) {
-                console.error('Error al actualizar oportunidades:', error);
-            }
-        }
-    }
-
-    socket.on('auctionEnded', function (data) {
-        const messageElement = document.createElement('div');
-
-        // Verificar que data.winner no sea null o undefined
-        const winnerName = generatedName || 'un participante desconocido';
-
-        Swal.fire({
-            icon: 'success',
-            title: `¡Subasta ganada por ${winnerName}!`,
-            text: 'Felicidades, vamos por otra subasta',
-            confirmButtonText: 'Ir al catálogo',
-            allowOutsideClick: false,
-            customClass: {
-                confirmButton: 'bg-btn-alert2',
-            },
-            didOpen: () => {
-                const end = Date.now() + 15 * 1000;
-                const colors = ["#ff0000", "#fbff00", "#04ff04"];
-
-                (function frame() {
-                    confetti({
-                        particleCount: 2,
-                        angle: 60,
-                        spread: 55,
-                        origin: { x: 0 },
-                        colors: colors,
-                    });
-
-                    confetti({
-                        particleCount: 2,
-                        angle: 120,
-                        spread: 55,
-                        origin: { x: 1 },
-                        colors: colors,
-                    });
-
-                    confetti({
-                        particleCount: 2,
-                        angle: 180,
-                        spread: 55,
-                        origin: { x: 2 },
-                        colors: colors,
-                    });
-
-                    if (Date.now() < end) {
-                        requestAnimationFrame(frame);
+                if (progressValue <= 50 && auctionCount === 0) {
+                    auctionCount = 1;
+                    addAuctionMessage("a la 1");
+                } else if (progressValue <= 25 && auctionCount === 1) {
+                    auctionCount = 2;
+                    addAuctionMessage("a las 2");
+                } else if (progressValue <= 0 && auctionCount === 2) {
+                    auctionCount = 3;
+                    addAuctionMessage("a las 3");
+                    clearInterval(progressInterval);
+                    if (auctionInProgress) {
+                        auctionInProgress = false; // Finalizar la subasta
+                        auctionEnded = true; // Marcar la subasta como terminada
+                        socket.emit('endAuction', auctionRoom); // Notificar al servidor que la subasta ha terminado
+                        disableButtons(); // Desactivar los botones
                     }
-                })();
-            },
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = '/catalogo'; // Redirige a /catalogo
+                }
+            }, 50); // Ajusta la velocidad de la barra de progreso según sea necesario
+        }
+
+        function addAuctionMessage(text) {
+            const messageElement = document.createElement('div');
+            messageElement.textContent = text;
+            messages.appendChild(messageElement);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        btnMas.addEventListener('click', function () {
+            if (auctionEnded) return; // No permitir cambios si la subasta ha terminado
+
+            let currentBidValue = parseInt(messageInput.value.replace(/,/g, ''));
+            currentBidValue += 100;
+            messageInput.value = formatNumber(currentBidValue);
+            minBid = currentBidValue; // Actualizar la puja mínima permitida
+        });
+
+        btnMenos.addEventListener('click', function () {
+            if (auctionEnded) return; // No permitir cambios si la subasta ha terminado
+
+            let currentBidValue = parseInt(messageInput.value.replace(/,/g, ''));
+            if (currentBidValue > minBid) {
+                currentBidValue -= 100;
+                if (currentBidValue < minBid) {
+                    currentBidValue = minBid;
+                }
+                messageInput.value = formatNumber(currentBidValue);
             }
         });
 
-        messages.appendChild(messageElement);
-        messages.scrollTop = messages.scrollHeight;
-        disableButtons(); // Desactivar los botones
+        sendButton.addEventListener('click', function () {
+            if (auctionEnded) return; // No permitir envíos si la subasta ha terminado
 
-        // Actualizar la cantidad de oportunidades en la UI
-        actualizarOportunidades();
-    });
+            let bidValue = parseInt(messageInput.value.replace(/,/g, ''));
 
-    messageInput.addEventListener('keypress', function (event) {
-        if (event.key === 'Enter') {
-            sendButton.click();
+            // Verificar que la puja no sea menor que la puja mínima permitida
+            if (bidValue < minBid) {
+                Swal.fire({
+                    title: `La puja debe ser al menos $${formatNumber(minBid)}.`,
+                    icon: "warning",
+                });
+                return;
+            }
+
+            socket.emit('bid', {
+                user: '<%= usuario ? usuario.nombre : "Invitado" %>',
+                bid: bidValue,
+                room: auctionRoom
+            });
+            startProgressBar();
+        });
+
+        socket.on('newBid', function (data) {
+            if (auctionEnded) return; // No aceptar nuevas pujas si la subasta ha terminado
+
+            currentBid = parseInt(data.bid); // Actualizar la puja actual
+            minBid = currentBid; // Actualizar la puja mínima permitida
+
+            if (!generatedName) {
+                // Generar el nombre solo si no ha sido generado previamente
+                function newClienteName(data) {
+                    const dbNameUser = data.user; // Traemos el usuario de la base de datos
+                    const userArray = Array.from(dbNameUser); // Convertimos en un array el usuario
+                    const NumUser = userArray.length; // Cuantos caracteres tiene el nombre del user
+
+                    for (let i = 0; i < NumUser; i++) {
+                        const arrayNumeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+                        // Cambiamos el carácter actual por un número aleatorio
+                        userArray[i] = arrayNumeros[Math.floor(Math.random() * arrayNumeros.length)];
+                    }
+
+                    // Agregamos el número de caracteres al final del array
+                    userArray.push(NumUser);
+
+                    // Convertimos el array de vuelta a una cadena de texto
+                    const nuevoNombre = userArray.join('');
+
+                    return nuevoNombre;
+                }
+
+                generatedName = newClienteName(data); // Almacenar el nombre generado
+            }
+
+            const messageElement = document.createElement('div');
+            messageElement.textContent = `Puja de $${formatNumber(data.bid)} por ${generatedName}`;
+            messages.appendChild(messageElement);
+            messages.scrollTop = messages.scrollHeight;
+        });
+
+        socket.on('auctionEnded', function () {
+            Swal.fire({
+                title: "La subasta ha terminado",
+                icon: "info",
+                text: "La subasta ha finalizado. Puedes volver al catálogo.",
+                confirmButtonText: "Volver al catálogo",
+                didClose: () => {
+                    document.getElementById('numero-oportunidades').innerText = '0'; // Asume que la subasta ha terminado y el usuario no tiene más oportunidades
+                    auctionEnded = true; // Marcar la subasta como terminada
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/catalogo'; // Redirigir al catálogo
+                }
+            });
+        });
+
+        function formatNumber(number) {
+            return number.toLocaleString('en-US', { minimumFractionDigits: 0 });
         }
+
+        function disableButtons() {
+            btnMas.disabled = true;
+            btnMenos.disabled = true;
+            sendButton.disabled = true;
+        }
+
+        function obtenerIdUsuarioDesdeSesion() {
+            // Implementa esta función para obtener el ID del usuario desde la sesión o desde algún otro medio
+            return '<%= usuario ? usuario.id : "" %>';
+        }
+
+        // Iniciar la barra de progreso al cargar la página
+        startProgressBar();
     });
-
-    function disableButtons() {
-        btnMas.disabled = true;
-        btnMenos.disabled = true;
-        sendButton.disabled = true;
-        messageInput.disabled = true;
-    }
-
-    function formatNumber(num) {
-        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    }
 </script>
+
 
 
   <script>

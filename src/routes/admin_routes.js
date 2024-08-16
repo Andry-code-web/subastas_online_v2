@@ -268,50 +268,51 @@ router.post('/loginAdminV', (req, res) => {
   const { usuario, contraseña } = req.body;
 
   if (!contraseña) {
-    return res.status(400).send("Contraseña no proporcionada");
+    return res.status(400).json({ success: false, message: "Contraseña no proporcionada" });
   }
 
   const query = "SELECT * FROM adminvendedor WHERE nombre_usuario = ?";
   connection.query(query, [usuario], async (error, results) => {
     if (error) {
       console.error("Error al buscar el admin vendedor:", error);
-      return res.status(500).send("Error al iniciar sesión");
+      return res.status(500).json({ success: false, message: "Error al iniciar sesión" });
     }
     
     if (results.length === 0) {
-      return res.status(401).send("Usuario no registrado");
+      return res.status(401).json({ success: false, message: "Usuario no registrado" });
     }
 
     const adminVendedor = results[0];
 
     if (!adminVendedor.contraseña) {
       console.error("Contraseña no encontrada en la base de datos para el usuario:", usuario);
-      return res.status(500).send("Error al iniciar sesión");
+      return res.status(500).json({ success: false, message: "Error al iniciar sesión" });
     }
 
     try {
       const isPasswordValid = await bcrypt.compare(contraseña, adminVendedor.contraseña);
       if (!isPasswordValid) {
-        return res.status(401).send("Contraseña incorrecta");
+        return res.status(401).json({ success: false, message: "Contraseña incorrecta" });
       }
 
       req.session.adminVendedorId = adminVendedor.id;
       req.session.adminVendedorNombreUsuario = adminVendedor.nombre_usuario;
-      req.session.adminVendedorActivo = true; // Establecer como activo
+      req.session.adminVendedorActivo = true;
 
       req.session.save((err) => {
         if (err) {
           console.error("Error al guardar la sesión:", err);
-          return res.status(500).send("Error al iniciar sesión");
+          return res.status(500).json({ success: false, message: "Error al iniciar sesión" });
         }
-        res.redirect("/admin/adminV");
+        res.json({ success: true, message: "Inicio de sesión exitoso", redirectUrl: "/admin/adminV" });
       });
     } catch (compareError) {
       console.error("Error al comparar la contraseña:", compareError);
-      return res.status(500).send("Error al iniciar sesión");
+      return res.status(500).json({ success: false, message: "Error al iniciar sesión" });
     }
   });
 });
+
 
 router.get("/logoutAdminV", (req, res) => {
   req.session.adminVendedorActivo = false; // Establecer como inactivo
@@ -359,34 +360,28 @@ function calcularFechaProrroga(minutos) {
 }
 
 router.post("/subir-vehiculo", upload.fields([{ name: 'images', maxCount: 4 }, { name: 'anexos', maxCount: 5 }]), (req, res) => {
-  const { marca, modelo, descripcion, categoria, anio, precio_base, placa, tarjeta_propiedad, llave, ubicacion, estado, importante, fecha_subasta, hora_subasta, prorroga } = req.body;
+  const { marca, modelo, descripcion, categoria, anio, precio_base, placa, tarjeta_propiedad, llave, ubicacion, estado, importante, fecha_subasta, hora_subasta } = req.body;
   const imagenes = req.files['images'];
   const anexos = req.files['anexos'];
 
-  // Obtener el ID del administrador vendedor desde la sesión
   const id_admin_vendedor = req.session.adminVendedorId;
 
   if (!id_admin_vendedor) {
-    return res.status(401).send("Debe iniciar sesión como administrador vendedor para subir un vehículo.");
+    return res.status(401).json({ success: false, message: "Debe iniciar sesión como administrador vendedor para subir un vehículo." });
   }
 
-  // Calcular la fecha y hora de inicio de la prórroga
-  const fechaHoraInicioProrroga = calcularFechaProrroga(parseInt(prorroga, 10));
-
-  // Inserción del vehículo en la base de datos
-  const insertQuery = `INSERT INTO subastas (marca, modelo, descripcion, categoria, anio, precio_base, placa, tarjeta_propiedad, llave, ubicacion, estado, importante, fecha_subasta, hora_subasta, prorroga_inicio, id_admin_vendedor) 
-                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-  const values = [marca, modelo, descripcion, categoria, anio, precio_base, placa, tarjeta_propiedad, llave, ubicacion, estado, importante, fecha_subasta, hora_subasta, fechaHoraInicioProrroga, id_admin_vendedor];
+  const insertQuery = `INSERT INTO subastas (marca, modelo, descripcion, categoria, anio, precio_base, placa, tarjeta_propiedad, llave, ubicacion, estado, importante, fecha_subasta, hora_subasta, id_admin_vendedor) 
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  const values = [marca, modelo, descripcion, categoria, anio, precio_base, placa, tarjeta_propiedad, llave, ubicacion, estado, importante, fecha_subasta, hora_subasta, id_admin_vendedor];
 
   connection.query(insertQuery, values, (err, result) => {
     if (err) {
       console.error("Error al insertar vehículo:", err);
-      return res.status(500).send("Error al insertar vehículo");
-    } 
+      return res.status(500).json({ success: false, message: "Error al insertar vehículo" });
+    }
 
     const id_subasta = result.insertId;
 
-    // Guardar las imágenes en la base de datos
     if (imagenes && imagenes.length > 0) {
       const insertImagenesQuery = 'INSERT INTO imagenes_propiedad (id_subasta, imagen) VALUES ?';
       const imagenesData = imagenes.map(img => [id_subasta, img.buffer]);
@@ -394,10 +389,9 @@ router.post("/subir-vehiculo", upload.fields([{ name: 'images', maxCount: 4 }, {
       connection.query(insertImagenesQuery, [imagenesData], (err) => {
         if (err) {
           console.error("Error al insertar imágenes:", err);
-          return res.status(500).send("Error al insertar imágenes");
+          return res.status(500).json({ success: false, message: "Error al insertar imágenes" });
         }
 
-        // Guardar los anexos en la base de datos
         if (anexos && anexos.length > 0) {
           const insertAnexosQuery = 'INSERT INTO anexos_propiedad (id_subasta, anexo) VALUES ?';
           const anexosData = anexos.map(anexo => [id_subasta, anexo.buffer]);
@@ -405,17 +399,16 @@ router.post("/subir-vehiculo", upload.fields([{ name: 'images', maxCount: 4 }, {
           connection.query(insertAnexosQuery, [anexosData], (err) => {
             if (err) {
               console.error("Error al insertar anexos:", err);
-              return res.status(500).send("Error al insertar anexos");
+              return res.status(500).json({ success: false, message: "Error al insertar anexos" });
             }
 
-            res.status(200).send("Vehículo, imágenes y anexos subidos correctamente");
+            res.json({ success: true, message: "Vehículo, imágenes y anexos subidos correctamente" });
           });
         } else {
-          res.status(200).send("Vehículo e imágenes subidos correctamente (sin anexos)");
+          res.json({ success: true, message: "Vehículo e imágenes subidos correctamente (sin anexos)" });
         }
       });
     } else {
-      // Si no hay imágenes
       if (anexos && anexos.length > 0) {
         const insertAnexosQuery = 'INSERT INTO anexos_propiedad (id_subasta, anexo) VALUES ?';
         const anexosData = anexos.map(anexo => [id_subasta, anexo.buffer]);
@@ -423,17 +416,19 @@ router.post("/subir-vehiculo", upload.fields([{ name: 'images', maxCount: 4 }, {
         connection.query(insertAnexosQuery, [anexosData], (err) => {
           if (err) {
             console.error("Error al insertar anexos:", err);
-            return res.status(500).send("Error al insertar anexos");
+            return res.status(500).json({ success: false, message: "Error al insertar anexos" });
           }
 
-          res.status(200).send("Vehículo y anexos subidos correctamente (sin imágenes)");
+          res.json({ success: true, message: "Vehículo y anexos subidos correctamente (sin imágenes)" });
         });
       } else {
-        res.status(200).send("Vehículo subido correctamente (sin imágenes ni anexos)");
+        res.json({ success: true, message: "Vehículo subido correctamente (sin imágenes ni anexos)" });
       }
     }
   });
 });
+
+
 
 
 

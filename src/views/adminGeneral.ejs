@@ -123,13 +123,13 @@
                                                     <i class="bi bi-person-circle text-warning" style="font-size: 1.5rem;"></i>
                                                 </td>
                                                 <td>
-                                                    <%= usuario.nombre + " " + usuario.apellidos %>
+                                                    <%= usuario.nombre_apellidos %>
                                                 </td>
                                                 <td>
-                                                    <%= usuario.dni %>
+                                                    <%= usuario.dni_ce %>
                                                 </td>
                                                 <td>
-                                                    <%= usuario.correo_electronico %>
+                                                    <%= usuario.email %>
                                                 </td>
                                                 <td>
                                                     <%= usuario.oportunidades %> <!-- Muestra las oportunidades -->
@@ -142,9 +142,12 @@
                                                         <i class="bi bi-trash3"></i>
                                                     </a>
                                                     <!-- Enlace para activar oportunidades -->
-                                                    <a href="" class="btn btn-success activar-oportunidades" data-id="<%= usuario.id %>">
-                                                        Activar oportunidades
+                                                    <a href="#" class="text-success activar-oportunidades" data-id="<%= usuario.id %>">
+                                                        <i class="bi bi-check-square"></i>
+                                                        <span class="tooltip-text">Activar oportunidades</span>
                                                     </a>
+                                                    
+                                                    
                                                 </td>
                                             </tr>
                                         <% }); %>

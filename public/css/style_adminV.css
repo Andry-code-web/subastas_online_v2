@@ -231,3 +231,35 @@ body {
     text-align: center;
     /* Centra el texto horizontalmente */
 }
+
+.activar-oportunidades {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tooltip-text {
+    position: absolute;
+    background-color: #000;
+    color: #fff;
+    padding: 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    bottom: 100%; /* Ubica el texto justo arriba del icono */
+    left: 50%;
+    transform: translateX(-50%); /* Centra el texto horizontalmente */
+    margin-bottom: 5px; /* Espacio entre el texto y el icono */
+    z-index: 1; /* Asegura que el texto esté encima del icono */
+}
+
+.activar-oportunidades:hover .tooltip-text {
+    opacity: 1;
+    visibility: visible;
+}
+
+

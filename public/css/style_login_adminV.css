@@ -34,7 +34,7 @@
     height: auto;
     padding: 1rem;
     position: absolute;
-    top: 40%;
+    top: 50%;
     left: 35%;
     transform: translate(-50%, -50%);
 }
@@ -144,4 +144,27 @@
 a {
     text-decoration: none;
 }
+
+.btn_registro{
+    width: 200px;
+    height: 35px;
+    border: none;
+    background-color: #d10000;
+    color: white;
+    font-weight: 600;
+    border-radius: 50px;
+    box-shadow: 1px 3px 5px rgba(63, 63, 63, 0.411);
+}
+
+.regresar{
+    margin-top: .5rem;
+    font-weight: 400;
+    cursor: pointer;
+}
   
+.regresar span a{
+    border: none;
+    font-weight: 500;
+    color: #d10000;
+    text-decoration: underline;
+}
