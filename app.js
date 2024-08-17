@@ -43,9 +43,9 @@ app.use('/admin', adminRouter);
 
 // Configuración de vistas
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-app.set('views', '/opt/render/project/src/views');
+app.set('views', path.join(__dirname, 'src', 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 const auctions = {}; // Objeto para almacenar el estado de cada subasta
 const HEARTBEAT_TIMEOUT = 5000; // Tiempo en milisegundos para considerar que un cliente se desconectó (5 segundos)
