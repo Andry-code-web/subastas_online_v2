@@ -118,7 +118,7 @@ router.get("/adminG", (req, res) => {
       const numAdminVendedores = adminVendedores.length;
       const numSubastas = subastas.length;
 
-      res.render("admingeneral", {
+      res.render("adminGeneral", {
         nombreUsuario,
         usuarios,
         numUsuarios,
@@ -181,6 +181,7 @@ router.get('/editarUsuario/:id', (req, res) => {
     res.render('editarUsuario', { usuario });
   });
 });
+
 //prosesar la actualizacion de usuario
 router.post('/editarUsuario/:id', (req, res) => {
   const userId = req.params.id;
