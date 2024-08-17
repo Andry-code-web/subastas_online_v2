@@ -17,18 +17,18 @@ const isAuthenticated = (req, res, next) => {
 router.get("/", (req, res) => {
   let querySubastas = `
     SELECT s.*, IFNULL(l.like_count, 0) AS like_count
-    FROM subastaonline.subastas s
+    FROM subastas s
     LEFT JOIN (
       SELECT subasta_id, COUNT(*) AS like_count
-      FROM subastaonline.likes
+      FROM likes
       GROUP BY subasta_id
     ) l ON s.id = l.subasta_id
     ORDER BY like_count DESC, s.id ASC
     LIMIT 15  -- Obtén más de 5 para categorizar después
   `;
 
-  const queryImagenes = "SELECT id_subasta, imagen FROM subastaonline.imagenes_propiedad";
-  const queryComentarios = "SELECT * FROM subastaonline.comentarios ORDER BY id DESC";
+  const queryImagenes = "SELECT id_subasta, imagen FROM imagenes_propiedad";
+  const queryComentarios = "SELECT * FROM comentarios ORDER BY id DESC";
 
   conexion.query(querySubastas, (error, subastas) => {
     if (error) {
@@ -86,7 +86,7 @@ router.post("/", (req, res) => {
   }
 
   const query =
-    "INSERT INTO subastaonline.comentarios (nombre, comentario, rating) VALUES (?, ?, ?)";
+    "INSERT INTO comentarios (nombre, comentario, rating) VALUES (?, ?, ?)";
   const values = [nombre, texto, rating];
 
   conexion.query(query, values, (error, results) => {
@@ -193,7 +193,7 @@ router.post('/registro', (req, res) => {
     console.log(typeof (valores.terminos_y_condiciones));
 
     const sql = `
-          INSERT INTO subastaonline.usuarios (
+          INSERT INTO usuarios (
               tipo_persona, email, confirmacion_email, celular, telefono,
               nombre_apellidos, dni_ce, fecha_nacimiento, sexo, estado_civil,
               ruc, nombre_comercial, actividad_comercial,
@@ -243,7 +243,7 @@ router.post('/registro', (req, res) => {
     };
 
     const sql = `
-          INSERT INTO subastaonline.usuarios (
+          INSERT INTO usuarios (
               tipo_persona, email, confirmacion_email, celular, telefono,
               nombre_apellidos, dni_ce, fecha_nacimiento, sexo, estado_civil,
               ruc, nombre_comercial, actividad_comercial,
@@ -275,7 +275,7 @@ router.get("/catalogo", (req, res) => {
   const { categoria } = req.query;
   const usuario_id = req.session.usuario ? req.session.usuario.id : null;
 
-  let querySubastas = "SELECT * FROM subastaonline.subastas";
+  let querySubastas = "SELECT * FROM subastas";
   const queryParams = [];
 
   if (categoria) {
@@ -284,7 +284,7 @@ router.get("/catalogo", (req, res) => {
   }
   querySubastas += " ORDER BY id ASC";
 
-  const queryImagenes = "SELECT id_subasta, imagen FROM subastaonline.imagenes_propiedad";
+  const queryImagenes = "SELECT id_subasta, imagen FROM imagenes_propiedad";
 
   conexion.query(querySubastas, queryParams, (error, subastas) => {
     if (error) {
@@ -310,7 +310,7 @@ router.get("/catalogo", (req, res) => {
 
       if (usuario_id) {
         // Consulta adicional para verificar los likes del usuario
-        const queryLikes = "SELECT subasta_id FROM subastaonline.likes WHERE user_id = ?";
+        const queryLikes = "SELECT subasta_id FROM likes WHERE user_id = ?";
         conexion.query(queryLikes, [usuario_id], (error, likes) => {
           if (error) {
             console.error("Error al obtener likes del usuario", error);
@@ -351,11 +351,11 @@ router.get('/subasta/:id', isAuthenticated, (req, res) => {
       DATE_FORMAT(hora_subasta, '%h:%i %p') AS hora_formateada, 
       CONCAT(fecha_subasta, ' ', hora_subasta) AS fecha_hora_subasta,
       prorroga_inicio
-    FROM subastaonline.subastas 
+    FROM subastas 
     WHERE id = ?`;
 
-  const queryImagenes = 'SELECT imagen FROM subastaonline.imagenes_propiedad WHERE id_subasta = ?';
-  const queryAnexos = 'SELECT id FROM subastaonline.anexos_propiedad WHERE id_subasta = ?';
+  const queryImagenes = 'SELECT imagen FROM imagenes_propiedad WHERE id_subasta = ?';
+  const queryAnexos = 'SELECT id FROM anexos_propiedad WHERE id_subasta = ?';
 
   function formatNumber(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -433,7 +433,7 @@ router.get('/subasta/:id', isAuthenticated, (req, res) => {
 router.get('/descargar-anexo/:id', (req, res) => {
   const anexoId = req.params.id;
 
-  const query = 'SELECT anexo FROM subastaonline.anexos_propiedad WHERE id = ?';
+  const query = 'SELECT anexo FROM anexos_propiedad WHERE id = ?';
   conexion.query(query, [anexoId], (err, results) => {
     if (err) {
       console.error('Error al obtener el anexo:', err);
@@ -535,7 +535,7 @@ router.post("/like", (req, res) => {
     }
 
     // Verificar si el usuario ya ha dado like a la subasta
-    const checkLikeQuery = "SELECT * FROM subastaonline.likes WHERE user_id = ? AND subasta_id = ?";
+    const checkLikeQuery = "SELECT * FROM likes WHERE user_id = ? AND subasta_id = ?";
     conexion.query(checkLikeQuery, [usuario_id, subasta_id], (error, results) => {
       if (error) {
         return conexion.rollback(() => {
@@ -546,7 +546,7 @@ router.post("/like", (req, res) => {
 
       if (results.length > 0) {
         // El usuario ya ha dado like, eliminar el like y decrementar el like_count
-        const deleteLikeQuery = "DELETE FROM subastaonline.likes WHERE user_id = ? AND subasta_id = ?";
+        const deleteLikeQuery = "DELETE FROM likes WHERE user_id = ? AND subasta_id = ?";
         conexion.query(deleteLikeQuery, [usuario_id, subasta_id], (error) => {
           if (error) {
             return conexion.rollback(() => {
@@ -555,7 +555,7 @@ router.post("/like", (req, res) => {
             });
           }
 
-          const decrementLikeCountQuery = "UPDATE subastaonline.subastas SET like_count = GREATEST(like_count - 1, 0) WHERE id = ?";
+          const decrementLikeCountQuery = "UPDATE subastas SET like_count = GREATEST(like_count - 1, 0) WHERE id = ?";
           conexion.query(decrementLikeCountQuery, [subasta_id], (error) => {
             if (error) {
               return conexion.rollback(() => {
@@ -577,7 +577,7 @@ router.post("/like", (req, res) => {
         });
       } else {
         // El usuario no ha dado like, agregar el like y incrementar el like_count
-        const addLikeQuery = "INSERT INTO subastaonline.likes (user_id, subasta_id) VALUES (?, ?)";
+        const addLikeQuery = "INSERT INTO likes (user_id, subasta_id) VALUES (?, ?)";
         conexion.query(addLikeQuery, [usuario_id, subasta_id], (error) => {
           if (error) {
             return conexion.rollback(() => {
@@ -586,7 +586,7 @@ router.post("/like", (req, res) => {
             });
           }
 
-          const incrementLikeCountQuery = "UPDATE subastaonline.subastas SET like_count = like_count + 1 WHERE id = ?";
+          const incrementLikeCountQuery = "UPDATE subastas SET like_count = like_count + 1 WHERE id = ?";
           conexion.query(incrementLikeCountQuery, [subasta_id], (error) => {
             if (error) {
               return conexion.rollback(() => {

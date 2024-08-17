@@ -22,7 +22,7 @@ router.get("/loginAdminG", (req, res) => {
 router.post("/loginAdminG", (req, res) => {
   const { correo, contraseña } = req.body;
 
-  const query = "SELECT * FROM subastaonline.admingeneral WHERE correo_electronico = ?";
+  const query = "SELECT * FROM admingeneral WHERE correo_electronico = ?";
   connection.query(query, [correo], (error, results) => {
     if (error) {
       console.error("Error al buscar el administrador general:", error);
@@ -70,9 +70,9 @@ router.get("/adminG", (req, res) => {
 
   const nombreUsuario = req.session.admingeneralNombreUsuario;
 
-  const queryUsuarios = 'SELECT * FROM subastaonline.usuarios';
-  const queryAdminVendedores = 'SELECT * FROM subastaonline.adminvendedor';
-  const querySubastas = 'SELECT * FROM subastaonline.subastas';
+  const queryUsuarios = 'SELECT * FROM usuarios';
+  const queryAdminVendedores = 'SELECT * FROM adminvendedor';
+  const querySubastas = 'SELECT * FROM subastas';
 
   Promise.all([
     new Promise((resolve, reject) => {
@@ -166,7 +166,7 @@ router.post("/crear-admin-vendedor", async (req, res) => {
 router.get('/editarUsuario/:id', (req, res) => {
   const userId = req.params.id;
 
-  const query = 'SELECT * FROM subastaonline.usuarios WHERE id = ?';
+  const query = 'SELECT * FROM usuarios WHERE id = ?';
   connection.query(query, [userId], (error, result) => {
     if (error) {
       console.error("Error al obtener el usuario para editar: ", error);
@@ -215,7 +215,7 @@ router.delete('/eliminarUsuario/:id', (req, res) => {
 router.delete('/eliminarAdminVendedor/:id', (req, res) => {
   const adminVendedorId = req.params.id;
 
-  const query = 'DELETE FROM subastaonline.adminvendedor WHERE id = ?';
+  const query = 'DELETE FROM adminvendedor WHERE id = ?';
   connection.query(query, [adminVendedorId], (error, result) => {
     if (error) {
       console.error('Error al eliminar el adminVendedor', error);
@@ -338,7 +338,7 @@ router.get("/adminV", isAuthenticatedAdminV, (req, res) => {
   const nombreUsuario = req.session.adminVendedorNombreUsuario;
   const adminVendedorId = req.session.adminVendedorId; // ID del admin vendedor que inició sesión
 
-  const query = 'SELECT * FROM subastaonline.subastas WHERE id_admin_vendedor = ?';
+  const query = 'SELECT * FROM subastas WHERE id_admin_vendedor = ?';
   connection.query(query, [adminVendedorId], (error, results) => {
     if (error) {
       console.error("Error al obtener los datos de subasta:", error);
