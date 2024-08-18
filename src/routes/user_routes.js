@@ -349,8 +349,7 @@ router.get('/subasta/:id', isAuthenticated, (req, res) => {
     SELECT *, 
       DATE_FORMAT(fecha_subasta, '%W %d') AS fecha_formateada, 
       DATE_FORMAT(hora_subasta, '%h:%i %p') AS hora_formateada, 
-      CONCAT(fecha_subasta, ' ', hora_subasta) AS fecha_hora_subasta,
-      prorroga_inicio
+      CONCAT(fecha_subasta, ' ', hora_subasta) AS fecha_hora_subasta
     FROM subastas 
     WHERE id = ?`;
 
@@ -413,8 +412,7 @@ router.get('/subasta/:id', isAuthenticated, (req, res) => {
           fecha_formateada: fechaFormateadaEsp, // Usamos la fecha traducida
           imagenes: resultadoImagenes.map(img => img.imagen.toString('base64')),
           anexos: resultadoAnexos,
-          estaEnCurso, // Información de si la subasta está en curso
-          prorroga_inicio: subasta.prorroga_inicio // Incluimos prorroga_inicio
+          estaEnCurso // Información de si la subasta está en curso
         };
 
         res.render('subasta', {
@@ -426,7 +424,6 @@ router.get('/subasta/:id', isAuthenticated, (req, res) => {
     });
   });
 });
-
 
 
 //descargar el anexo
