@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const router = express.Router();
 const moment = require('moment');
-const conexion = require("../database/db"); // Asegúrate de que el nombre del archivo y la ruta sean correctos
+const { conection } = require("../database/db"); // Asegúrate de que el nombre del archivo y la ruta sean correctos
 
 router.use(bodyParser.urlencoded({ extended: true }));
 
@@ -30,19 +30,19 @@ router.get("/", (req, res) => {
   const queryImagenes = "SELECT id_subasta, imagen FROM imagenes_propiedad";
   const queryComentarios = "SELECT * FROM comentarios ORDER BY id DESC";
 
-  conexion.query(querySubastas, (error, subastas) => {
+  conection.query(querySubastas, (error, subastas) => {
     if (error) {
       console.error("Error al obtener datos de subasta", error);
       return res.status(500).send("Error al obtener datos de subasta");
     }
 
-    conexion.query(queryImagenes, (error, imagenes) => {
+    conection.query(queryImagenes, (error, imagenes) => {
       if (error) {
         console.error("Error al obtener imágenes de subasta", error);
         return res.status(500).send("Error al obtener imágenes de subasta");
       }
 
-      conexion.query(queryComentarios, (error, comentarios) => {
+      conection.query(queryComentarios, (error, comentarios) => {
         if (error) {
           console.error("Error al obtener comentarios de subasta", error);
           return res.status(500).send("Error al obtener comentarios de subasta");
@@ -89,7 +89,7 @@ router.post("/", (req, res) => {
     "INSERT INTO comentarios (nombre, comentario, rating) VALUES (?, ?, ?)";
   const values = [nombre, texto, rating];
 
-  conexion.query(query, values, (error, results) => {
+  conection.query(query, values, (error, results) => {
     if (error) {
       console.error("Error al subir los datos del formulario:", error);
       return res.status(500).send("Error al subir los datos del formulario");
@@ -110,7 +110,7 @@ router.post('/login', (req, res) => {
 
   console.log(usuario, contra);
 
-  conexion.query(consulta, function (err, result, fields) {
+  conection.query(consulta, function (err, result, fields) {
     if (err) {
       console.error("Error al realizar la consulta: ", err);
       res.status(500).json({ message: "Error interno del servidor" });
@@ -202,7 +202,7 @@ router.post('/registro', (req, res) => {
           ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
 
-    conexion.query(sql, [
+    conection.query(sql, [
       valores.tipo_persona, valores.email, valores.confirmacion_email, valores.celular, valores.telefono,
       valores.nombre_apellidos, valores.dni_ce, valores.fecha_nacimiento, valores.sexo, valores.estado_civil,
       valores.ruc, valores.nombre_comercial, valores.actividad_comercial,
@@ -252,7 +252,7 @@ router.post('/registro', (req, res) => {
           ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
 
-    conexion.query(sql, [
+    conection.query(sql, [
       valores.tipo_persona, valores.email, valores.confirmacion_email, valores.celular, valores.telefono,
       valores.nombre_apellidos, valores.dni_ce, valores.fecha_nacimiento, valores.sexo, valores.estado_civil,
       valores.ruc, valores.nombre_comercial, valores.actividad_comercial,
@@ -286,13 +286,13 @@ router.get("/catalogo", (req, res) => {
 
   const queryImagenes = "SELECT id_subasta, imagen FROM imagenes_propiedad";
 
-  conexion.query(querySubastas, queryParams, (error, subastas) => {
+  conection.query(querySubastas, queryParams, (error, subastas) => {
     if (error) {
       console.error("Error al obtener datos de subasta", error);
       return res.status(500).send("Error al obtener datos de subasta");
     }
 
-    conexion.query(queryImagenes, (error, imagenes) => {
+    conection.query(queryImagenes, (error, imagenes) => {
       if (error) {
         console.error("Error al obtener imágenes de subasta", error);
         return res.status(500).send("Error al obtener imágenes de subasta");
@@ -311,7 +311,7 @@ router.get("/catalogo", (req, res) => {
       if (usuario_id) {
         // Consulta adicional para verificar los likes del usuario
         const queryLikes = "SELECT subasta_id FROM likes WHERE user_id = ?";
-        conexion.query(queryLikes, [usuario_id], (error, likes) => {
+        conection.query(queryLikes, [usuario_id], (error, likes) => {
           if (error) {
             console.error("Error al obtener likes del usuario", error);
             return res.status(500).send("Error al obtener likes del usuario");
@@ -344,7 +344,6 @@ router.get("/catalogo", (req, res) => {
 router.get('/subasta/:id', isAuthenticated, (req, res) => {
   const subastaId = req.params.id;
 
-  // Consulta para obtener los datos de la subasta
   const querySubasta = `
     SELECT *, 
       DATE_FORMAT(fecha_subasta, '%W %d') AS fecha_formateada, 
@@ -374,7 +373,7 @@ router.get('/subasta/:id', isAuthenticated, (req, res) => {
   }
 
   const now = moment(); // Obtiene la fecha y hora actuales
-  conexion.query(querySubasta, [subastaId], (error, resultadoSubasta) => {
+  conection.query(querySubasta, [subastaId], (error, resultadoSubasta) => {
     if (error) {
       console.error("Error al obtener datos de subasta", error);
       return res.status(500).send("Error al obtener datos de subasta");
@@ -388,20 +387,26 @@ router.get('/subasta/:id', isAuthenticated, (req, res) => {
     const fechaHoraSubasta = moment(subasta.fecha_hora_subasta);
 
     // Verifica si la subasta está en curso
-    const estaEnCurso = fechaHoraSubasta.isSameOrBefore(now) && now.isBefore(fechaHoraSubasta.clone().add(1, 'hour'));
+    let estaEnCurso = false;
+    if (now.isBetween(fechaHoraSubasta, fechaHoraSubasta.clone().add(5, 'minutes'), null, '[]')) {
+      // La subasta comienza dentro de los próximos 5 minutos o ha comenzado hace menos de 5 minutos
+      estaEnCurso = true;
+    } else if (now.isAfter(fechaHoraSubasta.clone().add(5, 'minutes'))) {
+      // Si ya pasaron los 5 minutos desde el inicio de la subasta, no está en curso
+      estaEnCurso = false;
+    }
 
-    // Traducimos el día al español
     const fechaFormateada = subasta.fecha_formateada;
     const [day, dayNumber] = fechaFormateada.split(' ');
     const fechaFormateadaEsp = `${translateDay(day)} ${dayNumber}`;
 
-    conexion.query(queryImagenes, [subastaId], (error, resultadoImagenes) => {
+    conection.query(queryImagenes, [subastaId], (error, resultadoImagenes) => {
       if (error) {
         console.error("Error al obtener imágenes de subasta", error);
         return res.status(500).send("Error al obtener imágenes de subasta");
       }
 
-      conexion.query(queryAnexos, [subastaId], (error, resultadoAnexos) => {
+      conection.query(queryAnexos, [subastaId], (error, resultadoAnexos) => {
         if (error) {
           console.error("Error al obtener anexos de subasta", error);
           return res.status(500).send("Error al obtener anexos de subasta");
@@ -409,10 +414,10 @@ router.get('/subasta/:id', isAuthenticated, (req, res) => {
 
         const datosSubasta = {
           ...subasta,
-          fecha_formateada: fechaFormateadaEsp, // Usamos la fecha traducida
+          fecha_formateada: fechaFormateadaEsp,
           imagenes: resultadoImagenes.map(img => img.imagen.toString('base64')),
           anexos: resultadoAnexos,
-          estaEnCurso // Información de si la subasta está en curso
+          estaEnCurso
         };
 
         res.render('subasta', {
@@ -426,12 +431,14 @@ router.get('/subasta/:id', isAuthenticated, (req, res) => {
 });
 
 
+
+
 //descargar el anexo
 router.get('/descargar-anexo/:id', (req, res) => {
   const anexoId = req.params.id;
 
   const query = 'SELECT anexo FROM anexos_propiedad WHERE id = ?';
-  conexion.query(query, [anexoId], (err, results) => {
+  conection.query(query, [anexoId], (err, results) => {
     if (err) {
       console.error('Error al obtener el anexo:', err);
       return res.status(500).send('Error al obtener el anexo');
@@ -460,7 +467,7 @@ router.get('/descargar-anexo/:id', (req, res) => {
   const subastaId = req.params.idSubasta;
 
   // Primero, marca la subasta como ganada en la base de datos
-  conexion.query(
+  conection.query(
     'UPDATE subastas SET estado = "ganada", id_ganador = ? WHERE id = ?',
     [usuarioId, subastaId],
     (error, results) => {
@@ -470,7 +477,7 @@ router.get('/descargar-anexo/:id', (req, res) => {
       }
 
       // Luego, resta una oportunidad al usuario que ganó
-      conexion.query(
+      conection.query(
         'UPDATE usuarios SET oportunidades = oportunidades - 1 WHERE id = ? AND oportunidades > 0',
         [usuarioId],
         (error, results) => {
@@ -496,7 +503,7 @@ router.get('/oportunidades/:id', (req, res) => {
   const usuarioId = req.params.id;
 
   // Consulta para obtener el número de oportunidades
-  conexion.query(
+  conection.query(
     'SELECT oportunidades FROM usuarios WHERE id = ?',
     [usuarioId],
     (error, results) => {
@@ -525,7 +532,7 @@ router.post("/like", (req, res) => {
   const { subasta_id } = req.body;
   const usuario_id = req.session.usuario.id;
 
-  conexion.beginTransaction((err) => {
+  conection.beginTransaction((err) => {
     if (err) {
       console.error("Error al iniciar la transacción:", err);
       return res.status(500).json({ success: false });
@@ -533,9 +540,9 @@ router.post("/like", (req, res) => {
 
     // Verificar si el usuario ya ha dado like a la subasta
     const checkLikeQuery = "SELECT * FROM likes WHERE user_id = ? AND subasta_id = ?";
-    conexion.query(checkLikeQuery, [usuario_id, subasta_id], (error, results) => {
+    conection.query(checkLikeQuery, [usuario_id, subasta_id], (error, results) => {
       if (error) {
-        return conexion.rollback(() => {
+        return conection.rollback(() => {
           console.error("Error al verificar el like:", error);
           return res.status(500).json({ success: false });
         });
@@ -544,26 +551,26 @@ router.post("/like", (req, res) => {
       if (results.length > 0) {
         // El usuario ya ha dado like, eliminar el like y decrementar el like_count
         const deleteLikeQuery = "DELETE FROM likes WHERE user_id = ? AND subasta_id = ?";
-        conexion.query(deleteLikeQuery, [usuario_id, subasta_id], (error) => {
+        conection.query(deleteLikeQuery, [usuario_id, subasta_id], (error) => {
           if (error) {
-            return conexion.rollback(() => {
+            return conection.rollback(() => {
               console.error("Error al eliminar el like:", error);
               return res.status(500).json({ success: false });
             });
           }
 
           const decrementLikeCountQuery = "UPDATE subastas SET like_count = GREATEST(like_count - 1, 0) WHERE id = ?";
-          conexion.query(decrementLikeCountQuery, [subasta_id], (error) => {
+          conection.query(decrementLikeCountQuery, [subasta_id], (error) => {
             if (error) {
-              return conexion.rollback(() => {
+              return conection.rollback(() => {
                 console.error("Error al decrementar el like_count:", error);
                 return res.status(500).json({ success: false });
               });
             }
 
-            conexion.commit((err) => {
+            conection.commit((err) => {
               if (err) {
-                return conexion.rollback(() => {
+                return conection.rollback(() => {
                   console.error("Error al hacer commit:", err);
                   return res.status(500).json({ success: false });
                 });
@@ -575,26 +582,26 @@ router.post("/like", (req, res) => {
       } else {
         // El usuario no ha dado like, agregar el like y incrementar el like_count
         const addLikeQuery = "INSERT INTO likes (user_id, subasta_id) VALUES (?, ?)";
-        conexion.query(addLikeQuery, [usuario_id, subasta_id], (error) => {
+        conection.query(addLikeQuery, [usuario_id, subasta_id], (error) => {
           if (error) {
-            return conexion.rollback(() => {
+            return conection.rollback(() => {
               console.error("Error al agregar el like:", error);
               return res.status(500).json({ success: false });
             });
           }
 
           const incrementLikeCountQuery = "UPDATE subastas SET like_count = like_count + 1 WHERE id = ?";
-          conexion.query(incrementLikeCountQuery, [subasta_id], (error) => {
+          conection.query(incrementLikeCountQuery, [subasta_id], (error) => {
             if (error) {
-              return conexion.rollback(() => {
+              return conection.rollback(() => {
                 console.error("Error al incrementar el like_count:", error);
                 return res.status(500).json({ success: false });
               });
             }
 
-            conexion.commit((err) => {
+            conection.commit((err) => {
               if (err) {
-                return conexion.rollback(() => {
+                return conection.rollback(() => {
                   console.error("Error al hacer commit:", err);
                   return res.status(500).json({ success: false });
                 });

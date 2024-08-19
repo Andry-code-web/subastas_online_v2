@@ -9,7 +9,7 @@ const path = require('path');
 require('dotenv').config();
 
 // Base de datos
-const conexion = require('./src/database/db');
+const { conection } = require('./src/database/db');
 const sessionStore = require('./src/database/sessionStore');
 
 const app = express();
@@ -70,7 +70,7 @@ io.on('connection', (socket) => {
 
         // Consultar el estado actual de la subasta desde la base de datos y restaurarlo si es necesario
         const query = "SELECT * FROM subastas WHERE id = ?";
-        conexion.query(query, [room], (error, results) => {
+        conection.query(query, [room], (error, results) => {
             if (error) {
                 console.error("Error al obtener estado de subasta:", error);
                 return;
@@ -109,7 +109,7 @@ io.on('connection', (socket) => {
     
         // Actualizar el estado de la subasta en la base de datos
         const updateQuery = "UPDATE subastas SET currentWinner = ?, currentBid = ? WHERE id = ?";
-        conexion.query(updateQuery, [data.user, data.bid, room], (error, results) => {
+        conection.query(updateQuery, [data.user, data.bid, room], (error, results) => {
             if (error) {
                 console.error("Error al actualizar el ganador de la subasta:", error);
                 return;
@@ -124,7 +124,7 @@ io.on('connection', (socket) => {
     
             // Marca la subasta como finalizada en la base de datos
             const updateQuery = "UPDATE subastas SET auctionEnded = true WHERE id = ?";
-            conexion.query(updateQuery, [room], (error, results) => {
+            conection.query(updateQuery, [room], (error, results) => {
                 if (error) {
                     console.error("Error al marcar la subasta como finalizada:", error);
                     return;
@@ -135,7 +135,7 @@ io.on('connection', (socket) => {
     
                 // Consulta para obtener el ID del usuario basado en su nombre de usuario
                 const getUserIdQuery = "SELECT id FROM usuarios WHERE usuario = ?";
-                conexion.query(getUserIdQuery, [username], (error, results) => {
+                conection.query(getUserIdQuery, [username], (error, results) => {
                     if (error) {
                         console.error('Error al obtener el ID del usuario:', error);
                         return;
@@ -146,7 +146,7 @@ io.on('connection', (socket) => {
     
                         // Actualizar oportunidades
                         const updateOpportunitiesQuery = "UPDATE usuarios SET oportunidades = oportunidades - 1 WHERE id = ? AND oportunidades > 0";
-                        conexion.query(updateOpportunitiesQuery, [userId], (error, results) => {
+                        conection.query(updateOpportunitiesQuery, [userId], (error, results) => {
                             if (error) {
                                 console.error('Error al actualizar oportunidades:', error);
                                 return;
@@ -158,7 +158,7 @@ io.on('connection', (socket) => {
     
                                 // Consultar el número de oportunidades restantes
                                 const getOpportunitiesQuery = "SELECT oportunidades FROM usuarios WHERE id = ?";
-                                conexion.query(getOpportunitiesQuery, [userId], (error, results) => {
+                                conection.query(getOpportunitiesQuery, [userId], (error, results) => {
                                     if (error) {
                                         console.error('Error al obtener el número de oportunidades restantes:', error);
                                         return;
@@ -206,7 +206,7 @@ io.on('connection', (socket) => {
         auctions[room].clientDisconnected = false; // Marcar al cliente como conectado
     });
 
-    // Verificar el estado de los latidos de corazón y manejar desconexiones
+    // Verificar el estado de los latidos de corazón y manejar desconectiones
     setInterval(() => {
         Object.keys(lastHeartbeat).forEach(room => {
             const timeSinceLastHeartbeat = Date.now() - lastHeartbeat[room];

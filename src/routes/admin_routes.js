@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const multer = require('multer');
 const path = require('path');
 const nodemailer = require('nodemailer');
-const connection = require("../database/db");
+const { conection } = require("../database/db");
 const moment = require('moment');
 
 const router = express.Router();
@@ -23,7 +23,7 @@ router.post("/loginAdminG", (req, res) => {
   const { correo, contraseña } = req.body;
 
   const query = "SELECT * FROM admingeneral WHERE correo_electronico = ?";
-  connection.query(query, [correo], (error, results) => {
+  conection.query(query, [correo], (error, results) => {
     if (error) {
       console.error("Error al buscar el administrador general:", error);
       return res.status(500).send("Error al iniciar sesión");
@@ -76,7 +76,7 @@ router.get("/adminG", (req, res) => {
 
   Promise.all([
     new Promise((resolve, reject) => {
-      connection.query(queryUsuarios, (error, resultadosUsuarios) => {
+      conection.query(queryUsuarios, (error, resultadosUsuarios) => {
         if (error) {
           console.error("Error al obtener los usuarios: ", error);
           reject(error);
@@ -86,7 +86,7 @@ router.get("/adminG", (req, res) => {
       });
     }),
     new Promise((resolve, reject) => {
-      connection.query(queryAdminVendedores, (error, resultadosAdminVendedores) => {
+      conection.query(queryAdminVendedores, (error, resultadosAdminVendedores) => {
         if (error) {
           console.error("Error al obtener los admin vendedores: ", error);
           reject(error);
@@ -103,7 +103,7 @@ router.get("/adminG", (req, res) => {
       });
     }),
     new Promise((resolve, reject) => {
-      connection.query(querySubastas, (error, resultadoSubastas) => {
+      conection.query(querySubastas, (error, resultadoSubastas) => {
         if (error) {
           console.error("Error al obtener los datos de subasta", error);
           reject(error);
@@ -149,7 +149,7 @@ router.post("/crear-admin-vendedor", async (req, res) => {
 
     const query = "INSERT INTO adminvendedor (id_admin_general, nombre_usuario, contraseña) VALUES (?, ?, ?)";
 
-    connection.query(query, [id_admin_general, nombre_usuario, hashedPassword], (error, results) => {
+    conection.query(query, [id_admin_general, nombre_usuario, hashedPassword], (error, results) => {
       if (error) {
         console.error("Error al crear el admin vendedor:", error);
         return res.status(500).send("Error al crear el admin vendedor");
@@ -167,7 +167,7 @@ router.get('/editarUsuario/:id', (req, res) => {
   const userId = req.params.id;
 
   const query = 'SELECT * FROM usuarios WHERE id = ?';
-  connection.query(query, [userId], (error, result) => {
+  conection.query(query, [userId], (error, result) => {
     if (error) {
       console.error("Error al obtener el usuario para editar: ", error);
       return res.status(500).send("Error el usuario para editar");
@@ -188,7 +188,7 @@ router.post('/editarUsuario/:id', (req, res) => {
   const { nombre, apellidos, dni, correo_electronico } = req.body;
 
   const query = 'UPDATE usuarios SET nombre = ?, apellidos = ?, dni = ?, correo_electronico = ? WHERE id = ?';
-  connection.query(query, [nombre, apellidos, dni, correo_electronico, userId], (error, result) => {
+  conection.query(query, [nombre, apellidos, dni, correo_electronico, userId], (error, result) => {
     if (error) {
       console.error('Error al actualizar el usuario', error);
       return res.status(500).send('Error al actualizar el usuario');
@@ -203,7 +203,7 @@ router.delete('/eliminarUsuario/:id', (req, res) => {
 
   // Lógica para eliminar usuario en la base de datos
   const query = 'DELETE FROM usuarios WHERE id = ?';
-  connection.query(query, [userId], (error, result) => {
+  conection.query(query, [userId], (error, result) => {
     if (error) {
       console.error('Error al eliminar el usuario', error);
       return res.status(500).send('Error al eliminar el usuario');
@@ -217,7 +217,7 @@ router.delete('/eliminarAdminVendedor/:id', (req, res) => {
   const adminVendedorId = req.params.id;
 
   const query = 'DELETE FROM adminvendedor WHERE id = ?';
-  connection.query(query, [adminVendedorId], (error, result) => {
+  conection.query(query, [adminVendedorId], (error, result) => {
     if (error) {
       console.error('Error al eliminar el adminVendedor', error);
       return res.status(500).send('Error al eliminar el adminVendedor');
@@ -231,7 +231,7 @@ router.post('/activarOportunidades/:id', (req, res) => {
   const usuarioId = req.params.id;
 
   // Consulta para activar oportunidades
-  connection.query(
+  conection.query(
       'UPDATE usuarios SET oportunidades = oportunidades + 3 WHERE id = ?',
       [usuarioId],
       (error, results) => {
@@ -273,7 +273,7 @@ router.post('/loginAdminV', (req, res) => {
   }
 
   const query = "SELECT * FROM adminvendedor WHERE nombre_usuario = ?";
-  connection.query(query, [usuario], async (error, results) => {
+  conection.query(query, [usuario], async (error, results) => {
     if (error) {
       console.error("Error al buscar el admin vendedor:", error);
       return res.status(500).json({ success: false, message: "Error al iniciar sesión" });
@@ -340,7 +340,7 @@ router.get("/adminV", isAuthenticatedAdminV, (req, res) => {
   const adminVendedorId = req.session.adminVendedorId; // ID del admin vendedor que inició sesión
 
   const query = 'SELECT * FROM subastas WHERE id_admin_vendedor = ?';
-  connection.query(query, [adminVendedorId], (error, results) => {
+  conection.query(query, [adminVendedorId], (error, results) => {
     if (error) {
       console.error("Error al obtener los datos de subasta:", error);
       return res.status(500).send("Error al obtener los datos de subasta");
@@ -375,7 +375,7 @@ router.post("/subir-vehiculo", upload.fields([{ name: 'images', maxCount: 4 }, {
                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   const values = [marca, modelo, descripcion, categoria, anio, precio_base, placa, tarjeta_propiedad, llave, ubicacion, estado, importante, fecha_subasta, hora_subasta, id_admin_vendedor];
 
-  connection.query(insertQuery, values, (err, result) => {
+  conection.query(insertQuery, values, (err, result) => {
     if (err) {
       console.error("Error al insertar vehículo:", err);
       return res.status(500).json({ success: false, message: "Error al insertar vehículo" });
@@ -387,7 +387,7 @@ router.post("/subir-vehiculo", upload.fields([{ name: 'images', maxCount: 4 }, {
       const insertImagenesQuery = 'INSERT INTO imagenes_propiedad (id_subasta, imagen) VALUES ?';
       const imagenesData = imagenes.map(img => [id_subasta, img.buffer]);
 
-      connection.query(insertImagenesQuery, [imagenesData], (err) => {
+      conection.query(insertImagenesQuery, [imagenesData], (err) => {
         if (err) {
           console.error("Error al insertar imágenes:", err);
           return res.status(500).json({ success: false, message: "Error al insertar imágenes" });
@@ -397,7 +397,7 @@ router.post("/subir-vehiculo", upload.fields([{ name: 'images', maxCount: 4 }, {
           const insertAnexosQuery = 'INSERT INTO anexos_propiedad (id_subasta, anexo) VALUES ?';
           const anexosData = anexos.map(anexo => [id_subasta, anexo.buffer]);
 
-          connection.query(insertAnexosQuery, [anexosData], (err) => {
+          conection.query(insertAnexosQuery, [anexosData], (err) => {
             if (err) {
               console.error("Error al insertar anexos:", err);
               return res.status(500).json({ success: false, message: "Error al insertar anexos" });
@@ -414,7 +414,7 @@ router.post("/subir-vehiculo", upload.fields([{ name: 'images', maxCount: 4 }, {
         const insertAnexosQuery = 'INSERT INTO anexos_propiedad (id_subasta, anexo) VALUES ?';
         const anexosData = anexos.map(anexo => [id_subasta, anexo.buffer]);
 
-        connection.query(insertAnexosQuery, [anexosData], (err) => {
+        conection.query(insertAnexosQuery, [anexosData], (err) => {
           if (err) {
             console.error("Error al insertar anexos:", err);
             return res.status(500).json({ success: false, message: "Error al insertar anexos" });
@@ -463,7 +463,7 @@ router.post('/recuperar', (req, res) => {
   const { email } = req.body;
 
   const query = "SELECT * FROM admingeneral WHERE correo_electronico = ?";
-  connection.query(query, [email], (error, results) => {
+  conection.query(query, [email], (error, results) => {
     if (error) {
       console.error("Error al buscar el administrador general:", error);
       return res.status(500).send("Error al buscar el administrador general");
@@ -474,7 +474,7 @@ router.post('/recuperar', (req, res) => {
 
     const verificationCode = generateVerificationCode();
     const updateQuery = "UPDATE admingeneral SET verification_code = ? WHERE correo_electronico = ?";
-    connection.query(updateQuery, [verificationCode, email], (error) => {
+    conection.query(updateQuery, [verificationCode, email], (error) => {
       if (error) {
         console.error("Error al actualizar el código de verificación:", error);
         return res.status(500).send("Error al actualizar el código de verificación");
@@ -514,7 +514,7 @@ router.post('/validarCodigo', (req, res) => {
   const { email, code } = req.body;
 
   const query = "SELECT * FROM admingeneral WHERE correo_electronico = ? AND verification_code = ?";
-  connection.query(query, [email, code], (error, results) => {
+  conection.query(query, [email, code], (error, results) => {
     if (error) {
       console.error("Error al validar el código:", error);
       return res.status(500).send("Error al validar el código");
@@ -531,7 +531,7 @@ router.post('/cambiarContra', (req, res) => {
   const { email, newPassword } = req.body;
 
   const updateQuery = "UPDATE admingeneral SET contraseña = ? WHERE correo_electronico = ?";
-  connection.query(updateQuery, [newPassword, email], (error) => {
+  conection.query(updateQuery, [newPassword, email], (error) => {
     if (error) {
       console.error("Error al actualizar la contraseña:", error);
       return res.status(500).send("Error al actualizar la contraseña");

@@ -20,6 +20,8 @@ const options = {
     }
 };
 
+
+
 const sessionStore = new MySQLStore(options);
 
 module.exports = sessionStore;
