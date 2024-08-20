@@ -24,11 +24,16 @@ router.get("/", (req, res) => {
       GROUP BY subasta_id
     ) l ON s.id = l.subasta_id
     ORDER BY like_count DESC, s.id ASC
-    LIMIT 15  -- Obtén más de 5 para categorizar después
+    LIMIT 15;
   `;
 
   const queryImagenes = "SELECT id_subasta, imagen FROM imagenes_propiedad";
-  const queryComentarios = "SELECT * FROM comentarios ORDER BY id DESC";
+  
+  const queryConteoCategorias = `
+    SELECT categoria, COUNT(*) AS cantidad
+    FROM subastas
+    GROUP BY categoria;
+  `;
 
   conection.query(querySubastas, (error, subastas) => {
     if (error) {
@@ -42,10 +47,10 @@ router.get("/", (req, res) => {
         return res.status(500).send("Error al obtener imágenes de subasta");
       }
 
-      conection.query(queryComentarios, (error, comentarios) => {
+      conection.query(queryConteoCategorias, (error, conteoCategorias) => {
         if (error) {
-          console.error("Error al obtener comentarios de subasta", error);
-          return res.status(500).send("Error al obtener comentarios de subasta");
+          console.error("Error al obtener el conteo de categorías", error);
+          return res.status(500).send("Error al obtener el conteo de categorías");
         }
 
         // Combina las imágenes con las subastas
@@ -63,18 +68,27 @@ router.get("/", (req, res) => {
         const camionetas = subastasConImagenes.filter(subasta => subasta.categoria === 'camioneta');
         const autos = subastasConImagenes.filter(subasta => subasta.categoria === 'auto');
         const motos = subastasConImagenes.filter(subasta => subasta.categoria === 'moto');
+        const piezas = subastasConImagenes.filter(subasta => subasta.categoria === 'piezas');
+
+        // Obtener las cantidades de subastas por categoría
+        const cantidades = conteoCategorias.reduce((acc, categoria) => {
+          acc[categoria.categoria] = categoria.cantidad;
+          return acc;
+        }, {});
 
         res.render("home", {
           usuario: req.session.usuario,
           camionetas,
           autos,
           motos,
-          comentarios
+          piezas,
+          cantidades // Objeto con la cantidad de subastas por categoría
         });
       });
     });
   });
 });
+
 
 
 router.post("/", (req, res) => {

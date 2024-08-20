@@ -35,11 +35,11 @@ header {
   z-index: 100;
 }
 
-.logo{
+.logo {
   width: 7%;
 }
 
-.logo img{
+.logo img {
   width: 100%;
 }
 
@@ -50,17 +50,17 @@ header {
   padding: 0;
 }
 
-.ingresar{
+.ingresar {
   padding: .1rem .6rem .2rem .6rem !important;
   background-color: #B20000;
   border-radius: 5px;
 }
 
-.ingresar:hover{
+.ingresar:hover {
   background-color: #d30000;
 }
 
-.ingresar span i{
+.ingresar span i {
   font-size: 1.5rem;
   font-weight: 600;
 }
@@ -92,7 +92,7 @@ header nav a:hover {
   transform: scale(1.1);
 }
 
-.session{
+.session {
   padding: .1rem .6rem .2rem .6rem !important;
   background-color: #B20000;
   border-radius: 5px;
@@ -135,15 +135,15 @@ header .session p .btn_menu i {
     transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.perfil_user{
+.perfil_user {
   color: #fff;
 }
 
-.menu_desplegable div ul{
+.menu_desplegable div ul {
   list-style: none;
 }
 
-.menu_desplegable div ul li a{
+.menu_desplegable div ul li a {
   text-decoration: none;
   color: #fff;
   font-family: var(--font--banner--bool);
@@ -151,7 +151,7 @@ header .session p .btn_menu i {
   transition: ease-in .3s;
 }
 
-.menu_desplegable div ul li a:hover{
+.menu_desplegable div ul li a:hover {
   font-size: 1.1rem;
   border-bottom: 2px solid #fff;
 }
@@ -173,7 +173,7 @@ header .session p .btn_menu i {
 
 /* BANNER */
 .banner {
-/*   position: relative; */
+  /*   position: relative; */
   width: 100%;
   height: auto;
   display: flex;
@@ -182,17 +182,17 @@ header .session p .btn_menu i {
   margin-top: 6rem;
 }
 
-.carousel{
+.carousel {
   width: 100%;
 }
 
 .carousel-control-prev,
-.carousel-control-next{
+.carousel-control-next {
   width: 8% !important;
 }
 
 .carousel-icon i,
-.carousel-next-icon i{
+.carousel-next-icon i {
   font-size: 3rem;
   color: #fff;
 }
@@ -259,27 +259,27 @@ header .session p .btn_menu i {
 } */
 
 /* CATEGORIAS */
-.categoria{
+.categoria {
   width: 100%;
   height: auto;
   padding: 1rem .5rem 1rem 2rem;
 }
 
-.categoria h2{
+.categoria h2 {
   font-family: var(--font--banner--semi);
   font-size: 1.2rem;
   font-weight: 500;
   color: #535353;
 }
 
-.categorias{
+.categorias {
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
   margin-left: 1rem;
 }
 
-.content_img{
+.content_img {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -291,36 +291,36 @@ header .session p .btn_menu i {
   font-weight: 400;
 }
 
-.iconos_cuentas{
+.iconos_cuentas {
   width: 70px;
   height: auto;
   position: relative;
 }
 
-.iconos_cuentas .icono img{
-  width: 90%;
+.iconos_cuentas .icono img {
+  width: 70%;
   -webkit-filter: grayscale(0.5);
   filter: opacity(50%);
 }
 
-.piezas img{
+.piezas img {
   width: 70% !important;
 }
 
-.iconos_cuentas .contador{
+.iconos_cuentas .contador {
   padding: .5px 10px .05px 10px;
   background-color: #f5f5f5;
   position: absolute;
-  top: 10px;
-  right: -10px;
+  top: 8px;
+  right: 7px;
   border-radius: 5px;
   color: #000;
   font-family: var(--font--banner--semi) !important;
   font-weight: 600 !important;
-  font-size: 1rem !important;
+  font-size: .7rem !important;
 }
 
-.piesas{
+.piesas {
   top: 5px !important;
   display: flex;
   justify-content: center;
@@ -456,6 +456,17 @@ header .session p .btn_menu i {
   font-family: var(--font--banner--semi);
   color: var(--color--sub);
   font-weight: 500;
+  position: relative;
+}
+
+.subastas h2::before{
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 3%;
+  height: 1px;
+  background-color: #a29060;
 }
 
 .content_card {
@@ -468,7 +479,7 @@ header .session p .btn_menu i {
 }
 
 
-.verMas{
+.verMas {
   width: 100%;
   text-align: center;
   margin-top: 5rem;
@@ -476,7 +487,7 @@ header .session p .btn_menu i {
 
 
 
-/* From Uiverse.io by adamgiebl */ 
+/* From Uiverse.io by adamgiebl */
 .cssbuttons-io-button {
   background: #f07070;
   color: white;
@@ -601,7 +612,7 @@ svg {
 }
 
 
-.informacion .info{
+.informacion .info {
   margin-bottom: 0;
 }
 

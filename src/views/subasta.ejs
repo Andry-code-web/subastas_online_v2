@@ -387,6 +387,28 @@
           startProgressBar();
         });
 
+        let generatedName;
+
+        if (!generatedName) {
+          function newClienteName(data) {
+            // Generar un nuevo nombre para el cliente
+            const dbNameUser = data.user;
+            const userArray = Array.from(dbNameUser);
+            const NumUser = userArray.length;
+
+            for (let i = 0; i < NumUser; i++) {
+              const arrayNumeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+              userArray[i] = arrayNumeros[Math.floor(Math.random() * arrayNumeros.length)];
+            }
+
+            userArray.push(NumUser);
+
+            const nuevoNombre = userArray.join('');
+            generatedName = nuevoNombre; // Ahora `generatedName` es accesible fuera de la función.
+          }
+        }
+
+
         socket.on('newBid', function (data) {
           if (auctionEnded) return;
 
@@ -394,24 +416,10 @@
           minBid = currentBid;
 
           if (!generatedName) {
-            function newClienteName(data) {
-              const dbNameUser = data.user;
-              const userArray = Array.from(dbNameUser);
-              const NumUser = userArray.length;
-
-              for (let i = 0; i < NumUser; i++) {
-                const arrayNumeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-                userArray[i] = arrayNumeros[Math.floor(Math.random() * arrayNumeros.length)];
-              }
-
-              userArray.push(NumUser);
-
-              const nuevoNombre = userArray.join('');
-              const generatedName = nuevoNombre;
-            }
+            newClienteName(data); // Aquí llamas a la función para generar el nombre.
           }
 
-          const user = data.user;
+          const user = generatedName || data.user; // Usar `generatedName` si está definido, de lo contrario usar el nombre original.
           const bid = data.bid;
 
           const message = `<b>${user}:</b> $${formatNumber(bid)}`;
@@ -421,6 +429,7 @@
           messageInput.value = formatNumber(bid + 100);
           startProgressBar();
         });
+
 
         socket.on('endAuction', function () {
           auctionEnded = true;
