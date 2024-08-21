@@ -355,6 +355,7 @@ router.get("/catalogo", (req, res) => {
 });
 
 // Subastas
+// Ruta para obtener los datos de la subasta
 router.get('/subasta/:id', isAuthenticated, (req, res) => {
   const subastaId = req.params.id;
 
@@ -367,7 +368,7 @@ router.get('/subasta/:id', isAuthenticated, (req, res) => {
     WHERE id = ?`;
 
   const queryImagenes = 'SELECT imagen FROM imagenes_propiedad WHERE id_subasta = ?';
-  const queryAnexos = 'SELECT id FROM anexos_propiedad WHERE id_subasta = ?';
+  const queryAnexos = 'SELECT id, anexo FROM anexos_propiedad WHERE id_subasta = ?';
 
   function formatNumber(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -426,17 +427,13 @@ router.get('/subasta/:id', isAuthenticated, (req, res) => {
           return res.status(500).send("Error al obtener anexos de subasta");
         }
 
-        const datosSubasta = {
-          ...subasta,
-          fecha_formateada: fechaFormateadaEsp,
-          imagenes: resultadoImagenes.map(img => img.imagen.toString('base64')),
-          anexos: resultadoAnexos,
-          estaEnCurso
-        };
-
-        res.render('subasta', {
-          subasta: datosSubasta,
+        res.render("subasta", {
           usuario: req.session.usuario,
+          subasta,
+          imagenes: resultadoImagenes.map(img => img.imagen.toString('base64')), // Asegúrate de pasar 'imagenes' correctamente
+          anexos: resultadoAnexos.map(anexo => ({ id: anexo.id, nombre: `Anexo ${anexo.id}` })), // Mapa solo el ID y nombre del anexo
+          estaEnCurso,
+          fechaFormateadaEsp,
           formatNumber
         });
       });
@@ -444,13 +441,11 @@ router.get('/subasta/:id', isAuthenticated, (req, res) => {
   });
 });
 
-
-
-
-//descargar el anexo
-router.get('/descargar-anexo/:id', (req, res) => {
+// Ruta para descargar un anexo
+router.get('/descargar-anexo/:id', isAuthenticated, (req, res) => {
   const anexoId = req.params.id;
 
+  // Consulta para recuperar el anexo
   const query = 'SELECT anexo FROM anexos_propiedad WHERE id = ?';
   conection.query(query, [anexoId], (err, results) => {
     if (err) {
@@ -461,16 +456,19 @@ router.get('/descargar-anexo/:id', (req, res) => {
     if (results.length > 0) {
       const { anexo } = results[0];
 
-      // Enviar el archivo para descarga con un nombre predeterminado
-      res.setHeader('Content-Disposition', 'attachment; filename=archivo.pdf');
-      res.setHeader('Content-Type', 'application/pdf');
-      res.send(anexo);
+      if (anexo) {
+        // Enviar el archivo para descarga
+        res.setHeader('Content-Disposition', 'attachment; filename=archivo.pdf');
+        res.setHeader('Content-Type', 'application/pdf');
+        res.send(anexo);
+      } else {
+        res.status(404).send('Anexo no encontrado');
+      }
     } else {
       res.status(404).send('Anexo no encontrado');
     }
   });
 });
-
 
 
 
@@ -546,85 +544,102 @@ router.post("/like", (req, res) => {
   const { subasta_id } = req.body;
   const usuario_id = req.session.usuario.id;
 
-  conection.beginTransaction((err) => {
+  conection.getConnection((err, connection) => {
     if (err) {
-      console.error("Error al iniciar la transacción:", err);
+      console.error("Error al obtener la conexión:", err);
       return res.status(500).json({ success: false });
     }
 
-    // Verificar si el usuario ya ha dado like a la subasta
-    const checkLikeQuery = "SELECT * FROM likes WHERE user_id = ? AND subasta_id = ?";
-    conection.query(checkLikeQuery, [usuario_id, subasta_id], (error, results) => {
-      if (error) {
-        return conection.rollback(() => {
-          console.error("Error al verificar el like:", error);
-          return res.status(500).json({ success: false });
-        });
+    connection.beginTransaction((err) => {
+      if (err) {
+        console.error("Error al iniciar la transacción:", err);
+        connection.release();
+        return res.status(500).json({ success: false });
       }
 
-      if (results.length > 0) {
-        // El usuario ya ha dado like, eliminar el like y decrementar el like_count
-        const deleteLikeQuery = "DELETE FROM likes WHERE user_id = ? AND subasta_id = ?";
-        conection.query(deleteLikeQuery, [usuario_id, subasta_id], (error) => {
-          if (error) {
-            return conection.rollback(() => {
-              console.error("Error al eliminar el like:", error);
-              return res.status(500).json({ success: false });
-            });
-          }
+      // Verificar si el usuario ya ha dado like a la subasta
+      const checkLikeQuery = "SELECT * FROM likes WHERE user_id = ? AND subasta_id = ?";
+      connection.query(checkLikeQuery, [usuario_id, subasta_id], (error, results) => {
+        if (error) {
+          return connection.rollback(() => {
+            console.error("Error al verificar el like:", error);
+            connection.release();
+            return res.status(500).json({ success: false });
+          });
+        }
 
-          const decrementLikeCountQuery = "UPDATE subastas SET like_count = GREATEST(like_count - 1, 0) WHERE id = ?";
-          conection.query(decrementLikeCountQuery, [subasta_id], (error) => {
+        if (results.length > 0) {
+          // El usuario ya ha dado like, eliminar el like y decrementar el like_count
+          const deleteLikeQuery = "DELETE FROM likes WHERE user_id = ? AND subasta_id = ?";
+          connection.query(deleteLikeQuery, [usuario_id, subasta_id], (error) => {
             if (error) {
-              return conection.rollback(() => {
-                console.error("Error al decrementar el like_count:", error);
+              return connection.rollback(() => {
+                console.error("Error al eliminar el like:", error);
+                connection.release();
                 return res.status(500).json({ success: false });
               });
             }
 
-            conection.commit((err) => {
-              if (err) {
-                return conection.rollback(() => {
-                  console.error("Error al hacer commit:", err);
+            const decrementLikeCountQuery = "UPDATE subastas SET like_count = GREATEST(like_count - 1, 0) WHERE id = ?";
+            connection.query(decrementLikeCountQuery, [subasta_id], (error) => {
+              if (error) {
+                return connection.rollback(() => {
+                  console.error("Error al decrementar el like_count:", error);
+                  connection.release();
                   return res.status(500).json({ success: false });
                 });
               }
-              res.json({ success: true });
+
+              connection.commit((err) => {
+                if (err) {
+                  return connection.rollback(() => {
+                    console.error("Error al hacer commit:", err);
+                    connection.release();
+                    return res.status(500).json({ success: false });
+                  });
+                }
+                connection.release(); // Libera la conexión de vuelta al pool
+                res.json({ success: true });
+              });
             });
           });
-        });
-      } else {
-        // El usuario no ha dado like, agregar el like y incrementar el like_count
-        const addLikeQuery = "INSERT INTO likes (user_id, subasta_id) VALUES (?, ?)";
-        conection.query(addLikeQuery, [usuario_id, subasta_id], (error) => {
-          if (error) {
-            return conection.rollback(() => {
-              console.error("Error al agregar el like:", error);
-              return res.status(500).json({ success: false });
-            });
-          }
-
-          const incrementLikeCountQuery = "UPDATE subastas SET like_count = like_count + 1 WHERE id = ?";
-          conection.query(incrementLikeCountQuery, [subasta_id], (error) => {
+        } else {
+          // El usuario no ha dado like, agregar el like y incrementar el like_count
+          const addLikeQuery = "INSERT INTO likes (user_id, subasta_id) VALUES (?, ?)";
+          connection.query(addLikeQuery, [usuario_id, subasta_id], (error) => {
             if (error) {
-              return conection.rollback(() => {
-                console.error("Error al incrementar el like_count:", error);
+              return connection.rollback(() => {
+                console.error("Error al agregar el like:", error);
+                connection.release();
                 return res.status(500).json({ success: false });
               });
             }
 
-            conection.commit((err) => {
-              if (err) {
-                return conection.rollback(() => {
-                  console.error("Error al hacer commit:", err);
+            const incrementLikeCountQuery = "UPDATE subastas SET like_count = like_count + 1 WHERE id = ?";
+            connection.query(incrementLikeCountQuery, [subasta_id], (error) => {
+              if (error) {
+                return connection.rollback(() => {
+                  console.error("Error al incrementar el like_count:", error);
+                  connection.release();
                   return res.status(500).json({ success: false });
                 });
               }
-              res.json({ success: true });
+
+              connection.commit((err) => {
+                if (err) {
+                  return connection.rollback(() => {
+                    console.error("Error al hacer commit:", err);
+                    connection.release();
+                    return res.status(500).json({ success: false });
+                  });
+                }
+                connection.release(); // Libera la conexión de vuelta al pool
+                res.json({ success: true });
+              });
             });
           });
-        });
-      }
+        }
+      });
     });
   });
 });

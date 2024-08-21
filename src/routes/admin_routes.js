@@ -360,7 +360,7 @@ function calcularFechaProrroga(minutos) {
   return moment().add(minutos, 'minutes').format('YYYY-MM-DD HH:mm:ss');
 }
 
-router.post("/subir-vehiculo", upload.fields([{ name: 'images', maxCount: 4 }, { name: 'anexos', maxCount: 5 }]), (req, res) => {
+router.post("/subir-vehiculo", upload.fields([{ name: 'images', maxCount: 10 }, { name: 'anexos', maxCount: 5 }]), (req, res) => {
   const { marca, modelo, descripcion, categoria, anio, precio_base, placa, tarjeta_propiedad, llave, ubicacion, estado, importante, fecha_subasta, hora_subasta } = req.body;
   const imagenes = req.files['images'];
   const anexos = req.files['anexos'];

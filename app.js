@@ -55,37 +55,25 @@ io.on('connection', (socket) => {
     console.log('Nuevo cliente conectado');
 
     socket.on('joinRoom', (room) => {
-        socket.join(room);
-        console.log(`Cliente unido a la sala: ${room}`);
-
-        // Inicializar el estado de la subasta si no existe en la memoria
-        if (!auctions[room]) {
-            auctions[room] = {
-                auctionEnded: false,
-                currentWinner: null,
-                clientDisconnected: false,
-                winnerNotified: false // Controlar si el ganador ha sido notificado
-            };
-        }
-
-        // Consultar el estado actual de la subasta desde la base de datos y restaurarlo si es necesario
-        const query = "SELECT * FROM subastas WHERE id = ?";
+        const query = "SELECT auctionEnded, currentWinner FROM subastas WHERE id = ?";
         conection.query(query, [room], (error, results) => {
             if (error) {
-                console.error("Error al obtener estado de subasta:", error);
+                console.error("Error al obtener el estado de la subasta:", error);
                 return;
             }
-            if (results.length > 0) {
-                auctions[room].auctionEnded = results[0].auctionEnded;
-                auctions[room].currentWinner = results[0].currentWinner;
 
-                // Notificar al cliente sobre el estado de la subasta
-                if (auctions[room].auctionEnded) {
-                    socket.emit('auctionEnded', { winner: auctions[room].currentWinner });
+            if (results.length > 0) {
+                const auctionEnded = results[0].auctionEnded;
+                const currentWinner = results[0].currentWinner;
+
+                if (auctionEnded && currentWinner) {
+                    // Emitir evento endAuction para el cliente que acaba de unirse
+                    socket.emit('endAuction', { winner: currentWinner });
+                    console.log(`Cliente se unió a una subasta ya terminada en la sala ${room}`);
+                } else {
+                    socket.join(room);
+                    console.log(`Cliente unido a la sala: ${room}`);
                 }
-            } else {
-                // Manejar el caso cuando no se encuentra la subasta en la base de datos
-                console.error("No se encontró la subasta:", room);
             }
         });
     });

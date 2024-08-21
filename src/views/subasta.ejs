@@ -86,17 +86,26 @@
       <div id="carouselExample<%= subasta.id %>" class="carousel slide slider">
         <div class="max-w-4xl mx-auto rounded-lg overflow-hidden content_galeria">
           <div id="imagen_principal" class="imgen_principal">
-            <img class="img_principal rounded-lg" src="data:image/jpeg;base64, <%= subasta.imagenes[0] %>" alt="">
+            <% if (imagenes.length> 0) { %>
+              <img class="img_principal rounded-lg" src="data:image/jpeg;base64,<%= imagenes[0] %>" alt="">
+              <% } else { %>
+                <img class="img_principal rounded-lg" src="path/to/default-image.jpg" alt="Imagen no disponible">
+                <% } %>
           </div>
           <div class="galeria scroll-1">
-            <% subasta.imagenes.forEach((imagen, index)=> { %>
-              <div class="img_wrapper">
-                <img class="imgs rounded-lg" src="data:image/jpeg;base64, <%= imagen %>" alt="">
-              </div>
-              <% }); %>
+            <% if (imagenes.length> 0) { %>
+              <% imagenes.forEach((imagen, index)=> { %>
+                <div class="img_wrapper">
+                  <img class="imgs rounded-lg" src="data:image/jpeg;base64,<%= imagen %>" alt="">
+                </div>
+                <% }); %>
+                  <% } else { %>
+                    <p>No hay imágenes disponibles.</p>
+                    <% } %>
           </div>
         </div>
       </div>
+
 
       <div class="property-details-content">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -197,12 +206,17 @@
           <!-- ANEXOS -->
           <div class="tab-pane fade contet_pdf" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab"
             tabindex="0">
-            <% subasta.anexos.forEach(anexo=> { %>
-              <a href="/descargar-anexo/<%= anexo.id %>" download class="archivo_pdf">
-                <i class="bi bi-file-pdf-fill"></i> Anexos
-              </a><br>
-              <% }) %>
+            <% if (subasta.anexos && subasta.anexos.length> 0) { %>
+              <% subasta.anexos.forEach(anexo=> { %>
+                <a href="/descargar-anexo/<%= anexo.id %>" download class="archivo_pdf">
+                  <i class="bi bi-file-pdf-fill"></i> Anexos
+                </a><br>
+                <% }) %>
+                  <% } else { %>
+                    <p>No hay anexos disponibles.</p>
+                    <% } %>
           </div>
+
         </div>
       </div>
     </div>
@@ -434,11 +448,18 @@
         socket.on('endAuction', function () {
           auctionEnded = true;
           auctionInProgress = false;
+
           Swal.fire({
             title: '¡Subasta finalizada!',
-            text: `Ganador: ${'<%= usuario.nombre_apellidos %>'}`,
             icon: 'success',
+            allowOutsideClick: false, // No permitir cerrar con un clic fuera del alert
+            confirmButtonText: 'Ir al catálogo', // Texto del botón
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.href = '/catalogo'; // Redirigir al catálogo cuando se haga clic en el botón
+            }
           });
+
           disableButtons();
         });
 
