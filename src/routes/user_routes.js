@@ -426,17 +426,18 @@ router.get('/subasta/:id', isAuthenticated, (req, res) => {
           console.error("Error al obtener anexos de subasta", error);
           return res.status(500).send("Error al obtener anexos de subasta");
         }
-
+      
         res.render("subasta", {
           usuario: req.session.usuario,
           subasta,
-          imagenes: resultadoImagenes.map(img => img.imagen.toString('base64')), // Asegúrate de pasar 'imagenes' correctamente
-          anexos: resultadoAnexos.map(anexo => ({ id: anexo.id, nombre: `Anexo ${anexo.id}` })), // Mapa solo el ID y nombre del anexo
+          imagenes: resultadoImagenes.map(img => img.imagen.toString('base64')),
+          anexos: resultadoAnexos.map(anexo => ({ id: anexo.id, url: anexo.anexo })), // Mapea ID y URL del anexo
           estaEnCurso,
           fechaFormateadaEsp,
           formatNumber
         });
       });
+      
     });
   });
 });
@@ -457,10 +458,14 @@ router.get('/descargar-anexo/:id', isAuthenticated, (req, res) => {
       const { anexo } = results[0];
 
       if (anexo) {
-        // Enviar el archivo para descarga
-        res.setHeader('Content-Disposition', 'attachment; filename=archivo.pdf');
-        res.setHeader('Content-Type', 'application/pdf');
-        res.send(anexo);
+        // Usa res.download para descargar el archivo
+        const filePath = path.join(__dirname, 'public', anexo); // Asegúrate de ajustar el path según tu estructura
+        res.download(filePath, (err) => {
+          if (err) {
+            console.error('Error al descargar el anexo:', err);
+            res.status(500).send('Error al descargar el anexo');
+          }
+        });
       } else {
         res.status(404).send('Anexo no encontrado');
       }
@@ -469,6 +474,7 @@ router.get('/descargar-anexo/:id', isAuthenticated, (req, res) => {
     }
   });
 });
+
 
 
 

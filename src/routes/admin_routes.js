@@ -360,10 +360,9 @@ function calcularFechaProrroga(minutos) {
   return moment().add(minutos, 'minutes').format('YYYY-MM-DD HH:mm:ss');
 }
 
-router.post("/subir-vehiculo", upload.fields([{ name: 'images', maxCount: 10 }, { name: 'anexos', maxCount: 5 }]), (req, res) => {
-  const { marca, modelo, descripcion, categoria, anio, precio_base, placa, tarjeta_propiedad, llave, ubicacion, estado, importante, fecha_subasta, hora_subasta } = req.body;
+router.post("/subir-vehiculo", upload.fields([{ name: 'images', maxCount: 10 }]), (req, res) => {
+  const { marca, modelo, descripcion, categoria, anio, precio_base, placa, tarjeta_propiedad, llave, ubicacion, estado, importante, fecha_subasta, hora_subasta, anexos } = req.body;
   const imagenes = req.files['images'];
-  const anexos = req.files['anexos'];
 
   const id_admin_vendedor = req.session.adminVendedorId;
 
@@ -392,42 +391,26 @@ router.post("/subir-vehiculo", upload.fields([{ name: 'images', maxCount: 10 }, 
           console.error("Error al insertar imágenes:", err);
           return res.status(500).json({ success: false, message: "Error al insertar imágenes" });
         }
+      });
+    }
 
-        if (anexos && anexos.length > 0) {
-          const insertAnexosQuery = 'INSERT INTO anexos_propiedad (id_subasta, anexo) VALUES ?';
-          const anexosData = anexos.map(anexo => [id_subasta, anexo.buffer]);
+    if (anexos) {
+      const anexosArray = anexos.split(','); // Asume que los URLs de anexos están separados por comas
+      const insertAnexosQuery = 'INSERT INTO anexos_propiedad (id_subasta, anexo) VALUES ?';
+      const anexosData = anexosArray.map(anexoUrl => [id_subasta, anexoUrl.trim()]);
 
-          conection.query(insertAnexosQuery, [anexosData], (err) => {
-            if (err) {
-              console.error("Error al insertar anexos:", err);
-              return res.status(500).json({ success: false, message: "Error al insertar anexos" });
-            }
-
-            res.json({ success: true, message: "Vehículo, imágenes y anexos subidos correctamente" });
-          });
-        } else {
-          res.json({ success: true, message: "Vehículo e imágenes subidos correctamente (sin anexos)" });
+      conection.query(insertAnexosQuery, [anexosData], (err) => {
+        if (err) {
+          console.error("Error al insertar anexos:", err);
+          return res.status(500).json({ success: false, message: "Error al insertar anexos" });
         }
       });
-    } else {
-      if (anexos && anexos.length > 0) {
-        const insertAnexosQuery = 'INSERT INTO anexos_propiedad (id_subasta, anexo) VALUES ?';
-        const anexosData = anexos.map(anexo => [id_subasta, anexo.buffer]);
-
-        conection.query(insertAnexosQuery, [anexosData], (err) => {
-          if (err) {
-            console.error("Error al insertar anexos:", err);
-            return res.status(500).json({ success: false, message: "Error al insertar anexos" });
-          }
-
-          res.json({ success: true, message: "Vehículo y anexos subidos correctamente (sin imágenes)" });
-        });
-      } else {
-        res.json({ success: true, message: "Vehículo subido correctamente (sin imágenes ni anexos)" });
-      }
     }
+
+    res.json({ success: true, message: "Vehículo, imágenes y anexos subidos correctamente" });
   });
 });
+
 
 
 
