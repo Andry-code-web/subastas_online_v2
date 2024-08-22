@@ -242,13 +242,14 @@ COLLATE = utf8mb4_0900_ai_ci;
 CREATE TABLE IF NOT EXISTS `subastaonline`.`anexos_propiedad` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `id_subasta` INT NOT NULL,
-  `anexo` LONGBLOB NOT NULL,
+  `anexo` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `id_subasta` (`id_subasta` ASC) VISIBLE,
   CONSTRAINT `anexos_propiedad_ibfk_1`
     FOREIGN KEY (`id_subasta`)
     REFERENCES `subastaonline`.`subastas` (`id`)
-    ON DELETE CASCADE)
+    ON DELETE CASCADE
+)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
