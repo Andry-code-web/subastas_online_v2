@@ -23,7 +23,7 @@
 <body>
   <!-- CABEZERA -->
   <header>
-    <div class="logo"><img src="/img/SUBASTA-SUR-COLOR-ROJO-SIN-FONDO.png" alt=""></div>
+    <div class="logo"><img src="/img/logo_v2_sin_fondo.png" alt=""></div>
     <nav>
       <a href="/">Inicio</a>
       <a href="/catalogo">Catalogo</a>
@@ -254,7 +254,7 @@
               </div>
             </div>
             <div class="card-footer">
-              <span class="text-title">
+              <span class="text-title precio" id="precio">
                 $<%= subasta.precio_base %>
               </span>
               <div class="card-button">
@@ -310,7 +310,7 @@
               </div>
             </div>
             <div class="card-footer">
-              <span class="text-title">
+              <span class="text-title precio">
                 $<%= subasta.precio_base %>
               </span>
               <div class="card-button">
@@ -366,7 +366,7 @@
               </div>
             </div>
             <div class="card-footer">
-              <span class="text-title">
+              <span class="text-title precio">
                 $<%= subasta.precio_base %>
               </span>
               <div class="card-button">
@@ -400,7 +400,7 @@
     <img class="img_footer" src="/img/footer.png" alt="">
     <div class="contenedor_superior">
       <div class="contet_footer">
-        <img class="img_logo" src="/img/SUBASTA-SUR-COLOR-ROJO-SIN-FONDO.png" alt="">
+        <img class="img_logo" src="/img/logo_v2_sin_fondo.png" alt="">
         <div class="redes_footer">
           <a href="">
             <img src="/img/face_footer.svg" alt="">
@@ -512,6 +512,20 @@
       });
     });
   </script>
+
+ <!--  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const precioElement = document.getElementById('precio');
+      let precio = parseInt(precioElement.textContent.replace('$', '').replace(/\s+/g, ''), 10);
+
+      if (precio >= 1000) {
+        const milPart = Math.floor(precio / 1000);
+        precioElement.textContent = `$${milPart}/mil`;
+      } else {
+        precioElement.textContent = `$${precio}`;
+      }
+    });
+  </script> -->
 </body>
 
 </html>

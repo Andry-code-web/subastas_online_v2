@@ -11,8 +11,8 @@
   --font--testimoni: "Modern Antiqua";
   --font--about: "BioRhyme";
   --font--cont: "Scope One";
-  --bg--botones: #a29060;
-  --color--sub: #c5ac75;
+  --bg--botones: #d30000;
+  --color--sub: #d30000;
 }
 
 * {
@@ -36,7 +36,7 @@ header {
 }
 
 .logo {
-  width: 7%;
+  width: 12%;
 }
 
 .logo img {
@@ -262,7 +262,11 @@ header .session p .btn_menu i {
 .categoria {
   width: 100%;
   height: auto;
-  padding: 1rem .5rem 1rem 2rem;
+  padding: 1rem 15rem 1rem 15rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .categoria h2 {
@@ -302,6 +306,12 @@ header .session p .btn_menu i {
   -webkit-filter: grayscale(0.5);
   filter: opacity(50%);
 }
+
+.iconos_cuentas .icono img:hover {
+  filter: invert(16%) sepia(90%) saturate(3000%) hue-rotate(-20deg) brightness(110%);
+}
+
+
 
 .piezas img {
   width: 70% !important;
@@ -425,6 +435,8 @@ header .session p .btn_menu i {
 .subastas {
   width: 100%;
   height: auto;
+  padding-left: 15rem;
+  padding-right: 15rem;
 }
 
 /* .subastas .fondo {
@@ -454,12 +466,13 @@ header .session p .btn_menu i {
 .subastas h2 {
   font-size: 2rem;
   font-family: var(--font--banner--semi);
-  color: var(--color--sub);
+  color: #d30000;
   font-weight: 500;
   position: relative;
+  text-align: center;
 }
 
-.subastas h2::before{
+/* .subastas h2::before{
   content: '';
   position: absolute;
   bottom: 0;
@@ -467,7 +480,7 @@ header .session p .btn_menu i {
   width: 3%;
   height: 1px;
   background-color: #a29060;
-}
+} */
 
 .content_card {
   width: 100%;
@@ -545,7 +558,7 @@ header .session p .btn_menu i {
 
 
 .card_home {
-  width: 200px;
+  width: 220px;
   height: 320px;
   padding: .8em;
   background: #f5f5f5;
@@ -592,6 +605,10 @@ svg {
   font-weight: 900;
   font-size: 1.2em;
   line-height: 1.5;
+}
+
+.precio{
+  font-size: 1rem;
 }
 
 .text-body {
@@ -1038,7 +1055,7 @@ footer::before {
 }
 
 .img_logo {
-  width: 20%;
+  width: 30%;
 }
 
 .subastar {

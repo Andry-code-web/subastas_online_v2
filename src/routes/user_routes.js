@@ -53,13 +53,22 @@ router.get("/", (req, res) => {
           return res.status(500).send("Error al obtener el conteo de categorías");
         }
 
-        // Combina las imágenes con las subastas
+        // Función para formatear el precio
+        function formatearPrecio(precio) {
+          if (precio >= 1000) {
+            return (precio / 1000).toFixed(precio >= 10000 ? 0 : 1) + "/mil";
+          }
+          return precio;
+        }
+
+        // Combina las imágenes con las subastas y formatea el precio
         const subastasConImagenes = subastas.map((subasta) => {
           const imagenesSubasta = imagenes.filter(
             (imagen) => imagen.id_subasta === subasta.id
           );
           return {
             ...subasta,
+            precio_base: formatearPrecio(subasta.precio_base), // Formatea el precio aquí
             imagenes: imagenesSubasta.map((img) => img.imagen.toString("base64")),
           };
         });
@@ -88,8 +97,6 @@ router.get("/", (req, res) => {
     });
   });
 });
-
-
 
 router.post("/", (req, res) => {
   const { nombre, texto, rating } = req.body;
@@ -355,7 +362,6 @@ router.get("/catalogo", (req, res) => {
 });
 
 // Subastas
-// Ruta para obtener los datos de la subasta
 router.get('/subasta/:id', isAuthenticated, (req, res) => {
   const subastaId = req.params.id;
 
@@ -404,10 +410,8 @@ router.get('/subasta/:id', isAuthenticated, (req, res) => {
     // Verifica si la subasta está en curso
     let estaEnCurso = false;
     if (now.isBetween(fechaHoraSubasta, fechaHoraSubasta.clone().add(5, 'minutes'), null, '[]')) {
-      // La subasta comienza dentro de los próximos 5 minutos o ha comenzado hace menos de 5 minutos
       estaEnCurso = true;
     } else if (now.isAfter(fechaHoraSubasta.clone().add(5, 'minutes'))) {
-      // Si ya pasaron los 5 minutos desde el inicio de la subasta, no está en curso
       estaEnCurso = false;
     }
 
@@ -431,16 +435,16 @@ router.get('/subasta/:id', isAuthenticated, (req, res) => {
           usuario: req.session.usuario,
           subasta,
           imagenes: resultadoImagenes.map(img => img.imagen.toString('base64')),
-          anexos: resultadoAnexos.map(anexo => ({ id: anexo.id, url: anexo.anexo })), // Mapea ID y URL del anexo
+          anexos: resultadoAnexos.map(anexo => ({ id: anexo.id, url: anexo.anexo })), 
           estaEnCurso,
-          fechaFormateadaEsp,
+          fechaFormateadaEsp, // Aquí pasamos la fecha traducida a español
           formatNumber
         });
       });
-      
     });
   });
 });
+
 
 // Ruta para descargar un anexo
 router.get('/descargar-anexo/:id', isAuthenticated, (req, res) => {

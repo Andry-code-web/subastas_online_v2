@@ -15,8 +15,8 @@
   --font--sub--title: "Arsenal SC";
   --font--sub--title--2: "Roboto Condensed";
   --font--sub--title--3: "Kanit";
-  --bg--botones: #a29060;
-  --color--sub: #c5ac75;
+  --bg--botones: #d30000;
+  --color--sub: #d30000;
 }
 
 /* HEADER */
@@ -185,8 +185,8 @@ header .session p .btn_menu i {
 
 .scroll-1::-webkit-scrollbar-thumb {
   border-radius: 20px;
-  background: rgb(204, 180, 120);
-  background: linear-gradient(90deg, rgba(204, 180, 120, 1) 0%, rgba(214, 198, 165, 1) 100%);
+  background: rgb(204, 120, 120);
+  background: linear-gradient(90deg, rgb(204, 120, 120) 0%, rgb(214, 165, 165) 100%);
 }
 
 .content_galeria {
@@ -272,14 +272,14 @@ header .session p .btn_menu i {
 .property-details-content h4 {
   display: inline-block;
   color: var(--color--sub);
-  font-size: 1rem;
-  font-family: var(--font--sub--title--2);
-  font-weight: 400;
+  font-size: 1.2rem;
+  font-family: var(--font--sub--title--3);
+  font-weight: 600;
   position: relative;
   padding: 10px 15px 10px 15px;
 }
 
-.property-details-content h4::before {
+/* .property-details-content h4::before {
   content: '';
   position: absolute;
   top: 0;
@@ -300,7 +300,7 @@ header .session p .btn_menu i {
   border-bottom: 3px solid var(--bg--botones);
   border-right: 3px solid var(--bg--botones);
 }
-
+ */
 .content_info_subastas p {
   border-bottom: 1px solid #dddddd;
 }
