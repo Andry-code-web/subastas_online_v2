@@ -2,6 +2,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Modern+Antiqua&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Scope+One&display=swap");
 @import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 :root {
   --font--banner--semi: "Barlow";
@@ -11,6 +12,7 @@
   --font--testimoni: "Modern Antiqua";
   --font--about: "BioRhyme";
   --font--cont: "Scope One";
+  --font--header--v2: "Poppins";
   --bg--botones: #d30000;
   --color--sub: #d30000;
 }
@@ -33,6 +35,10 @@ header {
   align-items: center;
   justify-content: space-around;
   z-index: 100;
+}
+
+.menu_icon{
+  display: none;
 }
 
 .logo {
@@ -82,7 +88,8 @@ header nav {
 
 header nav a {
   font-size: 1.1rem;
-  font-family: var(--font--header);
+  font-family: var(--font--header--v2);
+  font-weight: 500;
   text-decoration: none;
   color: #000;
   transition: all 0.3s;
@@ -206,9 +213,9 @@ header .session p .btn_menu i {
   width: 4px;
   height: 15.5%;
   background-color: #000;
-} */
+}
 
-/* .banner img {
+.banner img {
   width: 90%;
   height: 70vh;
   position: absolute;
@@ -486,8 +493,10 @@ header .session p .btn_menu i {
   width: 100%;
   height: auto;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 3rem;
+  row-gap: 1rem;
+  column-gap: 5rem;
   margin-top: 5rem;
 }
 
@@ -561,11 +570,11 @@ header .session p .btn_menu i {
   width: 220px;
   height: 320px;
   padding: .8em;
-  background: #f5f5f5;
+  background: #fafafa;
   position: relative;
   overflow: visible;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  border-radius: .3rem;
+  border-radius: .4rem;
 }
 
 .card-img {
@@ -695,18 +704,20 @@ svg {
   --ch-black: #141414;
   --eer-black: #1b1b1b;
   --night-rider: #414141;
+  --red: #d60202;
   --white: #ffffff;
   --af-white: #f3f3f3;
   --ch-white: #e1e1e1;
   position: relative;
   padding: 9px 11px;
   border-radius: 5px;
-  color: var(--night-rider);
+  color: var(--white);
   font-weight: 600;
   font-size: 1rem;
   letter-spacing: 0px;
-  background-color: var(--white);
+  background-color: var(--red);
   border: solid 1px var(--ch-white);
+  border-radius: 5px;
   overflow: hidden;
   cursor: pointer;
   transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
@@ -1041,14 +1052,21 @@ footer .img_footer {
   text-align: center;
 }
 
-footer::before {
-  content: url("/img/reset.svg");
+.regresar_inicio{
+  position: absolute;
+  top: 21%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* footer::before {
+  content: url("/img/regreso_inicio");
   position: absolute;
   top: 21.5%;
   left: 50%;
   transform: translate(-50%, -50%);
   cursor: pointer;
-}
+} */
 
 .contet_footer {
   margin-top: 12rem;
@@ -1083,17 +1101,22 @@ footer::before {
 .redes_footer {
   margin-top: 2rem;
   margin-bottom: 2rem;
-}
-
-.contet_footer p {
-  color: #444444;
-}
-
-.redes_footer {
   display: flex;
   gap: 1rem;
   justify-content: center;
   align-items: center;
+}
+
+.redes_footer a{
+  transition: ease-in .2s;
+}
+
+.redes_footer a:hover{
+  transform: scale(1.2);
+}
+
+.contet_footer p {
+  color: #444444;
 }
 
 /* ANIMACIONES */
@@ -1118,5 +1141,317 @@ footer::before {
   100% {
     transform: translateX(1000px);
     opacity: 0;
+  }
+}
+
+
+
+
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) and (max-width: 992px) {
+  header{
+    height: 75px;
+  }
+
+  .menu_icon{
+    display: block;
+  }
+
+  .menu_activar{
+    background: none;
+    border: none;
+  }
+
+  .menu_activar i{
+    font-size: 1.5rem;
+    color: #000;
+  }
+
+  .menu_navegador{
+    position: absolute;
+    top: 0;
+    left: -300px;
+    width: 300px;
+    height: 100vh;
+    transition: ease-in .3s;
+  }
+
+  .menu_navegador.active{
+    position: absolute;
+    top: 0rem;
+    left: 0px;
+    width: 300px;
+    height: 100vh;
+    background-color: #a30000db;
+    transition: ease-out .3s;
+  }
+
+  .cerrar_contet{
+    text-align: end;
+    margin-top: .9rem;
+    margin-right: .7rem;
+    margin-bottom: 2rem;
+  }
+
+  .menu_cerrar{
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .menu_cerrar i{
+    font-size: 2.5rem;
+    color: #fff;
+  }
+
+  .navegador{
+    list-style: none;
+  }
+
+  .navegador li{
+    margin-bottom: 1.5rem;
+    margin-left: 1rem;
+  }
+
+  .navegador li a{
+    font-family: var(--font--banner--semi);
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: #fff;
+  }
+
+
+  .logo{
+    width: 25%;
+  }
+
+  header nav{
+    display: none;
+  }
+
+  .ingresar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  .ingresar span i{
+    font-size: 1.2rem;
+  }
+
+  .ingresar span a{
+    font-size: .7rem;
+
+  }
+
+  /* BANNER */
+  .banner{
+    margin-top: 4.5rem;
+  }
+  
+  /* CATEGORIAS */
+  .categoria{
+    padding: 1rem 3rem 1rem 3rem;
+  }
+
+  .categoria h2{
+    font-size: .9rem;
+  }
+
+  .categorias{
+    gap: 0.5rem;
+  }
+
+  .content_img{
+    font-size: .8rem;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px ) and (max-width: 1200px) {
+  /* HEADER */
+  header{
+    height: 60px;
+    box-shadow:  0px 1px 10px #ccc;
+  }
+
+  .session p{
+    font-size: .5rem;
+  }
+
+  .session p span{
+    font-size: .8rem;
+  }
+
+  .ingresar span i{
+    font-size: 1.1rem;
+    font-weight: 300;
+  }
+
+  .ingresar span a{
+    font-size: .7rem;
+  }
+
+  header nav a{
+    font-size: .8rem;
+  }
+
+  /* BANNER */
+  .banner{
+    margin-top: 4rem;
+  }
+
+  /* CATEGORIAS */
+  .categoria h2{
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .categorias{
+    gap: 0rem;
+  }
+
+  .content_img{
+    font-size: .7rem;
+  }
+
+  .iconos_cuentas .icono img{
+    width: 55%;
+  }
+
+  .piezas img{
+    width: 45% !important;
+  }
+
+  .piesas{
+    top: 0px !important;
+  }
+
+  .iconos_cuentas .contador{
+    padding: .2rem 5px .2rem 5px;
+    top: 0;
+  }
+
+  /* SUBASTAS */
+  .subastas{
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
+
+  .contenedor_subastass{
+    padding: 0px 0px 2rem 0px;
+  }
+
+  .subastas h2{
+    font-size: 1.7rem;
+  }
+
+  .content_card{
+    margin-top: 2rem;
+    column-gap: 2.5rem;
+    row-gap: .5rem;
+  }
+
+  .card_home{
+    width: 200px;
+    height: 300px;
+  }
+
+  /* FOOTER */
+  .regresar_inicio{
+    width: 7%;
+  }
+
+  .img_logo{
+    width: 20%;
+  }
+
+  .contet_footer{
+    margin-top: 9rem;
+  }
+
+  .redes_footer{
+    gap: .5rem;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .redes_footer a img{
+    width: 65%;
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) and (max-width: 1440px) {
+  /* HEADER */
+  header{
+    height: 70px;
+    box-shadow: 0px 1px 10px #ccc;
+  }
+
+  .logo{
+    width: 12%;
+  }
+
+  .session p{
+    font-size: .7rem;
+  }
+
+  .session p span{
+    font-size: .9rem;
+  }
+
+  .ingresar{
+    padding: .05rem .4rem .1rem .4rem;
+  }
+
+  .ingresar span i{
+    font-size: 1.2rem;
+    font-weight: 400;
+  }
+
+  .ingresar span a{
+    font-size: .9rem;
+  }
+
+  header nav a{
+    font-size: .8rem;
+    font-family: var(--font--header--v2);
+  }
+
+  /* BANNER */
+  .banner{
+    margin-top: 4.5rem;
+  }
+
+  /* CATEGORIAS */
+
+
+  /* SUBASTAS */
+  .subastas{
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
+
+  .contenedor_subastass{
+    padding: 0px 0px 2rem 0px;
+  }
+
+  .content_card{
+    margin-top: 2rem;
+    column-gap: 3rem;
   }
 }

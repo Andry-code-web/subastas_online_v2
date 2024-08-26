@@ -11,6 +11,7 @@
   --font--testimoni: "Modern Antiqua";
   --font--about: "BioRhyme";
   --font--cont: "Scope One";
+  --font--header--v2: "Poppins";
   --bg--botones: #A29060;
   --color--sub: #C5AC75;
 }
@@ -82,7 +83,8 @@ header nav {
 
 header nav a {
   font-size: 1.1rem;
-  font-family: var(--font--header);
+  font-family: var(--font--header--v2);
+  font-weight: 500;
   text-decoration: none;
   color: #000;
   transition: all 0.3s;
