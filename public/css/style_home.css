@@ -37,7 +37,7 @@ header {
   z-index: 100;
 }
 
-.menu_icon{
+.menu_icon {
   display: none;
 }
 
@@ -319,7 +319,6 @@ header .session p .btn_menu i {
 }
 
 
-
 .piezas img {
   width: 70% !important;
 }
@@ -474,7 +473,7 @@ header .session p .btn_menu i {
   font-size: 2rem;
   font-family: var(--font--banner--semi);
   color: #d30000;
-  font-weight: 500;
+  font-weight: 600;
   position: relative;
   text-align: center;
 }
@@ -511,7 +510,7 @@ header .session p .btn_menu i {
 
 /* From Uiverse.io by adamgiebl */
 .cssbuttons-io-button {
-  background: #f07070;
+  background: #d60202;
   color: white;
   font-family: inherit;
   padding: 0.35em;
@@ -616,7 +615,7 @@ svg {
   line-height: 1.5;
 }
 
-.precio{
+.precio {
   font-size: 1rem;
 }
 
@@ -1052,7 +1051,7 @@ footer .img_footer {
   text-align: center;
 }
 
-.regresar_inicio{
+.regresar_inicio {
   position: absolute;
   top: 21%;
   left: 50%;
@@ -1107,11 +1106,11 @@ footer .img_footer {
   align-items: center;
 }
 
-.redes_footer a{
+.redes_footer a {
   transition: ease-in .2s;
 }
 
-.redes_footer a:hover{
+.redes_footer a:hover {
   transform: scale(1.2);
 }
 
@@ -1151,34 +1150,94 @@ footer .img_footer {
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
 
+  /* BANNER */
+  .banner {
+    margin-top: 2.9rem;
+  }
+
+  .carousel-control-prev,
+  .carousel-control-next {
+    display: none;
+  }
+
+  /* CATEGORIAS */
+  .categoria {
+    padding: 1rem 2rem 1rem 2rem;
+  }
+
+  .categoria h2 {
+    font-size: .8rem;
+  }
+
+  .categorias {
+    gap: 0rem;
+  }
+
+  .iconos_cuentas .icono img {
+    width: 45%;
+  }
+
+  .piezas img {
+    width: 45% !important;
+  }
+
+  .iconos_cuentas .contador {
+    display: none;
+  }
+
+  .content_img {
+    font-size: .6rem;
+  }
+
+  /* SUBASTAS */
+  .subastas {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .subastas h2{
+    font-size: 1.6rem;
+  }
+
+  .content_card{
+    margin-top: 1rem;
+  }
+
+  .contenedor_subastass {
+    padding: 1rem 2rem 1rem 2rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cssbuttons-io-button {
+    font-size: .8rem;
+  }
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {
-
-}
+@media only screen and (min-width: 600px) {}
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) and (max-width: 992px) {
-  header{
+  header {
     height: 75px;
   }
 
-  .menu_icon{
+  .menu_icon {
     display: block;
   }
 
-  .menu_activar{
+  .menu_activar {
     background: none;
     border: none;
   }
 
-  .menu_activar i{
+  .menu_activar i {
     font-size: 1.5rem;
     color: #000;
   }
 
-  .menu_navegador{
+  .menu_navegador {
     position: absolute;
     top: 0;
     left: -300px;
@@ -1187,7 +1246,7 @@ footer .img_footer {
     transition: ease-in .3s;
   }
 
-  .menu_navegador.active{
+  .menu_navegador.active {
     position: absolute;
     top: 0rem;
     left: 0px;
@@ -1197,34 +1256,34 @@ footer .img_footer {
     transition: ease-out .3s;
   }
 
-  .cerrar_contet{
+  .cerrar_contet {
     text-align: end;
     margin-top: .9rem;
     margin-right: .7rem;
     margin-bottom: 2rem;
   }
 
-  .menu_cerrar{
+  .menu_cerrar {
     background: none;
     border: none;
     cursor: pointer;
   }
 
-  .menu_cerrar i{
+  .menu_cerrar i {
     font-size: 2.5rem;
     color: #fff;
   }
 
-  .navegador{
+  .navegador {
     list-style: none;
   }
 
-  .navegador li{
+  .navegador li {
     margin-bottom: 1.5rem;
     margin-left: 1rem;
   }
 
-  .navegador li a{
+  .navegador li a {
     font-family: var(--font--banner--semi);
     font-size: 1.2rem;
     font-weight: 500;
@@ -1233,207 +1292,263 @@ footer .img_footer {
   }
 
 
-  .logo{
+  .logo {
     width: 25%;
   }
 
-  header nav{
+  header nav {
     display: none;
   }
 
-  .ingresar{
+  .ingresar {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: .5rem;
   }
 
-  .ingresar span i{
+  .ingresar span i {
     font-size: 1.2rem;
   }
 
-  .ingresar span a{
+  .ingresar span a {
     font-size: .7rem;
 
   }
 
   /* BANNER */
-  .banner{
+  .banner {
     margin-top: 4.5rem;
   }
-  
+
   /* CATEGORIAS */
-  .categoria{
+  .categoria {
     padding: 1rem 3rem 1rem 3rem;
   }
 
-  .categoria h2{
+  .categoria h2 {
     font-size: .9rem;
   }
 
-  .categorias{
+  .categorias {
     gap: 0.5rem;
   }
 
-  .content_img{
-    font-size: .8rem;
-  }
-}
-
-/* Large devices (laptops/desktops, 992px and up) */
-@media only screen and (min-width: 992px ) and (max-width: 1200px) {
-  /* HEADER */
-  header{
-    height: 60px;
-    box-shadow:  0px 1px 10px #ccc;
-  }
-
-  .session p{
-    font-size: .5rem;
-  }
-
-  .session p span{
+  .content_img {
     font-size: .8rem;
   }
 
-  .ingresar span i{
-    font-size: 1.1rem;
-    font-weight: 300;
+  .iconos_cuentas {
+    width: 60px;
   }
 
-  .ingresar span a{
-    font-size: .7rem;
+  .piesa {
+    margin-top: 4px !important;
   }
 
-  header nav a{
-    font-size: .8rem;
+  .piesas {
+    top: 0 !important;
   }
 
-  /* BANNER */
-  .banner{
-    margin-top: 4rem;
+  .piezas img {
+    width: 60% !important;
   }
 
-  /* CATEGORIAS */
-  .categoria h2{
-    font-size: 1rem;
-    margin-bottom: 1rem;
-  }
-
-  .categorias{
-    gap: 0rem;
-  }
-
-  .content_img{
-    font-size: .7rem;
-  }
-
-  .iconos_cuentas .icono img{
-    width: 55%;
-  }
-
-  .piezas img{
-    width: 45% !important;
-  }
-
-  .piesas{
-    top: 0px !important;
-  }
-
-  .iconos_cuentas .contador{
+  .iconos_cuentas .contador {
     padding: .2rem 5px .2rem 5px;
     top: 0;
   }
 
   /* SUBASTAS */
-  .subastas{
+  .subastas {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .content_card {
+    margin-top: 2rem;
+  }
+
+  /* FOOTER */
+  footer {
+    height: 50vh;
+  }
+
+  footer .img_footer {
+    width: 100%;
+    height: 100%;
+  }
+
+  .regresar_inicio {
+    width: 10%;
+    top: 20.5%;
+  }
+
+  .contet_footer {
+    margin-top: 8rem;
+  }
+
+  .img_logo {
+    width: 38%;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+
+  /* HEADER */
+  header {
+    height: 60px;
+    box-shadow: 0px 1px 10px #ccc;
+  }
+
+  .session p {
+    font-size: .5rem;
+  }
+
+  .session p span {
+    font-size: .8rem;
+  }
+
+  .ingresar span i {
+    font-size: 1.1rem;
+    font-weight: 300;
+  }
+
+  .ingresar span a {
+    font-size: .7rem;
+  }
+
+  header nav a {
+    font-size: .8rem;
+  }
+
+  /* BANNER */
+  .banner {
+    margin-top: 4rem;
+  }
+
+  /* CATEGORIAS */
+  .categoria h2 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .categorias {
+    gap: 0rem;
+  }
+
+  .content_img {
+    font-size: .7rem;
+  }
+
+  .iconos_cuentas .icono img {
+    width: 55%;
+  }
+
+  .piezas img {
+    width: 45% !important;
+  }
+
+  .piesas {
+    top: 0px !important;
+  }
+
+  .iconos_cuentas .contador {
+    padding: .2rem 5px .2rem 5px;
+    top: 0;
+  }
+
+  /* SUBASTAS */
+  .subastas {
     padding-left: 5rem;
     padding-right: 5rem;
   }
 
-  .contenedor_subastass{
+  .contenedor_subastass {
     padding: 0px 0px 2rem 0px;
   }
 
-  .subastas h2{
+  .subastas h2 {
     font-size: 1.7rem;
   }
 
-  .content_card{
+  .content_card {
     margin-top: 2rem;
     column-gap: 2.5rem;
     row-gap: .5rem;
   }
 
-  .card_home{
+  .card_home {
     width: 200px;
     height: 300px;
   }
 
   /* FOOTER */
-  .regresar_inicio{
+  .regresar_inicio {
     width: 7%;
   }
 
-  .img_logo{
+  .img_logo {
     width: 20%;
   }
 
-  .contet_footer{
+  .contet_footer {
     margin-top: 9rem;
   }
 
-  .redes_footer{
+  .redes_footer {
     gap: .5rem;
     margin-top: 1rem;
     margin-bottom: 1.5rem;
   }
 
-  .redes_footer a img{
+  .redes_footer a img {
     width: 65%;
   }
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) and (max-width: 1440px) {
+
   /* HEADER */
-  header{
+  header {
     height: 70px;
     box-shadow: 0px 1px 10px #ccc;
   }
 
-  .logo{
+  .logo {
     width: 12%;
   }
 
-  .session p{
+  .session p {
     font-size: .7rem;
   }
 
-  .session p span{
+  .session p span {
     font-size: .9rem;
   }
 
-  .ingresar{
+  .ingresar {
     padding: .05rem .4rem .1rem .4rem;
   }
 
-  .ingresar span i{
+  .ingresar span i {
     font-size: 1.2rem;
     font-weight: 400;
   }
 
-  .ingresar span a{
+  .ingresar span a {
     font-size: .9rem;
   }
 
-  header nav a{
+  header nav a {
     font-size: .8rem;
     font-family: var(--font--header--v2);
   }
 
   /* BANNER */
-  .banner{
+  .banner {
     margin-top: 4.5rem;
   }
 
@@ -1441,16 +1556,16 @@ footer .img_footer {
 
 
   /* SUBASTAS */
-  .subastas{
+  .subastas {
     padding-left: 5rem;
     padding-right: 5rem;
   }
 
-  .contenedor_subastass{
+  .contenedor_subastass {
     padding: 0px 0px 2rem 0px;
   }
 
-  .content_card{
+  .content_card {
     margin-top: 2rem;
     column-gap: 3rem;
   }

@@ -13,6 +13,8 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
   <link rel="stylesheet" href="/css/style_catalogo.css">
+  <link rel="stylesheet" href="/css/partials/styles_header.css">
+  <link rel="stylesheet" href="/css/partials/styles_footer.css">
 
   <title>Subasta Sur || Catalogo</title>
 
@@ -33,7 +35,7 @@
 </head>
 
 <body>
-  <header>
+  <!-- <header>
     <div class="logo"><img src="/img/SUBASTA-SUR-COLOR-ROJO-SIN-FONDO.png" alt=""></div>
     <nav>
       <a href="/">Inicio</a>
@@ -85,7 +87,11 @@
             <% } %>
         </div>
     </div>
-  </header>
+  </header> -->
+
+  <!-- HEADER -->
+
+   <%- include('partials/header') %>
 
   <!-- Header Image and Title -->
   <div class="header">
@@ -341,10 +347,10 @@
         <% }) %>
     </div>
 
-
   </div>
 
 
+  <%- include('partials/footer') %>
 
 
   <!-- SCRIPT -->
@@ -405,6 +411,8 @@
     });
 
   </script>
+
+  <script src="/js/partials/script_header.js"></script>
 
 </body>
 
