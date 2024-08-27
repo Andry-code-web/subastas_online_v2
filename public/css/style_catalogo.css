@@ -622,3 +622,190 @@ header .session p .btn_menu i {
   top: 0;
   opacity: 1;
 }
+
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  /* BANNER */
+  .header img{
+    margin-top: 2rem;
+    height: 30vh;
+  }
+
+  .header .overlay h1{
+    font-size: 2rem;
+    margin-left: 2rem;
+  }
+
+  .header .overlay p{
+    font-size: .9rem;
+    margin-left: 2rem;
+  }
+
+  /* SUBASTAS */
+  .container{
+    max-width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+  }
+
+  .content_filtro{
+    width: 95%;
+  }
+
+  .filtros form{
+    display: flex;
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) and (max-width: 992px) {
+  /* BANNER */
+  .header img{
+    margin-top: 5rem;
+    height: 35vh;
+  }
+
+  /* SUBASTAS */
+  .container{
+    max-width: 95%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .filtros form{
+    display: flex;
+  }
+
+  .content_filtro{
+    width: 80%;
+  }
+
+  .content_image_filtro .img{
+    width: 70%;
+  }
+
+  .property-card{
+    height: 20vh;
+  }
+
+  .property-card-content{
+    padding: 1rem 2rem 1rem 2rem;
+  }
+
+  .content_info{
+    width: 55%;
+    gap: 0rem;
+  }
+
+  .property-card-content .features .imgenes{
+    height: 80px;
+  }
+
+  .detalle_like{
+    justify-content: flex-end;
+    width: 30%;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+  /* BANNER */
+  .header img{
+    margin-top: 3.5rem;
+  }
+
+  .container{
+    max-width: 85%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .content_filtro{
+    width: 75%;
+  }
+
+  .filtros{
+    margin-bottom: 1rem;
+  }
+
+  .filtros form{
+    display: flex;
+  }
+
+  .content_image_filtro .img{
+    width: 60%;
+  }
+
+  .property-card{
+    height: 35vh;
+  }
+
+  .property-card-content{
+    padding: 1rem 2rem 1rem 2rem;
+  }
+
+  .content_info{
+    width: 50%;
+    gap: .5rem;
+  }
+
+  .property-card-content p{
+    margin-bottom: 0;
+  }
+
+  .property-card-content .features .imgenes{
+    height: 35px;
+  }
+
+  .detalle_like{
+    width: 30%;
+  }
+
+  .like-button{
+    width: 80%;
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) and (max-width: 1440px) {
+  /* BANNER */
+  .header img{
+    margin-top: 4.5rem;
+  }
+
+  /* SUBASTAS */
+  .container{
+    max-width: 95%;
+  }
+
+  .content_info{
+    width: 50%;
+  }
+
+  .property-card-content .features{
+    width: 20%;
+    gap: 0rem;
+  }
+
+  .property-card-content .features .imgenes{
+    height: 45px;
+  }
+
+  .detalle_like{
+    width: 30%;
+  }
+
+  .like-button{
+    width: 80%;
+  }
+}

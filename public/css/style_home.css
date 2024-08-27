@@ -1163,18 +1163,19 @@ footer .img_footer {
   /* CATEGORIAS */
   .categoria {
     padding: 1rem 2rem 1rem 2rem;
+    margin: 0;
   }
 
   .categoria h2 {
-    font-size: .8rem;
+    font-size: .95rem;
   }
 
   .categorias {
-    gap: 0rem;
+    gap: 0.5rem;
   }
 
   .iconos_cuentas .icono img {
-    width: 45%;
+    width: 55%;
   }
 
   .piezas img {
@@ -1186,13 +1187,13 @@ footer .img_footer {
   }
 
   .content_img {
-    font-size: .6rem;
+    font-size: .75rem;
   }
 
   /* SUBASTAS */
   .subastas {
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
   .subastas h2{
@@ -1204,13 +1205,19 @@ footer .img_footer {
   }
 
   .contenedor_subastass {
-    padding: 1rem 2rem 1rem 2rem;
+    padding: 1rem 1rem 1rem 1rem;
     display: flex;
     flex-direction: column;
+    align-items: center;
   }
 
   .cssbuttons-io-button {
-    font-size: .8rem;
+    font-size: .97rem;
+  }
+
+  .card_home{
+    width: 250px;
+    height: 350px;
   }
 }
 
