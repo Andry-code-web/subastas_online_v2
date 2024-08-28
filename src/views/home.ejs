@@ -25,83 +25,6 @@
 
 <body>
   <!-- CABEZERA -->
-  <!-- <header>
-    <div class="menu_icon">
-      <button class="menu_activar" id="menu_activar">
-        <i class="bi bi-list"></i>
-      </button>
-      <div class="menu_navegador" id="menu_navegador">
-        <div class="cerrar_contet">
-          <button  class="menu_cerrar" id="menu_cerrar">
-            <i class="bi bi-x"></i>
-          </button>
-        </div>
-        <ul class="navegador">
-          <li>
-            <a href="/">Inicio</a>
-          </li>
-          <li>
-            <a href="/catalogo">Catalogo</a>
-          </li>
-          <li>
-            <a href="/admin/LoginAdminV">Vender</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="logo"><img src="/img/logo_v2_sin_fondo.png" alt=""></div>
-    <nav>
-      <a href="/">Inicio</a>
-      <a href="/catalogo">Catalogo</a>
-      <a href="/admin/LoginAdminV">Vender</a>
-    </nav>
-    <div class="session">
-      <% if (usuario) { %>
-        <p class="d-flex align-items-center ">
-          <span>
-            <%= usuario.nombre %>
-          </span>
-          <button class="btn_menu ms-1" id="btn_menu">
-            <i class="bi bi-list"></i>
-          </button>
-        <div class="menu_desplegable d-flex flex-column justify-content-between">
-          <div>
-            <div class="cabezera_menu d-flex justify-content-between">
-              <h3>Subastas</h3>
-              <button id="btn_close">
-                <i class="bi bi-x-lg"></i>
-              </button>
-            </div>
-            <ul>
-              <li><a href="#">Me gusta</a></li>
-            </ul>
-          </div>
-          <div class="perfil_user">
-            <div class="d-flex flex-row">
-              <i class="bi bi-person-bounding-box" style="font-size: 2.5rem; color: #fff; margin-right: 1rem;"></i>
-              <div class="d-flex flex-column">
-                <strong>Cliente</strong>
-                <small>
-                  <%= usuario.nombre %>
-                </small>
-                <a href="/logout" class="btn btn-danger btn-sm ms-2">Cerrar Sesión</a>
-              </div>
-            </div>
-          </div>
-          <% } else { %>
-            <p class="ingresar">
-              <span>
-                <i class="bi bi-person"></i>
-              </span>
-              <span>
-                <a href="/login">Ingresar</a>
-              </span>
-            </p>
-            <% } %>
-        </div>
-    </div>
-  </header> -->
-
   <%- include('partials/header') %>
 
   <!-- BANNER -->
@@ -422,32 +345,7 @@
   </section>
 
   <!-- FOOTER -->
-<!--   <footer>
-    <a href="#banner">
-      <img src="/img/regreso_inicio" class="regresar_inicio" alt="">
-    </a>
-    
-    <img class="img_footer" src="/img/footer.png" alt="">
-    <div class="contenedor_superior">
-      <div class="contet_footer">
-        <img class="img_logo" src="/img/logo_v2_sin_fondo.png" alt="">
-        <div class="redes_footer">
-          <a href="">
-            <img src="/img/face_footer.png" alt="">
-          </a>
-          <a href="">
-            <img src="/img/whatsapp_footer.png" alt="">
-          </a>
-        </div>
-        <a href="/admin/LoginAdminV" class="subastar">Quieres subastar tus vehículos <span>Click</span></a>
-        <p>COPYRIGHT @ SUBASTAS.COM 2024</p>
-      </div>
-    </div>
-
-  </footer> -->
-
   <%- include('partials/footer') %>
-
 
   <!-- SCRIPTS -->
   <script>

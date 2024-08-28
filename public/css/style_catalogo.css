@@ -658,6 +658,83 @@ header .session p .btn_menu i {
 
   .filtros form{
     display: flex;
+    justify-content: center;
+  }
+
+  .content_filtro{
+    text-align: center;
+    margin-top: 1rem;
+  }
+
+  .content_filtro h2{
+    font-size: .8rem;
+    font-weight: 600;
+  }
+
+  .filtros button{
+    width: 75px;
+    height: 70px;
+    padding: 5px !important;
+  }
+
+  .filtros button p span{
+    display: none;
+  }
+
+  .filtro p{
+    margin-bottom: .2rem;
+  }
+
+  .svg_todo{
+    width: 30px;
+    height: 30px;
+    margin-top: .3rem;
+  }
+
+  .content_image_filtro .img{
+    width: 60%;
+  }
+
+  /* SUBASTAS */
+  .property-card{
+    flex-direction: column;
+    height: 50vh;
+    margin-bottom: 2.5rem;
+  }
+
+  .slider{
+    width: 100%;
+    height: 40%;
+  }
+
+  .property-card-content{
+    width: 100%;
+    padding: .5rem 1rem .5rem 1rem;
+    flex-wrap: wrap;
+    row-gap: 1rem;
+  }
+
+  .content_info{
+    width: 70%;
+    gap: 0rem;
+  }
+
+  .property-card-content .features{
+    width: 30%;
+  }
+
+  .detalle_like{
+    width: 80%;
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  .button_a{
+    width: 200px;
+  }
+
+  .like-button{
+    margin-top: 0rem;
   }
 }
 
