@@ -29,6 +29,7 @@ header {
     align-items: center;
     justify-content: space-around;
     z-index: 100;
+    font-family: var(--font--header--v2) !important;
 }
 
 .menu_icon {
@@ -172,8 +173,14 @@ header .session p .btn_menu i {
     font-size: 1.2rem;
 }
 
+.navbar-expand-lg .navbar-nav{
+    gap: 1rem;
+}
 
 
+.navbar-nav{
+    color: #000 !important;
+}
 
 
 /* Extra small devices (phones, 600px and down) */
@@ -295,6 +302,10 @@ header .session p .btn_menu i {
     header .session p .btn_menu i {
         font-size: 1.1rem;
     }
+
+    .navbar{
+        display: none;
+    }
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
@@ -403,6 +414,9 @@ header .session p .btn_menu i {
 
     }
 
+    .navbar{
+        display: none;
+    }
 }
 
 /* Large devices (laptops/desktops, 992px and up) */

@@ -302,6 +302,10 @@ header .session p .btn_menu i {
   font-weight: 400;
 }
 
+.descripcion_categoria{
+  width: 85px;
+}
+
 .iconos_cuentas {
   width: 70px;
   height: auto;

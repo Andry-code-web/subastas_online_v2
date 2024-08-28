@@ -655,5 +655,18 @@ router.post("/like", (req, res) => {
 });
 
 
+//Info page vender
+router.get('/info-vender', (req, res) =>{
+  res.render("vender", {
+    usuario: req.session.usuario
+  })
+});
+
+//Info page comprar
+router.get('/info-comprar', (req, res) =>{
+  res.render('comprar', {
+    usuario: req.session.usuario
+  })
+});
 
 module.exports = router;
