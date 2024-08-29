@@ -26,55 +26,157 @@
   <%- include('partials/header') %>
 
   <section class="banner">
-    <div class="contenedor_banner">
-      <h1>¿Como comprar en Subasta Sur?</h1>
+    <h2>¿Como comprar en Subasta Sur?</h2>
+    <div class="contenedor_info_banner">
+      <div class="contenedor_info">
+        <h3>Registrate en el sitio</h3>
+        <p>Para comenzar, puede registrarse haciendo clic en el botón a continuación. En la página de registro, complete los campos con sus datos, valide su cuenta a través de su correo electrónico y espere la confirmación del equipo de Subasta sur para comenzar a ofertar.</p>
+        <a href="/registro">REGISTRATE</a>
+      </div>
+      <img src="/img/comprar_login_subasta.png" alt="">
+    </div>
+  </section>
 
-      <div class="contenedor_info_banner d-flex">
-        <div class="info_contenido">
-          <h2>Registrate en el sitio</h2>
+  <section class="como">
+    <div class="contenedor_info_como">
+      <img src="/img/computer_comprar.png" alt="">
+      <div class="como_info">
+        <h3>Elige el lote de tu interés</h3>
+        <p>En Subasta Sur Exchange, encontrarás miles de ofertas en diferentes categorías como autos, máquinas pesadas, electrónicos, industrial, camiones y más. Puedes usar el menú lateral para seleccionar la categoría y subcategoría de tu interés o escribir en la barra superior de búsqueda el nombre del activo que deseas comprar.</p>
+      </div>
+    </div>
+  </section>
 
-          <p>Para comenzar, puede registrarse haciendo clic en el botón a continuación. En la página de registro, complete los campos con sus datos, valide su cuenta a través de su correo electrónico y espere la confirmación del equipo de Subasta SUR para comenzar a ofertar.</p>
+  <section class="identifica">
+    <h2>Identificá a qué modalidad de venta corresponde tu producto</h2>
+    <div class="property-details-content tabs_info">
+      <!-- Tabs with Links -->
+      <ul class="nav nav-underline navegador_tabs">
+        <li class="nav-item">
+          <a class="nav-link active navegador_tab" id="home-link" aria-current="page" href="#home-tab-pane" data-bs-toggle="tab" role="tab" aria-controls="home-tab-pane" aria-selected="true">SUBASTA</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link navegador_tab" id="profile-link" href="#profile-tab-pane" data-bs-toggle="tab" role="tab" aria-controls="profile-tab-pane" aria-selected="false">COMPRE YA</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link navegador_tab" id="proposal-link" href="#profile-tab-pane-propuesta" data-bs-toggle="tab" role="tab" aria-controls="profile-tab-pane-propuesta" aria-selected="false">PROPUESTA</a>
+        </li>
+      </ul>
 
-          <a href="/registro">REGISTRARSE</a>
+      <div class="tab-content contenedor_indo_lista" id="myTabContent">
+
+        <div class="tab-pane fade show active contenedor_subasta_tab" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+          <div class="contenedor_info_subasta">
+            <div class="contenedor_info">
+              <ol>
+                <li> Lee atentamente las Condiciones de Subasta y habilitate</li>
+                <li> Ofertá</li>
+                <li> Seguí la disputa</li>
+                <li> En el caso de que seas el ganador, estarás recibiendo nuestro contacto con los pasos a seguir</li>
+              </ol>
+              <a href="#">MÁS INFORMACIÓN</a>
+            </div>
+            <img src="/img/subasta.png" alt="">
+          </div>
         </div>
-        <img src="/img/comprar_login_subasta.png" alt="">
+
+        <div class="tab-pane fade contenedor_subasta_tab" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+          <div class="contenedor_info_compraya">
+            <div class="contenedor_info">
+              <ol>
+                <li> Hacé click en el botón “Comprar”</li>
+                <li> Completá los campos, leé y aceptá los términos de venta</li>
+                <li> Confirmá el token enviado por email</li>
+                <li> Aguardá la confirmación del pedido de compra</li>
+                <li> En el caso de que seas el ganador, estarás recibiendo nuestro contacto con los pasos a seguir</li>
+                <li> ¡Retirás el producto!</li>
+              </ol>
+              <a href="#">MÁS INFORMACIÓN</a>
+            </div>
+            <img src="/img/compraya.png" alt="">
+          </div>
+        </div>
+
+        <div class="tab-pane fade contenedor_subasta_tab" id="profile-tab-pane-propuesta" role="tabpanel" aria-labelledby="proposal-tab" tabindex="0">
+          <div class="contenedor_info_propuesta">
+            <div class="contenedor_info">
+              <ol>
+                <li> Hacé click en “Hacé tu propuesta”</li>
+                <li> Completá los campos, leé y aceptá los términos de venta</li>
+                <li> Confirmá el token enviado por email</li>
+                <li> Utilizá los botones de más y menos para ajustar la propuesta o completá el valor a pagar</li>
+                <li> Aguardá la aceptación de la propuesta</li>
+                <li> En el caso de que seas el ganador, estarás recibiendo nuestro contacto con los pasos a seguir</li>
+                <li> ¡Retirás el producto!</li>
+              </ol>
+              <a href="#">MÁS INFORMACIÓN</a>
+            </div>
+            <img src="/img/propuesta.png" alt="">
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="porque">
+    <h2>¿Por qué comprar en Subasta Sur?</h2>
+    <p>Únete a las más de 500 mil personas que utilizan Subasta sur para comprar activos.</p>
+    <div class="contenedor_infor_porque row">
+
+      <div class="tarjeta col">
+        <div class="imagenes_tarjetas">
+          <img src="/img/candado.png" alt="" style="width: 45px;">
+        </div>
+
+        <div class="contenedor_info">
+          <h4>Seguridad</h4>
+          <p>Contamos con los más altos estándares de seguridad y encriptación de datos para una compra protegida.</p>
+        </div>
+      </div>
+
+      <div class="tarjeta col">
+        <div class="imagenes_tarjetas">
+          <img src="/img/haorro.png" alt="" style="width: 70px;">
+        </div>
+
+        <div class="contenedor_info">
+          <h4>Ahorro</h4>
+          <p>Además de la procedencia de los activos en venta, los valores están abajo de los valores de mercado. Un vehículo seminuevo, por ejemplo, puede tener un ahorro de hasta 40% abajo de los listados de precios oficiales publicados por las asociaciones de venta.</p>
+        </div>
+      </div>
+
+      <div class="tarjeta col">
+        <div class="imagenes_tarjetas">
+          <img src="/img/variedad.png" alt="" style="width: 60px;">
+        </div>
+
+        <div class="contenedor_info">
+          <h4>Variedad</h4>
+          <p>¡Miles de productos de diferentes categorías para su casa o negocio!</p>
+        </div>
+      </div>
+
+      <div class="tarjeta col">
+        <div class="imagenes_tarjetas">
+          <img src="/img/transpariencia.png" alt="" style="width: 60px;">
+        </div>
+
+        <div class="contenedor_info">
+          <h4>transpariencia</h4>
+          <p>El proceso de disputa por los productos no tiene interferencia humana. Todos los participantes están en igualdad de condiciones en la oferta o en la propuesta.</p>
+        </div>
       </div>
 
     </div>
   </section>
 
-  <section class="informacion">
-    <div class="contenedor_informacion">
-      <h2>Ventajas de vender en Subasta Sur</h2>
-      <div class="info d-flex justify-content-center">
-        <div class="tarjeta">
-          <img src="/img/info1.png" alt="">
-          <h3>Procesos auditados</h3>
-          <p>Imparcialidad en las negociaciones desde el contacto con los potenciales compradores hasta el retiro de los activos después del pago y documentación solicitada. Los procesos son transparentes y auditables, obedeciendo las mejores prácticas de compliance y gobernanza.</p>
-        </div>
-        <div class="tarjeta">
-          <img src="/img/info2.png" alt="">
-          <h3>Focos en su negocio</h3>
-          <p>Contamos con soluciones que optimizarán los procesos y costos de su empresa, dedicándonos totalmente a su negocio.</p>
-        </div>
-        <div class="tarjeta">
-          <img src="/img/info3.png" alt="">
-          <h3>Resultados comprovados</h3>
-          <p>Recuperación de capital para la empresa con los mejores resultados del mercado. Amplia base de conocimiento en diversas categorías de activos y eficiencia comprobada, con grandes casos de éxito.</p>
-        </div>
-      </div>
-    </div>
+  <section class="oportunidad">
+    <h2>!No te pierdas la oportunidad¡</h2>
+    <p>!Registrate y accede a las mejores ofertas de Subasta sur¡</p>
+    <a href="">REGISTRARSE</a>
   </section>
-
-  <sectiom class="enviar_datos">
-    <div class="contenedor_datos">
-      <h2>¡ENVIA TUS DATOS!</h2>
-      <p>No pierdas la oportunidad de liquidar tus activos con recuperación de capital. ¡Envíanos tus datos y nuestro equipo comercial se pondrá en contacto contigo!</p>
-      <button class="datos_vender">QUIERO VENDER</button>
-    </div>
-  </sectiom>
-
-
 
   <%- include('partials/footer') %>
 </body>
