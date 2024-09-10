@@ -25,13 +25,6 @@ footer {
     position: relative;
     box-shadow: inset 0px .5px 5px #cccc;
 }
-
-/* footer .img_footer {
-    width: 100%;
-    height: 70vh;
-    position: absolute;
-    z-index: -1;
-}*/
  
 .contenedor_superior {
     width: 100%;
@@ -143,30 +136,48 @@ footer {
 
     /* FOOTER */
     footer {
-        height: 50vh;
-    }
-
-    footer .img_footer {
-        height: 50vh;
-    }
-
-    .regresar_inicio {
-        width: 15%;
-        top: 20%;
+        height: 60vh;
     }
 
     .contet_footer {
-        margin-top: 6rem;
+        flex-direction: column;
+        margin-top: 0;
+        gap: 1rem;
+    }
+
+    .contenedor_superior{
+        justify-content: space-around;
     }
 
     .img_logo {
-        width: 65%;
+        width: 60%;
+    }
+
+    .terminos_condiciones a{
+        font-size: .9rem;
+    }
+
+    .copy_paises{
+        flex-direction: column;
+    }
+
+    .paises img{
+        width: 26px;
+    }
+
+    .copy_paises p{
+        margin: 0;
+        font-size: .9rem;
     }
 
     .redes_footer {
         gap: 0;
-        margin-top: 2.5rem;
-        margin-bottom: 1rem;
+        margin-top: 0rem;
+        margin-bottom: 0rem;
+    }
+
+    .redes_footer div{
+        display: flex;
     }
 
     .redes_footer a img {
@@ -189,22 +200,29 @@ footer {
         height: 50vh;
     }
 
-    footer .img_footer {
-        width: 100%;
-        height: 100%;
-    }
-
-    .regresar_inicio {
-        width: 10%;
-        top: 20.5%;
+    .contenedor_superior{
+        justify-content: space-evenly;
     }
 
     .contet_footer {
-        margin-top: 8rem;
+        margin-top: 0rem;
+        flex-direction: column;
     }
 
     .img_logo {
         width: 38%;
+    }
+
+    .redes_footer{
+        margin: 0;
+    }
+
+    .copy_paises{
+        align-items: center;
+    }
+
+    .copy_paises p{
+        margin: 0;
     }
 }
 
@@ -212,8 +230,12 @@ footer {
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
 
     /* FOOTER */
-    .regresar_inicio {
-        width: 7%;
+    footer{
+        height: 30vh;
+    }
+
+    .contenedor_superior {
+        justify-content: space-around;
     }
 
     .img_logo {
@@ -221,7 +243,13 @@ footer {
     }
 
     .contet_footer {
-        margin-top: 9rem;
+        gap: 1rem;
+        margin-top: 0rem;
+    }
+
+    .contet_footer p{
+        width: 30%;
+        font-size: .8rem;
     }
 
     .redes_footer {
@@ -231,7 +259,20 @@ footer {
     }
 
     .redes_footer a img {
-        width: 65%;
+        width: 35%;
+    }
+
+    .terminos_condiciones a{
+        font-size: .9rem;
+    }
+
+    .copy_paises{
+        align-items: center;
+    }
+
+    .copy_paises p{
+        margin: 0;
+        font-size: .9rem;
     }
 }
 

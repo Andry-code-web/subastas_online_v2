@@ -698,7 +698,7 @@ header .session p .btn_menu i {
   /* SUBASTAS */
   .property-card{
     flex-direction: column;
-    height: 50vh;
+    height: auto;
     margin-bottom: 2.5rem;
   }
 
@@ -724,7 +724,7 @@ header .session p .btn_menu i {
   }
 
   .detalle_like{
-    width: 80%;
+    width: 95%;
     flex-direction: row;
     gap: 1rem;
   }

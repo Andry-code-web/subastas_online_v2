@@ -304,7 +304,7 @@ header .session p .btn_menu i {
     }
 
     .navbar{
-        display: none;
+        display: none !important;
     }
 }
 
@@ -415,7 +415,7 @@ header .session p .btn_menu i {
     }
 
     .navbar{
-        display: none;
+        display: none !important;
     }
 }
 

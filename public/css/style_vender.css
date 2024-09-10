@@ -73,6 +73,8 @@
 }
 
 .info {
+    display: flex;
+    justify-content: center;
     gap: 2rem;
 }
 
@@ -130,7 +132,7 @@
     width: 60%;
 }
 
-.contenedor_datos button{
+.contenedor_datos button {
     width: 15%;
     height: 40px;
     border: none;
@@ -140,6 +142,292 @@
     transition: ease-in .3s;
 }
 
-.contenedor_datos button:hover{
+.contenedor_datos button:hover {
     transform: scale(1.1);
+}
+
+
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px){
+    .banner{
+        height: 60vh;
+        margin-top: 3rem;
+    }
+
+    .contenedor_banner h1{
+        width: 60%;
+        font-size: 1.8rem;
+        text-align: center;
+    }
+
+    .contenedor_banner img{
+        width: 30%;
+    }
+
+    .contenedor_banner h2{
+        width: 70%;
+        text-align: center;
+    }
+
+    .contenedor_banner p{
+        width: 90%;
+        font-size: .8rem;
+    }
+
+    /*  */
+
+    .contenedor_informacion{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .contenedor_informacion h2{
+        width: 80%;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .info{
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 0rem;
+    }
+
+    .tarjeta{
+        width: 90%;
+        padding: 1rem .5rem;
+    }
+
+    .tarjeta img{
+        width: 20%;
+    }
+
+    .tarjeta p{
+        text-align: justify;
+        margin: 0;
+    }
+
+    /*  */
+    .enviar_datos{
+        margin-top: 2rem;
+    }
+
+    .contenedor_datos{
+        padding: 1rem 1rem;
+    }
+
+    .contenedor_datos h2{
+        font-size: 1.8rem;
+    }
+
+    .contenedor_datos p{
+        width: 90%;
+        font-size: .9rem;
+    }
+
+    .contenedor_datos button{
+        width: 40%;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) and (max-width: 992px){
+    .banner{
+        height: 40vh;
+        margin-top: 4.5rem;
+    }
+
+    .contenedor_banner h1{
+        font-size: 1.9rem;
+    }
+
+    .contenedor_banner img{
+        width: 15%;
+    }
+
+    .contenedor_banner h2{
+        font-size: 1.5rem;
+    }
+
+    .contenedor_banner p{
+        width: 75%;
+        font-size: .9rem;
+    }
+
+    /*  */
+
+    .contenedor_informacion h2{
+        font-size: 1.8rem;
+    }
+
+    .info{
+        gap: 1rem;
+    }
+
+    .tarjeta{
+        width: 30%;
+    } 
+
+    .tarjeta h3{
+        font-size: 1.2rem;
+    }
+
+    .tarjeta p{
+        text-align: justify;
+        padding: .5rem 1rem;
+    }
+
+    /*  */
+    .enviar_datos{
+        height: 25vh;
+    }
+
+    .contenedor_datos{
+        padding: 1rem 5rem;
+    }
+
+    .contenedor_datos h2{
+        font-size: 1.8rem;
+    }
+
+    .contenedor_datos p{
+        width: 80%;
+        font-size: .8rem;
+    }
+
+    .contenedor_datos button{
+        width: 30%;
+    }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) and (max-width: 1200px){
+    .banner{
+        height: 50vh;
+        margin-top: 3.5rem;
+    }
+
+    .contenedor_banner h1 {
+        font-size: 1.5rem;
+    }
+
+    .contenedor_banner img {
+        width: 5%;
+    }
+
+    .contenedor_banner h2{
+        font-size: 1.1rem;
+    }
+
+    .contenedor_banner p{
+        font-size: .7rem;
+    }
+
+    /*  */
+
+    .contenedor_informacion h2{
+        font-size: 1.4rem;
+    }
+
+    .tarjeta{
+        width: 25%;
+    }
+
+    .tarjeta img{
+        width: 25%;
+    }
+
+    .tarjeta h3{
+        font-size: 1.1rem;
+    }
+
+    .tarjeta p{
+        text-align: justify;
+        font-size: .8rem;
+    }
+
+    /*  */
+
+    .enviar_datos {
+        height: 35vh;
+    }
+
+    .contenedor_datos{
+        gap: .9rem;
+    }
+
+    .contenedor_datos h2{
+        font-size: 1.4rem;
+    }
+
+    .contenedor_datos p{
+        width: 80%;
+        font-size: .8rem;
+    }
+
+    .contenedor_datos button{
+        width: 40%;
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) and (max-width: 1440px){
+    .banner{
+        margin-top: 4.5rem;
+    }
+
+    .contenedor_banner h1{
+        font-size: 1.8rem;
+    }
+
+    .contenedor_banner h2{
+        font-size: 1.5rem;
+    }
+
+    .contenedor_banner p{
+        font-size: .8rem;
+    }
+
+    .contenedor_informacion h2{
+        font-size: 1.8rem;
+    }
+
+    .tarjeta{
+        width: 25%;
+    }
+
+    .tarjeta img{
+        width: 25%;
+    }
+
+    .tarjeta h3{
+        font-size: 1.3rem;
+    }
+
+    .tarjeta p{
+        text-align: justify;
+    }
+
+    .enviar_datos{
+        height: 35vh;
+    }
+
+    .enviar_datos h2{
+        font-size: 1.9rem;
+    }
+
+    .enviar_datos p{
+        width: 70%;
+    }
+
+    .contenedor_datos button{
+        width: 30%;
+    }
 }
