@@ -12,13 +12,15 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <!-- STYLE -->
   <link rel="stylesheet" href="/css/style_subastas.css">
+  <link rel="stylesheet" href="/css/partials/styles_header.css">
+  <link rel="stylesheet" href="/css/partials/styles_footer.css">
   <title>Inmueble || subasta</title>
   <script src="/socket.io/socket.io.js"></script>
 </head>
 
 <body>
 
-  <header>
+  <!-- <header>
     <div class="logo"><img src="/img/SUBASTA-SUR-COLOR-ROJO-SIN-FONDO.png" alt=""></div>
     <nav>
       <a href="/">Inicio</a>
@@ -66,18 +68,15 @@
           <span>
             <a href="/login">Ingresar</a>
           </span>
-
-          <!-- <span>/</span>
-              <span>
-                <a href="/registro">Sign up</a>
-              </span> -->
         </p>
         <% } %>
       </div>
     </div>
-  </header>
+  </header> -->
 
-  <div class="detalles_subasta d-flex justify-content-center">
+  <%- include('partials/header') %>
+
+  <div class="detalles_subasta">
     <div class="property-detail">
       <!-- Carrusel e información del inmueble -->
       <div id="carouselExample<%= subasta.id %>" class="carousel slide slider">
@@ -269,13 +268,16 @@
     </div>
   </div>
 
+  <%- include('partials/footer') %>
+
   <!-- SCRIPT -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- <script src="https://cdn.jsdelivr.net/npm/tsparticles@2"></script> -->
   <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
   <!-- script moment fecha y hora -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-
+  <!-- script header -->
+   <script src="/js/partials/script_header.js"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -474,8 +476,6 @@
       }
     });
   </script>
-
-
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {

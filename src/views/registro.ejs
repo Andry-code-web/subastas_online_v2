@@ -2,374 +2,363 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="/img/footer_logo.svg" type="image/x-icon">
-    <title>Registro</title>
-    <link rel="stylesheet" href="/css/slyle_register.css"> <!-- Ajusta la ruta según tu estructura de archivos -->
-    <!-- BOOTSTRAP -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <!-- BOOTSTRAP ICON -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="/img/footer_logo.svg" type="image/x-icon">
+  <title>Registro</title>
+  <link rel="stylesheet" href="/css/slyle_register.css"> <!-- Ajusta la ruta según tu estructura de archivos -->
+  <!-- BOOTSTRAP -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <!-- BOOTSTRAP ICON -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 
 <body>
-    <div class="contenedor_general">
-        <div class="contenedor_general_a d-flex flex-row">
-            <div class="banner_registro d-flex justify-content-center align-items-center flex-column">
-                <h1>Bienvenido</h1>
-                <p> Podrás ver todos los detalles de las propiedades y participar en las subastas activas.</p>
-                <div class="tipo_persona">
-                    <button class="me-3" onclick="PersonaNatural()">Persona natural</button>
-                    <button onclick="PersonaJuridica()">Persona juridica</button>
-                </div>
-                <p class="login">
-                    Ya me encuentro registrado
-                    <a href="/login">Iniciar sesion</a>
-                </p>
-            </div>
-            <div class="contenedor_de_datos d-flex flex-column justify-content-center align-items-center">
-                <div class="titulo">
-                    <h2>Crea una cuenta Subasta Sur</h2>
-                </div>
-                <div class="navegador d-flex justify-content-center flex-row">
-                    <div class="nav_datos uno active" id="step-1">
-                        <p>1</p>
-                    </div>
-                    <div class="nav_datos dos" id="step-2">
-                        <p>2</p>
-                    </div>
-                    <div class="nav_datos tres" id="step-3">
-                        <p>3</p>
-                    </div>
-                </div>
-
-                <!-- FORM PERSONA NATURAL -->
-                <div class="contenedor_datos_natural d-flex flex-column align-items-center d-block" id="persNatural">
-                    <form action="/registro" method="post">
-                        <input type="hidden" name="tipo_persona" value="natural">
-                        <div class="datos_personales step active">
-                            <h5>Datos Personales Persona Natural</h5>
-                            <div class="espacioT nombre row">
-                                <input class="col" type="text" name="nombre_apellidos" placeholder="Nombre y Apellidos">
-                                <input class="col" type="text" name="dni_ce" placeholder="DNI/CE">
-                            </div>
-                            <div class="espacioT email row">
-                                <input class="col" type="email" name="email" placeholder="Email">
-                                <input class="col" type="email" name="confirmacion_email"
-                                    placeholder="Confirmacion Email">
-                            </div>
-                            <div class="espacioT sexo_fecha row">
-                                <input class="col" type="date" name="fecha_nacimiento"
-                                    placeholder="Fecha de Nacimiento">
-                                <select class="col" name="sexo">
-                                    <option value="M">Masculino</option>
-                                    <option value="F">Femenino</option>
-                                </select>
-                                <select class="col" name="estado_civil">
-                                    <option value="soltero">Soltero(a)</option>
-                                    <option value="casado">Casado(a)</option>
-                                    <option value="divorciado">Divorciado(a)</option>
-                                    <option value="viudo">Viudo(a)</option>
-                                </select>
-                            </div>
-                            <div class="espacioT celular row">
-                                <input class="col" type="tel" name="celular" placeholder="Celular">
-                                <input class="col" type="tel" name="telefono" placeholder="Telefono">
-                            </div>
-                            <div class="botones">
-                                <button type="button" onclick="nextStep(1)">
-                                    Siguiente <i class="bi bi-chevron-double-right"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="datos_direccion step">
-                            <h5>Direccion</h5>
-                            <div class="row espacioT">
-                                <input class="col" type="text" name="departamento" placeholder="Departamento">
-                                <input class="col" type="text" name="provincia" placeholder="Provincia">
-                            </div>
-                            <div class="row espacioT">
-                                <input class="col-4" type="text" name="distrito" placeholder="Distrito">
-                                <input class="col" type="text" name="direccion" placeholder="Direccion">
-                            </div>
-                            <div class="row espacioT">
-                                <input class="col-3" type="text" name="numero" placeholder="Numero">
-                                <input class="col" type="text" name="complemento"
-                                    placeholder="Complemento (piso, dpto, manzana, etc)">
-                            </div>
-                            <div class="botones">
-                                <button type="button" onclick="nextStep(2)">
-                                    Siguiente <i class="bi bi-chevron-double-right"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="datos_acceso step">
-                            <h5>Datos de acceso</h5>
-                            <div class="col espacioI mt-4">
-                                <input class="row" type="text" name="usuario" placeholder="Usuario">
-                                <input class="row" type="password" name="contraseña" placeholder="Contraseña">
-                            </div>
-                            <div class="terminoss d-flex">
-                                <input type="checkbox" name="terminos_y_condiciones" id="terminos_y_condiciones"
-                                    value="1" required>
-                                <label for="terminos_y_condiciones">
-                                    He leído, conozco las condiciones para el tratamiento de mis datos personales y doy
-                                    mi consentimiento, tal y como se describe en
-                                    <a target="_blank" href="#">nuestros términos de uso</a>
-                                </label>
-                            </div>
-                            <div class="boton_final">
-                                <button type="submit"> Finalizar</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-
-
-                <!-- FORM PERSONA JURIDICA -->
-                <div class="contenedor_datos_juridica d-none" id="persJuridica">
-                    <form action="/registro" method="post">
-                        <input type="hidden" name="tipo_persona" value="juridica">
-                        <div class="datos-personales step_j active">
-                            <h5>Datos Personales Persona Juridica</h5>
-                            <div class="espacioT row">
-                                <input class="col" type="email" name="email" placeholder="Email">
-                                <input class="col" type="email" name="confirmacion_email"
-                                    placeholder="Confirmacion Email">
-                            </div>
-                            <div class="espacioT row">
-                                <input class="col" type="text" name="ruc" placeholder="RUC">
-                                <input class="col" type="text" name="nombre_comercial" placeholder="Nombre Comercial">
-                            </div>
-                            <div class="espacioT row">
-                                <input class="col" type="text" name="actividad_comercial"
-                                    placeholder="Actividad Comercial">
-                            </div>
-                            <div class="espacioT row">
-                                <input class="col" type="tel" name="celular" placeholder="Celular">
-                                <input class="col" type="tel" name="telefono" placeholder="Telefono">
-                            </div>
-                            <div class="botones">
-                                <button type="button" onclick="nextStepJ(1)">
-                                    Siguiente <i class="bi bi-chevron-double-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="datos_direccion step_j">
-                            <h5>Direccion</h5>
-                            <div class="espacioT row">
-                                <input class="col" type="text" name="departamento" placeholder="Departamento">
-                                <input class="col" type="text" name="provincia" placeholder="Provincia">
-                            </div>
-                            <div class="espacioT row">
-                                <input class="col" type="text" name="distrito" placeholder="Distrito">
-                                <input class="col" type="text" name="direccion" placeholder="Direccion">
-                            </div>
-                            <div class="espacioT row">
-                                <input class="col-3" type="text" name="numero" placeholder="Numero">
-                                <input class="col" type="text" name="complemento"
-                                    placeholder="Complemento (piso, dpto, manzana, etc)">
-                            </div>
-                            <div class="botones">
-                                <button type="button" onclick="nextStepJ(2)">
-                                    Siguiente <i class="bi bi-chevron-double-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="datos_acceso step_j">
-                            <h5>Datos de acceso</h5>
-                            <div class="col espacioI mt-4">
-                                <input class="row" type="text" name="usuario" placeholder="Usuario">
-                                <input class="row" type="password" name="contraseña" placeholder="Contraseña">
-                            </div>
-                            <div class="terminoss d-flex">
-                                <input type="checkbox" name="terminos_y_condiciones" id="terminos_y_condiciones"
-                                    value="1" required>
-                                <label for="terminos_y_condiciones">
-                                    He leído, conozco las condiciones para el tratamiento de mis datos personales y doy
-                                    mi consentimiento, tal y como se describe en
-                                    <a target="_blank" href="#">nuestros términos de uso</a>
-                                </label>
-                            </div>
-                            <div class="boton_final">
-                                <button type="submit"> Finalizar</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-
-            </div>
+  <div class="contenedor_general">
+    <div class="contenedor_general_a">
+      <div class="banner_registro d-flex justify-content-center align-items-center flex-column">
+        <h1>Bienvenido</h1>
+        <p> Podrás ver todos los detalles de las propiedades y participar en las subastas activas.</p>
+        <div class="tipo_persona">
+          <button class="btn_persona_natural" onclick="PersonaNatural()">Persona natural</button>
+          <button onclick="PersonaJuridica()">Persona juridica</button>
         </div>
+        <p class="login">
+          Ya me encuentro registrado
+          <a href="/login">Iniciar sesion</a>
+        </p>
+      </div>
+      <div class="contenedor_de_datos d-flex flex-column align-items-center">
+        <div class="titulo">
+          <h2>Crea una cuenta Subasta Sur</h2>
+        </div>
+        <div class="navegador d-flex justify-content-center flex-row">
+          <div class="nav_datos uno active" id="step-1">
+            <p>1</p>
+          </div>
+          <div class="nav_datos dos" id="step-2">
+            <p>2</p>
+          </div>
+          <div class="nav_datos tres" id="step-3">
+            <p>3</p>
+          </div>
+        </div>
+
+        <!-- FORM PERSONA NATURAL -->
+        <div class="contenedor_datos_natural d-flex flex-column align-items-center d-block" id="persNatural">
+          <form action="/registro" method="post">
+            <input type="hidden" name="tipo_persona" value="natural">
+            <div class="datos_personales step active">
+              <h5>Datos Personales Persona Natural</h5>
+              <div class="espacioT nombre row">
+                <input class="col" type="text" name="nombre_apellidos" placeholder="Nombre y Apellidos">
+                <input class="col" type="text" name="dni_ce" placeholder="DNI/CE">
+              </div>
+              <div class="espacioT email row">
+                <input class="col" type="email" name="email" placeholder="Email">
+                <input class="col" type="email" name="confirmacion_email" placeholder="Confirmacion Email">
+              </div>
+              <div class="espacioT sexo_fecha row">
+                <input class="col" type="date" name="fecha_nacimiento" placeholder="Fecha de Nacimiento">
+                <select class="col" name="sexo">
+                  <option value="M">Masculino</option>
+                  <option value="F">Femenino</option>
+                </select>
+                <select class="col" name="estado_civil">
+                  <option value="soltero">Soltero(a)</option>
+                  <option value="casado">Casado(a)</option>
+                  <option value="divorciado">Divorciado(a)</option>
+                  <option value="viudo">Viudo(a)</option>
+                </select>
+              </div>
+              <div class="espacioT celular row">
+                <input class="col" type="tel" name="celular" placeholder="Celular">
+                <input class="col" type="tel" name="telefono" placeholder="Telefono">
+              </div>
+              <div class="botones">
+                <button type="button" onclick="nextStep(1)">
+                  Siguiente <i class="bi bi-chevron-double-right"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="datos_direccion step">
+              <h5>Direccion</h5>
+              <div class="row espacioT">
+                <input class="col" type="text" name="departamento" placeholder="Departamento">
+                <input class="col" type="text" name="provincia" placeholder="Provincia">
+              </div>
+              <div class="row espacioT">
+                <input class="col-4" type="text" name="distrito" placeholder="Distrito">
+                <input class="col" type="text" name="direccion" placeholder="Direccion">
+              </div>
+              <div class="row espacioT">
+                <input class="col-3" type="text" name="numero" placeholder="Numero">
+                <input class="col" type="text" name="complemento" placeholder="Complemento (piso, dpto, manzana, etc)">
+              </div>
+              <div class="botones">
+                <button type="button" onclick="nextStep(2)">
+                  Siguiente <i class="bi bi-chevron-double-right"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="datos_acceso step">
+              <h5>Datos de acceso</h5>
+              <div class="col espacioI mt-4">
+                <input class="row" type="text" name="usuario" placeholder="Usuario">
+                <input class="row" type="password" name="contraseña" placeholder="Contraseña">
+              </div>
+              <div class="terminoss d-flex">
+                <input type="checkbox" name="terminos_y_condiciones" id="terminos_y_condiciones" value="1" required>
+                <label for="terminos_y_condiciones">
+                  He leído, conozco las condiciones para el tratamiento de mis datos personales y doy
+                  mi consentimiento, tal y como se describe en
+                  <a target="_blank" href="#">nuestros términos de uso</a>
+                </label>
+              </div>
+              <div class="boton_final">
+                <button type="submit"> Finalizar</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+
+
+        <!-- FORM PERSONA JURIDICA -->
+        <div class="contenedor_datos_juridica d-none" id="persJuridica">
+          <form action="/registro" method="post">
+            <input type="hidden" name="tipo_persona" value="juridica">
+            <div class="datos-personales step_j active">
+              <h5>Datos Personales Persona Juridica</h5>
+              <div class="espacioT row">
+                <input class="col" type="email" name="email" placeholder="Email">
+                <input class="col" type="email" name="confirmacion_email" placeholder="Confirmacion Email">
+              </div>
+              <div class="espacioT row">
+                <input class="col" type="text" name="ruc" placeholder="RUC">
+                <input class="col" type="text" name="nombre_comercial" placeholder="Nombre Comercial">
+              </div>
+              <div class="espacioT row">
+                <input class="col" type="text" name="actividad_comercial" placeholder="Actividad Comercial">
+              </div>
+              <div class="espacioT row">
+                <input class="col" type="tel" name="celular" placeholder="Celular">
+                <input class="col" type="tel" name="telefono" placeholder="Telefono">
+              </div>
+              <div class="botones">
+                <button type="button" onclick="nextStepJ(1)">
+                  Siguiente <i class="bi bi-chevron-double-right"></i>
+                </button>
+              </div>
+            </div>
+            <div class="datos_direccion step_j">
+              <h5>Direccion</h5>
+              <div class="espacioT row">
+                <input class="col" type="text" name="departamento" placeholder="Departamento">
+                <input class="col" type="text" name="provincia" placeholder="Provincia">
+              </div>
+              <div class="espacioT row">
+                <input class="col" type="text" name="distrito" placeholder="Distrito">
+                <input class="col" type="text" name="direccion" placeholder="Direccion">
+              </div>
+              <div class="espacioT row">
+                <input class="col-3" type="text" name="numero" placeholder="Numero">
+                <input class="col" type="text" name="complemento" placeholder="Complemento (piso, dpto, manzana, etc)">
+              </div>
+              <div class="botones">
+                <button type="button" onclick="nextStepJ(2)">
+                  Siguiente <i class="bi bi-chevron-double-right"></i>
+                </button>
+              </div>
+            </div>
+            <div class="datos_acceso step_j">
+              <h5>Datos de acceso</h5>
+              <div class="col espacioI mt-4">
+                <input class="row" type="text" name="usuario" placeholder="Usuario">
+                <input class="row" type="password" name="contraseña" placeholder="Contraseña">
+              </div>
+              <div class="terminoss d-flex">
+                <input type="checkbox" name="terminos_y_condiciones" id="terminos_y_condiciones" value="1" required>
+                <label for="terminos_y_condiciones">
+                  He leído, conozco las condiciones para el tratamiento de mis datos personales y doy
+                  mi consentimiento, tal y como se describe en
+                  <a target="_blank" href="#">nuestros términos de uso</a>
+                </label>
+              </div>
+              <div class="boton_final">
+                <button type="submit"> Finalizar</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+
+      </div>
     </div>
+  </div>
 
 
-    <script>
-        document.getElementById('signupForm').addEventListener('submit', function (event) {
-            // Aquí puedes agregar la lógica de validación del formulario.
-            let valid = true;
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', function(event) {
+      // Aquí puedes agregar la lógica de validación del formulario.
+      let valid = true;
 
-            // Validación del nombre
-            const firstName = document.getElementById('firstName').value;
-            if (firstName.trim() === '') {
-                valid = false;
-                document.getElementById('firstNameError').innerText = 'El nombre es requerido.';
-            } else {
-                document.getElementById('firstNameError').innerText = '';
-            }
+      // Validación del nombre
+      const firstName = document.getElementById('firstName').value;
+      if (firstName.trim() === '') {
+        valid = false;
+        document.getElementById('firstNameError').innerText = 'El nombre es requerido.';
+      } else {
+        document.getElementById('firstNameError').innerText = '';
+      }
 
-            // Validación del apellido
-            const lastName = document.getElementById('lastName').value;
-            if (lastName.trim() === '') {
-                valid = false;
-                document.getElementById('lastNameError').innerText = 'El apellido es requerido.';
-            } else {
-                document.getElementById('lastNameError').innerText = '';
-            }
+      // Validación del apellido
+      const lastName = document.getElementById('lastName').value;
+      if (lastName.trim() === '') {
+        valid = false;
+        document.getElementById('lastNameError').innerText = 'El apellido es requerido.';
+      } else {
+        document.getElementById('lastNameError').innerText = '';
+      }
 
-            // Validación del correo electrónico
-            const email = document.getElementById('email').value;
-            if (email.trim() === '') {
-                valid = false;
-                document.getElementById('emailError').innerText = 'El correo electrónico es requerido.';
-            } else if (!/\S+@\S+\.\S+/.test(email)) {
-                valid = false;
-                document.getElementById('emailError').innerText = 'El correo electrónico no es válido.';
-            } else {
-                document.getElementById('emailError').innerText = '';
-            }
+      // Validación del correo electrónico
+      const email = document.getElementById('email').value;
+      if (email.trim() === '') {
+        valid = false;
+        document.getElementById('emailError').innerText = 'El correo electrónico es requerido.';
+      } else if (!/\S+@\S+\.\S+/.test(email)) {
+        valid = false;
+        document.getElementById('emailError').innerText = 'El correo electrónico no es válido.';
+      } else {
+        document.getElementById('emailError').innerText = '';
+      }
 
-            // Validación de la contraseña
-            const password = document.getElementById('password').value;
-            if (password.trim() === '') {
-                valid = false;
-                document.getElementById('passwordError').innerText = 'La contraseña es requerida.';
-            } else {
-                document.getElementById('passwordError').innerText = '';
-            }
+      // Validación de la contraseña
+      const password = document.getElementById('password').value;
+      if (password.trim() === '') {
+        valid = false;
+        document.getElementById('passwordError').innerText = 'La contraseña es requerida.';
+      } else {
+        document.getElementById('passwordError').innerText = '';
+      }
 
-            // Validación de la confirmación de la contraseña
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            if (confirmPassword.trim() === '') {
-                valid = false;
-                document.getElementById('confirmPasswordError').innerText = 'Por favor, confirme la contraseña.';
-            } else if (password !== confirmPassword) {
-                valid = false;
-                document.getElementById('confirmPasswordError').innerText = 'Las contraseñas no coinciden.';
-            } else {
-                document.getElementById('confirmPasswordError').innerText = '';
-            }
+      // Validación de la confirmación de la contraseña
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      if (confirmPassword.trim() === '') {
+        valid = false;
+        document.getElementById('confirmPasswordError').innerText = 'Por favor, confirme la contraseña.';
+      } else if (password !== confirmPassword) {
+        valid = false;
+        document.getElementById('confirmPasswordError').innerText = 'Las contraseñas no coinciden.';
+      } else {
+        document.getElementById('confirmPasswordError').innerText = '';
+      }
 
-            // Validación de los términos y condiciones
-            const terms = document.getElementById('terms').checked;
-            if (!terms) {
-                valid = false;
-                document.getElementById('termsError').innerText = 'Debe aceptar los términos y condiciones.';
-            } else {
-                document.getElementById('termsError').innerText = '';
-            }
+      // Validación de los términos y condiciones
+      const terms = document.getElementById('terms').checked;
+      if (!terms) {
+        valid = false;
+        document.getElementById('termsError').innerText = 'Debe aceptar los términos y condiciones.';
+      } else {
+        document.getElementById('termsError').innerText = '';
+      }
 
-            if (!valid) {
-                event.preventDefault(); // Prevenir el envío del formulario si no es válido
-            }
-        });
-    </script>
+      if (!valid) {
+        event.preventDefault(); // Prevenir el envío del formulario si no es válido
+      }
+    });
+  </script>
 
-    <!-- SCRIPTS -->
-    <script>
+  <!-- SCRIPTS -->
+  <script>
+    function PersonaNatural() {
+      const contDivNatural = document.getElementById('persNatural');
+      const contDivJuridica = document.getElementById('persJuridica');
 
-        function PersonaNatural() {
-            const contDivNatural = document.getElementById('persNatural');
-            const contDivJuridica = document.getElementById('persJuridica');
+      contDivNatural.classList.add('d-block');
+      contDivNatural.classList.remove('d-none');
+      contDivJuridica.classList.add('d-none');
+      contDivJuridica.classList.remove('d-block');
 
-            contDivNatural.classList.add('d-block');
-            contDivNatural.classList.remove('d-none');
-            contDivJuridica.classList.add('d-none');
-            contDivJuridica.classList.remove('d-block');
+      nextStep(0); // Reiniciar el formulario de persona natural al primer paso
+    }
 
-            nextStep(0); // Reiniciar el formulario de persona natural al primer paso
-        }
+    function PersonaJuridica() {
+      const contDivNatural = document.getElementById('persNatural');
+      const contDivJuridica = document.getElementById('persJuridica');
 
-        function PersonaJuridica() {
-            const contDivNatural = document.getElementById('persNatural');
-            const contDivJuridica = document.getElementById('persJuridica');
+      contDivNatural.classList.add('d-none');
+      contDivNatural.classList.remove('d-block');
+      contDivJuridica.classList.add('d-block');
+      contDivJuridica.classList.remove('d-none');
 
-            contDivNatural.classList.add('d-none');
-            contDivNatural.classList.remove('d-block');
-            contDivJuridica.classList.add('d-block');
-            contDivJuridica.classList.remove('d-none');
-
-            nextStepJ(0); // Reiniciar el formulario de persona jurídica al primer paso
-        }
-
-
-        function nextStep(step) {
-            //ocultar las secciones
-            let steps = document.querySelectorAll('.step');
-            steps.forEach((step) => {
-                step.classList.remove('active');
-            });
-
-            //Mostar la sigiente seccion
-            steps[step].classList.add('active');
-
-            //Actualizar el navegador
-            let navItems = document.querySelectorAll('.nav_datos');
-            navItems.forEach((item) => {
-                item.classList.remove('active');
-            });
-
-            navItems[step].classList.add('active');
-        }
+      nextStepJ(0); // Reiniciar el formulario de persona jurídica al primer paso
+    }
 
 
-        function nextStepJ(step_j) {
-            // ocultar las secciones
-            let stepsJ = document.querySelectorAll('.step_j');
-            stepsJ.forEach((steps_J) => {
-                steps_J.classList.remove('active');
-            });
+    function nextStep(step) {
+      //ocultar las secciones
+      let steps = document.querySelectorAll('.step');
+      steps.forEach((step) => {
+        step.classList.remove('active');
+      });
 
-            // mostrar la siguiente seccion
-            stepsJ[step_j].classList.add('active');
+      //Mostar la sigiente seccion
+      steps[step].classList.add('active');
 
-            // actualizar el navegador
-            let navItems = document.querySelectorAll('.nav_datos');
-            navItems.forEach((item) => {
-                item.classList.remove('active');
-            });
+      //Actualizar el navegador
+      let navItems = document.querySelectorAll('.nav_datos');
+      navItems.forEach((item) => {
+        item.classList.remove('active');
+      });
 
-            navItems[step_j].classList.add('active');
-        }
-
-
-        // Inicializa el primer paso y el primer elemento del navegador como activos
-        document.addEventListener('DOMContentLoaded', () => {
-            nextStep(0);
-        });
+      navItems[step].classList.add('active');
+    }
 
 
-        document.addEventListener("DOMContentLoaded", function () {
-            const persNaturalBtn = document.querySelector("button[onclick='PersonaNatural()']");
-            const persJuridicaBtn = document.querySelector("button[onclick='PersonaJuridica()']");
+    function nextStepJ(step_j) {
+      // ocultar las secciones
+      let stepsJ = document.querySelectorAll('.step_j');
+      stepsJ.forEach((steps_J) => {
+        steps_J.classList.remove('active');
+      });
 
-            persNaturalBtn.addEventListener("click", function () {
-                document.getElementById('persNatural').classList.remove('d-none');
-                document.getElementById('persJuridica').classList.add('d-none');
-            });
+      // mostrar la siguiente seccion
+      stepsJ[step_j].classList.add('active');
 
-            persJuridicaBtn.addEventListener("click", function () {
-                document.getElementById('persNatural').classList.add('d-none');
-                document.getElementById('persJuridica').classList.remove('d-none');
-            });
-        });
+      // actualizar el navegador
+      let navItems = document.querySelectorAll('.nav_datos');
+      navItems.forEach((item) => {
+        item.classList.remove('active');
+      });
 
-    </script>
+      navItems[step_j].classList.add('active');
+    }
+
+
+    // Inicializa el primer paso y el primer elemento del navegador como activos
+    document.addEventListener('DOMContentLoaded', () => {
+      nextStep(0);
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const persNaturalBtn = document.querySelector("button[onclick='PersonaNatural()']");
+      const persJuridicaBtn = document.querySelector("button[onclick='PersonaJuridica()']");
+
+      persNaturalBtn.addEventListener("click", function() {
+        document.getElementById('persNatural').classList.remove('d-none');
+        document.getElementById('persJuridica').classList.add('d-none');
+      });
+
+      persJuridicaBtn.addEventListener("click", function() {
+        document.getElementById('persNatural').classList.add('d-none');
+        document.getElementById('persJuridica').classList.remove('d-none');
+      });
+    });
+  </script>
 </body>
 
 </html>

@@ -2,134 +2,129 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="/img/footer_logo.svg" type="image/x-icon">
-    <link rel="stylesheet" href="/css/style_login.css">
-    <!-- BOOSTRAP ICON -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <title>Subastas online | login</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="/img/footer_logo.svg" type="image/x-icon">
+  <link rel="stylesheet" href="/css/style_login.css">
+  <!-- BOOSTRAP ICON -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <title>Subastas online | login</title>
 </head>
 
 <body>
-    <div class="contenedor">
-        <div class="imagen slideInLeft">
-            <a class="regreso" href="/">
-                <img src="/img/regresar.svg" alt="">
-            </a>
-            <img class="imagen_fondo " src="/img/imagen_login.svg" alt="">
-        </div>
-        <div class="fondo ">
-            <div class="content_form slideInLeft">
-                <h2>Inicia sesión</h2>
-                <form action="/login" class="slideInLeft" method="POST" id="loginForm">
-                    <label for="usuario">Usuario*</label>
-                    <input type="text" name="usuario" id="usuario" placeholder="Ingresa tu Usuario" required>
-                    <div class="content_contra">
-                        <label for="contraseña">Contraseña*</label>
-                        <div class="input-container">
-                            <input type="password" name="contra" id="contraseña" placeholder="Ingresa tu Contraseña"
-                                required>
-                            <button type="button" class="mostarC" id="toggleButton" onclick="mostrar()">
-                                <i id="toggleIcon" class="bi bi-eye-slash-fill"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <button type="submit">Iniciar sesión</button>
-                    <p>
-                        <span>No tienes una cuenta?</span>
-                        <span>
-                            <a href="/registro">Sign up</a>
-                        </span>
-                    </p>
-                    <a href="/admin/loginAdminG" class="subastar" id="subastarLink">Quieres subastar tus propiedades
-                        <span>Click</span></a>
-                </form>
-            </div>
-        </div>
+  <div class="contenedor">
+    <div class="imagen slideInLeft">
+      <a class="regreso" href="/">
+        <img src="/img/regresar.svg" alt="">
+      </a>
+      <img class="imagen_fondo " src="/img/imagen_login.svg" alt="">
     </div>
+    <div class="fondo ">
+      <div class="content_form slideInLeft">
+        <h2>Inicia sesión</h2>
+        <form action="/login" class="slideInLeft" method="POST" id="loginForm">
+          <label for="usuario">Usuario*</label>
+          <input type="text" name="usuario" id="usuario" placeholder="Ingresa tu Usuario" required>
+          <div class="content_contra">
+            <label for="contraseña">Contraseña*</label>
+            <div class="input-container">
+              <input type="password" name="contra" id="contraseña" placeholder="Ingresa tu Contraseña" required>
+              <button type="button" class="mostarC" id="toggleButton" onclick="mostrar()">
+                <i id="toggleIcon" class="bi bi-eye-slash-fill"></i>
+              </button>
+            </div>
+          </div>
+          <button type="submit">Iniciar sesión</button>
+          <a class="registrar" href="/registro">Regístrate</a>
+          <a class="regresar" href="/">Ir al inicio</a>
+          <a href="/admin/loginAdminG" class="subastar" id="subastarLink">Quieres subastar tus propiedades
+            <span>Click</span></a>
+        </form>
+      </div>
+    </div>
+  </div>
 
-    <!-- Incluye SweetAlert2 desde un CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Incluye SweetAlert2 desde un CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', async function (event) {
-            event.preventDefault();
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
 
-            const formData = new FormData(this);
-            const data = {
-                usuario: formData.get('usuario'),
-                contra: formData.get('contra')
-            };
+      const formData = new FormData(this);
+      const data = {
+        usuario: formData.get('usuario'),
+        contra: formData.get('contra')
+      };
 
-            try {
-                const response = await fetch('/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                const result = await response.json();
-
-                if (response.ok) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Login exitoso',
-                        text: 'bienvenido ' + data.usuario,
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => {
-                        window.location.href = result.redirect;
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: result.message
-                    });
-                }
-            } catch (error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Error al intentar realizar la solicitud'
-                });
-            }
+      try {
+        const response = await fetch('/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
         });
-    </script>
 
-    <script>
-        function mostrar() {
-            const contra = document.getElementById("contraseña");
-            const icon = document.getElementById("toggleIcon");
-            if (contra.type == "password") {
-                contra.type = "text";
-                icon.classList.remove('bi-eye-slash-fill');
-                icon.classList.add('bi-eye-fill');
-            } else {
-                contra.type = "password";
-                icon.classList.remove('bi-eye-fill');
-                icon.classList.add('bi-eye-slash-fill')
-            }
+        const result = await response.json();
+
+        if (response.ok) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Login exitoso',
+            text: 'bienvenido ' + data.usuario,
+            showConfirmButton: false,
+            timer: 1500
+          }).then(() => {
+            window.location.href = result.redirect;
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: result.message
+          });
         }
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Escucha el clic en el enlace de subastar
-            document.getElementById('subastarLink').addEventListener('click', function (event) {
-                event.preventDefault(); // Evita el comportamiento predeterminado del enlace
-                // Agrega una clase para iniciar la animación de deslizamiento
-                document.querySelector('.contenedor').classList.add('slideOutRight');
-                // Espera un poco para que la animación termine antes de redirigir
-                setTimeout(function () {
-                    window.location.href = "/admin/loginAdminG";
-                }, 500); // Ajusta este tiempo para que coincida con la duración de la animación CSS
-            });
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error al intentar realizar la solicitud'
         });
-    </script>
+      }
+    });
+  </script>
+
+  <script>
+    function mostrar() {
+      const contra = document.getElementById("contraseña");
+      const icon = document.getElementById("toggleIcon");
+      if (contra.type == "password") {
+        contra.type = "text";
+        icon.classList.remove('bi-eye-slash-fill');
+        icon.classList.add('bi-eye-fill');
+      } else {
+        contra.type = "password";
+        icon.classList.remove('bi-eye-fill');
+        icon.classList.add('bi-eye-slash-fill')
+      }
+    }
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Escucha el clic en el enlace de subastar
+      document.getElementById('subastarLink').addEventListener('click', function(event) {
+        event.preventDefault(); // Evita el comportamiento predeterminado del enlace
+        // Agrega una clase para iniciar la animación de deslizamiento
+        document.querySelector('.contenedor').classList.add('slideOutRight');
+        // Espera un poco para que la animación termine antes de redirigir
+        setTimeout(function() {
+          window.location.href = "/admin/loginAdminG";
+        }, 500); // Ajusta este tiempo para que coincida con la duración de la animación CSS
+      });
+    });
+  </script>
 </body>
 
 </html>

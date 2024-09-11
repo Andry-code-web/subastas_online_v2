@@ -19,157 +19,16 @@
   --color--sub: #d30000;
 }
 
-/* HEADER */
-header {
-  /* position: absolute; */
-  width: 100%;
-  height: 95px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  z-index: 100;
-}
-
-.logo{
-  width: 7%;
-}
-
-.logo img{
-  width: 100%;
-}
-
-.session p {
-  color: #fff;
-  font-size: 1rem;
-  margin: 0;
-  padding: 0;
-}
-
-.ingresar{
-  padding: .1rem .6rem .2rem .6rem !important;
-  background-color: #B20000;
-  border-radius: 5px;
-}
-
-.ingresar:hover{
-  background-color: #d30000;
-}
-
-.ingresar span i{
-  font-size: 1.5rem;
-  font-weight: 600;
-}
-
-.ingresar span a {
-  text-decoration: none;
-  font-size: 1rem;
-  font-family: var(--font--parrafo);
-  color: #fff;
-  text-decoration: none;
-  transition: all 0.5s;
-  font-weight: 600;
-}
-
-header nav {
-  display: flex;
-  gap: 2rem;
-}
-
-header nav a {
-  font-size: 1.1rem;
-  font-family: var(--font--header);
-  text-decoration: none;
-  color: #000;
-  transition: all 0.3s;
-}
-
-header nav a:hover {
-  transform: scale(1.1);
-}
-
-.session{
-  padding: .1rem .6rem .2rem .6rem !important;
-  background-color: #B20000;
-  border-radius: 5px;
-}
-
-header .session p .btn_menu {
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-header .session p .btn_menu i {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #fff;
-  margin-right: .5rem;
-}
-
-.menu_desplegable {
-  min-width: 300px;
-  height: 100vh;
-  position: fixed;
-  right: 0;
-  top: 0;
-  background-color: #c5ac75;
-  padding: 1rem;
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 0.5s,
-    opacity 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53),
-    transform 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53);
-  transform: translateX(100%);
-  z-index: 100;
-}
-
-.menu_desplegable.active {
-  visibility: visible;
-  opacity: 1;
-  transform: translateX(0);
-  transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.menu_desplegable div ul{
-  list-style: none;
-}
-
-.menu_desplegable div ul li a{
-  text-decoration: none;
-  color: #fff;
-  font-family: var(--font--banner--bool);
-  font-weight: 400;
-  transition: ease-in .3s;
-}
-
-.menu_desplegable div ul li a:hover{
-  font-size: 1.1rem;
-  border-bottom: 2px solid #fff;
-}
-
-.cabezera_menu h3 {
-  color: #fff;
-}
-
-.cabezera_menu button {
-  background: none;
-  border: none;
-  transition: ease 0.3s;
-  color: #fff;
-}
-
-.cabezera_menu button:hover {
-  font-size: 1.2rem;
-}
 
 
 /* SUBASTAS */
 .detalles_subasta {
   width: 100%;
-  margin-top: 2rem;
+  margin-top: 7rem;
   gap: 3rem;
   padding-bottom: 3rem;
+  display: flex;
+  justify-content: center;
 }
 
 .property-detail {
@@ -279,28 +138,6 @@ header .session p .btn_menu i {
   padding: 10px 15px 10px 15px;
 }
 
-/* .property-details-content h4::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 7%;
-  height: 30%;
-  border-top: 3px solid var(--bg--botones);
-  border-left: 3px solid var(--bg--botones);
-}
-
-.property-details-content h4::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 7%;
-  height: 30%;
-  border-bottom: 3px solid var(--bg--botones);
-  border-right: 3px solid var(--bg--botones);
-}
- */
 .content_info_subastas p {
   border-bottom: 1px solid #dddddd;
 }
@@ -587,4 +424,71 @@ header .session p .btn_menu i {
 
 .contet_pdf:hover a.archivo_pdf {
   text-decoration: underline;
+}
+
+
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  .detalles_subasta{
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+
+  .property-detail{
+    width: 95%;
+  }
+
+  .imgen_principal{
+    height: 25vh;
+  }
+
+  .img_wrapper{
+    width: 170px;
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) and (max-width: 992px) {
+  .detalles_subasta{
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+
+  .property-detail{
+    width: 80%;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+  .detalles_subasta{
+    margin-top: 4rem;
+  }
+
+  .property-detail{
+    width: 50%;
+  }
+
+  .card{
+    width: 300px;
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) and (max-width: 1440px) {
+  .detalles_subasta{
+    margin-top: 5rem;
+  }
+
+  .property-detail{
+    width: 50%;
+  }
+
+  .card{
+    margin-top: 1rem;
+  }
 }
