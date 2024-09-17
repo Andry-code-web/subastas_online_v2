@@ -20,7 +20,7 @@
 
   <!-- ESTILOS PAGINA -->
    <link rel="stylesheet" href="/css/style_vender.css">
-  <title>Document</title>
+  <title>Subasta Sur || info-vender</title>
 </head>
 
 <body>
@@ -73,7 +73,24 @@
 
   <%- include('partials/footer') %>
 
-  <script src="/js/partials/script_header.js"></script>
+  <!-- SCRIPTS -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const botonActivar = document.getElementById("btn_menu");
+      const botonCerrar = document.getElementById("btn_close");
+      const contenederMenu = document.getElementsByClassName("menu_desplegable")[0];
+
+      botonActivar.addEventListener('click', () => {
+        contenederMenu.classList.add("active");
+      });
+
+      botonCerrar.addEventListener('click', () => {
+        contenederMenu.classList.remove("active");
+      });
+    });
+  </script>
+
+    <script src="/js/partials/script_header.js"></script>
 
 </body>
 

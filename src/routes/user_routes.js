@@ -407,13 +407,16 @@ router.get('/subasta/:id', isAuthenticated, (req, res) => {
     const subasta = resultadoSubasta[0];
     const fechaHoraSubasta = moment(subasta.fecha_hora_subasta);
 
-    // Verifica si la subasta está en curso
-    let estaEnCurso = false;
-    if (now.isBetween(fechaHoraSubasta, fechaHoraSubasta.clone().add(5, 'minutes'), null, '[]')) {
-      estaEnCurso = true;
-    } else if (now.isAfter(fechaHoraSubasta.clone().add(5, 'minutes'))) {
-      estaEnCurso = false;
-    }
+    // Ajusta la lógica de verificación del estado de la subasta
+    const duracionSubasta = 5; // duración en minutos
+    const fechaHoraFinSubasta = fechaHoraSubasta.clone().add(duracionSubasta, 'minutes');
+    let estaEnCurso = now.isBetween(fechaHoraSubasta, fechaHoraFinSubasta, null, '[]');
+
+    // Agrega los logs aquí para depurar
+    console.log("Ahora:", now.format());
+    console.log("Fecha y Hora Subasta:", fechaHoraSubasta.format());
+    console.log("Fecha y Hora Fin Subasta:", fechaHoraFinSubasta.format());
+    console.log("Está en curso:", estaEnCurso);
 
     const fechaFormateada = subasta.fecha_formateada;
     const [day, dayNumber] = fechaFormateada.split(' ');
@@ -444,6 +447,7 @@ router.get('/subasta/:id', isAuthenticated, (req, res) => {
     });
   });
 });
+
 
 
 // Ruta para descargar un anexo
@@ -665,6 +669,27 @@ router.get('/info-vender', (req, res) =>{
 //Info page comprar
 router.get('/info-comprar', (req, res) =>{
   res.render('comprar', {
+    usuario: req.session.usuario
+  })
+});
+
+//politica de cookies
+router.get('/politicasDEcookies', (req, res) =>{
+  res.render('politica_cookies', {
+    usuario: req.session.usuario
+  })
+});
+
+//terminos y condiciones
+router.get('/politicasDEprivacidad', (req, res) =>{
+  res.render('politicas_privacidad', {
+    usuario: req.session.usuario
+  })
+});
+
+//condicionesYterminos
+router.get('/condicionesYterminos', (req, res) =>{
+  res.render('terminos_condiciones', {
     usuario: req.session.usuario
   })
 });
