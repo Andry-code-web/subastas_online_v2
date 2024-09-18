@@ -82,6 +82,17 @@ io.on('connection', (socket) => {
         const room = data.room;
         const bidValue = parseInt(data.bid);
         
+        // Verificar si auctions[room] está inicializado; si no, inicializarlo
+        if (!auctions[room]) {
+            auctions[room] = {
+                auctionEnded: false,
+                currentWinner: null,
+                clientDisconnected: false,
+                currentBid: 0,
+                winnerNotified: false
+            };
+        }
+    
         // Verificar que la puja no sea menor que la puja mínima permitida
         if (auctions[room].auctionEnded || auctions[room].clientDisconnected || bidValue < (auctions[room].currentBid || 0)) {
             console.log('Puja inválida o subasta terminada.');
