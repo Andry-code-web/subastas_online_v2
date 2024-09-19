@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const router = express.Router();
 const moment = require('moment');
+const bcrypt = require('bcrypt');
 const { conection } = require("../database/db"); // Asegúrate de que el nombre del archivo y la ruta sean correctos
 
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -126,27 +127,38 @@ router.get("/login", (req, res) => {
 
 // Ruta de inicio de sesión
 router.post('/login', (req, res) => {
-  const consulta = "SELECT id, usuario, contraseña FROM usuarios;";
   const { usuario, contra } = req.body;
 
-  console.log(usuario, contra);
+  // Consulta parametrizada para evitar inyecciones SQL
+  const sql = "SELECT id, usuario, contraseña FROM usuarios WHERE usuario = ?";
 
-  conection.query(consulta, function (err, result, fields) {
+  conection.query(sql, [usuario], (err, result) => {
     if (err) {
       console.error("Error al realizar la consulta: ", err);
-      res.status(500).json({ message: "Error interno del servidor" });
-      return;
+      return res.status(500).json({ message: "Error interno del servidor" });
     }
 
-    const usuarioEncontrado = result.find(
-      (user) => user.usuario === usuario && user.contraseña === contra
-    );
-    if (usuarioEncontrado) {
-      req.session.usuario = {
-        id: usuarioEncontrado.id,
-        nombre: usuarioEncontrado.usuario,
-      };
-      res.json({ success: true, redirect: "/" });
+    if (result.length > 0) {
+      const usuarioEncontrado = result[0];
+
+      // Comparar la contraseña proporcionada con la almacenada
+      bcrypt.compare(contra, usuarioEncontrado.contraseña, (err, isMatch) => {
+        if (err) {
+          console.error("Error al comparar contraseñas: ", err);
+          return res.status(500).json({ message: "Error interno del servidor" });
+        }
+
+        if (isMatch) {
+          req.session.usuario = {
+            id: usuarioEncontrado.id,
+            nombre: usuarioEncontrado.usuario,
+          };
+          res.json({ success: true, redirect: "/" });
+        } else {
+          console.log("Usuario o contraseña incorrectos");
+          res.status(401).json({ message: "Usuario o contraseña incorrectos" });
+        }
+      });
     } else {
       console.log("Usuario o contraseña incorrectos");
       res.status(401).json({ message: "Usuario o contraseña incorrectos" });
@@ -180,6 +192,8 @@ router.get("/registro", (req, res) => {
   res.render("registro");
 });
 
+const saltRounds = 10; // Puedes ajustar el número de rondas de sal
+
 router.post('/registro', (req, res) => {
   const datos = req.body;
 
@@ -211,30 +225,39 @@ router.post('/registro', (req, res) => {
       terminos_y_condiciones: parseInt(datos.terminos_y_condiciones) ? 1 : 0
     };
 
-    console.log(typeof (valores.terminos_y_condiciones));
+    // Encriptar la contraseña
+    bcrypt.hash(valores.contraseña, saltRounds, (err, hashedPassword) => {
+      if (err) {
+        console.error('Error al encriptar la contraseña:', err);
+        return res.status(500).send('Error al encriptar la contraseña');
+      }
 
-    const sql = `
-          INSERT INTO usuarios (
-              tipo_persona, email, confirmacion_email, celular, telefono,
-              nombre_apellidos, dni_ce, fecha_nacimiento, sexo, estado_civil,
-              ruc, nombre_comercial, actividad_comercial,
-              departamento, provincia, distrito, direccion, numero, complemento,
-              usuario, contraseña, terminos_y_condiciones
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      // Actualizar el valor de la contraseña con el hash
+      valores.contraseña = hashedPassword;
+
+      const sql = `
+        INSERT INTO usuarios (
+            tipo_persona, email, confirmacion_email, celular, telefono,
+            nombre_apellidos, dni_ce, fecha_nacimiento, sexo, estado_civil,
+            ruc, nombre_comercial, actividad_comercial,
+            departamento, provincia, distrito, direccion, numero, complemento,
+            usuario, contraseña, terminos_y_condiciones
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
 
-    conection.query(sql, [
-      valores.tipo_persona, valores.email, valores.confirmacion_email, valores.celular, valores.telefono,
-      valores.nombre_apellidos, valores.dni_ce, valores.fecha_nacimiento, valores.sexo, valores.estado_civil,
-      valores.ruc, valores.nombre_comercial, valores.actividad_comercial,
-      valores.departamento, valores.provincia, valores.distrito, valores.direccion, valores.numero, valores.complemento,
-      valores.usuario, valores.contraseña, valores.terminos_y_condiciones
-    ], (err, results) => {
-      if (err) {
-        console.error('Error al realizar la inserción:', err);
-        return res.status(500).send('Error al realizar la inserción');
-      }
-      res.redirect('/login');
+      conection.query(sql, [
+        valores.tipo_persona, valores.email, valores.confirmacion_email, valores.celular, valores.telefono,
+        valores.nombre_apellidos, valores.dni_ce, valores.fecha_nacimiento, valores.sexo, valores.estado_civil,
+        valores.ruc, valores.nombre_comercial, valores.actividad_comercial,
+        valores.departamento, valores.provincia, valores.distrito, valores.direccion, valores.numero, valores.complemento,
+        valores.usuario, valores.contraseña, valores.terminos_y_condiciones
+      ], (err, results) => {
+        if (err) {
+          console.error('Error al realizar la inserción:', err);
+          return res.status(500).send('Error al realizar la inserción');
+        }
+        res.redirect('/login');
+      });
     });
   } else if (datos.tipo_persona === 'juridica') {
     // Persona Jurídica
@@ -263,28 +286,39 @@ router.post('/registro', (req, res) => {
       terminos_y_condiciones: parseInt(datos.terminos_y_condiciones) ? 1 : 0
     };
 
-    const sql = `
-          INSERT INTO usuarios (
-              tipo_persona, email, confirmacion_email, celular, telefono,
-              nombre_apellidos, dni_ce, fecha_nacimiento, sexo, estado_civil,
-              ruc, nombre_comercial, actividad_comercial,
-              departamento, provincia, distrito, direccion, numero, complemento,
-              usuario, contraseña, terminos_y_condiciones
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    // Encriptar la contraseña
+    bcrypt.hash(valores.contraseña, saltRounds, (err, hashedPassword) => {
+      if (err) {
+        console.error('Error al encriptar la contraseña:', err);
+        return res.status(500).send('Error al encriptar la contraseña');
+      }
+
+      // Actualizar el valor de la contraseña con el hash
+      valores.contraseña = hashedPassword;
+
+      const sql = `
+        INSERT INTO usuarios (
+            tipo_persona, email, confirmacion_email, celular, telefono,
+            nombre_apellidos, dni_ce, fecha_nacimiento, sexo, estado_civil,
+            ruc, nombre_comercial, actividad_comercial,
+            departamento, provincia, distrito, direccion, numero, complemento,
+            usuario, contraseña, terminos_y_condiciones
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
 
-    conection.query(sql, [
-      valores.tipo_persona, valores.email, valores.confirmacion_email, valores.celular, valores.telefono,
-      valores.nombre_apellidos, valores.dni_ce, valores.fecha_nacimiento, valores.sexo, valores.estado_civil,
-      valores.ruc, valores.nombre_comercial, valores.actividad_comercial,
-      valores.departamento, valores.provincia, valores.distrito, valores.direccion, valores.numero, valores.complemento,
-      valores.usuario, valores.contraseña, valores.terminos_y_condiciones
-    ], (err, results) => {
-      if (err) {
-        console.error('Error al realizar la inserción:', err);
-        return res.status(500).send('Error al realizar la inserción');
-      }
-      res.redirect('/login');
+      conection.query(sql, [
+        valores.tipo_persona, valores.email, valores.confirmacion_email, valores.celular, valores.telefono,
+        valores.nombre_apellidos, valores.dni_ce, valores.fecha_nacimiento, valores.sexo, valores.estado_civil,
+        valores.ruc, valores.nombre_comercial, valores.actividad_comercial,
+        valores.departamento, valores.provincia, valores.distrito, valores.direccion, valores.numero, valores.complemento,
+        valores.usuario, valores.contraseña, valores.terminos_y_condiciones
+      ], (err, results) => {
+        if (err) {
+          console.error('Error al realizar la inserción:', err);
+          return res.status(500).send('Error al realizar la inserción');
+        }
+        res.redirect('/login');
+      });
     });
   } else {
     res.status(400).send('Tipo de persona no válido');
@@ -484,9 +518,6 @@ router.get('/descargar-anexo/:id', isAuthenticated, (req, res) => {
 });
 
 
-
-
-
 // Ruta para actualizar oportunidades cuando el cliente gana una subasta
 /* router.post('/ganarSubasta/:idSubasta', (req, res) => {
   const usuarioId = req.session.usuario.id; // Obtener el ID del usuario desde la sesión
@@ -546,7 +577,6 @@ router.get('/oportunidades/:id', (req, res) => {
     }
   );
 });
-
 
 
 // Like
