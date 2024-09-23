@@ -396,16 +396,23 @@ router.get("/catalogo", (req, res) => {
 });
 
 // Subastas
+// Subastas
 router.get('/subasta/:id', isAuthenticated, (req, res) => {
   const subastaId = req.params.id;
 
   const querySubasta = `
-    SELECT *, 
-      DATE_FORMAT(fecha_subasta, '%W %d') AS fecha_formateada, 
-      DATE_FORMAT(hora_subasta, '%h:%i %p') AS hora_formateada, 
-      CONCAT(fecha_subasta, ' ', hora_subasta) AS fecha_hora_subasta
-    FROM subastas 
-    WHERE id = ?`;
+    SELECT s.*, 
+      DATE_FORMAT(s.fecha_subasta, '%W %d') AS fecha_formateada, 
+      DATE_FORMAT(s.hora_subasta, '%h:%i %p') AS hora_formateada, 
+      CONCAT(s.fecha_subasta, ' ', s.hora_subasta) AS fecha_hora_subasta,
+      IFNULL(l.like_count, 0) AS like_count
+    FROM subastas s
+    LEFT JOIN (
+      SELECT subasta_id, COUNT(*) AS like_count
+      FROM likes
+      GROUP BY subasta_id
+    ) l ON s.id = l.subasta_id
+    WHERE s.id = ?`;
 
   const queryImagenes = 'SELECT imagen FROM imagenes_propiedad WHERE id_subasta = ?';
   const queryAnexos = 'SELECT id, anexo FROM anexos_propiedad WHERE id_subasta = ?';
@@ -481,6 +488,7 @@ router.get('/subasta/:id', isAuthenticated, (req, res) => {
     });
   });
 });
+
 
 
 

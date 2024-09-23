@@ -220,6 +220,9 @@
 
 .card-header p {
   margin: 0;
+  font-size: 1.2rem;
+  font-family: var(--font--banner--semi);
+
 }
 
 .card-header .heart-icon {
@@ -305,6 +308,12 @@
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
+  font-size: 1rem;
+  font-family: var(--font--banner--semi);
+}
+
+.mensaje ul{
+  list-style: none;
 }
 
 .content_acciones {

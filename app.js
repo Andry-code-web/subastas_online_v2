@@ -2,7 +2,7 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const session = require('express-session');
-const MySQLStore = require('express-mysql-session')(session);
+//const MySQLStore = require('express-mysql-session')(session);
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -223,6 +223,8 @@ io.on('connection', (socket) => {
         console.log('Cliente desconectado');
     });
 });
+
+server.timeout = 0;
 
 // Iniciar el servidor
 server.listen(port, () => {

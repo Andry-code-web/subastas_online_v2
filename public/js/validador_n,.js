@@ -9,7 +9,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const dni = document.querySelector('#input_dni').value;
         const dniError = document.querySelector('#dniError');
         const dniStatus = document.querySelector('#dniStatus');
-        if (dni) {
+        if (!dni) {
+            if (dniError) dniError.textContent = '(x) El campo DNI es obligatorio.';
+            valid = false;
+        } else {
             if (!validateDNI(dni)) {
                 if (dniError) dniError.textContent = 'DNI inválido.';
                 if (dniStatus) dniStatus.textContent = 'DNI incorrecto';
@@ -25,11 +28,19 @@ document.addEventListener('DOMContentLoaded', function () {
         const confirmacion_email = document.querySelector('#confirmacion_email').value;
         const emailError = document.querySelector('#emailError');
         const confirmacion_emailError = document.querySelector('#confirmacion_emailError');
-        if (email && !isValidEmail(email)) {
+        
+        if (!email) {
+            if (emailError) emailError.textContent = '(x) El campo email es obligatorio.';
+            valid = false;
+        } else if (!isValidEmail(email)) {
             if (emailError) emailError.textContent = 'Email inválido.';
             valid = false;
         }
-        if (confirmacion_email && email !== confirmacion_email) {
+        
+        if (!confirmacion_email) {
+            if (confirmacion_emailError) confirmacion_emailError.textContent = 'Confirma tu email.';
+            valid = false;
+        } else if (email !== confirmacion_email) {
             if (confirmacion_emailError) confirmacion_emailError.textContent = 'Los emails no coinciden.';
             valid = false;
         }
@@ -37,7 +48,11 @@ document.addEventListener('DOMContentLoaded', function () {
         // Validación del nombre y apellidos
         const nombre = document.querySelector('#input_nombre').value;
         const nombreError = document.querySelector('#nombreError');
-        if (nombre && /\d/.test(nombre)) {
+        
+        if (!nombre) {
+            if (nombreError) nombreError.textContent = '(x) El campo nombre es obligatorio.';
+            valid = false;
+        } else if (/\d/.test(nombre)) {
             if (nombreError) nombreError.textContent = 'El nombre no debe contener números.';
             valid = false;
         } else {
@@ -48,7 +63,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const fechaNacimiento = document.querySelector('#fecha_nacimiento').value;
         const fechaNacimientoError = document.querySelector('#fechaNacimientoError');
         const fechaNacimientoStatus = document.querySelector('#fechaNacimientoStatus');
-        if (fechaNacimiento && !isMayorDeEdad(fechaNacimiento)) {
+
+        if (!fechaNacimiento) {
+            if (fechaNacimientoError) fechaNacimientoError.textContent = '(x) Fecha es obligatoria.';
+            valid = false;
+        } else if (!isMayorDeEdad(fechaNacimiento)) {
             if (fechaNacimientoError) fechaNacimientoError.textContent = 'Debes ser mayor de edad.';
             if (fechaNacimientoStatus) fechaNacimientoStatus.textContent = 'No es mayor de edad';
             valid = false;

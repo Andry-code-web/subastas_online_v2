@@ -12,17 +12,6 @@
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <!-- BOOTSTRAP ICON -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-  <style>
-    .error-message {
-      color: red;
-
-    }
-
-    .status-message {
-      color: green;
-    }
-  </style>
 </head>
 
 <body>
@@ -33,7 +22,7 @@
         <p> Podrás ver todos los detalles de las propiedades y participar en las subastas activas.</p>
         <div class="tipo_persona">
           <button class="btn_persona_natural" onclick="PersonaNatural()">Persona natural</button>
-          <button onclick="PersonaJuridica()">Persona juridica</button>
+          <button type="button" onclick="PersonaJuridica()">Persona juridica</button>
         </div>
         <p class="login">
           Ya me encuentro registrado
@@ -65,39 +54,66 @@
             <div class="datos_personales step active">
               <h5>Datos Personales Persona Natural</h5>
               <div class="espacioT nombre row">
-                <input class="col" type="text" name="nombre_apellidos" placeholder="Nombre y Apellidos"
-                  id="input_nombre">
-                <span id="nombreError" class="error-message"></span> <!-- Mensaje de error para DNI -->
-                <input class="col" type="text" name="dni_ce" placeholder="DNI-número verificador" id="input_dni">
-                <span id="dniError" class="error-message"></span> <!-- Mensaje de error para DNI -->
+                <div class="col">
+                  <input type="text" name="nombre_apellidos" placeholder="Nombre y Apellidos" id="input_nombre">
+                  <span id="nombreError" class="error-message"></span> <!-- Mensaje de error para Nombre -->
+                </div>
+                <div class="col">
+                  <input type="text" name="dni_ce" placeholder="DNI-número verificador" id="input_dni">
+                  <span id="dniError" class="error-message"></span> <!-- Mensaje de error para DNI -->
+                </div>
               </div>
+
               <div class="espacioT email row">
-                <input class="col" type="email" name="email" placeholder="Email" id="email">
-                <span id="emailError" class="error-message"></span>
-                <input class="col" type="email" name="confirmacion_email" placeholder="Confirmacion Email"
-                  id="confirmacion_email">
-                <span id="confirmacion_emailError" class="error-message"></span>
+                <div class="col">
+                  <input type="email" name="email" placeholder="Email" id="email">
+                  <span id="emailError" class="error-message"></span> <!-- Mensaje de error para Email -->
+                </div>
+                <div class="col">
+                  <input type="email" name="confirmacion_email" placeholder="Confirmación Email"
+                    id="confirmacion_email">
+                  <span id="confirmacion_emailError" class="error-message"></span>
+                  <!-- Mensaje de error para Confirmación Email -->
+                </div>
               </div>
+
               <div class="espacioT sexo_fecha row">
-                <input class="col" type="date" name="fecha_nacimiento" placeholder="Fecha de Nacimiento"
-                  id="fecha_nacimiento">
-                <span id="fechaNacimientoError" class="error-message"></span>
-                <!-- Mensaje de error para la fecha de nacimiento -->
-                <select class="col" name="sexo">
-                  <option value="M">Masculino</option>
-                  <option value="F">Femenino</option>
-                </select>
-                <select class="col" name="estado_civil">
-                  <option value="soltero">Soltero(a)</option>
-                  <option value="casado">Casado(a)</option>
-                  <option value="divorciado">Divorciado(a)</option>
-                  <option value="viudo">Viudo(a)</option>
-                </select>
+                <div class="col">
+                  <input type="date" name="fecha_nacimiento" placeholder="Fecha de Nacimiento" id="fecha_nacimiento">
+                  <span id="fechaNacimientoError" class="error-message"></span>
+                  <!-- Mensaje de error para Fecha de Nacimiento -->
+                </div>
+                <div class="col">
+                  <select name="sexo" id="sexo">
+                    <option value="">Seleccionar Sexo</option>
+                    <option value="M">Masculino</option>
+                    <option value="F">Femenino</option>
+                  </select>
+                  <span id="sexoError" class="error-message"></span> <!-- Mensaje de error para Sexo -->
+                </div>
+                <div class="col">
+                  <select name="estado_civil" id="estado_civil">
+                    <option value="">Estado Civil</option>
+                    <option value="soltero">Soltero(a)</option>
+                    <option value="casado">Casado(a)</option>
+                    <option value="divorciado">Divorciado(a)</option>
+                    <option value="viudo">Viudo(a)</option>
+                  </select>
+                  <span id="estadoCivilError" class="error-message"></span> <!-- Mensaje de error para Estado Civil -->
+                </div>
               </div>
+
               <div class="espacioT celular row">
-                <input class="col" type="tel" name="celular" placeholder="Celular">
-                <input class="col" type="tel" name="telefono" placeholder="Telefono">
+                <div class="col">
+                  <input type="tel" name="celular" placeholder="Celular" id="celular">
+                  <span id="celularError" class="error-message"></span> <!-- Mensaje de error para Celular -->
+                </div>
+                <div class="col">
+                  <input type="tel" name="telefono" placeholder="Teléfono" id="telefono">
+                  <span id="telefonoError" class="error-message"></span> <!-- Mensaje de error para Teléfono -->
+                </div>
               </div>
+
               <div class="botones">
                 <button type="button" onclick="validateForm()">Siguiente <i
                     class="bi bi-chevron-double-right"></i></button>
@@ -339,79 +355,79 @@
 
   <!-- SCRIPTS -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      function PersonaNatural() {
-        const contDivNatural = document.getElementById('persNatural');
-        const contDivJuridica = document.getElementById('persJuridica');
+    function PersonaNatural() {
+      const contDivNatural = document.getElementById('persNatural');
+      const contDivJuridica = document.getElementById('persJuridica');
 
-        contDivNatural.classList.add('d-block');
-        contDivNatural.classList.remove('d-none');
-        contDivJuridica.classList.add('d-none');
-        contDivJuridica.classList.remove('d-block');
+      contDivNatural.classList.add('d-block');
+      contDivNatural.classList.remove('d-none');
+      contDivJuridica.classList.add('d-none');
+      contDivJuridica.classList.remove('d-block');
 
-        // Reiniciar el formulario de persona natural al primer paso
-        resetFormulario();
-        nextStep(0);
-      }
+      // Reiniciar el formulario de persona natural al primer paso
+      resetFormulario();
+      nextStep(0);
+    }
 
-      function PersonaJuridica() {
-        const contDivNatural = document.getElementById('persNatural');
-        const contDivJuridica = document.getElementById('persJuridica');
+    function PersonaJuridica() {
+      console.log("Cambiando a Persona Jurídica"); // Para verificar si se llama la función
+      const contDivNatural = document.getElementById('persNatural');
+      const contDivJuridica = document.getElementById('persJuridica');
 
-        contDivNatural.classList.add('d-none');
-        contDivNatural.classList.remove('d-block');
-        contDivJuridica.classList.add('d-block');
-        contDivJuridica.classList.remove('d-none');
+      contDivNatural.classList.add('d-none');
+      contDivNatural.classList.remove('d-block');
+      contDivJuridica.classList.add('d-block');
+      contDivJuridica.classList.remove('d-none');
 
-        // Reiniciar el formulario de persona jurídica al primer paso
-        resetFormulario();
-        nextStepJ(0);
-      }
+      resetFormulario();
+      //nextStepJ(0);
+    }
 
-      function resetFormulario() {
-        // Limpiar los campos del formulario
-        document.getElementById('formularioRegistro').reset();
-      }
-    })
+    function resetFormulario() {
+      // Limpiar los campos del formulario
+      document.getElementById('formularioRegistro').reset();
+    }
+
+
   </script>
 
-<script>
-  document.getElementById('contraseña').addEventListener('input', function(evt) {
-    const campo = evt.target;
-    const valido = document.getElementById('campoOK');
+  <script>
+    document.getElementById('contraseña').addEventListener('input', function (evt) {
+      const campo = evt.target;
+      const valido = document.getElementById('campoOK');
 
-    // Definir las expresiones regulares
-    const regexMayusculas = /[A-ZÁÉÍÓÚÜÑ]/;
-    const regexMinusculas = /[a-záéíóúüñ]/;
-    const regexNumeros = /\d/;
-    const regexCaracteresEspeciales = /[!@#$%^&*(),.?":{}|<>]/;
+      // Definir las expresiones regulares
+      const regexMayusculas = /[A-ZÁÉÍÓÚÜÑ]/;
+      const regexMinusculas = /[a-záéíóúüñ]/;
+      const regexNumeros = /\d/;
+      const regexCaracteresEspeciales = /[!@#$%^&*(),.?":{}|<>]/;
 
-    // Obtener el valor del campo
-    const valor = campo.value;
+      // Obtener el valor del campo
+      const valor = campo.value;
 
-    // Verificar cada criterio
-    const mensajes = [];
-    if (!regexMayusculas.test(valor)) {
-      mensajes.push("Debe contener al menos una letra mayúscula.");
-    }
-    if (!regexMinusculas.test(valor)) {
-      mensajes.push("Debe contener al menos una letra minúscula.");
-    }
-    if (!regexNumeros.test(valor)) {
-      mensajes.push("Debe contener al menos un número.");
-    }
-    if (!regexCaracteresEspeciales.test(valor)) {
-      mensajes.push("Debe contener al menos un carácter especial.");
-    }
+      // Verificar cada criterio
+      const mensajes = [];
+      if (!regexMayusculas.test(valor)) {
+        mensajes.push("Debe contener al menos una letra mayúscula.");
+      }
+      if (!regexMinusculas.test(valor)) {
+        mensajes.push("Debe contener al menos una letra minúscula.");
+      }
+      if (!regexNumeros.test(valor)) {
+        mensajes.push("Debe contener al menos un número.");
+      }
+      if (!regexCaracteresEspeciales.test(valor)) {
+        mensajes.push("Debe contener al menos un carácter especial.");
+      }
 
-    // Mostrar los mensajes
-    if (mensajes.length > 0) {
-      valido.innerHTML = mensajes.join('<br>');
-    } else {
-      valido.innerText = "Contraseña válida, ¡no la olvides!.";
-    }
-  });
-</script>
+      // Mostrar los mensajes
+      if (mensajes.length > 0) {
+        valido.innerHTML = mensajes.join('<br>');
+      } else {
+        valido.innerText = "Contraseña válida, ¡no la olvides!.";
+      }
+    });
+  </script>
 </body>
 
 </html>
