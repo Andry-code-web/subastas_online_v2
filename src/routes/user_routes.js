@@ -327,8 +327,10 @@ router.post('/registro', (req, res) => {
 
 // Catalogo
 router.get("/catalogo", (req, res) => {
-  const { categoria } = req.query;
+  const { categoria, page = 1 } = req.query; // Obtener el número de página de la consulta
   const usuario_id = req.session.usuario ? req.session.usuario.id : null;
+  const limit = 5; // Número de subastas por página
+  const offset = (page - 1) * limit; // Calcular el desplazamiento
 
   let querySubastas = "SELECT * FROM subastas";
   const queryParams = [];
@@ -337,7 +339,8 @@ router.get("/catalogo", (req, res) => {
     querySubastas += " WHERE categoria = ?";
     queryParams.push(categoria);
   }
-  querySubastas += " ORDER BY id ASC";
+  querySubastas += " ORDER BY id ASC LIMIT ? OFFSET ?";
+  queryParams.push(limit, offset); // Agregar limit y offset a los parámetros de consulta
 
   const queryImagenes = "SELECT id_subasta, imagen FROM imagenes_propiedad";
 
@@ -363,39 +366,57 @@ router.get("/catalogo", (req, res) => {
         };
       });
 
-      if (usuario_id) {
-        // Consulta adicional para verificar los likes del usuario
-        const queryLikes = "SELECT subasta_id FROM likes WHERE user_id = ?";
-        conection.query(queryLikes, [usuario_id], (error, likes) => {
-          if (error) {
-            console.error("Error al obtener likes del usuario", error);
-            return res.status(500).send("Error al obtener likes del usuario");
-          }
+      // Consulta adicional para contar el total de subastas
+      const totalSubastasQuery = "SELECT COUNT(*) AS total FROM subastas" + (categoria ? " WHERE categoria = ?" : "");
+      const totalParams = categoria ? [categoria] : [];
 
-          const likedSubastas = likes.map((like) => like.subasta_id);
+      conection.query(totalSubastasQuery, totalParams, (error, totalResult) => {
+        if (error) {
+          console.error("Error al contar subastas", error);
+          return res.status(500).send("Error al contar subastas");
+        }
 
-          subastasConImagenes.forEach((subasta) => {
-            subasta.liked_by_user = likedSubastas.includes(subasta.id);
+        const totalSubastas = totalResult[0].total;
+        const totalPages = Math.ceil(totalSubastas / limit); // Calcular el total de páginas
+
+        if (usuario_id) {
+          // Consulta adicional para verificar los likes del usuario
+          const queryLikes = "SELECT subasta_id FROM likes WHERE user_id = ?";
+          conection.query(queryLikes, [usuario_id], (error, likes) => {
+            if (error) {
+              console.error("Error al obtener likes del usuario", error);
+              return res.status(500).send("Error al obtener likes del usuario");
+            }
+
+            const likedSubastas = likes.map((like) => like.subasta_id);
+
+            subastasConImagenes.forEach((subasta) => {
+              subasta.liked_by_user = likedSubastas.includes(subasta.id);
+            });
+
+            res.render("catalogo", {
+              usuario: req.session.usuario,
+              subastas: subastasConImagenes,
+              categoria,
+              page: Number(page),
+              totalPages
+            });
           });
-
+        } else {
           res.render("catalogo", {
             usuario: req.session.usuario,
             subastas: subastasConImagenes,
-            categoria
+            categoria,
+            page: Number(page),
+            totalPages
           });
-        });
-      } else {
-        res.render("catalogo", {
-          usuario: req.session.usuario,
-          subastas: subastasConImagenes,
-          categoria
-        });
-      }
+        }
+      });
     });
   });
 });
 
-// Subastas
+
 // Subastas
 router.get('/subasta/:id', isAuthenticated, (req, res) => {
   const subastaId = req.params.id;
@@ -488,8 +509,6 @@ router.get('/subasta/:id', isAuthenticated, (req, res) => {
     });
   });
 });
-
-
 
 
 // Ruta para descargar un anexo

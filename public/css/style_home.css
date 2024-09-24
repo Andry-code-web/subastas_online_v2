@@ -614,6 +614,52 @@ svg {
 }
 
 
+/* banner informativos */
+.contenedor_banners_info{
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.banner_informativos {
+  width: 85%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(1, 1fr);
+  gap: .7rem;
+}
+  
+.banner_informativos .div1 {
+  grid-column: span 2 / span 2;
+}
+
+.banner_informativos .div2 {
+  grid-column-start: 3;
+}
+
+.banner_informativos .div3 {
+  grid-row-start: 2;
+}
+
+.banner_informativos .div4 {
+  grid-column: span 2 / span 2;
+  grid-row-start: 2;
+}
+
+.banner_informativos .div5 {
+  grid-column: span 3 / span 3;
+  grid-row-start: 2;
+}
+
+.img_div img{
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+  border-radius: .5rem;
+}
+
 
 /* COMENTARIOS
 .comentarios {

@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return edad >= 18;
     }
 
-    function validateDNI(dni) {
+    /* function validateDNI(dni) {
         const formattedDni = dni.replace('-', '').trim().toUpperCase();
         if (!formattedDni || formattedDni.length < 9) return false;
         const multiples = [3, 2, 7, 6, 5, 4, 3, 2];
@@ -124,7 +124,13 @@ document.addEventListener('DOMContentLoaded', function () {
             return dcontrols.numbers[index] === parseInt(dcontrol, 10);
         }
         return dcontrols.letters[index] === dcontrol;
-    }
+    } */
+
+        function validateDNI(dni) {
+            const formattedDni = dni.trim(); // Quitar espacios en blanco
+            return /^\d{8}$/.test(formattedDni); // Verifica si tiene exactamente 8 dígitos
+        }
+        
 
     function nextStep(step) {
         const steps = document.querySelectorAll('.step');

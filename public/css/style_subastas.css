@@ -312,7 +312,7 @@
   font-family: var(--font--banner--semi);
 }
 
-.mensaje ul{
+.mensaje li{
   list-style: none;
 }
 
