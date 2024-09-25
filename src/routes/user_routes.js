@@ -16,6 +16,7 @@ const isAuthenticated = (req, res, next) => {
 };
 
 router.get("/", (req, res) => {
+  // Consulta para obtener todas las subastas, incluyendo likes
   let querySubastas = `
     SELECT s.*, IFNULL(l.like_count, 0) AS like_count
     FROM subastas s
@@ -24,12 +25,11 @@ router.get("/", (req, res) => {
       FROM likes
       GROUP BY subasta_id
     ) l ON s.id = l.subasta_id
-    ORDER BY like_count DESC, s.id ASC
-    LIMIT 15;
+    ORDER BY like_count DESC, s.id ASC;
   `;
 
   const queryImagenes = "SELECT id_subasta, imagen FROM imagenes_propiedad";
-  
+
   const queryConteoCategorias = `
     SELECT categoria, COUNT(*) AS cantidad
     FROM subastas
@@ -74,10 +74,10 @@ router.get("/", (req, res) => {
           };
         });
 
-        // Filtra subastas por categoría
-        const camionetas = subastasConImagenes.filter(subasta => subasta.categoria === 'camioneta');
-        const autos = subastasConImagenes.filter(subasta => subasta.categoria === 'auto');
-        const motos = subastasConImagenes.filter(subasta => subasta.categoria === 'moto');
+        // Filtra subastas por categoría y limita a un máximo de 10 subastas por categoría
+        const camionetas = subastasConImagenes.filter(subasta => subasta.categoria === 'camioneta').slice(0, 10);
+        const autos = subastasConImagenes.filter(subasta => subasta.categoria === 'auto').slice(0, 10);
+        const motos = subastasConImagenes.filter(subasta => subasta.categoria === 'moto').slice(0, 10);
         const piezas = subastasConImagenes.filter(subasta => subasta.categoria === 'piezas');
 
         // Obtener las cantidades de subastas por categoría
@@ -418,7 +418,7 @@ router.get("/catalogo", (req, res) => {
 
 
 // Subastas
-router.get('/subasta/:id', isAuthenticated, (req, res) => {
+router.get('/subasta/:id', (req, res) => {
   const subastaId = req.params.id;
 
   const querySubasta = `
@@ -438,10 +438,12 @@ router.get('/subasta/:id', isAuthenticated, (req, res) => {
   const queryImagenes = 'SELECT imagen FROM imagenes_propiedad WHERE id_subasta = ?';
   const queryAnexos = 'SELECT id, anexo FROM anexos_propiedad WHERE id_subasta = ?';
 
+  // Formato de número
   function formatNumber(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
+  // Traducción de días
   function translateDay(day) {
     const days = {
       'Sunday': 'Domingo',
@@ -469,16 +471,11 @@ router.get('/subasta/:id', isAuthenticated, (req, res) => {
     const subasta = resultadoSubasta[0];
     const fechaHoraSubasta = moment(subasta.fecha_hora_subasta);
 
-    // Ajusta la lógica de verificación del estado de la subasta
+    // Lógica para verificar el estado de la subasta
     const duracionSubasta = 5; // duración en minutos
     const fechaHoraFinSubasta = fechaHoraSubasta.clone().add(duracionSubasta, 'minutes');
     let estaEnCurso = now.isBetween(fechaHoraSubasta, fechaHoraFinSubasta, null, '[]');
-
-    // Agrega los logs aquí para depurar
-    console.log("Ahora:", now.format());
-    console.log("Fecha y Hora Subasta:", fechaHoraSubasta.format());
-    console.log("Fecha y Hora Fin Subasta:", fechaHoraFinSubasta.format());
-    console.log("Está en curso:", estaEnCurso);
+    let estaTerminada = now.isAfter(fechaHoraFinSubasta); // Nueva variable que indica si ha terminado
 
     const fechaFormateada = subasta.fecha_formateada;
     const [day, dayNumber] = fechaFormateada.split(' ');
@@ -495,20 +492,26 @@ router.get('/subasta/:id', isAuthenticated, (req, res) => {
           console.error("Error al obtener anexos de subasta", error);
           return res.status(500).send("Error al obtener anexos de subasta");
         }
-      
+
+        // Renderiza la vista asegurando que estaEnCurso y estaTerminada se pasan correctamente
         res.render("subasta", {
           usuario: req.session.usuario,
           subasta,
           imagenes: resultadoImagenes.map(img => img.imagen.toString('base64')),
-          anexos: resultadoAnexos.map(anexo => ({ id: anexo.id, url: anexo.anexo })), 
-          estaEnCurso,
+          anexos: resultadoAnexos.map(anexo => ({ id: anexo.id, url: anexo.anexo })),
+          estaEnCurso, // Asegúrate de que estaEnCurso esté disponible aquí
+          estaTerminada, // Nueva variable que indica si la subasta ha terminado
           fechaFormateadaEsp, // Aquí pasamos la fecha traducida a español
-          formatNumber
+          formatNumber // Pasa la función formatNumber a la vista
         });
       });
     });
   });
 });
+
+
+
+
 
 
 // Ruta para descargar un anexo
@@ -717,35 +720,35 @@ router.post("/like", (req, res) => {
 
 
 //Info page vender
-router.get('/info-vender', (req, res) =>{
+router.get('/info-vender', (req, res) => {
   res.render("vender", {
     usuario: req.session.usuario
   })
 });
 
 //Info page comprar
-router.get('/info-comprar', (req, res) =>{
+router.get('/info-comprar', (req, res) => {
   res.render('comprar', {
     usuario: req.session.usuario
   })
 });
 
 //politica de cookies
-router.get('/politicasDEcookies', (req, res) =>{
+router.get('/politicasDEcookies', (req, res) => {
   res.render('politica_cookies', {
     usuario: req.session.usuario
   })
 });
 
 //terminos y condiciones
-router.get('/politicasDEprivacidad', (req, res) =>{
+router.get('/politicasDEprivacidad', (req, res) => {
   res.render('politicas_privacidad', {
     usuario: req.session.usuario
   })
 });
 
 //condicionesYterminos
-router.get('/condicionesYterminos', (req, res) =>{
+router.get('/condicionesYterminos', (req, res) => {
   res.render('terminos_condiciones', {
     usuario: req.session.usuario
   })

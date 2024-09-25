@@ -19,6 +19,19 @@
   <link rel="stylesheet" href="/css/partials/styles_footer.css">
   <title>Inmueble || subasta</title>
   <script src="/socket.io/socket.io.js"></script>
+
+  <style>
+    .disabled-button {
+      background-color: #ccc;
+      /* Color de fondo gris */
+      color: #666;
+      /* Color de texto gris */
+      cursor: not-allowed;
+      /* Cambiar el cursor a no permitido */
+      pointer-events: none;
+      /* Deshabilitar interacciones */
+    }
+  </style>
 </head>
 
 <body>
@@ -182,11 +195,13 @@
                     d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z">
                   </path>
                 </svg>
-              </span> 
-              <span><%= subasta.like_count %></span>
+              </span>
+              <span>
+                <%= subasta.like_count %>
+              </span>
             </p>
           </div>
-          
+
           <div class="hora_subasta">
             <p>
               <%= subasta.hora_formateada %>
@@ -198,17 +213,24 @@
         <div class="card-body" id="body_card">
           <h2>¡Oportunidad para el que sabe!</h2>
 
-          <% if (estaEnCurso) { %>
-            <button id="participar">PARTICIPA</button>
-            <% } else { %>
-              <p>La subasta aún no ha comenzado o ya ha terminado.</p>
-              <% } %>
+          <button id="participar">
+            <% if (estaTerminada) { %>
+              La subasta acabó
+              <% } else { %>
+                PARTICIPA
+                <% } %>
+          </button>
+          <p id="estado-subasta" style="display: none;"></p>
 
-                <p class="precio d-flex align-items-center justify-content-center">
-                  <i class="bi bi-cash-coin d-flex"></i>
-                  <span class="precio_base">Precio base:</span>
-                  <span class="price">US$<%= formatNumber(subasta.precio_base) %></span>
-                </p>
+
+
+
+
+          <p class="precio d-flex align-items-center justify-content-center">
+            <i class="bi bi-cash-coin d-flex"></i>
+            <span class="precio_base">Precio base:</span>
+            <span class="price">US$<%= formatNumber(subasta.precio_base) %></span>
+          </p>
         </div>
 
         <!-- Chat de pujas -->
@@ -390,6 +412,7 @@
 
               Swal.fire({
                 title: '¡Subasta finalizada!',
+                text:'La subasta ya tiene un ganador',
                 icon: 'success',
                 allowOutsideClick: false, // No permitir cerrar con un clic fuera del alert
                 confirmButtonText: 'Ir al catálogo', // Texto del botón
@@ -498,14 +521,59 @@
             btnIniciarChat.addEventListener('click', async () => {
               console.log('se realizó clic');
 
-              const {
-                value: accept
-              } = await Swal.fire({
+              const usuarioId = await obtenerIdUsuario();
+              const fechaHoraFinSubasta = new Date("<%= subasta.fecha_hora_subasta %>"); // Asegúrate de que este valor esté en formato correcto (ISO 8601)
+              const now = new Date(); // Obtén la fecha y hora actuales
+
+              console.log('Fecha fin subasta:', fechaHoraFinSubasta);
+              console.log('Fecha actual:', now);
+              console.log('¿Subasta finalizada?', now > fechaHoraFinSubasta);
+
+              const margenDeTiempo = 5 * 60 * 1000; // 5 minutos en milisegundos
+
+              // Verificar si la subasta ha finalizado
+              // Verificar si la subasta ha finalizado
+              if (now.getTime() > fechaHoraFinSubasta.getTime() + margenDeTiempo) {
+                Swal.fire({
+                  icon: 'warning',
+                  title: "Terminó la subasta",
+                  text: "La subasta ha finalizado. Puedes regresar al catálogo.",
+                  showCancelButton: false,
+                  confirmButtonText: 'Ir al catálogo',
+                  preConfirm: () => {
+                    window.location.href = '/catalogo';
+                  }
+                });
+                return; // Salir del evento si la subasta ha terminado
+              }
+
+              // Si la subasta está activa
+              if (!usuarioId) {
+                // Si no está logueado
+                const { value: login } = await Swal.fire({
+                  title: "Términos y condiciones",
+                  html: `<a href="/condicionesYterminos" style="font-size: 1.5rem; margin-bottom: 1rem;">Términos y condiciones</a>`,
+                  text: "Para participar en el evento, Ud. debe estar logueado:",
+                  showCancelButton: true,
+                  confirmButtonText: 'Iniciar sesión',
+                  cancelButtonText: 'Crear cuenta'
+                });
+
+                if (login) {
+                  // Redirigir a la página de inicio de sesión
+                  window.location.href = '/login'; // Cambia la ruta según tu configuración
+                } else {
+                  // Redirigir a la página de registro
+                  window.location.href = '/registro'; // Cambia la ruta según tu configuración
+                }
+                return; // Salir del evento
+              }
+
+              // Si ya está logueado
+              const { value: accept } = await Swal.fire({
                 title: "Términos y condiciones",
-                html: `<a href="/condicionesYterminos" style="font-size: 1.5rem; margin-bottom: 1rem; ">Términos y condiciones</a>
-        <br>
-        <input type="checkbox" id="terms-checkbox">
-        <label for="terms-checkbox">E leído y acepto los términos y condiciones</label>`,
+                html: `<input type="checkbox" id="terms-checkbox">
+          <label for="terms-checkbox">He leído y acepto los términos y condiciones</label>`,
                 showCancelButton: true,
                 confirmButtonText: 'Continuar&nbsp;<i class="fa fa-arrow-right"></i>',
                 cancelButtonText: 'Cancelar',
@@ -524,110 +592,103 @@
                 }
               });
 
-              if (accept) {
-                const {
-                  value: deposit
-                } = await Swal.fire({
-                  title: "Depósito requerido",
-                  text: "Debes depositar 200 dólares para participar en la subasta.",
-                  showCancelButton: true,
-                  confirmButtonText: 'Ya deposité',
-                  cancelButtonText: 'No deposité',
-                  onDismiss: () => {
-                    window.location.href = '/catalogo';
-                  }
-                });
+              if (!accept) {
+                Swal.fire("No has aceptado los términos y condiciones");
+                return; // Salir del evento si no acepta
+              }
 
-                if (deposit) {
-                  const usuarioId = await obtenerIdUsuario();
+              const { value: deposit } = await Swal.fire({
+                title: "Depósito requerido",
+                text: "Debes depositar 200 dólares para participar en la subasta.",
+                showCancelButton: true,
+                confirmButtonText: 'Ya deposité',
+                cancelButtonText: 'No deposité',
+                onDismiss: () => {
+                  window.location.href = '/catalogo';
+                }
+              });
 
-                  if (usuarioId) {
-                    const response = await fetch(`/oportunidades/${usuarioId}`);
-                    const data = await response.json();
+              if (deposit) {
+                const response = await fetch(`/oportunidades/${usuarioId}`);
+                const data = await response.json();
 
-                    if (data.success) {
-                      const intentosDisponibles = data.oportunidades;
+                if (data.success) {
+                  const intentosDisponibles = data.oportunidades;
 
-                      if (intentosDisponibles > 0) {
-                        Swal.fire("Puedes ingresar a la subasta");
-                        chat.classList.add('active');
-                        cardBody.classList.add('active');
-                      } else {
+                  if (intentosDisponibles > 0) {
+                    Swal.fire("Puedes ingresar a la subasta");
+                    chat.classList.add('active');
+                    cardBody.classList.add('active');
+                  } else {
+                    Swal.fire({
+                      title: "No tienes intentos disponibles",
+                      text: "Debes depositar 200 dólares para obtener más intentos.",
+                      showCancelButton: true,
+                      confirmButtonText: 'Depositar',
+                      cancelButtonText: 'Ir al catálogo'
+                    }).then(result => {
+                      if (result.isConfirmed) {
                         Swal.fire({
-                          title: "No tienes intentos disponibles",
-                          text: "Debes depositar 200 dólares para obtener más intentos.",
+                          title: "Información de depósito",
+                          html: `<p>Por favor, realiza el depósito en el siguiente número de cuenta y envía el comprobante a soporteSubastasur@correo.com.</p>
+                    <img src="/img/Commons_QR_code.png" alt="QR Code" style="width: 200px; height: auto;">`,
                           showCancelButton: true,
-                          confirmButtonText: 'Depositar',
-                          cancelButtonText: 'Ir al catálogo'
-                        }).then(result => {
-                          if (result.isConfirmed) {
+                          confirmButtonText: 'Ya envié',
+                          cancelButtonText: 'Regresar'
+                        }).then(depositResult => {
+                          if (depositResult.isConfirmed) {
                             Swal.fire({
-                              title: "Información de depósito",
-                              html: `<p>Por favor, realiza el depósito en el siguiente número de cuenta y envía el comprobante a soporteSubastasur@correo.com.</p>
-                      <img src="/img/Commons_QR_code.png" alt="QR Code" style="width: 200px; height: auto;">`,
-                              showCancelButton: true,
-                              confirmButtonText: 'Ya envié',
-                              cancelButtonText: 'Regresar'
-                            }).then(depositResult => {
-                              if (depositResult.isConfirmed) {
-                                Swal.fire({
-                                  title: "Proceso en curso",
-                                  text: "Se está procesando el depósito. Por favor, espera...",
-                                  confirmButtonText: 'Ok'
-                                }).then(() => {
-                                  window.location.href = '/catalogo';
-                                });
-                              } else {
-                                window.location.href = '/catalogo';
-                              }
+                              title: "Proceso en curso",
+                              text: "Se está procesando el depósito. Por favor, espera...",
+                              confirmButtonText: 'Ok'
+                            }).then(() => {
+                              window.location.href = '/catalogo';
                             });
                           } else {
                             window.location.href = '/catalogo';
                           }
                         });
+                      } else {
+                        window.location.href = '/catalogo';
                       }
-                    } else {
-                      Swal.fire("Error al obtener oportunidades");
-                    }
-                  } else {
-                    Swal.fire("No se pudo obtener el ID del usuario");
+                    });
                   }
                 } else {
-                  Swal.fire({
-                    title: "Información de depósito",
-                    html: `<p>Por favor, realiza el depósito en el siguiente número de cuenta y envía el comprobante a soporteSubastasur@correo.com.</p>
-            <img src="/img/Commons_QR_code.png" alt="QR Code" style="width: 200px; height: auto;">`,
-                    showCancelButton: true,
-                    confirmButtonText: 'Ya envié',
-                    cancelButtonText: 'Regresar',
-                    onDismiss: () => {
-                      window.location.href = '/catalogo';
-                    }
-                  }).then(result => {
-                    if (result.isConfirmed) {
-                      Swal.fire({
-                        title: "Proceso en curso",
-                        text: "Se está procesando el depósito. Por favor, espera...",
-                        confirmButtonText: 'Ok',
-                        onDismiss: () => {
-                          window.location.href = '/catalogo';
-                        }
-                      });
-                    } else {
-                      window.location.href = '/catalogo';
-                    }
-                  });
+                  Swal.fire("Error al obtener oportunidades");
                 }
               } else {
-                Swal.fire("No has aceptado los términos y condiciones");
+                Swal.fire({
+                  title: "Información de depósito",
+                  html: `<p>Por favor, realiza el depósito en el siguiente número de cuenta y envía el comprobante a soporteSubastasur@correo.com.</p>
+            <img src="/img/Commons_QR_code.png" alt="QR Code" style="width: 200px; height: auto;">`,
+                  showCancelButton: true,
+                  confirmButtonText: 'Ya envié',
+                  cancelButtonText: 'Regresar',
+                  onDismiss: () => {
+                    window.location.href = '/catalogo';
+                  }
+                }).then(result => {
+                  if (result.isConfirmed) {
+                    Swal.fire({
+                      title: "Proceso en curso",
+                      text: "Se está procesando el depósito. Por favor, espera...",
+                      confirmButtonText: 'Ok',
+                      onDismiss: () => {
+                        window.location.href = '/catalogo';
+                      }
+                    });
+                  } else {
+                    window.location.href = '/catalogo';
+                  }
+                });
               }
             });
           } else {
             console.log("El botón 'participar' no está disponible.");
           }
         });
-      </script>
 
+      </script>
 </body>
 
 </html>
