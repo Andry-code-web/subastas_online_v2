@@ -98,6 +98,8 @@ footer {
     transform: scale(1.2);
 }
 
+
+
 .contet_footer p {
     font-size: 1.1rem;
     color: #444444;
@@ -119,7 +121,7 @@ footer {
 .terminos_condiciones a{
     font-family: var(--font--header--v2);
     font-weight: 500;
-    font-size: 1.05rem;
+    font-size: .9rem;
     color: #d30000;
     text-decoration: none;
     transition: ease-in .2s;

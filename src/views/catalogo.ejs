@@ -15,6 +15,10 @@
   <link rel="stylesheet" href="/css/style_catalogo.css">
   <link rel="stylesheet" href="/css/partials/styles_header.css">
   <link rel="stylesheet" href="/css/partials/styles_footer.css">
+  <link rel="stylesheet" href="/css/partials/styles_whatsapp_flot.css">
+
+  <!-- ICONS -->
+  <script src="https://kit.fontawesome.com/78137c0870.js" crossorigin="anonymous"></script>
 
   <title>Subasta Sur || Catalogo</title>
 
@@ -36,364 +40,371 @@
 
 <body>
   <!-- HEADER -->
-   <%- include('partials/header') %>
+  <%- include('partials/header') %>
 
-  <!-- Header Image and Title -->
-  <div class="header">
-    <img src="/img/banner_catalogo.jpeg" alt="Header Image">
-    <div class="overlay">
-      <h1 class="text-4xl">Vehículos en subasta</h1>
-      <p class="mt-2">Es tu sueño el que estamos construyendo</p>
-    </div>
-  </div>
-
-
-  <!-- Content -->
-  <div class="container">
-
-    <div class="content_filtro">
-      <h2>TIPO DE VEHICULO</h2>
-      <!-- Filtros -->
-      <div class="filtros ">
-        <form id="filterForm" action="/catalogo" method="GET">
-          <button class="filtro" type="submit" name="categoria" value="" <%=!categoria ? 'class="active"' : '' %>>
-            <p>
-              Todas
-              <span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="34" height="30" viewBox="0 0 34 30" fill="none">
-                  <g id="Vector" filter="url(#filter0_d_124_140)">
-                    <path
-                      d="M14.6315 19.1383L10.1997 15.0758C9.93344 14.8318 9.93344 14.436 10.1997 14.1919L11.1639 13.3081C11.4302 13.064 11.8619 13.064 12.1281 13.3081L15.1136 16.0447L21.5082 10.1831C21.7745 9.93898 22.2062 9.93898 22.4724 10.1831L23.4367 11.0669C23.7029 11.311 23.7029 11.7067 23.4367 11.9508L15.5957 19.1383C15.3295 19.3824 14.8978 19.3824 14.6315 19.1383Z"
-                      fill="#757575" />
-                  </g>
-                  <defs>
-                    <filter id="filter0_d_124_140" x="0" y="0" width="33.6362" height="29.3214"
-                      filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                      <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                        result="hardAlpha" />
-                      <feOffset />
-                      <feGaussianBlur stdDeviation="5" />
-                      <feComposite in2="hardAlpha" operator="out" />
-                      <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0" />
-                      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_124_140" />
-                      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_124_140" result="shape" />
-                    </filter>
-                  </defs>
-                </svg>
-              </span>
-            </p>
-            <svg class="svg_todo" xmlns="http://www.w3.org/2000/svg" width="55" height="50" viewBox="0 0 32 32"
-              fill="#757575" stroke="none">
-              <path class="cls-1"
-                d="M30,15a1,1,0,0,1-.58-.19L16,5.23,2.58,14.81a1,1,0,0,1-1.16-1.62l14-10a1,1,0,0,1,1.16,0l14,10A1,1,0,0,1,30,15Z" />
-              <path class="cls-1" d="M5,9A1,1,0,0,1,4,8V4A1,1,0,0,1,5,3H9A1,1,0,0,1,9,5H6V8A1,1,0,0,1,5,9Z" />
-              <path class="cls-1"
-                d="M25,29H20a1,1,0,0,1-1-1V21H13v7a1,1,0,0,1-1,1H7a3,3,0,0,1-3-3V16a1,1,0,0,1,2,0V26a1,1,0,0,0,1,1h4V20a1,1,0,0,1,1-1h8a1,1,0,0,1,1,1v7h4a1,1,0,0,0,1-1V16a1,1,0,0,1,2,0V26A3,3,0,0,1,25,29Z" />
-            </svg>
-
-          </button>
-          <button class="filtro" type="submit" name="categoria" value="camioneta" <%=categoria==='camioneta'
-            ? 'class="active"' : '' %>>
-            <p>
-              Camionetas
-              <span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="34" height="30" viewBox="0 0 34 30" fill="none">
-                  <g id="Vector" filter="url(#filter0_d_124_140)">
-                    <path
-                      d="M14.6315 19.1383L10.1997 15.0758C9.93344 14.8318 9.93344 14.436 10.1997 14.1919L11.1639 13.3081C11.4302 13.064 11.8619 13.064 12.1281 13.3081L15.1136 16.0447L21.5082 10.1831C21.7745 9.93898 22.2062 9.93898 22.4724 10.1831L23.4367 11.0669C23.7029 11.311 23.7029 11.7067 23.4367 11.9508L15.5957 19.1383C15.3295 19.3824 14.8978 19.3824 14.6315 19.1383Z"
-                      fill="#757575" />
-                  </g>
-                  <defs>
-                    <filter id="filter0_d_124_140" x="0" y="0" width="33.6362" height="29.3214"
-                      filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                      <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                        result="hardAlpha" />
-                      <feOffset />
-                      <feGaussianBlur stdDeviation="5" />
-                      <feComposite in2="hardAlpha" operator="out" />
-                      <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0" />
-                      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_124_140" />
-                      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_124_140" result="shape" />
-                    </filter>
-                  </defs>
-                </svg>
-              </span>
-            </p>
-            <div class="content_image_filtro">
-              <div class="img">
-                <img src="/img/icon_camioneta.png" alt="">
-              </div>
-            </div>
-
-          </button>
-          <button class="filtro" type="submit" name="categoria" value="auto" <%=categoria==='auto' ? 'class="active"'
-            : '' %>>
-            <p>
-              Autos
-              <span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="34" height="30" viewBox="0 0 34 30" fill="none">
-                  <g id="Vector" filter="url(#filter0_d_124_140)">
-                    <path
-                      d="M14.6315 19.1383L10.1997 15.0758C9.93344 14.8318 9.93344 14.436 10.1997 14.1919L11.1639 13.3081C11.4302 13.064 11.8619 13.064 12.1281 13.3081L15.1136 16.0447L21.5082 10.1831C21.7745 9.93898 22.2062 9.93898 22.4724 10.1831L23.4367 11.0669C23.7029 11.311 23.7029 11.7067 23.4367 11.9508L15.5957 19.1383C15.3295 19.3824 14.8978 19.3824 14.6315 19.1383Z"
-                      fill="#757575" />
-                  </g>
-                  <defs>
-                    <filter id="filter0_d_124_140" x="0" y="0" width="33.6362" height="29.3214"
-                      filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                      <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                        result="hardAlpha" />
-                      <feOffset />
-                      <feGaussianBlur stdDeviation="5" />
-                      <feComposite in2="hardAlpha" operator="out" />
-                      <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0" />
-                      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_124_140" />
-                      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_124_140" result="shape" />
-                    </filter>
-                  </defs>
-                </svg>
-              </span>
-            </p>
-            <div class="content_image_filtro">
-              <div class="img">
-                <img src="/img/icon_auto.png" alt="">
-              </div>
-            </div>
-          </button>
-          <button class="filtro" type="submit" name="categoria" value="moto" <%=categoria==='moto' ? 'class="active"'
-            : '' %>>
-            <p>
-              Motos
-              <span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="34" height="30" viewBox="0 0 34 30" fill="none">
-                  <g id="Vector" filter="url(#filter0_d_124_140)">
-                    <path
-                      d="M14.6315 19.1383L10.1997 15.0758C9.93344 14.8318 9.93344 14.436 10.1997 14.1919L11.1639 13.3081C11.4302 13.064 11.8619 13.064 12.1281 13.3081L15.1136 16.0447L21.5082 10.1831C21.7745 9.93898 22.2062 9.93898 22.4724 10.1831L23.4367 11.0669C23.7029 11.311 23.7029 11.7067 23.4367 11.9508L15.5957 19.1383C15.3295 19.3824 14.8978 19.3824 14.6315 19.1383Z"
-                      fill="#757575" />
-                  </g>
-                  <defs>
-                    <filter id="filter0_d_124_140" x="0" y="0" width="33.6362" height="29.3214"
-                      filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                      <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                        result="hardAlpha" />
-                      <feOffset />
-                      <feGaussianBlur stdDeviation="5" />
-                      <feComposite in2="hardAlpha" operator="out" />
-                      <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0" />
-                      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_124_140" />
-                      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_124_140" result="shape" />
-                    </filter>
-                  </defs>
-                </svg>
-              </span>
-            </p>
-            <div class="content_image_filtro">
-              <div class="img">
-                <img src="/img/icon_moto.png" alt="">
-              </div>
-            </div>
-          </button>
-        </form>
+    <!-- Header Image and Title -->
+    <div class="header">
+      <img src="/img/banner_catalogo.jpeg" alt="Header Image">
+      <div class="overlay">
+        <h1 class="text-4xl">Vehículos en subasta</h1>
+        <p class="mt-2">Es tu sueño el que estamos construyendo</p>
       </div>
     </div>
 
-    <div class="property-listing">
-      <% subastas.forEach(subasta=> { %>
-        <div class="property-card mt-4">
-          <div id="carouselExample<%= subasta.id %>" class="carousel slide slider">
-            <div class="carousel-inner">
-              <% subasta.imagenes.forEach((imagen, index)=> { %>
-                <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
-                  <img src="data:image/jpeg;base64,<%= imagen %>" class="d-block w-100" alt="Imagen de propiedad">
-                </div>
-                <% }) %>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample<%= subasta.id %>"
-              data-bs-slide="prev">
-              <span class="img_flechas" aria-hidden="true">
-                <img src="/img/back_flecha.svg" alt="">
-              </span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample<%= subasta.id %>"
-              data-bs-slide="next">
-              <span class="img_flechas" aria-hidden="true">
-                <img src="/img/next_flecha.svg" alt="">
-              </span>
-              <span class="visually-hidden">Next</span>
-            </button>
-          </div>
-          <div class="property-card-content">
-            <div class="content_info">
-              <div class="nombre_tipo">
-                <h3>
-                  <%= subasta.marca %>
-                </h3>
-                <p>
-                  <%= subasta.categoria.toUpperCase() %>
-                </p>
-                <p class="text-model">Modelo: <%= subasta.modelo %>
-                </p>
-                <p style="color: #000; font-size: 1.1rem;">
-                  <%= subasta.anio %>
-                </p>
-              </div>
-              <p class="ubicacion">
-                <%= subasta.ubicacion %>
-              </p>
-              <p class="precio">Precio Base: <span class="price">US$<%= subasta.precio_base %></span></p>
-            </div>
-            <div class="features">
-              <div class="imgenes">
-                <i class="bi bi-key"></i>
-                <p>
-                  <%= subasta.llave %>
-                </p>
-              </div>
-              <div class="imgenes">
-                <i class="bi bi-credit-card-2-front"></i>
-                <p>
-                  <%= subasta.tarjeta_propiedad %>
-                </p>
-              </div>
-              <div class="imgenes">
-                <i class="bi bi-question-diamond"></i>
-                <p>
-                  <%= subasta.estado.toLowerCase() %>
-                </p>
-              </div>
-            </div>
-            <!-- Botón de Like en la vista general -->
-            <div class="detalle_like">
 
-              <a href="/subasta/<%= subasta.id %>" class="button_a">
-                <span class="label">Entrar</span>
-                <span class="icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                    <path fill="none" d="M0 0h24v24H0z"></path>
-                    <path fill="currentColor"
-                      d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"></path>
+    <!-- Content -->
+    <div class="container">
+
+      <div class="content_filtro">
+        <h2>TIPO DE VEHICULO</h2>
+        <!-- Filtros -->
+        <div class="filtros ">
+          <form id="filterForm" action="/catalogo" method="GET">
+            <button class="filtro active" type="submit" name="categoria" value="" <%=!categoria ? 'class="active"' : '' %>>
+              <p>
+                Todas
+                <span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="34" height="30" viewBox="0 0 34 30" fill="none">
+                    <g id="Vector" filter="url(#filter0_d_124_140)">
+                      <path
+                        d="M14.6315 19.1383L10.1997 15.0758C9.93344 14.8318 9.93344 14.436 10.1997 14.1919L11.1639 13.3081C11.4302 13.064 11.8619 13.064 12.1281 13.3081L15.1136 16.0447L21.5082 10.1831C21.7745 9.93898 22.2062 9.93898 22.4724 10.1831L23.4367 11.0669C23.7029 11.311 23.7029 11.7067 23.4367 11.9508L15.5957 19.1383C15.3295 19.3824 14.8978 19.3824 14.6315 19.1383Z"
+                        fill="#757575" />
+                    </g>
+                    <defs>
+                      <filter id="filter0_d_124_140" x="0" y="0" width="33.6362" height="29.3214"
+                        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                          result="hardAlpha" />
+                        <feOffset />
+                        <feGaussianBlur stdDeviation="5" />
+                        <feComposite in2="hardAlpha" operator="out" />
+                        <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0" />
+                        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_124_140" />
+                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_124_140" result="shape" />
+                      </filter>
+                    </defs>
                   </svg>
                 </span>
-              </a>
-              <button class="like-button" data-subasta-id="<%= subasta.id %>">
-                <p>Me gusta</p>
-                |
-                <i class="bi bi-heart-fill like-icon <%= subasta.liked_by_user ? 'like-filled' : 'd-none' %>"></i>
-                <i class="bi bi-heart like-icon <%= subasta.liked_by_user ? 'd-none' : 'like-empty' %>"></i>
-              </button>
+              </p>
+              <svg class="svg_todo" xmlns="http://www.w3.org/2000/svg" width="55" height="50" viewBox="0 0 32 32"
+                fill="#757575" stroke="none">
+                <path class="cls-1"
+                  d="M30,15a1,1,0,0,1-.58-.19L16,5.23,2.58,14.81a1,1,0,0,1-1.16-1.62l14-10a1,1,0,0,1,1.16,0l14,10A1,1,0,0,1,30,15Z" />
+                <path class="cls-1" d="M5,9A1,1,0,0,1,4,8V4A1,1,0,0,1,5,3H9A1,1,0,0,1,9,5H6V8A1,1,0,0,1,5,9Z" />
+                <path class="cls-1"
+                  d="M25,29H20a1,1,0,0,1-1-1V21H13v7a1,1,0,0,1-1,1H7a3,3,0,0,1-3-3V16a1,1,0,0,1,2,0V26a1,1,0,0,0,1,1h4V20a1,1,0,0,1,1-1h8a1,1,0,0,1,1,1v7h4a1,1,0,0,0,1-1V16a1,1,0,0,1,2,0V26A3,3,0,0,1,25,29Z" />
+              </svg>
 
+            </button>
+            <button class="filtro" type="submit" name="categoria" value="camioneta" <%=categoria==='camioneta'
+              ? 'class="active"' : '' %>>
+              <p>
+                Camionetas
+                <span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="34" height="30" viewBox="0 0 34 30" fill="none">
+                    <g id="Vector" filter="url(#filter0_d_124_140)">
+                      <path
+                        d="M14.6315 19.1383L10.1997 15.0758C9.93344 14.8318 9.93344 14.436 10.1997 14.1919L11.1639 13.3081C11.4302 13.064 11.8619 13.064 12.1281 13.3081L15.1136 16.0447L21.5082 10.1831C21.7745 9.93898 22.2062 9.93898 22.4724 10.1831L23.4367 11.0669C23.7029 11.311 23.7029 11.7067 23.4367 11.9508L15.5957 19.1383C15.3295 19.3824 14.8978 19.3824 14.6315 19.1383Z"
+                        fill="#757575" />
+                    </g>
+                    <defs>
+                      <filter id="filter0_d_124_140" x="0" y="0" width="33.6362" height="29.3214"
+                        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                          result="hardAlpha" />
+                        <feOffset />
+                        <feGaussianBlur stdDeviation="5" />
+                        <feComposite in2="hardAlpha" operator="out" />
+                        <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0" />
+                        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_124_140" />
+                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_124_140" result="shape" />
+                      </filter>
+                    </defs>
+                  </svg>
+                </span>
+              </p>
+              <div class="content_image_filtro">
+                <div class="img">
+                  <img src="/img/icon_camioneta.png" alt="">
+                </div>
+              </div>
+
+            </button>
+            <button class="filtro" type="submit" name="categoria" value="auto" <%=categoria==='auto' ? 'class="active"'
+              : '' %>>
+              <p>
+                Autos
+                <span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="34" height="30" viewBox="0 0 34 30" fill="none">
+                    <g id="Vector" filter="url(#filter0_d_124_140)">
+                      <path
+                        d="M14.6315 19.1383L10.1997 15.0758C9.93344 14.8318 9.93344 14.436 10.1997 14.1919L11.1639 13.3081C11.4302 13.064 11.8619 13.064 12.1281 13.3081L15.1136 16.0447L21.5082 10.1831C21.7745 9.93898 22.2062 9.93898 22.4724 10.1831L23.4367 11.0669C23.7029 11.311 23.7029 11.7067 23.4367 11.9508L15.5957 19.1383C15.3295 19.3824 14.8978 19.3824 14.6315 19.1383Z"
+                        fill="#757575" />
+                    </g>
+                    <defs>
+                      <filter id="filter0_d_124_140" x="0" y="0" width="33.6362" height="29.3214"
+                        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                          result="hardAlpha" />
+                        <feOffset />
+                        <feGaussianBlur stdDeviation="5" />
+                        <feComposite in2="hardAlpha" operator="out" />
+                        <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0" />
+                        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_124_140" />
+                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_124_140" result="shape" />
+                      </filter>
+                    </defs>
+                  </svg>
+                </span>
+              </p>
+              <div class="content_image_filtro">
+                <div class="img">
+                  <img src="/img/icon_auto.png" alt="">
+                </div>
+              </div>
+            </button>
+            <button class="filtro" type="submit" name="categoria" value="moto" <%=categoria==='moto' ? 'class="active"'
+              : '' %>>
+              <p>
+                Motos
+                <span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="34" height="30" viewBox="0 0 34 30" fill="none">
+                    <g id="Vector" filter="url(#filter0_d_124_140)">
+                      <path
+                        d="M14.6315 19.1383L10.1997 15.0758C9.93344 14.8318 9.93344 14.436 10.1997 14.1919L11.1639 13.3081C11.4302 13.064 11.8619 13.064 12.1281 13.3081L15.1136 16.0447L21.5082 10.1831C21.7745 9.93898 22.2062 9.93898 22.4724 10.1831L23.4367 11.0669C23.7029 11.311 23.7029 11.7067 23.4367 11.9508L15.5957 19.1383C15.3295 19.3824 14.8978 19.3824 14.6315 19.1383Z"
+                        fill="#757575" />
+                    </g>
+                    <defs>
+                      <filter id="filter0_d_124_140" x="0" y="0" width="33.6362" height="29.3214"
+                        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                          result="hardAlpha" />
+                        <feOffset />
+                        <feGaussianBlur stdDeviation="5" />
+                        <feComposite in2="hardAlpha" operator="out" />
+                        <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0" />
+                        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_124_140" />
+                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_124_140" result="shape" />
+                      </filter>
+                    </defs>
+                  </svg>
+                </span>
+              </p>
+              <div class="content_image_filtro">
+                <div class="img">
+                  <img src="/img/icon_moto.png" alt="">
+                </div>
+              </div>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="property-listing">
+        <% subastas.forEach(subasta=> { %>
+          <div class="property-card mt-4">
+            <div id="carouselExample<%= subasta.id %>" class="carousel slide slider">
+              <div class="carousel-inner">
+                <% subasta.imagenes.forEach((imagen, index)=> { %>
+                  <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                    <img src="data:image/jpeg;base64,<%= imagen %>" class="d-block w-100" alt="Imagen de propiedad">
+                  </div>
+                  <% }) %>
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample<%= subasta.id %>"
+                data-bs-slide="prev">
+                <span class="img_flechas" aria-hidden="true">
+                  <img src="/img/back_flecha.svg" alt="">
+                </span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselExample<%= subasta.id %>"
+                data-bs-slide="next">
+                <span class="img_flechas" aria-hidden="true">
+                  <img src="/img/next_flecha.svg" alt="">
+                </span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+            <div class="property-card-content">
+              <div class="content_info">
+                <div class="nombre_tipo">
+                  <h3>
+                    <%= subasta.marca %>
+                  </h3>
+                  <p>
+                    <%= subasta.categoria.toUpperCase() %>
+                  </p>
+                  <p class="text-model">Modelo: <%= subasta.modelo %>
+                  </p>
+                  <p style="color: #000; font-size: 1.1rem;">
+                    <%= subasta.anio %>
+                  </p>
+                </div>
+                <p class="ubicacion">
+                  <%= subasta.ubicacion %>
+                </p>
+                <p class="precio">Precio Base: <span class="price">US$<%= subasta.precio_base %></span></p>
+              </div>
+              <div class="features">
+                <div class="imgenes">
+                  <i class="bi bi-key"></i>
+                  <p>
+                    <%= subasta.llave %>
+                  </p>
+                </div>
+                <div class="imgenes">
+                  <i class="bi bi-credit-card-2-front"></i>
+                  <p>
+                    <%= subasta.tarjeta_propiedad %>
+                  </p>
+                </div>
+                <div class="imgenes">
+                  <i class="bi bi-question-diamond"></i>
+                  <p>
+                    <%= subasta.estado.toLowerCase() %>
+                  </p>
+                </div>
+              </div>
+              <!-- Botón de Like en la vista general -->
+              <div class="detalle_like">
+
+                <a href="/subasta/<%= subasta.id %>" class="button_a">
+                  <span class="label">Entrar</span>
+                  <span class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                      <path fill="none" d="M0 0h24v24H0z"></path>
+                      <path fill="currentColor"
+                        d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"></path>
+                    </svg>
+                  </span>
+                </a>
+                <button class="like-button" data-subasta-id="<%= subasta.id %>">
+                  <p>Me gusta</p>
+                  |
+                  <i class="bi bi-heart-fill like-icon <%= subasta.liked_by_user ? 'like-filled' : 'd-none' %>"></i>
+                  <i class="bi bi-heart like-icon <%= subasta.liked_by_user ? 'd-none' : 'like-empty' %>"></i>
+                </button>
+
+              </div>
             </div>
           </div>
-        </div>
-        <% }) %>
+          <% }) %>
 
-        <nav aria-label="Page navigation" class="paginas_navegacion">
-          <ul class="pagination">
-            <% if (page > 1) { %>
-              <li class="page-item">
-                <a class="page-link" href="?page=<%= page - 1 %>&categoria=<%= categoria %>" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                </a>
-              </li>
-            <% } else { %>
-              <li class="page-item disabled">
-                <span class="page-link">&laquo;</span>
-              </li>
-            <% } %>
-        
-            <% for (let i = 1; i <= totalPages; i++) { %>
-              <li class="page-item <%= page === i ? 'active' : '' %>">
-                <a class="page-link" href="?page=<%= i %>&categoria=<%= categoria %>"><%= i %></a>
-              </li>
-            <% } %>
-        
-            <% if (page < totalPages) { %>
-              <li class="page-item">
-                <a class="page-link" href="?page=<%= page + 1 %>&categoria=<%= categoria %>" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                </a>
-              </li>
-            <% } else { %>
-              <li class="page-item disabled">
-                <span class="page-link">&raquo;</span>
-              </li>
-            <% } %>
-          </ul>
-        </nav>
+            <nav aria-label="Page navigation" class="paginas_navegacion">
+              <ul class="pagination">
+                <% if (page> 1) { %>
+                  <li class="page-item">
+                    <a class="page-link" href="?page=<%= page - 1 %>&categoria=<%= categoria %>" aria-label="Previous">
+                      <span aria-hidden="true">&laquo;</span>
+                    </a>
+                  </li>
+                  <% } else { %>
+                    <li class="page-item disabled">
+                      <span class="page-link">&laquo;</span>
+                    </li>
+                    <% } %>
+
+                      <% for (let i=1; i <=totalPages; i++) { %>
+                        <li class="page-item <%= page === i ? 'active' : '' %>">
+                          <a class="page-link" href="?page=<%= i %>&categoria=<%= categoria %>">
+                            <%= i %>
+                          </a>
+                        </li>
+                        <% } %>
+
+                          <% if (page < totalPages) { %>
+                            <li class="page-item">
+                              <a class="page-link" href="?page=<%= page + 1 %>&categoria=<%= categoria %>"
+                                aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                              </a>
+                            </li>
+                            <% } else { %>
+                              <li class="page-item disabled">
+                                <span class="page-link">&raquo;</span>
+                              </li>
+                              <% } %>
+              </ul>
+            </nav>
+      </div>
+
+
+
     </div>
 
-    
-    
-  </div>
+    <!-- WHATSAPP FLOTANTE -->
+    <%- include('partials/whatsapp_flot') %>
+
+      <%- include('partials/footer') %>
 
 
-  <%- include('partials/footer') %>
 
+      
+        <!-- SCRIPT -->
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const botonActivar = document.getElementById("btn_menu");
+            const botonCerrar = document.getElementById("btn_close");
+            const contenederMenu = document.getElementsByClassName("menu_desplegable")[0];
 
-  <!-- SCRIPT -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const botonActivar = document.getElementById("btn_menu");
-      const botonCerrar = document.getElementById("btn_close");
-      const contenederMenu = document.getElementsByClassName("menu_desplegable")[0];
-
-      botonActivar.addEventListener('click', () => {
-        contenederMenu.classList.add("active");
-      });
-
-      botonCerrar.addEventListener('click', () => {
-        contenederMenu.classList.remove("active");
-      });
-    });
-  </script>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.like-button').forEach(button => {
-        button.addEventListener('click', async () => {
-          const subastaId = button.dataset.subastaId;
-
-          try {
-            const response = await fetch('/like', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                subasta_id: subastaId
-              })
+            botonActivar.addEventListener('click', () => {
+              contenederMenu.classList.add("active");
             });
 
-            const data = await response.json();
-            if (data.success) {
-              // Alternar el estado del botón de like
-              const heartFilledIcon = button.querySelector('.bi-heart-fill');
-              const heartEmptyIcon = button.querySelector('.bi-heart');
+            botonCerrar.addEventListener('click', () => {
+              contenederMenu.classList.remove("active");
+            });
+          });
+        </script>
 
-              if (heartEmptyIcon.classList.contains('d-none')) {
-                heartFilledIcon.classList.add('d-none');
-                heartEmptyIcon.classList.remove('d-none');
-              } else {
-                heartFilledIcon.classList.remove('d-none');
-                heartEmptyIcon.classList.add('d-none');
-              }
-            } else {
-              console.error('Error al dar like:', data.message);
-            }
-          } catch (error) {
-            console.error('Error en la solicitud:', error);
-          }
-        });
-      });
-    });
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.like-button').forEach(button => {
+              button.addEventListener('click', async () => {
+                const subastaId = button.dataset.subastaId;
 
-  </script>
+                try {
+                  const response = await fetch('/like', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                      subasta_id: subastaId
+                    })
+                  });
 
-  <script src="/js/partials/script_header.js"></script>
+                  const data = await response.json();
+                  if (data.success) {
+                    // Alternar el estado del botón de like
+                    const heartFilledIcon = button.querySelector('.bi-heart-fill');
+                    const heartEmptyIcon = button.querySelector('.bi-heart');
+
+                    if (heartEmptyIcon.classList.contains('d-none')) {
+                      heartFilledIcon.classList.add('d-none');
+                      heartEmptyIcon.classList.remove('d-none');
+                    } else {
+                      heartFilledIcon.classList.remove('d-none');
+                      heartEmptyIcon.classList.add('d-none');
+                    }
+                  } else {
+                    console.error('Error al dar like:', data.message);
+                  }
+                } catch (error) {
+                  console.error('Error en la solicitud:', error);
+                }
+              });
+            });
+          });
+
+        </script>
+
+        <script src="/js/partials/script_header.js"></script>
 
 </body>
 

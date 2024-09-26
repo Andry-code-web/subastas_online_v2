@@ -416,7 +416,7 @@
 
 
 .card_home {
-  width: 220px;
+  width: 250px;
   height: 320px;
   padding: .8em;
   background: #fafafa;
@@ -424,6 +424,7 @@
   overflow: visible;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   border-radius: .4rem;
+  transition: .2s ease;
 }
 
 .card-img {
@@ -456,6 +457,7 @@ svg {
   align-items: center;
   padding-top: 15px;
   border-top: 1px solid #ddd;
+  transition: .3s ease;
 }
 
 /*Text*/
@@ -489,6 +491,37 @@ svg {
 
 .informacion .info {
   margin-bottom: 0;
+  text-decoration: none;
+  color: #000;
+}
+
+.text_descripcion{
+  display: none;
+  opacity: 0;
+  transition: .3s ease-in;
+}
+
+.card_home:hover{
+  height: 450px;
+}
+
+.card_home:hover .card-img{
+  height: 32%;
+}
+
+.card_home:hover .text_descripcion{
+  display: block;
+  opacity: 1;
+  width: 100%;
+  text-align: justify;
+  font-size: .8rem;
+  font-family: var(--font--banner--semi);
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
 }
 
 .comment-react {

@@ -15,11 +15,14 @@
     crossorigin="anonymous"></script>
   <!-- BOOTSSTRAP ICON -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- ICONS -->
+  <script src="https://kit.fontawesome.com/78137c0870.js" crossorigin="anonymous"></script>
   <!-- ESTILOS -->
   <link rel="stylesheet" href="/css/style_home.css">
   <!-- estilos componentes -->
   <link rel="stylesheet" href="/css/partials/styles_header.css">
   <link rel="stylesheet" href="/css/partials/styles_footer.css">
+  <link rel="stylesheet" href="/css/partials/styles_whatsapp_flot.css">
 
   <title>Subasta Sur</title>
 </head>
@@ -129,7 +132,7 @@
             </span>
           </div>
           <span class="descripcion_categoria">
-            Maquinas de construccion
+            Maquinas de construcción
           </span>
         </a>
         <a href="/catalogo?categoria=moto" class="content_img">
@@ -200,14 +203,18 @@
 
               <div class="card-info d-flex justify-content-between">
                 <div class="informacion">
-                  <p class="info text-title">
+                  <a href="/subasta/<%= subasta.id %>" class="info text-title">
                     <%= subasta.marca %>
-                  </p>
+                  </a>
                   <p class="info text-body">
                     <%= subasta.categoria %>
                   </p>
                   <p class="text-model">
                     Modelo: <%= subasta.modelo %>
+                  </p>
+                  
+                  <p class="text_descripcion">
+                    <%= subasta.descripcion %>
                   </p>
                 </div>
                 <div class="comment-react">
@@ -263,14 +270,18 @@
               </div>
               <div class="card-info d-flex justify-content-between">
                 <div class="informacion">
-                  <p class="info text-title">
+                  <a href="/subasta/<%= subasta.id %>" class="info text-title">
                     <%= subasta.marca %>
-                  </p>
+                  </a>
                   <p class="info text-body">
                     <%= subasta.categoria %>
                   </p>
                   <p class="text-model">
                     Modelo: <%= subasta.modelo %>
+                  </p>
+
+                  <p class="text_descripcion">
+                    <%= subasta.descripcion %>
                   </p>
                 </div>
                 <div class="comment-react">
@@ -326,14 +337,18 @@
               </div>
               <div class="card-info d-flex justify-content-between">
                 <div class="informacion">
-                  <p class="info text-title">
+                  <a href="/subasta/<%= subasta.id %>" class="info text-title">
                     <%= subasta.marca %>
-                  </p>
+                  </a>
                   <p class="info text-body">
                     <%= subasta.categoria %>
                   </p>
                   <p class="text-model">
                     Modelo: <%= subasta.modelo %>
+                  </p>
+
+                  <p class="text_descripcion">
+                    <%= subasta.descripcion %>
                   </p>
                 </div>
                 <div class="comment-react">
@@ -386,6 +401,9 @@
       </div>
     </section>
 
+    <!-- WHATSAPP FLOTANTE -->
+     <%- include('partials/whatsapp_flot') %>
+
     <!-- FOOTER -->
     <%- include('partials/footer') %>
 
@@ -427,6 +445,7 @@
       </script>
 
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
       <script>
         $(document).ready(function () {
           $(".like-button").on("click", function () {
