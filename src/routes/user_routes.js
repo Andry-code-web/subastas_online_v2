@@ -420,7 +420,8 @@ router.get("/catalogo", (req, res) => {
 // Subastas
 router.get('/subasta/:id', (req, res) => {
   const subastaId = req.params.id;
-
+  const usuarioId = req.session.usuario ? req.session.usuario.id : null; // ID del usuario si está autenticado
+  
   const querySubasta = `
     SELECT s.*, 
       DATE_FORMAT(s.fecha_subasta, '%W %d') AS fecha_formateada, 
@@ -437,6 +438,12 @@ router.get('/subasta/:id', (req, res) => {
 
   const queryImagenes = 'SELECT imagen FROM imagenes_propiedad WHERE id_subasta = ?';
   const queryAnexos = 'SELECT id, anexo FROM anexos_propiedad WHERE id_subasta = ?';
+  
+  // Consulta para registrar la visita
+  const queryRegistrarVisita = 'INSERT INTO visitas_subasta (subasta_id, usuario_id) VALUES (?, ?)';
+
+  // Consulta para contar visitas
+  const queryContarVisitas = 'SELECT COUNT(*) AS total_visitas FROM visitas_subasta WHERE subasta_id = ?';
 
   // Formato de número
   function formatNumber(num) {
@@ -458,56 +465,79 @@ router.get('/subasta/:id', (req, res) => {
   }
 
   const now = moment(); // Obtiene la fecha y hora actuales
-  conection.query(querySubasta, [subastaId], (error, resultadoSubasta) => {
+  
+  // Registrar la visita
+  conection.query(queryRegistrarVisita, [subastaId, usuarioId], (error) => {
     if (error) {
-      console.error("Error al obtener datos de subasta", error);
-      return res.status(500).send("Error al obtener datos de subasta");
+      console.error("Error al registrar la visita", error);
     }
 
-    if (resultadoSubasta.length === 0) {
-      return res.status(404).send("Subasta no encontrada");
-    }
-
-    const subasta = resultadoSubasta[0];
-    const fechaHoraSubasta = moment(subasta.fecha_hora_subasta);
-
-    // Lógica para verificar el estado de la subasta
-    const duracionSubasta = 5; // duración en minutos
-    const fechaHoraFinSubasta = fechaHoraSubasta.clone().add(duracionSubasta, 'minutes');
-    let estaEnCurso = now.isBetween(fechaHoraSubasta, fechaHoraFinSubasta, null, '[]');
-    let estaTerminada = now.isAfter(fechaHoraFinSubasta); // Nueva variable que indica si ha terminado
-
-    const fechaFormateada = subasta.fecha_formateada;
-    const [day, dayNumber] = fechaFormateada.split(' ');
-    const fechaFormateadaEsp = `${translateDay(day)} ${dayNumber}`;
-
-    conection.query(queryImagenes, [subastaId], (error, resultadoImagenes) => {
+    // Obtener los datos de la subasta
+    conection.query(querySubasta, [subastaId], (error, resultadoSubasta) => {
       if (error) {
-        console.error("Error al obtener imágenes de subasta", error);
-        return res.status(500).send("Error al obtener imágenes de subasta");
+        console.error("Error al obtener datos de subasta", error);
+        return res.status(500).send("Error al obtener datos de subasta");
       }
 
-      conection.query(queryAnexos, [subastaId], (error, resultadoAnexos) => {
+      if (resultadoSubasta.length === 0) {
+        return res.status(404).send("Subasta no encontrada");
+      }
+
+      const subasta = resultadoSubasta[0];
+      const fechaHoraSubasta = moment(subasta.fecha_hora_subasta);
+      
+      // Lógica para verificar el estado de la subasta
+      const duracionSubasta = 5; // duración en minutos
+      const fechaHoraFinSubasta = fechaHoraSubasta.clone().add(duracionSubasta, 'minutes');
+      let estaEnCurso = now.isBetween(fechaHoraSubasta, fechaHoraFinSubasta, null, '[]');
+      let estaTerminada = now.isAfter(fechaHoraFinSubasta); // Nueva variable que indica si ha terminado
+
+      const fechaFormateada = subasta.fecha_formateada;
+      const [day, dayNumber] = fechaFormateada.split(' ');
+      const fechaFormateadaEsp = `${translateDay(day)} ${dayNumber}`;
+
+      // Obtener imágenes de la subasta
+      conection.query(queryImagenes, [subastaId], (error, resultadoImagenes) => {
         if (error) {
-          console.error("Error al obtener anexos de subasta", error);
-          return res.status(500).send("Error al obtener anexos de subasta");
+          console.error("Error al obtener imágenes de subasta", error);
+          return res.status(500).send("Error al obtener imágenes de subasta");
         }
 
-        // Renderiza la vista asegurando que estaEnCurso y estaTerminada se pasan correctamente
-        res.render("subasta", {
-          usuario: req.session.usuario,
-          subasta,
-          imagenes: resultadoImagenes.map(img => img.imagen.toString('base64')),
-          anexos: resultadoAnexos.map(anexo => ({ id: anexo.id, url: anexo.anexo })),
-          estaEnCurso, // Asegúrate de que estaEnCurso esté disponible aquí
-          estaTerminada, // Nueva variable que indica si la subasta ha terminado
-          fechaFormateadaEsp, // Aquí pasamos la fecha traducida a español
-          formatNumber // Pasa la función formatNumber a la vista
+        // Obtener anexos de la subasta
+        conection.query(queryAnexos, [subastaId], (error, resultadoAnexos) => {
+          if (error) {
+            console.error("Error al obtener anexos de subasta", error);
+            return res.status(500).send("Error al obtener anexos de subasta");
+          }
+
+          // Contar cuántas personas han visto la subasta
+          conection.query(queryContarVisitas, [subastaId], (error, resultadoVisitas) => {
+            if (error) {
+              console.error("Error al contar visitas de la subasta", error);
+              return res.status(500).send("Error al contar visitas de la subasta");
+            }
+
+            const totalVisitas = resultadoVisitas[0].total_visitas;
+
+            // Renderizar la vista con los datos de la subasta y el contador de visitas
+            res.render("subasta", {
+              usuario: req.session.usuario,
+              subasta,
+              imagenes: resultadoImagenes.map(img => img.imagen.toString('base64')),
+              anexos: resultadoAnexos.map(anexo => ({ id: anexo.id, url: anexo.anexo })),
+              estaEnCurso, // Indica si la subasta está en curso
+              estaTerminada, // Nueva variable que indica si la subasta ha terminado
+              fechaFormateadaEsp, // Fecha traducida a español
+              formatNumber, // Función para formatear números
+              totalVisitas // Total de visitas
+            });
+          });
         });
       });
     });
   });
 });
+
 
 
 

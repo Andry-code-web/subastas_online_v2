@@ -30,11 +30,6 @@
       border: 1px solid #ccc;
       cursor: pointer;
     }
-
-    .filtros button.active {
-      background-color: #007bff;
-      color: #fff;
-    }
   </style>
 </head>
 
@@ -60,7 +55,7 @@
         <!-- Filtros -->
         <div class="filtros ">
           <form id="filterForm" action="/catalogo" method="GET">
-            <button class="filtro active" type="submit" name="categoria" value="" <%=!categoria ? 'class="active"' : '' %>>
+            <button class="filtro <%= !categoria ? 'active' : '' %>" type="submit" name="categoria" value="" <%=!categoria ? 'class="active"' : '' %>>
               <p>
                 Todas
                 <span>
@@ -97,7 +92,7 @@
               </svg>
 
             </button>
-            <button class="filtro" type="submit" name="categoria" value="camioneta" <%=categoria==='camioneta'
+            <button class="filtro <%= categoria === 'camioneta' ? 'active' : '' %>" type="submit" name="categoria" value="camioneta" <%=categoria==='camioneta'
               ? 'class="active"' : '' %>>
               <p>
                 Camionetas
@@ -132,7 +127,7 @@
               </div>
 
             </button>
-            <button class="filtro" type="submit" name="categoria" value="auto" <%=categoria==='auto' ? 'class="active"'
+            <button class="filtro <%= categoria === 'auto' ? 'active' : '' %>" type="submit" name="categoria" value="auto" <%=categoria==='auto' ? 'class="active"'
               : '' %>>
               <p>
                 Autos
@@ -166,7 +161,7 @@
                 </div>
               </div>
             </button>
-            <button class="filtro" type="submit" name="categoria" value="moto" <%=categoria==='moto' ? 'class="active"'
+            <button class="filtro <%= categoria === 'moto' ? 'active' : '' %>" type="submit" name="categoria" value="moto" <%=categoria==='moto' ? 'class="active"'
               : '' %>>
               <p>
                 Motos
@@ -343,6 +338,21 @@
       <%- include('partials/footer') %>
 
 
+      <script>
+        // Obtener todos los botones de filtro
+        const filtros = document.querySelectorAll('.filtro');
+      
+        // Agregar un evento de clic a cada botón de filtro
+        filtros.forEach(filtro => {
+          filtro.addEventListener('click', function(event) {
+            // Remover la clase 'active' de todos los botones
+            filtros.forEach(btn => btn.classList.remove('active'));
+      
+            // Agregar la clase 'active' al botón en el que se hizo clic
+            this.classList.add('active');
+          });
+        });
+      </script>
 
       
         <!-- SCRIPT -->

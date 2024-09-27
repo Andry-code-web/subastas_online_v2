@@ -19,12 +19,32 @@
   --color--sub: #d30000;
 }
 
+.contenedor_superior_subastas{
+  width: 100%;
+}
 
+.title_veiculo{
+  width: 100%;
+  text-align: center;
+  font-size: 1.6rem;
+  margin-top: 9rem;
+  font-family: var(--font--banner--bool);
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #494949;
+}
+
+.sub_title_apertura{
+  margin-bottom: .4rem;
+  padding: 0;
+  font-size: .9rem;
+  font-family: var(--font--banner--semi);
+}
 
 /* SUBASTAS */
 .detalles_subasta {
   width: 100%;
-  margin-top: 7rem;
+  margin-top: 2rem;
   gap: 3rem;
   padding-bottom: 3rem;
   display: flex;
@@ -190,10 +210,96 @@
   font-weight: 200 !important;
 }
 
-.importante span:last-child ,
-.descripcion span:last-child {
-  font-size: .6rem;
+.importante span:last-child {
+  font-size: .8rem;
   text-align: end;
+}
+
+.descripcion span:last-child{
+  width: 65%;
+  font-size: .9rem;
+  text-align: justify;
+}
+
+
+.info_apertura_redes{
+  width: 100%;
+  height: auto;
+  margin-top: 1rem;
+  margin-left: 1rem;
+}
+
+.redes_apertura{
+  width: 50%;
+  height: auto;
+  gap: .5rem;
+}
+
+.redes_apertura div{
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.redes_apertura .face{
+  background-color: #3C5A99;
+}
+
+.redes_apertura .tik{
+  background-color: #000000;
+}
+
+.redes_apertura .youtu{
+  background-color: #993c3c;
+}
+
+.redes_apertura .whats{
+  background-color: #25D366;
+}
+
+
+.redes_apertura .face i,
+.redes_apertura .tik i,
+.redes_apertura .youtu i,
+.redes_apertura .whats i{
+  font-size: 1.2rem;
+  color: #ffff;
+}
+
+
+.info_apertura{
+  width: 100%;
+  height: auto;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  margin-left: .5rem;
+}
+
+.info_apertura h4{
+  font-size: 1.2rem;
+  font-family: var(--font--banner--bool);
+  font-weight: 600;
+}
+
+.info_apertura p:first-child{
+  margin: 0;
+  padding: 0;
+}
+
+.info_apertura p span:first-child{
+  font-size: 1.05srem;
+  font-family: var(--font--banner--bool);
+  font-weight: 700;
+}
+
+.precio_apertura{
+  margin-bottom: 1rem;
+}
+
+.info_apertura p span:last-child{
+  font-size: 1.1rem;
 }
 
 /* CHAT */
@@ -225,6 +331,20 @@
 
 }
 
+.analisis{
+  gap: 3rem;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+
+.analisis p{
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: .9rem;
+  font-family: var(--font--sub--title--2);
+}
+
 .card-header .heart-icon {
   font-size: 1.5rem;
 }
@@ -247,7 +367,7 @@
 }
 
 .card-body button {
-  width: 80%;
+  width: 100%;
   height: 45px;
   background-color: #FBB44C;
   font-family: var(--font--sub--title--3);
@@ -285,6 +405,16 @@
   font-size: 1.1rem;
   font-weight: 600;
   margin: 1rem 0;
+}
+
+.incremento_precio{
+  font-size: .8rem;
+  font-family: var(--font--banner--bool);
+}
+
+.incremento_precio span{
+  font-weight: 700;
+  color: #00521e;
 }
 
 .chat {

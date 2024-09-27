@@ -471,6 +471,11 @@ svg {
   font-size: 1rem;
 }
 
+.precio a{
+  text-decoration: none;
+  color: #000;
+}
+
 .text-body {
   font-size: .9em;
   padding-bottom: 15px;
@@ -486,6 +491,8 @@ svg {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-decoration: none;
+  color: #000;
 }
 
 
@@ -502,7 +509,8 @@ svg {
 }
 
 .card_home:hover{
-  height: 450px;
+  height: 435px;
+  padding-bottom: 1rem;
 }
 
 .card_home:hover .card-img{
@@ -521,7 +529,9 @@ svg {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  
+  text-decoration: none;
+  color: #000;
+  cursor: pointer;
 }
 
 .comment-react {
@@ -641,10 +651,10 @@ svg {
 }
 
 /*Hover*/
-.card-img:hover {
+/* .card-img:hover {
   transform: translateY(-25%);
   box-shadow: rgba(226, 63, 63, 0.151) 0px 13px 47px -5px, rgba(180, 71, 71, 0.144) 0px 5px 5px 5px;
-}
+} */
 
 
 /* banner informativos */
@@ -956,96 +966,6 @@ svg {
   color: var(--color--sub);
 } */
 
-/* FOOTER */
-footer {
-  margin-top: 2rem;
-  width: 100%;
-  height: 70vh;
-  position: relative;
-}
-
-footer .img_footer {
-  width: 100%;
-  height: 70vh;
-  position: absolute;
-  z-index: -1;
-}
-
-.contenedor_superior {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.regresar_inicio {
-  position: absolute;
-  top: 21%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-/* footer::before {
-  content: url("/img/regreso_inicio");
-  position: absolute;
-  top: 21.5%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  cursor: pointer;
-} */
-
-.contet_footer {
-  margin-top: 12rem;
-}
-
-.img_logo {
-  width: 30%;
-}
-
-.subastar {
-  color: #ebebeb;
-  font-family: var(--font--about);
-  font-size: 0.9rem;
-  text-decoration: none;
-  transition: ease-in-out 0.3s;
-}
-
-.subastar span {
-  text-decoration: underline;
-  color: var(--color--sub);
-  transition: ease-in-out 0.3s;
-}
-
-.subastar:hover {
-  color: var(--color--sub);
-}
-
-.subastar:hover span {
-  color: #ebebeb;
-}
-
-.redes_footer {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  align-items: center;
-}
-
-.redes_footer a {
-  transition: ease-in .2s;
-}
-
-.redes_footer a:hover {
-  transform: scale(1.2);
-}
-
-.contet_footer p {
-  color: #444444;
-}
 
 /* ANIMACIONES */
 @keyframes slide-in-right {

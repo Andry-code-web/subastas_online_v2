@@ -47,6 +47,9 @@
           <div class="carousel-item">
             <img src="/img/banner_slider4_v2.jpeg" class="d-block w-100" alt="...">
           </div>
+          <div class="carousel-item">
+            <img src="/img/banner_catalogo_2.png" class="d-block w-100" alt="...">
+          </div>
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval"
           data-bs-slide="prev">
@@ -195,7 +198,10 @@
             <div class="card_home col mb-4">
               <div class="card-img">
                 <% if (subasta.imagenes && subasta.imagenes.length> 0) { %>
-                  <img src="data:image/jpeg;base64,<%= subasta.imagenes[0] %>" alt="Subasta Image">
+                  <a href="/subasta/<%= subasta.id %>">
+                    <img src="data:image/jpeg;base64,<%= subasta.imagenes[0] %>" alt="Subasta Image">
+                  </a>
+
                   <% }else { %>
                     <img src="/img/casa.png" alt="Default Image">
                     <% } %>
@@ -209,13 +215,13 @@
                   <p class="info text-body">
                     <%= subasta.categoria %>
                   </p>
-                  <p class="text-model">
+                  <a href="/subasta/<%= subasta.id %>" class="text-model">
                     Modelo: <%= subasta.modelo %>
-                  </p>
-                  
-                  <p class="text_descripcion">
+                  </a>
+
+                  <a href="/subasta/<%= subasta.id %>" class="text_descripcion">
                     <%= subasta.descripcion %>
-                  </p>
+                  </a>
                 </div>
                 <div class="comment-react">
                   <div class="like">
@@ -233,7 +239,9 @@
               </div>
               <div class="card-footer">
                 <span class="text-title precio" id="precio">
-                  $<%= subasta.precio_base %>
+                  <a href="/subasta/<%= subasta.id %>">
+                    $<%= subasta.precio_base %>
+                  </a>
                 </span>
                 <div class="card-button">
                   <a href="/subasta/<%= subasta.id %>" class="button">
@@ -263,7 +271,9 @@
             <div class="card_home">
               <div class="card-img">
                 <% if (subasta.imagenes && subasta.imagenes.length> 0) { %>
-                  <img src="data:image/jpeg;base64,<%= subasta.imagenes[0] %>" alt="Subasta Image">
+                  <a href="">
+                    <img src="data:image/jpeg;base64,<%= subasta.imagenes[0] %>" alt="Subastas Image">
+                  </a>
                   <% }else { %>
                     <img src="/img/casa.png" alt="Default Image">
                     <% } %>
@@ -276,13 +286,13 @@
                   <p class="info text-body">
                     <%= subasta.categoria %>
                   </p>
-                  <p class="text-model">
+                  <a href="/subasta/<%= subasta.id %>" class="text-model">
                     Modelo: <%= subasta.modelo %>
-                  </p>
+                  </a>
 
-                  <p class="text_descripcion">
+                  <a href="/subasta/<%= subasta.id %>" class="text_descripcion">
                     <%= subasta.descripcion %>
-                  </p>
+                  </a>
                 </div>
                 <div class="comment-react">
                   <div class="like">
@@ -300,7 +310,9 @@
               </div>
               <div class="card-footer">
                 <span class="text-title precio">
-                  $<%= subasta.precio_base %>
+                  <a href="/subasta/<%= subasta.id %>">
+                    $<%= subasta.precio_base %>
+                  </a>
                 </span>
                 <div class="card-button">
                   <a href="/subasta/<%= subasta.id %>" class="button">
@@ -330,7 +342,9 @@
             <div class="card_home">
               <div class="card-img">
                 <% if (subasta.imagenes && subasta.imagenes.length> 0) { %>
-                  <img src="data:image/jpeg;base64,<%= subasta.imagenes[0] %>" alt="Subasta Image">
+                  <a href="/subasta/<%= subasta.id %>">
+                    <img src="data:image/jpeg;base64,<%= subasta.imagenes[0] %>" alt="Subasta Image">
+                  </a>
                   <% }else { %>
                     <img src="/img/casa.png" alt="Default Image">
                     <% } %>
@@ -343,13 +357,13 @@
                   <p class="info text-body">
                     <%= subasta.categoria %>
                   </p>
-                  <p class="text-model">
+                  <a href="/subasta/<%= subasta.id %>" class="text-model">
                     Modelo: <%= subasta.modelo %>
-                  </p>
+                  </a>
 
-                  <p class="text_descripcion">
+                  <a href="/subasta/<%= subasta.id %>" class="text_descripcion">
                     <%= subasta.descripcion %>
-                  </p>
+                  </a>
                 </div>
                 <div class="comment-react">
                   <div class="like">
@@ -367,7 +381,9 @@
               </div>
               <div class="card-footer">
                 <span class="text-title precio">
-                  $<%= subasta.precio_base %>
+                  <a href="/subasta/<%= subasta.id %>">
+                    $<%= subasta.precio_base %>
+                  </a>
                 </span>
                 <div class="card-button">
                   <a href="/subasta/<%= subasta.id %>" class="button">
@@ -402,83 +418,83 @@
     </section>
 
     <!-- WHATSAPP FLOTANTE -->
-     <%- include('partials/whatsapp_flot') %>
+    <%- include('partials/whatsapp_flot') %>
 
-    <!-- FOOTER -->
-    <%- include('partials/footer') %>
+      <!-- FOOTER -->
+      <%- include('partials/footer') %>
 
-      <!-- SCRIPTS -->
-      <script>
-        document.querySelectorAll('.img-subasta').forEach(img => {
-          img.addEventListener('load', function () {
-            // Ocultar el loader cuando la imagen se haya cargado
-            const loader = this.parentNode.querySelector('.loader');
-            if (loader) {
-              loader.style.display = 'none';
-            }
-          });
-
-          img.addEventListener('error', function () {
-            // En caso de error al cargar la imagen, también podemos ocultar el loader
-            const loader = this.parentNode.querySelector('.loader');
-            if (loader) {
-              loader.style.display = 'none';
-            }
-          });
-        });
-      </script>
-
-      <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          const botonActivar = document.getElementById("btn_menu");
-          const botonCerrar = document.getElementById("btn_close");
-          const contenederMenu = document.getElementsByClassName("menu_desplegable")[0];
-
-          botonActivar.addEventListener('click', () => {
-            contenederMenu.classList.add("active");
-          });
-
-          botonCerrar.addEventListener('click', () => {
-            contenederMenu.classList.remove("active");
-          });
-        });
-      </script>
-
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-      <script>
-        $(document).ready(function () {
-          $(".like-button").on("click", function () {
-            const $button = $(this);
-            const subastaId = $button.data("subasta-id");
-
-            // Enviar una solicitud al servidor para guardar el estado del like
-            $.post("/like", {
-              subasta_id: subastaId
-            }, function (response) {
-              if (response.success) {
-                // Alternar la visibilidad de los íconos
-                $button.find(".bi-heart-fill").toggleClass("d-none");
-                $button.find(".bi-heart").toggleClass("d-none");
-              } else if (response.redirect) {
-                // Redirigir al usuario a la página de inicio de sesión
-                window.location.href = response.redirect;
-              } else {
-                alert("Error al realizar la acción.");
+        <!-- SCRIPTS -->
+        <script>
+          document.querySelectorAll('.img-subasta').forEach(img => {
+            img.addEventListener('load', function () {
+              // Ocultar el loader cuando la imagen se haya cargado
+              const loader = this.parentNode.querySelector('.loader');
+              if (loader) {
+                loader.style.display = 'none';
               }
-            }).fail(function (jqXHR) {
-              if (jqXHR.status === 401) {
-                // Redirigir al usuario a la página de inicio de sesión
-                window.location.href = jqXHR.responseJSON.redirect;
-              } else {
-                alert("Error al realizar la acción.");
+            });
+
+            img.addEventListener('error', function () {
+              // En caso de error al cargar la imagen, también podemos ocultar el loader
+              const loader = this.parentNode.querySelector('.loader');
+              if (loader) {
+                loader.style.display = 'none';
               }
             });
           });
-        });
-      </script>
+        </script>
 
-      <script src="/js/partials/script_header.js"></script>
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const botonActivar = document.getElementById("btn_menu");
+            const botonCerrar = document.getElementById("btn_close");
+            const contenederMenu = document.getElementsByClassName("menu_desplegable")[0];
+
+            botonActivar.addEventListener('click', () => {
+              contenederMenu.classList.add("active");
+            });
+
+            botonCerrar.addEventListener('click', () => {
+              contenederMenu.classList.remove("active");
+            });
+          });
+        </script>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script>
+          $(document).ready(function () {
+            $(".like-button").on("click", function () {
+              const $button = $(this);
+              const subastaId = $button.data("subasta-id");
+
+              // Enviar una solicitud al servidor para guardar el estado del like
+              $.post("/like", {
+                subasta_id: subastaId
+              }, function (response) {
+                if (response.success) {
+                  // Alternar la visibilidad de los íconos
+                  $button.find(".bi-heart-fill").toggleClass("d-none");
+                  $button.find(".bi-heart").toggleClass("d-none");
+                } else if (response.redirect) {
+                  // Redirigir al usuario a la página de inicio de sesión
+                  window.location.href = response.redirect;
+                } else {
+                  alert("Error al realizar la acción.");
+                }
+              }).fail(function (jqXHR) {
+                if (jqXHR.status === 401) {
+                  // Redirigir al usuario a la página de inicio de sesión
+                  window.location.href = jqXHR.responseJSON.redirect;
+                } else {
+                  alert("Error al realizar la acción.");
+                }
+              });
+            });
+          });
+        </script>
+
+        <script src="/js/partials/script_header.js"></script>
 </body>
 
 </html>

@@ -40,663 +40,750 @@
 <body>
   <%- include('partials/header') %>
 
-    <div class="detalles_subasta">
-      <div class="property-detail">
-        <!-- Carrusel e información del inmueble -->
-        <div id="carouselExample<%= subasta.id %>" class="carousel slide slider">
-          <div class="max-w-4xl mx-auto rounded-lg overflow-hidden content_galeria">
-            <div id="imagen_principal" class="imgen_principal">
-              <% if (imagenes.length> 0) { %>
-                <img class="img_principal rounded-lg" src="data:image/jpeg;base64,<%= imagenes[0] %>" alt="">
-                <% } else { %>
-                  <img class="img_principal rounded-lg" src="path/to/default-image.jpg" alt="Imagen no disponible">
-                  <% } %>
-            </div>
-            <div class="galeria scroll-1">
-              <% if (imagenes.length> 0) { %>
-                <% imagenes.forEach((imagen, index)=> { %>
-                  <div class="img_wrapper">
-                    <img class="imgs rounded-lg" src="data:image/jpeg;base64,<%= imagen %>" alt="">
-                  </div>
-                  <% }); %>
-                    <% } else { %>
-                      <p>No hay imágenes disponibles.</p>
-                      <% } %>
+    <div class="contenedor_superior_subastas">
+
+      <h2 class="title_veiculo">
+        <span> Marca :<%= subasta.marca %></span>
+        <span> Modelo :<%= subasta.modelo %></span>
+        <span> Año :<%= subasta.año %></span>
+        <span> Placa :<%= subasta.placa %></span>
+        <span> Ubicacion :<%= subasta.ubicacion %></span>
+      </h2>
+
+      <div class="detalles_subasta">
+        <div class="property-detail">
+          <!-- Carrusel e información del inmueble -->
+          <div id="carouselExample<%= subasta.id %>" class="carousel slide slider">
+            <div class="max-w-4xl mx-auto rounded-lg overflow-hidden content_galeria">
+              <div id="imagen_principal" class="imgen_principal">
+                <% if (imagenes.length> 0) { %>
+                  <img class="img_principal rounded-lg" src="data:image/jpeg;base64,<%= imagenes[0] %>" alt="">
+                  <% } else { %>
+                    <img class="img_principal rounded-lg" src="path/to/default-image.jpg" alt="Imagen no disponible">
+                    <% } %>
+              </div>
+              <div class="galeria scroll-1">
+                <% if (imagenes.length> 0) { %>
+                  <% imagenes.forEach((imagen, index)=> { %>
+                    <div class="img_wrapper">
+                      <img class="imgs rounded-lg" src="data:image/jpeg;base64,<%= imagen %>" alt="">
+                    </div>
+                    <% }); %>
+                      <% } else { %>
+                        <p>No hay imágenes disponibles.</p>
+                        <% } %>
+              </div>
             </div>
           </div>
-        </div>
 
 
-        <div class="property-details-content">
-          <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane"
-                type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Descripción
-                detallada</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane"
-                type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Anexos</button>
-            </li>
-          </ul>
-          <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
-              tabindex="0">
-              <div class="content_title">
-                <h4>Información general</h4>
+          <div class="info_apertura_redes">
+            <p class="sub_title_apertura">Compartir:</p>
+            <div class="redes_apertura d-flex">
+
+              <div class="face">
+                <a href="">
+                  <i class="fa-brands fa-facebook-f"></i>
+                </a>
               </div>
+              <div class="tik">
+                <a href="">
+                  <i class="fa-brands fa-tiktok"></i>
+                </a>
 
-              <div class="d-flex flex-column align-items-center content_info_subastas">
-                <div class="nombre_tipo">
-                  <h3 class="d-flex justify-content-between">
-                    <span>Marca:</span>
-                    <span>
-                      <%= subasta.marca %>
-                    </span>
-                  </h3>
-                  <p class="d-flex justify-content-between">
-                    <span>Modelo:</span>
-                    <span>
-                      <%= subasta.modelo %>
-                    </span>
-                  </p>
-                  <p class="d-flex justify-content-between">
-                    <span>Categoría:</span>
-                    <span>
-                      <%= subasta.categoria %>
-                    </span>
-                  </p>
-                  <p class="d-flex justify-content-between">
-                    <span>Año:</span>
-                    <span>
-                      <%= subasta.anio %>
-                    </span>
-                  </p>
-                  <p class="d-flex justify-content-between">
-                    <span>Precio Base:</span>
-                    <span>
-                      <%= formatNumber(subasta.precio_base) %>
-                    </span>
-                  </p>
-                  <p class="d-flex justify-content-between">
-                    <span>Placa:</span>
-                    <span>
-                      <%= subasta.placa %>
-                    </span>
-                  </p>
-                  <p class="d-flex justify-content-between">
-                    <span>Tarjeta de Propiedad:</span>
-                    <span>
-                      <%= subasta.tarjeta_propiedad %>
-                    </span>
-                  </p>
-                  <p class="d-flex justify-content-between">
-                    <span>Llave:</span>
-                    <span>
-                      <%= subasta.llave %>
-                    </span>
-                  </p>
-                  <p class="d-flex justify-content-between">
-                    <span>Ubicación:</span>
-                    <span>
-                      <%= subasta.ubicacion %>
-                    </span>
-                  </p>
-                  <p class="d-flex justify-content-between">
-                    <span>Estado:</span>
-                    <span>
-                      <%= subasta.estado %>
-                    </span>
-                  </p>
-                  <p class="d-flex justify-content-between importante">
-                    <span>Importante:</span>
-                    <span>
-                      <%= subasta.importante %>
-                    </span>
-                  </p>
-                  <p class="d-flex justify-content-between descripcion">
-                    <span>Descripción:</span>
-                    <span>
-                      <%= subasta.descripcion %>
-                    </span>
-                  </p>
+              </div>
+              <div class="youtu">
+                <a href="">
+                  <i class="fa-brands fa-youtube"></i>
+                </a>
+
+              </div>
+              <div class="whats">
+                <a href="">
+                  <i class="fa-brands fa-whatsapp"></i>
+                </a>
+
+              </div>
+            </div>
+            <div class="info_apertura">
+              <h4>INFORMACIÓN DE APERTURA</h4>
+              <p style="margin: 0;">
+                <span>Vendedor: </span>
+                <span>Subasta Sur</span>
+              </p>
+              <p class="precio_apertura">
+                <span>Oferta inicial: </span>
+                <span>US$<%= subasta.precio_base %></span>
+              </p>
+            </div>
+          </div>
+
+          <div class="property-details-content">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane"
+                  type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Descripción
+                  detallada</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane"
+                  type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Anexos</button>
+              </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+              <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
+                tabindex="0">
+                <div class="content_title">
+                  <h4>Información general</h4>
+                </div>
+
+                <div class="d-flex flex-column align-items-center content_info_subastas">
+                  <div class="nombre_tipo">
+                    <h3 class="d-flex justify-content-between">
+                      <span>Marca:</span>
+                      <span>
+                        <%= subasta.marca %>
+                      </span>
+                    </h3>
+                    <p class="d-flex justify-content-between">
+                      <span>Modelo:</span>
+                      <span>
+                        <%= subasta.modelo %>
+                      </span>
+                    </p>
+                    <p class="d-flex justify-content-between">
+                      <span>Categoría:</span>
+                      <span>
+                        <%= subasta.categoria %>
+                      </span>
+                    </p>
+                    <p class="d-flex justify-content-between">
+                      <span>Año:</span>
+                      <span>
+                        <%= subasta.anio %>
+                      </span>
+                    </p>
+                    <p class="d-flex justify-content-between">
+                      <span>Precio Base:</span>
+                      <span>
+                        <%= formatNumber(subasta.precio_base) %>
+                      </span>
+                    </p>
+                    <p class="d-flex justify-content-between">
+                      <span>Placa:</span>
+                      <span>
+                        <%= subasta.placa %>
+                      </span>
+                    </p>
+                    <p class="d-flex justify-content-between">
+                      <span>Tarjeta de Propiedad:</span>
+                      <span>
+                        <%= subasta.tarjeta_propiedad %>
+                      </span>
+                    </p>
+                    <p class="d-flex justify-content-between">
+                      <span>Llave:</span>
+                      <span>
+                        <%= subasta.llave %>
+                      </span>
+                    </p>
+                    <p class="d-flex justify-content-between">
+                      <span>Ubicación:</span>
+                      <span>
+                        <%= subasta.ubicacion %>
+                      </span>
+                    </p>
+                    <p class="d-flex justify-content-between">
+                      <span>Estado:</span>
+                      <span>
+                        <%= subasta.estado %>
+                      </span>
+                    </p>
+                    <p class="d-flex justify-content-between importante">
+                      <span>Importante:</span>
+                      <span>
+                        <%= subasta.importante %>
+                      </span>
+                    </p>
+                    <p class="d-flex justify-content-between descripcion">
+                      <span>Descripción:</span>
+                      <span>
+                        <%= subasta.descripcion %>
+                      </span>
+                    </p>
+                  </div>
                 </div>
               </div>
+
+              <!-- Mostrar anexos en la vista -->
+              <div class="tab-pane fade contet_pdf" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab"
+                tabindex="0">
+                <% if (anexos && anexos.length> 0) { %>
+                  <% anexos.forEach(anexo=> { %>
+                    <a href="<%= anexo.url %>" download class="archivo_pdf" target="_blank">
+                      <i class="bi bi-file-pdf-fill"></i> Descargar Anexo <%= anexo.id %>
+                    </a><br>
+                    <% }) %>
+                      <% } else { %>
+                        <p>No hay anexos disponibles.</p>
+                        <% } %>
+              </div>
             </div>
-
-            <!-- Mostrar anexos en la vista -->
-            <div class="tab-pane fade contet_pdf" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab"
-              tabindex="0">
-              <% if (anexos && anexos.length> 0) { %>
-                <% anexos.forEach(anexo=> { %>
-                  <a href="<%= anexo.url %>" download class="archivo_pdf" target="_blank">
-                    <i class="bi bi-file-pdf-fill"></i> Descargar Anexo <%= anexo.id %>
-                  </a><br>
-                  <% }) %>
-                    <% } else { %>
-                      <p>No hay anexos disponibles.</p>
-                      <% } %>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-
-      <div class="card">
-        <div class="card-header">
-          <div class="fecha_subasta">
-            <p>Inicia<br>
-              <%= fechaFormateadaEsp %>
-            </p>
-          </div>
-          <div>
-            <p class="d-flex flex-column justify-content-center align-items-center">
-              <span>
-                <svg fill="none" viewBox="0 0 24 24" height="35" width="35" xmlns="http://www.w3.org/2000/svg">
-                  <path fill="#fff" stroke-linecap="round" stroke-width="2" stroke="none"
-                    d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z">
-                  </path>
-                </svg>
-              </span>
-              <span>
-                <%= subasta.like_count %>
-              </span>
-            </p>
-          </div>
-
-          <div class="hora_subasta">
-            <p>
-              <%= subasta.hora_formateada %>
-            </p>
           </div>
         </div>
 
 
-        <div class="card-body" id="body_card">
-          <h2>¡Oportunidad para el que sabe!</h2>
-
-          <button id="participar">
-            <% if (estaTerminada) { %>
-              La subasta acabó
-              <% } else { %>
-                PARTICIPA
-                <% } %>
-          </button>
-          <p id="estado-subasta" style="display: none;"></p>
-
-
-
-
-
-          <p class="precio d-flex align-items-center justify-content-center">
-            <i class="bi bi-cash-coin d-flex"></i>
-            <span class="precio_base">Precio base:</span>
-            <span class="price">US$<%= formatNumber(subasta.precio_base) %></span>
-          </p>
-        </div>
-
-        <!-- Chat de pujas -->
-        <div id="chat" class="chat">
-          <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0"
-            aria-valuemax="100">
-            <div class="progress-bar" id="progressBar" style="width: 100%"></div>
-          </div>
-          <div class="prorroga_esperando"></div>
-          <div id="messages" class="messages"></div>
-          <div class="content_acciones d-flex justify-content-center">
-            <div class="mensaje">
-              <button class="btn-minus" id="menos">
-                <i class="bi bi-dash-circle"></i>
-              </button>
-              <input type="text" id="messageInput" placeholder="Puja" class="input_mensaje" />
-              <button class="btn-plus">
-                <i class="bi bi-plus-circle" id="mas"></i>
-              </button>
+        <div class="card">
+          <div class="card-header">
+            <div class="fecha_subasta">
+              <p>Inicia<br>
+                <%= fechaFormateadaEsp %>
+              </p>
             </div>
-            <button id="sendButton" class=" btn_enviar">Enviar</button>
+            <div>
+              <!-- <p class="d-flex flex-column justify-content-center align-items-center">
+                <span>
+                  <svg fill="none" viewBox="0 0 24 24" height="35" width="35" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#fff" stroke-linecap="round" stroke-width="2" stroke="none"
+                      d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z">
+                    </path>
+                  </svg>
+                </span>
+                <span>
+                  <%= subasta.like_count %>
+                </span>
+              </p> -->
+            </div>
+
+            <div class="hora_subasta">
+              <p>
+                <%= subasta.hora_formateada %>
+              </p>
+            </div>
+          </div>
+
+
+          <div class="card-body" id="body_card">
+
+
+            <div class="analisis d-flex justify-content-center">
+
+              <div class="vistas">
+                <p>
+                  <span>VISTAS</span>
+                  <span>
+                    <%= totalVisitas %>
+                  </span>
+                </p>
+              </div>
+              <div class="megusta">
+                <p>
+                  <span>LIKES</span>
+                  <span>
+                    <%= subasta.like_count %>
+                  </span>
+                </p>
+              </div>
+
+            </div>
+
+            <h2>¡Oportunidad para el que sabe!</h2>
+
+            <p class="precio_sin_incremento">
+              <span>Oferta Actual:</span>
+              <span></span>
+            </p>
+
+            <hr>
+
+            <p class="precio d-flex align-items-center justify-content-center">
+              <i class="bi bi-cash-coin d-flex"></i>
+              <span class="precio_base">Precio base:</span>
+              <span class="price">US$<%= formatNumber(subasta.precio_base) %></span>
+            </p>
+
+            <button id="participar">
+              <% if (estaTerminada) { %>
+                La subasta acabó
+                <% } else { %>
+                  PARTICIPA
+                  <% } %>
+            </button>
+            <p id="estado-subasta" style="display: none;"></p>
+            <p class="incremento_precio">
+              Incremento <span>US$100.00</span> 
+            </p>
+
+
+
+
+
+
+          </div>
+
+          <!-- Chat de pujas -->
+          <div id="chat" class="chat">
+            <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0"
+              aria-valuemax="100">
+              <div class="progress-bar" id="progressBar" style="width: 100%"></div>
+            </div>
+            <div class="prorroga_esperando"></div>
+            <div id="messages" class="messages"></div>
+            <div class="content_acciones d-flex justify-content-center">
+              <div class="mensaje">
+                <button class="btn-minus" id="menos">
+                  <i class="bi bi-dash-circle"></i>
+                </button>
+                <input type="text" id="messageInput" placeholder="Puja" class="input_mensaje" />
+                <button class="btn-plus">
+                  <i class="bi bi-plus-circle" id="mas"></i>
+                </button>
+              </div>
+              <button id="sendButton" class=" btn_enviar">Enviar</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
+
     <!-- WHATSAPP FLOTANTE -->
     <%- include('partials/whatsapp_flot') %>
 
-    <%- include('partials/footer') %>
+      <%- include('partials/footer') %>
 
 
-      <!-- script header -->
-      <script src="/js/partials/script_header.js"></script>
-      <!-- SCRIPT -->
-      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-      <!-- <script src="https://cdn.jsdelivr.net/npm/tsparticles@2"></script> -->
-      <script
-        src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
-      <!-- script moment fecha y hora -->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+        <!-- script header -->
+        <script src="/js/partials/script_header.js"></script>
+        <!-- SCRIPT -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <!-- <script src="https://cdn.jsdelivr.net/npm/tsparticles@2"></script> -->
+        <script
+          src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
+        <!-- script moment fecha y hora -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
-      <script>
-        document.addEventListener('DOMContentLoaded', function () {
-          const socket = io();
-          const messages = document.getElementById('messages');
-          const messageInput = document.getElementById('messageInput');
-          const sendButton = document.getElementById('sendButton');
-          const btnMas = document.getElementById('mas');
-          const btnMenos = document.getElementById('menos');
-          const progressBar = document.getElementById('progressBar');
-          const numeroOportunidades = document.getElementById('numero-oportunidades');
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            const socket = io();
+            const messages = document.getElementById('messages');
+            const messageInput = document.getElementById('messageInput');
+            const sendButton = document.getElementById('sendButton');
+            const btnMas = document.getElementById('mas');
+            const btnMenos = document.getElementById('menos');
+            const progressBar = document.getElementById('progressBar');
+            const numeroOportunidades = document.getElementById('numero-oportunidades');
 
-          let currentBid = parseInt('<%= subasta.precio_base %>');
-          let minBid = currentBid; // Guardar la puja mínima permitida
-          let username; // Variable para almacenar el nombre de usuario
+            let currentBid = parseInt('<%= subasta.precio_base %>');
+            let minBid = currentBid; // Guardar la puja mínima permitida
+            let username; // Variable para almacenar el nombre de usuario
 
-          const auctionRoom = '<%= subasta.id %>';
-          socket.emit('joinRoom', auctionRoom);
+            const auctionRoom = '<%= subasta.id %>';
+            socket.emit('joinRoom', auctionRoom);
 
-          const auctionStartTime = moment('<%= subasta.fecha_hora_subasta %>'); // Hora de inicio de la subasta
-          const now = moment(); // Hora actual
+            const auctionStartTime = moment('<%= subasta.fecha_hora_subasta %>'); // Hora de inicio de la subasta
+            const now = moment(); // Hora actual
 
-          if (now.isBefore(auctionStartTime)) {
-            const timeRemaining = auctionStartTime.diff(now, 'seconds');
-            setTimeout(startAuction, timeRemaining * 1000); // Iniciar la subasta cuando llegue el tiempo
-          } else {
-            startAuction(); // Iniciar la subasta inmediatamente si ya es la hora
-          }
+            if (now.isBefore(auctionStartTime)) {
+              const timeRemaining = auctionStartTime.diff(now, 'seconds');
+              setTimeout(startAuction, timeRemaining * 1000); // Iniciar la subasta cuando llegue el tiempo
+            } else {
+              startAuction(); // Iniciar la subasta inmediatamente si ya es la hora
+            }
 
-          function startAuction() {
-            messageInput.value = formatNumber(currentBid + 100);
+            function startAuction() {
+              messageInput.value = formatNumber(currentBid + 100);
 
-            let progressInterval;
-            let progressValue = 100;
-            let auctionCount = 0;
-            let auctionInProgress = false;
-            let auctionEnded = false;
+              let progressInterval;
+              let progressValue = 100;
+              let auctionCount = 0;
+              let auctionInProgress = false;
+              let auctionEnded = false;
 
-            function startProgressBar() {
-              if (auctionEnded) return;
+              function startProgressBar() {
+                if (auctionEnded) return;
 
-              progressValue = 100;
-              auctionCount = 0;
-              progressBar.style.width = `${progressValue}%`;
-
-              if (progressInterval) {
-                clearInterval(progressInterval);
-              }
-
-              auctionInProgress = true;
-
-              progressInterval = setInterval(() => {
-                progressValue -= 1;
+                progressValue = 100;
+                auctionCount = 0;
                 progressBar.style.width = `${progressValue}%`;
 
-                if (progressValue <= 50 && auctionCount === 0) {
-                  auctionCount = 1;
-                  addAuctionMessage("a la 1");
-                } else if (progressValue <= 25 && auctionCount === 1) {
-                  auctionCount = 2;
-                  addAuctionMessage("a las 2");
-                } else if (progressValue <= 0 && auctionCount === 2) {
-                  auctionCount = 3;
-                  addAuctionMessage("a las 3");
+                if (progressInterval) {
                   clearInterval(progressInterval);
-                  if (auctionInProgress) {
-                    auctionInProgress = false;
-                    auctionEnded = true;
-                    socket.emit('endAuction', auctionRoom);
-                    disableButtons();
+                }
+
+                auctionInProgress = true;
+
+                progressInterval = setInterval(() => {
+                  progressValue -= 1;
+                  progressBar.style.width = `${progressValue}%`;
+
+                  if (progressValue <= 50 && auctionCount === 0) {
+                    auctionCount = 1;
+                    addAuctionMessage("a la 1");
+                  } else if (progressValue <= 25 && auctionCount === 1) {
+                    auctionCount = 2;
+                    addAuctionMessage("a las 2");
+                  } else if (progressValue <= 0 && auctionCount === 2) {
+                    auctionCount = 3;
+                    addAuctionMessage("a las 3");
+                    clearInterval(progressInterval);
+                    if (auctionInProgress) {
+                      auctionInProgress = false;
+                      auctionEnded = true;
+                      socket.emit('endAuction', auctionRoom);
+                      disableButtons();
+                    }
                   }
-                }
-              }, 50);
-            }
+                }, 50);
+              }
 
-            btnMas.addEventListener('click', function () {
-              if (auctionEnded) return;
+              btnMas.addEventListener('click', function () {
+                if (auctionEnded) return;
 
-              let currentBidValue = parseInt(messageInput.value.replace(/,/g, ''));
-              currentBidValue += 100;
-              messageInput.value = formatNumber(currentBidValue);
-              minBid = currentBidValue;
-            });
-
-            btnMenos.addEventListener('click', function () {
-              if (auctionEnded) return;
-
-              let currentBidValue = parseInt(messageInput.value.replace(/,/g, ''));
-              if (currentBidValue > minBid) {
-                currentBidValue -= 100;
-                if (currentBidValue < minBid) {
-                  currentBidValue = minBid;
-                }
+                let currentBidValue = parseInt(messageInput.value.replace(/,/g, ''));
+                currentBidValue += 100;
                 messageInput.value = formatNumber(currentBidValue);
-              }
-            });
-
-            sendButton.addEventListener('click', function () {
-              if (auctionEnded) return;
-
-              let bidValue = parseInt(messageInput.value.replace(/,/g, ''));
-
-              if (bidValue < minBid) {
-                Swal.fire({
-                  title: `La puja debe ser al menos $${formatNumber(minBid)}.`,
-                  icon: "warning",
-                });
-                return;
-              }
-
-              socket.emit('bid', {
-                user: username || '<%= usuario ? usuario.nombre : "Invitado" %>', // Usa el nombre de usuario recibido
-                bid: bidValue,
-                room: auctionRoom
+                minBid = currentBidValue;
               });
-              startProgressBar();
-            });
 
-            socket.on('setUsername', function (newUsername) {
-              username = newUsername; // Guardar el nombre de usuario recibido
-            });
+              btnMenos.addEventListener('click', function () {
+                if (auctionEnded) return;
 
-            socket.on('newBid', function (data) {
-              if (auctionEnded) return;
-
-              currentBid = parseInt(data.bid);
-              minBid = currentBid;
-
-              const user = username || data.user; // Usar `username` si está definido, de lo contrario usar el nombre original
-              const bid = data.bid;
-
-              const message = `<b>${user}:</b> $${formatNumber(bid)}`;
-              const li = document.createElement('li');
-              li.innerHTML = message;
-              messages.appendChild(li);
-              messageInput.value = formatNumber(bid + 100);
-              startProgressBar();
-            });
-
-            socket.on('endAuction', function () {
-              auctionEnded = true;
-              auctionInProgress = false;
-
-              Swal.fire({
-                title: '¡Subasta finalizada!',
-                text:'La subasta ya tiene un ganador',
-                icon: 'success',
-                allowOutsideClick: false, // No permitir cerrar con un clic fuera del alert
-                confirmButtonText: 'Ir al catálogo', // Texto del botón
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  window.location.href = '/catalogo'; // Redirigir al catálogo cuando se haga clic en el botón
+                let currentBidValue = parseInt(messageInput.value.replace(/,/g, ''));
+                if (currentBidValue > minBid) {
+                  currentBidValue -= 100;
+                  if (currentBidValue < minBid) {
+                    currentBidValue = minBid;
+                  }
+                  messageInput.value = formatNumber(currentBidValue);
                 }
               });
 
-              disableButtons();
-            });
+              sendButton.addEventListener('click', function () {
+                if (auctionEnded) return;
 
-            function addAuctionMessage(message) {
-              const li = document.createElement('li');
-              li.innerText = message;
-              messages.appendChild(li);
-            }
+                let bidValue = parseInt(messageInput.value.replace(/,/g, ''));
 
-            function disableButtons() {
-              btnMas.disabled = true;
-              btnMenos.disabled = true;
-              sendButton.disabled = true;
-              messageInput.disabled = true;
-            }
-          }
+                if (bidValue < minBid) {
+                  Swal.fire({
+                    title: `La puja debe ser al menos $${formatNumber(minBid)}.`,
+                    icon: "warning",
+                  });
+                  return;
+                }
 
-          function formatNumber(num) {
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-          }
-        });
+                socket.emit('bid', {
+                  user: username || '<%= usuario ? usuario.nombre : "Invitado" %>', // Usa el nombre de usuario recibido
+                  bid: bidValue,
+                  room: auctionRoom
+                });
+                startProgressBar();
+              });
 
-      </script>
+              socket.on('setUsername', function (newUsername) {
+                username = newUsername; // Guardar el nombre de usuario recibido
+              });
 
-      <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          const botonActivar = document.getElementById("btn_menu");
-          const botonCerrar = document.getElementById("btn_close");
-          const contenederMenu = document.getElementsByClassName("menu_desplegable")[0];
+              socket.on('newBid', function (data) {
+                if (auctionEnded) return;
 
-          botonActivar.addEventListener('click', () => {
-            contenederMenu.classList.add("active");
-          });
+                currentBid = parseInt(data.bid);
+                minBid = currentBid;
 
-          botonCerrar.addEventListener('click', () => {
-            contenederMenu.classList.remove("active");
-          });
-        });
-      </script>
+                const user = username || data.user; // Usar `username` si está definido, de lo contrario usar el nombre original
+                const bid = data.bid;
 
-      <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-          const mainImage = document.querySelector('#imagen_principal img');
-          const galleryImages = document.querySelectorAll('.galeria .imgs');
+                const message = `<b>${user}:</b> $${formatNumber(bid)}`;
+                const li = document.createElement('li');
+                li.innerHTML = message;
+                messages.appendChild(li);
+                messageInput.value = formatNumber(bid + 100);
+                startProgressBar();
+              });
 
-          // Iniciar con la primera imagen de la galería
-          if (galleryImages.length > 0) {
-            mainImage.src = galleryImages[0].src;
-            mainImage.alt = galleryImages[0].alt;
-            galleryImages[0].classList.add('active'); // Añadir clase 'active' a la primera imagen
-          }
+              socket.on('endAuction', function () {
+                auctionEnded = true;
+                auctionInProgress = false;
 
-          galleryImages.forEach(image => {
-            image.addEventListener('click', () => {
-              // Remueve la clase 'active' de todas las imágenes de la galería
-              galleryImages.forEach(img => img.classList.remove('active'));
-
-              // Agrega la clase 'active' a la imagen clicada
-              image.classList.add('active');
-
-              // Cambia la imagen y el alt de la imagen principal por los de la imagen clicada
-              mainImage.src = image.src;
-              mainImage.alt = image.alt;
-
-              // Desplaza la ventana para mostrar la imagen principal
-              //mainImage.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
-          });
-        });
-      </script>
-
-      <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          const btnIniciarChat = document.getElementById('participar');
-          const chat = document.getElementById('chat');
-          const cardBody = document.getElementById('body_card');
-
-          async function obtenerIdUsuario() {
-            try {
-              const response = await fetch('/usuario');
-              const data = await response.json();
-
-              if (data.success) {
-                return data.id;
-              } else {
-                console.error('Error al obtener ID del usuario:', data.message);
-                return null;
-              }
-            } catch (error) {
-              console.error('Error al obtener ID del usuario:', error);
-              return null;
-            }
-          }
-
-          // Verificar si el botón "participar" existe
-          if (btnIniciarChat) {
-            btnIniciarChat.addEventListener('click', async () => {
-              console.log('se realizó clic');
-
-              const usuarioId = await obtenerIdUsuario();
-              const fechaHoraFinSubasta = new Date("<%= subasta.fecha_hora_subasta %>"); // Asegúrate de que este valor esté en formato correcto (ISO 8601)
-              const now = new Date(); // Obtén la fecha y hora actuales
-
-              console.log('Fecha fin subasta:', fechaHoraFinSubasta);
-              console.log('Fecha actual:', now);
-              console.log('¿Subasta finalizada?', now > fechaHoraFinSubasta);
-
-              const margenDeTiempo = 5 * 60 * 1000; // 5 minutos en milisegundos
-
-              // Verificar si la subasta ha finalizado
-              // Verificar si la subasta ha finalizado
-              if (now.getTime() > fechaHoraFinSubasta.getTime() + margenDeTiempo) {
                 Swal.fire({
-                  icon: 'warning',
-                  title: "Terminó la subasta",
-                  text: "La subasta ha finalizado. Puedes regresar al catálogo.",
-                  showCancelButton: false,
-                  confirmButtonText: 'Ir al catálogo',
-                  preConfirm: () => {
-                    window.location.href = '/catalogo';
+                  title: '¡Subasta finalizada!',
+                  text: 'La subasta ya tiene un ganador',
+                  icon: 'success',
+                  allowOutsideClick: false, // No permitir cerrar con un clic fuera del alert
+                  confirmButtonText: 'Ir al catálogo', // Texto del botón
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    window.location.href = '/catalogo'; // Redirigir al catálogo cuando se haga clic en el botón
                   }
                 });
-                return; // Salir del evento si la subasta ha terminado
-              }
 
-              // Si la subasta está activa
-              if (!usuarioId) {
-                // Si no está logueado
-                const { value: login } = await Swal.fire({
-                  title: "Términos y condiciones",
-                  html: `<a href="/condicionesYterminos" style="font-size: 1.5rem; margin-bottom: 1rem;">Términos y condiciones</a>`,
-                  text: "Para participar en el evento, Ud. debe estar logueado:",
-                  showCancelButton: true,
-                  confirmButtonText: 'Iniciar sesión',
-                  cancelButtonText: 'Crear cuenta'
-                });
-
-                if (login) {
-                  // Redirigir a la página de inicio de sesión
-                  window.location.href = '/login'; // Cambia la ruta según tu configuración
-                } else {
-                  // Redirigir a la página de registro
-                  window.location.href = '/registro'; // Cambia la ruta según tu configuración
-                }
-                return; // Salir del evento
-              }
-
-              // Si ya está logueado
-              const { value: accept } = await Swal.fire({
-                title: "Términos y condiciones",
-                html: `<input type="checkbox" id="terms-checkbox">
-          <label for="terms-checkbox">He leído y acepto los términos y condiciones</label>`,
-                showCancelButton: true,
-                confirmButtonText: 'Continuar&nbsp;<i class="fa fa-arrow-right"></i>',
-                cancelButtonText: 'Cancelar',
-                preConfirm: () => {
-                  const checkbox = document.querySelector('#terms-checkbox');
-                  if (!checkbox.checked) {
-                    Swal.showValidationMessage("Debes aceptar los términos y condiciones");
-                  }
-                  return checkbox.checked;
-                },
-                customClass: {
-                  htmlContainer: 'custom-html-container'
-                },
-                onDismiss: () => {
-                  window.location.href = '/catalogo';
-                }
+                disableButtons();
               });
 
-              if (!accept) {
-                Swal.fire("No has aceptado los términos y condiciones");
-                return; // Salir del evento si no acepta
+              function addAuctionMessage(message) {
+                const li = document.createElement('li');
+                li.innerText = message;
+                messages.appendChild(li);
               }
 
-              const { value: deposit } = await Swal.fire({
-                title: "Depósito requerido",
-                text: "Debes depositar 200 dólares para participar en la subasta.",
-                showCancelButton: true,
-                confirmButtonText: 'Ya deposité',
-                cancelButtonText: 'No deposité',
-                onDismiss: () => {
-                  window.location.href = '/catalogo';
-                }
-              });
+              function disableButtons() {
+                btnMas.disabled = true;
+                btnMenos.disabled = true;
+                sendButton.disabled = true;
+                messageInput.disabled = true;
+              }
+            }
 
-              if (deposit) {
-                const response = await fetch(`/oportunidades/${usuarioId}`);
+            function formatNumber(num) {
+              return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            }
+          });
+
+        </script>
+
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const botonActivar = document.getElementById("btn_menu");
+            const botonCerrar = document.getElementById("btn_close");
+            const contenederMenu = document.getElementsByClassName("menu_desplegable")[0];
+
+            botonActivar.addEventListener('click', () => {
+              contenederMenu.classList.add("active");
+            });
+
+            botonCerrar.addEventListener('click', () => {
+              contenederMenu.classList.remove("active");
+            });
+          });
+        </script>
+
+        <script>
+          document.addEventListener('DOMContentLoaded', (event) => {
+            const mainImage = document.querySelector('#imagen_principal img');
+            const galleryImages = document.querySelectorAll('.galeria .imgs');
+
+            // Iniciar con la primera imagen de la galería
+            if (galleryImages.length > 0) {
+              mainImage.src = galleryImages[0].src;
+              mainImage.alt = galleryImages[0].alt;
+              galleryImages[0].classList.add('active'); // Añadir clase 'active' a la primera imagen
+            }
+
+            galleryImages.forEach(image => {
+              image.addEventListener('click', () => {
+                // Remueve la clase 'active' de todas las imágenes de la galería
+                galleryImages.forEach(img => img.classList.remove('active'));
+
+                // Agrega la clase 'active' a la imagen clicada
+                image.classList.add('active');
+
+                // Cambia la imagen y el alt de la imagen principal por los de la imagen clicada
+                mainImage.src = image.src;
+                mainImage.alt = image.alt;
+
+                // Desplaza la ventana para mostrar la imagen principal
+                //mainImage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              });
+            });
+          });
+        </script>
+
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const btnIniciarChat = document.getElementById('participar');
+            const chat = document.getElementById('chat');
+            const cardBody = document.getElementById('body_card');
+
+            async function obtenerIdUsuario() {
+              try {
+                const response = await fetch('/usuario');
                 const data = await response.json();
 
                 if (data.success) {
-                  const intentosDisponibles = data.oportunidades;
-
-                  if (intentosDisponibles > 0) {
-                    Swal.fire("Puedes ingresar a la subasta");
-                    chat.classList.add('active');
-                    cardBody.classList.add('active');
-                  } else {
-                    Swal.fire({
-                      title: "No tienes intentos disponibles",
-                      text: "Debes depositar 200 dólares para obtener más intentos.",
-                      showCancelButton: true,
-                      confirmButtonText: 'Depositar',
-                      cancelButtonText: 'Ir al catálogo'
-                    }).then(result => {
-                      if (result.isConfirmed) {
-                        Swal.fire({
-                          title: "Información de depósito",
-                          html: `<p>Por favor, realiza el depósito en el siguiente número de cuenta y envía el comprobante a soporteSubastasur@correo.com.</p>
-                    <img src="/img/Commons_QR_code.png" alt="QR Code" style="width: 200px; height: auto;">`,
-                          showCancelButton: true,
-                          confirmButtonText: 'Ya envié',
-                          cancelButtonText: 'Regresar'
-                        }).then(depositResult => {
-                          if (depositResult.isConfirmed) {
-                            Swal.fire({
-                              title: "Proceso en curso",
-                              text: "Se está procesando el depósito. Por favor, espera...",
-                              confirmButtonText: 'Ok'
-                            }).then(() => {
-                              window.location.href = '/catalogo';
-                            });
-                          } else {
-                            window.location.href = '/catalogo';
-                          }
-                        });
-                      } else {
-                        window.location.href = '/catalogo';
-                      }
-                    });
-                  }
+                  return data.id;
                 } else {
-                  Swal.fire("Error al obtener oportunidades");
+                  console.error('Error al obtener ID del usuario:', data.message);
+                  return null;
                 }
-              } else {
-                Swal.fire({
-                  title: "Información de depósito",
-                  html: `<p>Por favor, realiza el depósito en el siguiente número de cuenta y envía el comprobante a soporteSubastasur@correo.com.</p>
-            <img src="/img/Commons_QR_code.png" alt="QR Code" style="width: 200px; height: auto;">`,
+              } catch (error) {
+                console.error('Error al obtener ID del usuario:', error);
+                return null;
+              }
+            }
+
+            // Verificar si el botón "participar" existe
+            if (btnIniciarChat) {
+              btnIniciarChat.addEventListener('click', async () => {
+                console.log('se realizó clic');
+
+                const usuarioId = await obtenerIdUsuario();
+                const fechaHoraFinSubasta = new Date("<%= subasta.fecha_hora_subasta %>"); // Asegúrate de que este valor esté en formato correcto (ISO 8601)
+                const now = new Date(); // Obtén la fecha y hora actuales
+
+                console.log('Fecha fin subasta:', fechaHoraFinSubasta);
+                console.log('Fecha actual:', now);
+                console.log('¿Subasta finalizada?', now > fechaHoraFinSubasta);
+
+                const margenDeTiempo = 5 * 60 * 1000; // 5 minutos en milisegundos
+
+                // Verificar si la subasta ha finalizado
+                // Verificar si la subasta ha finalizado
+                if (now.getTime() > fechaHoraFinSubasta.getTime() + margenDeTiempo) {
+                  Swal.fire({
+                    icon: 'warning',
+                    title: "Terminó la subasta",
+                    text: "La subasta ha finalizado. Puedes regresar al catálogo.",
+                    showCancelButton: false,
+                    confirmButtonText: 'Ir al catálogo',
+                    preConfirm: () => {
+                      window.location.href = '/catalogo';
+                    }
+                  });
+                  return; // Salir del evento si la subasta ha terminado
+                }
+
+                // Si la subasta está activa
+                if (!usuarioId) {
+                  // Si no está logueado
+                  const { value: login } = await Swal.fire({
+                    title: "Términos y condiciones",
+                    html: `<a href="/condicionesYterminos" style="font-size: 1.5rem; margin-bottom: 1rem;">Términos y condiciones</a>`,
+                    text: "Para participar en el evento, Ud. debe estar logueado:",
+                    showCancelButton: true,
+                    confirmButtonText: 'Iniciar sesión',
+                    cancelButtonText: 'Crear cuenta'
+                  });
+
+                  if (login) {
+                    // Redirigir a la página de inicio de sesión
+                    window.location.href = '/login'; // Cambia la ruta según tu configuración
+                  } else {
+                    // Redirigir a la página de registro
+                    window.location.href = '/registro'; // Cambia la ruta según tu configuración
+                  }
+                  return; // Salir del evento
+                }
+
+                // Si ya está logueado
+                const { value: accept } = await Swal.fire({
+                  title: "Términos y condiciones",
+                  html: `<input type="checkbox" id="terms-checkbox">
+          <label for="terms-checkbox">He leído y acepto los términos y condiciones</label>`,
                   showCancelButton: true,
-                  confirmButtonText: 'Ya envié',
-                  cancelButtonText: 'Regresar',
+                  confirmButtonText: 'Continuar&nbsp;<i class="fa fa-arrow-right"></i>',
+                  cancelButtonText: 'Cancelar',
+                  preConfirm: () => {
+                    const checkbox = document.querySelector('#terms-checkbox');
+                    if (!checkbox.checked) {
+                      Swal.showValidationMessage("Debes aceptar los términos y condiciones");
+                    }
+                    return checkbox.checked;
+                  },
+                  customClass: {
+                    htmlContainer: 'custom-html-container'
+                  },
                   onDismiss: () => {
                     window.location.href = '/catalogo';
                   }
-                }).then(result => {
-                  if (result.isConfirmed) {
-                    Swal.fire({
-                      title: "Proceso en curso",
-                      text: "Se está procesando el depósito. Por favor, espera...",
-                      confirmButtonText: 'Ok',
-                      onDismiss: () => {
-                        window.location.href = '/catalogo';
-                      }
-                    });
-                  } else {
+                });
+
+                if (!accept) {
+                  Swal.fire("No has aceptado los términos y condiciones");
+                  return; // Salir del evento si no acepta
+                }
+
+                const { value: deposit } = await Swal.fire({
+                  title: "Depósito requerido",
+                  text: "Debes depositar 200 dólares para participar en la subasta.",
+                  showCancelButton: true,
+                  confirmButtonText: 'Ya deposité',
+                  cancelButtonText: 'No deposité',
+                  onDismiss: () => {
                     window.location.href = '/catalogo';
                   }
                 });
-              }
-            });
-          } else {
-            console.log("El botón 'participar' no está disponible.");
-          }
-        });
 
-      </script>
+                if (deposit) {
+                  const response = await fetch(`/oportunidades/${usuarioId}`);
+                  const data = await response.json();
+
+                  if (data.success) {
+                    const intentosDisponibles = data.oportunidades;
+
+                    if (intentosDisponibles > 0) {
+                      Swal.fire("Puedes ingresar a la subasta");
+                      chat.classList.add('active');
+                      cardBody.classList.add('active');
+                    } else {
+                      Swal.fire({
+                        title: "No tienes intentos disponibles",
+                        text: "Debes depositar 200 dólares para obtener más intentos.",
+                        showCancelButton: true,
+                        confirmButtonText: 'Depositar',
+                        cancelButtonText: 'Ir al catálogo'
+                      }).then(result => {
+                        if (result.isConfirmed) {
+                          Swal.fire({
+                            title: "Información de depósito",
+                            html: `<p>Por favor, realiza el depósito en el siguiente número de cuenta y envía el comprobante a soporteSubastasur@correo.com.</p>
+                    <img src="/img/Commons_QR_code.png" alt="QR Code" style="width: 200px; height: auto;">`,
+                            showCancelButton: true,
+                            confirmButtonText: 'Ya envié',
+                            cancelButtonText: 'Regresar'
+                          }).then(depositResult => {
+                            if (depositResult.isConfirmed) {
+                              Swal.fire({
+                                title: "Proceso en curso",
+                                text: "Se está procesando el depósito. Por favor, espera...",
+                                confirmButtonText: 'Ok'
+                              }).then(() => {
+                                window.location.href = '/catalogo';
+                              });
+                            } else {
+                              window.location.href = '/catalogo';
+                            }
+                          });
+                        } else {
+                          window.location.href = '/catalogo';
+                        }
+                      });
+                    }
+                  } else {
+                    Swal.fire("Error al obtener oportunidades");
+                  }
+                } else {
+                  Swal.fire({
+                    title: "Información de depósito",
+                    html: `<p>Por favor, realiza el depósito en el siguiente número de cuenta y envía el comprobante a soporteSubastasur@correo.com.</p>
+            <img src="/img/Commons_QR_code.png" alt="QR Code" style="width: 200px; height: auto;">`,
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya envié',
+                    cancelButtonText: 'Regresar',
+                    onDismiss: () => {
+                      window.location.href = '/catalogo';
+                    }
+                  }).then(result => {
+                    if (result.isConfirmed) {
+                      Swal.fire({
+                        title: "Proceso en curso",
+                        text: "Se está procesando el depósito. Por favor, espera...",
+                        confirmButtonText: 'Ok',
+                        onDismiss: () => {
+                          window.location.href = '/catalogo';
+                        }
+                      });
+                    } else {
+                      window.location.href = '/catalogo';
+                    }
+                  });
+                }
+              });
+            } else {
+              console.log("El botón 'participar' no está disponible.");
+            }
+          });
+
+        </script>
 </body>
 
 </html>
