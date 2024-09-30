@@ -441,7 +441,7 @@ router.get('/subasta/:id', (req, res) => {
   
   // Consulta para registrar la visita
   const queryRegistrarVisita = 'INSERT INTO visitas_subasta (subasta_id, usuario_id) VALUES (?, ?)';
-
+  
   // Consulta para contar visitas
   const queryContarVisitas = 'SELECT COUNT(*) AS total_visitas FROM visitas_subasta WHERE subasta_id = ?';
 
@@ -492,6 +492,10 @@ router.get('/subasta/:id', (req, res) => {
       let estaEnCurso = now.isBetween(fechaHoraSubasta, fechaHoraFinSubasta, null, '[]');
       let estaTerminada = now.isAfter(fechaHoraFinSubasta); // Nueva variable que indica si ha terminado
 
+      // Calcular la oferta actual
+      let precioBase = parseInt(subasta.precio_base);
+      const ofertaActual = formatNumber(precioBase + 100);
+
       const fechaFormateada = subasta.fecha_formateada;
       const [day, dayNumber] = fechaFormateada.split(' ');
       const fechaFormateadaEsp = `${translateDay(day)} ${dayNumber}`;
@@ -529,7 +533,8 @@ router.get('/subasta/:id', (req, res) => {
               estaTerminada, // Nueva variable que indica si la subasta ha terminado
               fechaFormateadaEsp, // Fecha traducida a español
               formatNumber, // Función para formatear números
-              totalVisitas // Total de visitas
+              totalVisitas, // Total de visitas
+              ofertaActual // Nueva variable que contiene el precio base + 100
             });
           });
         });
@@ -537,6 +542,7 @@ router.get('/subasta/:id', (req, res) => {
     });
   });
 });
+
 
 
 

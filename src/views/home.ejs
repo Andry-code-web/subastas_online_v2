@@ -271,7 +271,7 @@
             <div class="card_home">
               <div class="card-img">
                 <% if (subasta.imagenes && subasta.imagenes.length> 0) { %>
-                  <a href="">
+                  <a href="/subasta/<%= subasta.id %>">
                     <img src="data:image/jpeg;base64,<%= subasta.imagenes[0] %>" alt="Subastas Image">
                   </a>
                   <% }else { %>

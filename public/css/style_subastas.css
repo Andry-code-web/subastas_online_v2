@@ -79,7 +79,7 @@
   border-radius: 5px;
 }
 
-.imgen_principal .img_principal {
+.imgen_principal, .img_principal {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -296,6 +296,17 @@
 
 .precio_apertura{
   margin-bottom: 1rem;
+}
+
+.precio_con_incremento span:first-child{
+  font-size: 1.2rem;
+  font-family: var(--font--banner--bool);
+}
+
+.precio_con_incremento span:last-child{
+  font-size: 1.4rem;
+  font-family: var(--font--banner--bool);
+  color: #00722a;
 }
 
 .info_apertura p span:last-child{
