@@ -220,72 +220,86 @@
                         <%= subasta.marca %>
                       </span>
                     </h3>
+
                     <p class="d-flex justify-content-between">
                       <span>Modelo:</span>
                       <span>
                         <%= subasta.modelo %>
                       </span>
                     </p>
+
                     <p class="d-flex justify-content-between">
                       <span>Categoría:</span>
                       <span>
                         <%= subasta.categoria %>
                       </span>
                     </p>
+
                     <p class="d-flex justify-content-between">
                       <span>Año:</span>
                       <span>
                         <%= subasta.anio %>
                       </span>
                     </p>
+
                     <p class="d-flex justify-content-between">
                       <span>Precio Base:</span>
                       <span>
                         <%= formatNumber(subasta.precio_base) %>
                       </span>
                     </p>
+
                     <p class="d-flex justify-content-between">
                       <span>Placa:</span>
                       <span>
                         <%= subasta.placa %>
                       </span>
                     </p>
+
                     <p class="d-flex justify-content-between">
                       <span>Tarjeta de Propiedad:</span>
                       <span>
                         <%= subasta.tarjeta_propiedad %>
                       </span>
                     </p>
+
                     <p class="d-flex justify-content-between">
                       <span>Llave:</span>
                       <span>
                         <%= subasta.llave %>
                       </span>
                     </p>
+
                     <p class="d-flex justify-content-between">
                       <span>Ubicación:</span>
                       <span>
                         <%= subasta.ubicacion %>
                       </span>
                     </p>
+
                     <p class="d-flex justify-content-between">
                       <span>Estado:</span>
                       <span>
                         <%= subasta.estado %>
                       </span>
                     </p>
+
                     <p class="d-flex justify-content-between importante">
                       <span>Importante:</span>
                       <span>
                         <%= subasta.importante %>
                       </span>
                     </p>
+
                     <p class="d-flex justify-content-between descripcion">
                       <span>Descripción:</span>
-                      <span>
+                      <span class="descripcion-text">
                         <%= subasta.descripcion %>
                       </span>
                     </p>
+
+
+
                   </div>
                 </div>
               </div>
@@ -383,6 +397,21 @@
               Incremento <span>US$100.00</span>
             </p>
 
+            <div class="grid_info_card">
+              <div class="div1">
+                <p>Cuota mínima de participantes: 2</p>
+              </div>
+              <div class="div2">
+                <p>Con Precio Reserva</p>
+              </div>
+              <div class="div3">
+                <p>Opción a Visitas previa cita</p>
+              </div>
+              <div class="div4">
+                <p>Sin Comisión</p>
+              </div>
+            </div>
+
 
 
           </div>
@@ -417,24 +446,6 @@
     <%- include('partials/whatsapp_flot') %>
 
       <%- include('partials/footer') %>
-
-
-      <script>
-        // Variables recibidas desde el servidor
-        const fechaHoraSubasta = "<%= fechaHoraSubasta %>";
-        const fechaHoraFinSubasta = "<%= fechaHoraFinSubasta %>";
-        const fechaActual = "<%= fechaActual %>";
-        const estaEnCursol = <%= estaEnCurso %>;
-        const estaTerminadal = <%= estaTerminada %>;
-      
-        // Mostrar los valores en la consola del navegador
-        console.log("Fecha y hora de la subasta:", fechaHoraSubasta);
-        console.log("Fecha y hora de fin de subasta:", fechaHoraFinSubasta);
-        console.log("Fecha y hora actual en producción:", fechaActual);
-        console.log("¿Subasta en curso?:", estaEnCursol);
-        console.log("¿Subasta terminada?:", estaTerminadal);
-      </script>
-      
 
         <!-- script header -->
         <script src="/js/partials/script_header.js"></script>

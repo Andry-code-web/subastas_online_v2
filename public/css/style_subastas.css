@@ -221,6 +221,12 @@
   text-align: justify;
 }
 
+.descripcion-text {
+  white-space: pre-line; /* Esto preserva los saltos de línea */
+  width: 65%; /* Mantiene el mismo ancho que antes */
+  font-size: .9rem; /* Ajusta el tamaño de fuente */
+  text-align: justify; /* Alinea el texto a la izquierda */
+}
 
 .info_apertura_redes{
   width: 100%;
@@ -313,6 +319,49 @@
   font-size: 1.1rem;
 }
 
+
+.grid_info_card {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.grid_info_card .div3 {
+  grid-row-start: 2;
+}
+
+.grid_info_card .div4 {
+  grid-row-start: 2;
+}
+
+.grid_info_card .div1,
+.grid_info_card .div2,
+.grid_info_card .div3,
+.grid_info_card .div4 {
+  width: auto;
+  height: auto;
+  padding: .3rem .8rem;
+  background-color: #990000;
+  border-radius: .5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: default;
+}
+
+.grid_info_card .div1 p,
+.grid_info_card .div2 p,
+.grid_info_card .div3 p,
+.grid_info_card .div4 p{
+  font-size: .7rem;
+  color: #fff;
+  font-family: var(--font--banner--bool);
+  margin: 0;
+  padding: 0;
+}
+      
+
 /* CHAT */
 
 .card {
@@ -320,7 +369,7 @@
   border-radius: 0.5rem;
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
   width: 350px;
-  height: 500px;
+  height: 560px;
   font-family: Arial, sans-serif;
 }
 
@@ -421,6 +470,7 @@
 .incremento_precio{
   font-size: .8rem;
   font-family: var(--font--banner--bool);
+  margin-bottom: 2rem;
 }
 
 .incremento_precio span{
