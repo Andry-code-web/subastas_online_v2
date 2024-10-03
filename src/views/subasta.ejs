@@ -366,16 +366,16 @@
               <span class="price">US$<%= formatNumber(subasta.precio_base) %></span>
             </p>
 
+
+
             <button id="participar" <% if (!estaEnCurso) { %> disabled <% } %>>
                 <% if (estaTerminada) { %>
                   Subasta inactiva
                   <% } else { %>
                     PARTICIPA
                     <% } %>
-                      <% console.log("estaEnCurso:", estaEnCurso); %>
-                        <% console.log("estaTerminada:", estaTerminada); %>
-
             </button>
+
 
 
             <p id="estado-subasta" style="display: none;"></p>
@@ -418,6 +418,11 @@
 
       <%- include('partials/footer') %>
 
+
+        <script>
+          console.log("estaEnCurso:", <%= JSON.stringify(estaEnCurso) %>);
+          console.log("estaTerminada:", <%= JSON.stringify(estaTerminada) %>);
+        </script>
 
         <!-- script header -->
         <script src="/js/partials/script_header.js"></script>
