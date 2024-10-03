@@ -1,8 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const router = express.Router();
-const moment = require('moment');
 const bcrypt = require('bcrypt');
+const moment = require('moment');
 const momenT = require('moment-timezone'); // Asegúrate de tener moment-timezone instalado
 
 const { conection } = require("../database/db"); // Asegúrate de que el nombre del archivo y la ruta sean correctos
@@ -419,7 +419,6 @@ router.get("/catalogo", (req, res) => {
 });
 
 
-
 // Subastas
 router.get('/subasta/:id', (req, res) => {
   const subastaId = req.params.id;
@@ -444,7 +443,7 @@ router.get('/subasta/:id', (req, res) => {
   
   // Consulta para registrar la visita
   const queryRegistrarVisita = 'INSERT INTO visitas_subasta (subasta_id, usuario_id) VALUES (?, ?)';
-  
+
   // Consulta para contar visitas
   const queryContarVisitas = 'SELECT COUNT(*) AS total_visitas FROM visitas_subasta WHERE subasta_id = ?';
 
@@ -468,6 +467,8 @@ router.get('/subasta/:id', (req, res) => {
   }
 
   const now = momenT().tz("America/Lima"); // Ajusta a la zona horaria de Perú
+  // Nueva variable para la fecha actual
+  const fechaActual = now.format('YYYY-MM-DD HH:mm:ss'); // Formato de fecha que necesites
   
   // Registrar la visita
   conection.query(queryRegistrarVisita, [subastaId, usuarioId], (error) => {
@@ -492,8 +493,8 @@ router.get('/subasta/:id', (req, res) => {
       // Lógica para verificar el estado de la subasta
       const duracionSubasta = 5; // duración en minutos
       const fechaHoraFinSubasta = fechaHoraSubasta.clone().add(duracionSubasta, 'minutes');
-      let estaEnCurso = now.isBetween(fechaHoraSubasta, fechaHoraFinSubasta, null, '[]');
-      let estaTerminada = now.isAfter(fechaHoraFinSubasta); // Nueva variable que indica si ha terminado
+      const estaEnCurso = now.isBetween(fechaHoraSubasta, fechaHoraFinSubasta, null, '[]');
+      const estaTerminada = now.isAfter(fechaHoraFinSubasta); // Nueva variable que indica si ha terminado
 
       // Logs para verificar las fechas y el estado de la subasta
       console.log("Fecha y hora de la subasta:", fechaHoraSubasta.format());
@@ -503,7 +504,7 @@ router.get('/subasta/:id', (req, res) => {
       console.log("¿Subasta terminada?:", estaTerminada);
 
       // Calcular la oferta actual
-      let precioBase = parseInt(subasta.precio_base);
+      const precioBase = parseInt(subasta.precio_base);
       const ofertaActual = formatNumber(precioBase + 100);
 
       const fechaFormateada = subasta.fecha_formateada;
@@ -544,7 +545,10 @@ router.get('/subasta/:id', (req, res) => {
               fechaFormateadaEsp, // Fecha traducida a español
               formatNumber, // Función para formatear números
               totalVisitas, // Total de visitas
-              ofertaActual // Nueva variable que contiene el precio base + 100
+              ofertaActual, // Nueva variable que contiene el precio base + 100
+              fechaHoraSubasta: fechaHoraSubasta.format(), // Pasar la fecha y hora de la subasta
+              fechaHoraFinSubasta: fechaHoraFinSubasta.format(), // Pasar la fecha y hora de fin de la subasta
+              fechaActual
             });
           });
         });
@@ -552,6 +556,7 @@ router.get('/subasta/:id', (req, res) => {
     });
   });
 });
+
 
 
 
