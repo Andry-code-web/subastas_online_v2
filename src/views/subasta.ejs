@@ -419,10 +419,22 @@
       <%- include('partials/footer') %>
 
 
-        <script>
-          console.log("estaEnCurso:", <%= JSON.stringify(estaEnCurso) %>);
-          console.log("estaTerminada:", <%= JSON.stringify(estaTerminada) %>);
-        </script>
+      <script>
+        // Variables recibidas desde el servidor
+        const fechaHoraSubasta = "<%= fechaHoraSubasta %>";
+        const fechaHoraFinSubasta = "<%= fechaHoraFinSubasta %>";
+        const fechaActual = "<%= fechaActual %>";
+        const estaEnCursol = <%= estaEnCurso %>;
+        const estaTerminadal = <%= estaTerminada %>;
+      
+        // Mostrar los valores en la consola del navegador
+        console.log("Fecha y hora de la subasta:", fechaHoraSubasta);
+        console.log("Fecha y hora de fin de subasta:", fechaHoraFinSubasta);
+        console.log("Fecha y hora actual en producción:", fechaActual);
+        console.log("¿Subasta en curso?:", estaEnCursol);
+        console.log("¿Subasta terminada?:", estaTerminadal);
+      </script>
+      
 
         <!-- script header -->
         <script src="/js/partials/script_header.js"></script>

@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const router = express.Router();
 const moment = require('moment');
 const bcrypt = require('bcrypt');
+const momenT = require('moment-timezone'); // Asegúrate de tener moment-timezone instalado
+
 const { conection } = require("../database/db"); // Asegúrate de que el nombre del archivo y la ruta sean correctos
 
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -417,6 +419,7 @@ router.get("/catalogo", (req, res) => {
 });
 
 
+
 // Subastas
 router.get('/subasta/:id', (req, res) => {
   const subastaId = req.params.id;
@@ -464,7 +467,7 @@ router.get('/subasta/:id', (req, res) => {
     return days[day] || day;
   }
 
-  const now = moment(); // Obtiene la fecha y hora actuales
+  const now = momenT().tz("America/Lima"); // Ajusta a la zona horaria de Perú
   
   // Registrar la visita
   conection.query(queryRegistrarVisita, [subastaId, usuarioId], (error) => {
@@ -484,13 +487,20 @@ router.get('/subasta/:id', (req, res) => {
       }
 
       const subasta = resultadoSubasta[0];
-      const fechaHoraSubasta = moment(subasta.fecha_hora_subasta);
+      const fechaHoraSubasta = momenT(subasta.fecha_hora_subasta).tz("America/Lima");
       
       // Lógica para verificar el estado de la subasta
       const duracionSubasta = 5; // duración en minutos
       const fechaHoraFinSubasta = fechaHoraSubasta.clone().add(duracionSubasta, 'minutes');
       let estaEnCurso = now.isBetween(fechaHoraSubasta, fechaHoraFinSubasta, null, '[]');
       let estaTerminada = now.isAfter(fechaHoraFinSubasta); // Nueva variable que indica si ha terminado
+
+      // Logs para verificar las fechas y el estado de la subasta
+      console.log("Fecha y hora de la subasta:", fechaHoraSubasta.format());
+      console.log("Fecha y hora de fin de subasta:", fechaHoraFinSubasta.format());
+      console.log("Fecha y hora actual en producción:", now.format());
+      console.log("¿Subasta en curso?:", estaEnCurso);
+      console.log("¿Subasta terminada?:", estaTerminada);
 
       // Calcular la oferta actual
       let precioBase = parseInt(subasta.precio_base);
@@ -542,6 +552,7 @@ router.get('/subasta/:id', (req, res) => {
     });
   });
 });
+
 
 
 
