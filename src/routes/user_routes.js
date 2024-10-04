@@ -329,18 +329,37 @@ router.post('/registro', (req, res) => {
 
 // Catalogo
 router.get("/catalogo", (req, res) => {
-  const { categoria, page = 1 } = req.query; // Obtener el número de página de la consulta
+  const { categoria, page = 1, estado } = req.query; // Agregamos el estado de las subastas ('finalizadas' o 'activas')
   const usuario_id = req.session.usuario ? req.session.usuario.id : null;
-  const limit = 5; // Número de subastas por página
+  const limit = 12; // Número de subastas por página
   const offset = (page - 1) * limit; // Calcular el desplazamiento
 
   let querySubastas = "SELECT * FROM subastas";
   const queryParams = [];
 
+  // Filtro por categoría si se proporciona
   if (categoria) {
     querySubastas += " WHERE categoria = ?";
     queryParams.push(categoria);
   }
+
+  // Filtro por estado de subasta
+  if (estado === "finalizadas") {
+    // Subastas finalizadas: fecha pasada o con un ganador
+    if (categoria) {
+      querySubastas += " AND (fecha_subasta < NOW() OR currentWinner IS NOT NULL)";
+    } else {
+      querySubastas += " WHERE fecha_subasta < NOW() OR currentWinner IS NOT NULL";
+    }
+  } else if (estado === "activas") {
+    // Subastas activas: fecha futura y sin ganador
+    if (categoria) {
+      querySubastas += " AND fecha_subasta >= NOW() AND currentWinner IS NULL";
+    } else {
+      querySubastas += " WHERE fecha_subasta >= NOW() AND currentWinner IS NULL";
+    }
+  }
+
   querySubastas += " ORDER BY id ASC LIMIT ? OFFSET ?";
   queryParams.push(limit, offset); // Agregar limit y offset a los parámetros de consulta
 
@@ -352,13 +371,24 @@ router.get("/catalogo", (req, res) => {
       return res.status(500).send("Error al obtener datos de subasta");
     }
 
+    // Formatear la fecha de subasta antes de continuar
+    const subastasFormateadas = subastas.map((subasta) => {
+      const fecha = new Date(subasta.fecha_subasta); // Convertir a objeto Date
+      subasta.fecha_formateada = fecha.toLocaleDateString("es-PE", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "2-digit"
+      });
+      return subasta;
+    });
+
     conection.query(queryImagenes, (error, imagenes) => {
       if (error) {
         console.error("Error al obtener imágenes de subasta", error);
         return res.status(500).send("Error al obtener imágenes de subasta");
       }
 
-      const subastasConImagenes = subastas.map((subasta) => {
+      const subastasConImagenes = subastasFormateadas.map((subasta) => {
         const imagenesSubasta = imagenes.filter(
           (imagen) => imagen.id_subasta === subasta.id
         );
@@ -369,8 +399,20 @@ router.get("/catalogo", (req, res) => {
       });
 
       // Consulta adicional para contar el total de subastas
-      const totalSubastasQuery = "SELECT COUNT(*) AS total FROM subastas" + (categoria ? " WHERE categoria = ?" : "");
-      const totalParams = categoria ? [categoria] : [];
+      let totalSubastasQuery = "SELECT COUNT(*) AS total FROM subastas";
+      const totalParams = [];
+
+      // Contar también basado en el estado seleccionado
+      if (categoria) {
+        totalSubastasQuery += " WHERE categoria = ?";
+        totalParams.push(categoria);
+      }
+
+      if (estado === "finalizadas") {
+        totalSubastasQuery += (categoria ? " AND" : " WHERE") + " (fecha_subasta < NOW() OR currentWinner IS NOT NULL)";
+      } else if (estado === "activas") {
+        totalSubastasQuery += (categoria ? " AND" : " WHERE") + " fecha_subasta >= NOW() AND currentWinner IS NULL";
+      }
 
       conection.query(totalSubastasQuery, totalParams, (error, totalResult) => {
         if (error) {
@@ -400,6 +442,7 @@ router.get("/catalogo", (req, res) => {
               usuario: req.session.usuario,
               subastas: subastasConImagenes,
               categoria,
+              estado,
               page: Number(page),
               totalPages
             });
@@ -409,6 +452,7 @@ router.get("/catalogo", (req, res) => {
             usuario: req.session.usuario,
             subastas: subastasConImagenes,
             categoria,
+            estado,
             page: Number(page),
             totalPages
           });
@@ -417,6 +461,8 @@ router.get("/catalogo", (req, res) => {
     });
   });
 });
+
+
 
 
 // Subastas
@@ -556,14 +602,6 @@ router.get('/subasta/:id', (req, res) => {
     });
   });
 });
-
-
-
-
-
-
-
-
 
 
 // Ruta para descargar un anexo
