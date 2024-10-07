@@ -327,6 +327,7 @@ router.post('/registro', (req, res) => {
   }
 });
 
+
 // Catalogo
 router.get("/catalogo", (req, res) => {
   const { categoria, page = 1, estado } = req.query; // Agregamos el estado de las subastas ('finalizadas' o 'activas')
@@ -346,19 +347,22 @@ router.get("/catalogo", (req, res) => {
   // Filtro por estado de subasta
   if (estado === "finalizadas") {
     // Subastas finalizadas: fecha pasada o con un ganador
-    if (categoria) {
-      querySubastas += " AND (fecha_subasta < NOW() OR currentWinner IS NOT NULL)";
-    } else {
-      querySubastas += " WHERE fecha_subasta < NOW() OR currentWinner IS NOT NULL";
-    }
+    querySubastas += (categoria ? " AND" : " WHERE") + " (fecha_subasta < NOW() OR currentWinner IS NOT NULL)";
   } else if (estado === "activas") {
     // Subastas activas: fecha futura y sin ganador
-    if (categoria) {
-      querySubastas += " AND fecha_subasta >= NOW() AND currentWinner IS NULL";
-    } else {
-      querySubastas += " WHERE fecha_subasta >= NOW() AND currentWinner IS NULL";
-    }
+    querySubastas += (categoria ? " AND" : " WHERE") + `
+      (
+        fecha_subasta > CURDATE() -- Subastas para fechas futuras
+        OR (
+          fecha_subasta = CURDATE() -- Subastas que son hoy
+          AND TIME(hora_subasta) > TIME(NOW()) -- Verificar que la hora sea futura si es hoy
+        )
+      )
+      AND currentWinner IS NULL -- Asegurarse de que no hay ganador
+    `;
   }
+
+  console.log(querySubastas); // Imprimir la consulta SQL para verificar
 
   querySubastas += " ORDER BY id ASC LIMIT ? OFFSET ?";
   queryParams.push(limit, offset); // Agregar limit y offset a los parámetros de consulta
@@ -411,7 +415,16 @@ router.get("/catalogo", (req, res) => {
       if (estado === "finalizadas") {
         totalSubastasQuery += (categoria ? " AND" : " WHERE") + " (fecha_subasta < NOW() OR currentWinner IS NOT NULL)";
       } else if (estado === "activas") {
-        totalSubastasQuery += (categoria ? " AND" : " WHERE") + " fecha_subasta >= NOW() AND currentWinner IS NULL";
+        totalSubastasQuery += (categoria ? " AND" : " WHERE") + `
+          (
+            fecha_subasta >= CURDATE() -- Subastas para fechas futuras
+            OR (
+              fecha_subasta = CURDATE() -- Subastas que son hoy
+              AND TIME(hora_subasta) >= TIME(NOW()) -- Verificar que la hora sea futura si es hoy
+            )
+          )
+          AND currentWinner IS NULL -- Asegurarse de que no hay ganador
+        `;
       }
 
       conection.query(totalSubastasQuery, totalParams, (error, totalResult) => {
@@ -444,7 +457,7 @@ router.get("/catalogo", (req, res) => {
               categoria,
               estado,
               page: Number(page),
-              totalPages
+              totalPages,
             });
           });
         } else {
@@ -454,7 +467,7 @@ router.get("/catalogo", (req, res) => {
             categoria,
             estado,
             page: Number(page),
-            totalPages
+            totalPages,
           });
         }
       });
@@ -465,11 +478,13 @@ router.get("/catalogo", (req, res) => {
 
 
 
+
+
 // Subastas
 router.get('/subasta/:id', (req, res) => {
   const subastaId = req.params.id;
   const usuarioId = req.session.usuario ? req.session.usuario.id : null; // ID del usuario si está autenticado
-  
+
   const querySubasta = `
     SELECT s.*, 
       DATE_FORMAT(s.fecha_subasta, '%W %d') AS fecha_formateada, 
@@ -486,7 +501,7 @@ router.get('/subasta/:id', (req, res) => {
 
   const queryImagenes = 'SELECT imagen FROM imagenes_propiedad WHERE id_subasta = ?';
   const queryAnexos = 'SELECT id, anexo FROM anexos_propiedad WHERE id_subasta = ?';
-  
+
   // Consulta para registrar la visita
   const queryRegistrarVisita = 'INSERT INTO visitas_subasta (subasta_id, usuario_id) VALUES (?, ?)';
 
@@ -515,7 +530,7 @@ router.get('/subasta/:id', (req, res) => {
   const now = momenT().tz("America/Lima"); // Ajusta a la zona horaria de Perú
   // Nueva variable para la fecha actual
   const fechaActual = now.format('YYYY-MM-DD HH:mm:ss'); // Formato de fecha que necesites
-  
+
   // Registrar la visita
   conection.query(queryRegistrarVisita, [subastaId, usuarioId], (error) => {
     if (error) {
@@ -535,7 +550,7 @@ router.get('/subasta/:id', (req, res) => {
 
       const subasta = resultadoSubasta[0];
       const fechaHoraSubasta = momenT(subasta.fecha_hora_subasta).tz("America/Lima");
-      
+
       // Lógica para verificar el estado de la subasta
       const duracionSubasta = 5; // duración en minutos
       const fechaHoraFinSubasta = fechaHoraSubasta.clone().add(duracionSubasta, 'minutes');

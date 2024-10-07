@@ -1,185 +1,372 @@
--- MySQL Workbench Forward Engineering
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: localhost:3306
+-- Tiempo de generación: 04-10-2024 a las 23:49:41
+-- Versión del servidor: 8.0.39
+-- Versión de PHP: 8.3.8
 
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
-
--- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
-
--- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
--- -----------------------------------------------------
--- Schema subastaonline
--- -----------------------------------------------------
-
--- -----------------------------------------------------
--- Schema subastaonline
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `subastaonline` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
-USE `subastaonline`;
-
--- -----------------------------------------------------
--- Table `mydb`.`usuarios`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`usuarios` (
-  `id_usuarios` INT NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id_usuarios`))
-ENGINE = InnoDB;
-
-USE `subastaonline` ;
-
--- -----------------------------------------------------
--- Table `subastaonline`.`admingeneral`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `subastaonline`.`admingeneral` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `nombre_usuario` VARCHAR(50) NOT NULL,
-  `contraseña` VARCHAR(100) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
--- -----------------------------------------------------
--- Table `subastaonline`.`adminvendedor`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `subastaonline`.`adminvendedor` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `id_admin_general` INT NOT NULL,
-  `nombre_usuario` VARCHAR(50) NOT NULL,
-  `contraseña` VARCHAR(100) NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `id_admin_general` (`id_admin_general` ASC) VISIBLE,
-  CONSTRAINT `adminvendedor_ibfk_1`
-    FOREIGN KEY (`id_admin_general`)
-    REFERENCES `subastaonline`.`admingeneral` (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
--- -----------------------------------------------------
--- Table `subastaonline`.`usuarios`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `subastaonline`.`usuarios` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(50) NOT NULL,
-  `apellidos` VARCHAR(50) NOT NULL,
-  `dni` VARCHAR(20) NOT NULL,
-  `celular` VARCHAR(15) NOT NULL,
-  `correo_electronico` VARCHAR(100) NOT NULL,
-  `contraseña` VARCHAR(100) NOT NULL,
-  `boleta` TINYINT(1) NOT NULL DEFAULT '0',
-  `factura` TINYINT(1) NOT NULL DEFAULT '0',
-  `numero_factura` VARCHAR(50) NULL DEFAULT NULL,
-  `terminos_y_condiciones` TINYINT(1) NOT NULL DEFAULT '0',
-  `uso_datos_personales` TINYINT(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
--- -----------------------------------------------------
--- Table `subastaonline`.`subastas`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `subastaonline`.`subastas` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `nombre_propiedad` VARCHAR(100) NOT NULL,
-  `categoria` ENUM('departamento', 'casa_campo', 'casa') NOT NULL,
-  `direccion` VARCHAR(255) NOT NULL,
-  `precio_base` DECIMAL(10,2) NOT NULL,
-  `N_baños` INT NOT NULL,
-  `N_cuartos` INT NOT NULL,
-  `N_cocina` INT NOT NULL,
-  `N_cocheras` INT NOT NULL,
-  `patio` ENUM('si', 'no') NOT NULL,
-  `id_admin_vendedor` INT NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `id_admin_vendedor` (`id_admin_vendedor` ASC) VISIBLE,
-  CONSTRAINT `subastas_ibfk_1`
-    FOREIGN KEY (`id_admin_vendedor`)
-    REFERENCES `subastaonline`.`adminvendedor` (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
--- -----------------------------------------------------
--- Table `subastaonline`.`imagenes_propiedad` directo
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `subastaonline`.`imagenes_propiedad` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `id_subasta` INT NOT NULL,
-  `imagen` LONGBLOB NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `id_subasta` (`id_subasta` ASC) VISIBLE,
-  CONSTRAINT `imagenes_propiedad_ibfk_1`
-    FOREIGN KEY (`id_subasta`)
-    REFERENCES `subastaonline`.`subastas` (`id`)
-    ON DELETE CASCADE
-)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
--- -----------------------------------------------------
--- Table `subastaonline`.`imagenes_propiedad`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `subastaonline`.`imagenes_propiedad` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `id_subasta` INT NOT NULL,
-  `url_imagen` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `id_subasta` (`id_subasta` ASC) VISIBLE,
-  CONSTRAINT `imagenes_propiedad_ibfk_1`
-    FOREIGN KEY (`id_subasta`)
-    REFERENCES `subastaonline`.`subastas` (`id`)
-    ON DELETE CASCADE
-)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
--- -----------------------------------------------------
--- Table `subastaonline`.`ofertas`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `subastaonline`.`ofertas` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `id_usuario` INT NOT NULL,
-  `id_subasta` INT NOT NULL,
-  `monto_oferta` DECIMAL(10,2) NOT NULL,
-  `fecha_oferta` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  INDEX `id_usuario` (`id_usuario` ASC) VISIBLE,
-  INDEX `id_subasta` (`id_subasta` ASC) VISIBLE,
-  CONSTRAINT `ofertas_ibfk_1`
-    FOREIGN KEY (`id_usuario`)
-    REFERENCES `subastaonline`.`usuarios` (`id`),
-  CONSTRAINT `ofertas_ibfk_2`
-    FOREIGN KEY (`id_subasta`)
-    REFERENCES `subastaonline`.`subastas` (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
--- -----------------------------------------------------
--- Table `subastaonline`.`comentarios`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `subastaonline`.`comentarios` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(100) NOT NULL,
-  `comentario` TEXT NOT NULL,
-  `rating` INT NOT NULL,
-  PRIMARY KEY (`id`)
-)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
 
 
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
+--
+-- Base de datos: `iqjcontm_subastaDB`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `admingeneral`
+--
+
+CREATE TABLE `admingeneral` (
+  `id` int NOT NULL,
+  `nombre_usuario` varchar(50) NOT NULL,
+  `contraseña` varchar(100) NOT NULL,
+  `verificacion_code` varchar(20) DEFAULT NULL,
+  `correo_electronico` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `adminvendedor`
+--
+
+CREATE TABLE `adminvendedor` (
+  `id` int NOT NULL,
+  `id_admin_general` int NOT NULL,
+  `nombre_usuario` varchar(50) NOT NULL,
+  `contraseña` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `anexos_propiedad`
+--
+
+CREATE TABLE `anexos_propiedad` (
+  `id` int NOT NULL,
+  `id_subasta` int NOT NULL,
+  `anexo` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `imagenes_propiedad`
+--
+
+CREATE TABLE `imagenes_propiedad` (
+  `id` int NOT NULL,
+  `id_subasta` int NOT NULL,
+  `imagen` longblob NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `likes`
+--
+
+CREATE TABLE `likes` (
+  `id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `subasta_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ofertas`
+--
+
+CREATE TABLE `ofertas` (
+  `id` int NOT NULL,
+  `id_usuario` int NOT NULL,
+  `id_subasta` int NOT NULL,
+  `monto_oferta` decimal(10,2) NOT NULL,
+  `fecha_oferta` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `sessions`
+--
+
+CREATE TABLE `sessions` (
+  `session_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `expires` int UNSIGNED NOT NULL,
+  `data` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `subastas`
+--
+
+CREATE TABLE `subastas` (
+  `id` int NOT NULL,
+  `marca` varchar(100) NOT NULL,
+  `modelo` varchar(100) NOT NULL,
+  `descripcion` text NOT NULL,
+  `categoria` enum('auto','camioneta','moto','piezas') NOT NULL,
+  `anio` year NOT NULL,
+  `precio_base` decimal(20,2) NOT NULL,
+  `placa` varchar(50) NOT NULL,
+  `tarjeta_propiedad` enum('si','no') NOT NULL,
+  `llave` enum('si','no') NOT NULL,
+  `ubicacion` varchar(255) NOT NULL,
+  `estado` enum('SINIESTRADO','USADO') NOT NULL,
+  `importante` text NOT NULL,
+  `fecha_subasta` date DEFAULT NULL,
+  `hora_subasta` time DEFAULT NULL,
+  `id_admin_vendedor` int DEFAULT NULL,
+  `auctionEnded` tinyint(1) DEFAULT '0',
+  `currentWinner` varchar(255) DEFAULT NULL,
+  `like_count` int DEFAULT '0',
+  `currentBid` bigint DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuarios`
+--
+
+CREATE TABLE `usuarios` (
+  `id` int NOT NULL,
+  `tipo_persona` enum('natural','juridica') NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `confirmacion_email` varchar(100) NOT NULL,
+  `celular` varchar(15) NOT NULL,
+  `telefono` varchar(15) DEFAULT NULL,
+  `nombre_apellidos` varchar(100) DEFAULT NULL,
+  `dni_ce` varchar(20) DEFAULT NULL,
+  `fecha_nacimiento` date DEFAULT NULL,
+  `sexo` enum('M','F') DEFAULT NULL,
+  `estado_civil` enum('soltero','casado','divorciado','viudo') DEFAULT NULL,
+  `ruc` varchar(20) DEFAULT NULL,
+  `nombre_comercial` varchar(100) DEFAULT NULL,
+  `actividad_comercial` varchar(100) DEFAULT NULL,
+  `departamento` varchar(50) DEFAULT NULL,
+  `provincia` varchar(50) DEFAULT NULL,
+  `distrito` varchar(50) DEFAULT NULL,
+  `direccion` varchar(100) DEFAULT NULL,
+  `numero` varchar(10) DEFAULT NULL,
+  `complemento` varchar(100) DEFAULT NULL,
+  `usuario` varchar(50) NOT NULL,
+  `contraseña` varchar(100) NOT NULL,
+  `terminos_y_condiciones` tinyint(1) NOT NULL DEFAULT '0',
+  `oportunidades` int NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `visitas_subasta`
+--
+
+CREATE TABLE `visitas_subasta` (
+  `id` int NOT NULL,
+  `subasta_id` int NOT NULL,
+  `usuario_id` int DEFAULT NULL,
+  `fecha_visita` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `admingeneral`
+--
+ALTER TABLE `admingeneral`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `adminvendedor`
+--
+ALTER TABLE `adminvendedor`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_admin_general` (`id_admin_general`);
+
+--
+-- Indices de la tabla `anexos_propiedad`
+--
+ALTER TABLE `anexos_propiedad`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_subasta` (`id_subasta`);
+
+--
+-- Indices de la tabla `imagenes_propiedad`
+--
+ALTER TABLE `imagenes_propiedad`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_subasta` (`id_subasta`);
+
+--
+-- Indices de la tabla `likes`
+--
+ALTER TABLE `likes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `subasta_id` (`subasta_id`);
+
+--
+-- Indices de la tabla `ofertas`
+--
+ALTER TABLE `ofertas`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_usuario` (`id_usuario`),
+  ADD KEY `id_subasta` (`id_subasta`);
+
+--
+-- Indices de la tabla `sessions`
+--
+ALTER TABLE `sessions`
+  ADD PRIMARY KEY (`session_id`);
+
+--
+-- Indices de la tabla `subastas`
+--
+ALTER TABLE `subastas`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_admin_vendedor` (`id_admin_vendedor`);
+
+--
+-- Indices de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `visitas_subasta`
+--
+ALTER TABLE `visitas_subasta`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `subasta_id` (`subasta_id`),
+  ADD KEY `usuario_id` (`usuario_id`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `admingeneral`
+--
+ALTER TABLE `admingeneral`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `adminvendedor`
+--
+ALTER TABLE `adminvendedor`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `anexos_propiedad`
+--
+ALTER TABLE `anexos_propiedad`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `imagenes_propiedad`
+--
+ALTER TABLE `imagenes_propiedad`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `likes`
+--
+ALTER TABLE `likes`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `ofertas`
+--
+ALTER TABLE `ofertas`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `subastas`
+--
+ALTER TABLE `subastas`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `visitas_subasta`
+--
+ALTER TABLE `visitas_subasta`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `adminvendedor`
+--
+ALTER TABLE `adminvendedor`
+  ADD CONSTRAINT `adminvendedor_ibfk_1` FOREIGN KEY (`id_admin_general`) REFERENCES `admingeneral` (`id`);
+
+--
+-- Filtros para la tabla `anexos_propiedad`
+--
+ALTER TABLE `anexos_propiedad`
+  ADD CONSTRAINT `anexos_propiedad_ibfk_1` FOREIGN KEY (`id_subasta`) REFERENCES `subastas` (`id`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `imagenes_propiedad`
+--
+ALTER TABLE `imagenes_propiedad`
+  ADD CONSTRAINT `imagenes_propiedad_ibfk_1` FOREIGN KEY (`id_subasta`) REFERENCES `subastas` (`id`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `likes`
+--
+ALTER TABLE `likes`
+  ADD CONSTRAINT `likes_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `likes_ibfk_2` FOREIGN KEY (`subasta_id`) REFERENCES `subastas` (`id`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `ofertas`
+--
+ALTER TABLE `ofertas`
+  ADD CONSTRAINT `ofertas_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`),
+  ADD CONSTRAINT `ofertas_ibfk_2` FOREIGN KEY (`id_subasta`) REFERENCES `subastas` (`id`);
+
+--
+-- Filtros para la tabla `subastas`
+--
+ALTER TABLE `subastas`
+  ADD CONSTRAINT `subastas_ibfk_1` FOREIGN KEY (`id_admin_vendedor`) REFERENCES `adminvendedor` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `visitas_subasta`
+--
+ALTER TABLE `visitas_subasta`
+  ADD CONSTRAINT `visitas_subasta_ibfk_1` FOREIGN KEY (`subasta_id`) REFERENCES `subastas` (`id`),
+  ADD CONSTRAINT `visitas_subasta_ibfk_2` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
