@@ -859,4 +859,11 @@ router.get('/condicionesYterminos', (req, res) => {
   })
 });
 
+//buscador
+router.get('/navegador',function (req, res) {
+    res.render('busqueda', {
+      usuario: req.session.usuario
+    });
+  });
+
 module.exports = router;
