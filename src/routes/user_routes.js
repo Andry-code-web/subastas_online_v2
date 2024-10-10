@@ -713,7 +713,7 @@ router.get('/oportunidades/:id', (req, res) => {
   );
 });
 
-
+//
 // Like
 router.post("/like", (req, res) => {
   if (!req.session.usuario) {
