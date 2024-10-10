@@ -1,0 +1,119 @@
+<div class="card">
+  <div class="card-header">
+    <div class="fecha_subasta">
+      <p>Inicia<br>
+        <%= fechaFormateadaEsp %>
+      </p>
+    </div>
+
+    <div class="hora_subasta">
+      <p>
+        <%= subasta.hora_formateada %>
+      </p>
+    </div>
+  </div>
+
+
+  <div class="card-body" id="body_card">
+
+
+    <div class="analisis d-flex justify-content-center">
+
+      <div class="vistas">
+        <p>
+          <span>VISTAS</span>
+          <span>
+            <%= totalVisitas %>
+          </span>
+        </p>
+      </div>
+      <div class="megusta">
+        <p>
+          <span>LIKES</span>
+          <span>
+            <%= subasta.like_count %>
+          </span>
+        </p>
+      </div>
+
+    </div>
+
+    <h2>¡Oportunidad para el que sabe!</h2>
+
+    <p class="precio_con_incremento">
+      <span>Oferta Actual: </span>
+      <span>
+        US$ <%= ofertaActual %>
+      </span>
+
+    </p>
+
+    <hr>
+
+    <p class="precio d-flex align-items-center justify-content-center">
+      <i class="bi bi-cash-coin d-flex"></i>
+      <span class="precio_base">Precio base:</span>
+      <span class="price">US$<%= formatNumber(subasta.precio_base) %></span>
+    </p>
+
+
+
+    <button id="participar" <% if (!estaEnCurso) { %> disabled <% } %>>
+      <% if (estaTerminada) { %>
+      Subasta inactiva
+      <% } else { %>
+      PARTICIPA
+      <% } %>
+    </button>
+
+
+
+    <p id="estado-subasta" style="display: none;"></p>
+    <p class="incremento_precio">
+      Incremento <span>US$100.00</span>
+    </p>
+
+    <div class="grid_info_card">
+      <div class="div1">
+        <p>Cuota mínima de participantes: 2</p>
+      </div>
+      <div class="div2">
+        <p>Con Precio Reserva</p>
+      </div>
+      <div class="div3">
+        <p>Opción a Visitas previa cita</p>
+      </div>
+      <div class="div4">
+        <p>Sin Comisión</p>
+      </div>
+    </div>
+
+
+
+  </div>
+
+  <!-- Chat de pujas -->
+  <div id="chat" class="chat">
+    <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+      <div class="progress-bar" id="progressBar" style="width: 100%"></div>
+    </div>
+    <div class="prorroga_esperando"></div>
+    <div id="messages" class="messages"></div>
+
+    <!-- Input para la última puja +100 (no editable) -->
+    <div class="content_acciones d-flex justify-content-center">
+      <div class="mensaje">
+        <input type="text" id="lastBidInput" placeholder="Última Puja" class="input_mensaje" disabled />
+      </div>
+      <button id="sendLastBidButton" class="btn_enviar">Enviar Última Puja</button>
+    </div>
+
+    <!-- Input para puja personalizada (editable) -->
+    <div class="content_acciones d-flex justify-content-center">
+      <div class="mensaje">
+        <input type="text" id="customBidInput" placeholder="Ingresa tu oferta" class="input_mensaje" />
+      </div>
+      <button id="sendCustomBidButton" class="btn_enviar">Enviar Puja Personalizada</button>
+    </div>
+  </div>
+</div>

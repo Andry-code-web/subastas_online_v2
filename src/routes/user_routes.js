@@ -859,4 +859,10 @@ router.get('/condicionesYterminos', (req, res) => {
   })
 });
 
+
+//chat prueva subasta
+router.get('/chat', (req, res) => {
+  res.render('chat');
+});
+
 module.exports = router;
