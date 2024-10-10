@@ -379,14 +379,14 @@
 
             <!-- Mostrar la fecha de la subasta -->
             <% 
-const fechaActual = new Date();
-const fechaSubasta = new Date(subasta.fecha_subasta);
-const horaSubasta = new Date(`${subasta.fecha_subasta}T${subasta.hora_subasta}`); // Asumiendo que `hora_subasta` es una cadena con el formato "HH:mm:ss"
+              const fechaActual = new Date();
+              const fechaSubasta = new Date(subasta.fecha_subasta);
+              const horaSubasta = new Date(`${subasta.fecha_subasta}T${subasta.hora_subasta}`); // Asumiendo que `hora_subasta` es una cadena con el formato "HH:mm:ss"
 
-// Condición para determinar si la subasta es finalizada
-if (fechaSubasta < fechaActual) {
-    // Si ya pasó la fecha
-    %>
+              // Condición para determinar si la subasta es finalizada
+              if (fechaSubasta < fechaActual) {
+                  // Si ya pasó la fecha
+                  %>
             <p class="footer subasta-finalizada">
               <i class="fa-solid fa-gavel" style="color: #ffffff;"></i>
               <span class="date">
@@ -394,11 +394,11 @@ if (fechaSubasta < fechaActual) {
               </span>
             </p>
             <%
-} else if (fechaSubasta.toDateString() === fechaActual.toDateString()) {
-    // Si la subasta es hoy
-    if (horaSubasta < fechaActual) {
-        // Si la hora de la subasta ya ha pasado
-        %>
+              } else if (fechaSubasta.toDateString() === fechaActual.toDateString()) {
+                  // Si la subasta es hoy
+                  if (horaSubasta < fechaActual) {
+                      // Si la hora de la subasta ya ha pasado
+                      %>
             <p class="footer subasta-finalizada">
               <i class="fa-solid fa-gavel" style="color: #ffffff;"></i>
               <span class="date">
@@ -406,9 +406,9 @@ if (fechaSubasta < fechaActual) {
               </span>
             </p>
             <%
-    } else if (subasta.currentWinner) {
-        // Si tiene un ganador y la subasta está en tiempo
-        %>
+                  } else if (subasta.currentWinner) {
+                      // Si tiene un ganador y la subasta está en tiempo
+                      %>
             <p class="footer subasta-finalizada">
               <i class="fa-solid fa-gavel" style="color: #ffffff;"></i>
               <span class="date">
@@ -416,9 +416,9 @@ if (fechaSubasta < fechaActual) {
               </span>
             </p>
             <%
-    } else {
-        // La subasta está en tiempo y no tiene ganador
-        %>
+                  } else {
+                      // La subasta está en tiempo y no tiene ganador
+                      %>
             <p class="footer subasta-activa">
               <i class="fa-solid fa-gavel" style="color: #ffffff;"></i>
               <span class="date">
@@ -426,10 +426,10 @@ if (fechaSubasta < fechaActual) {
               </span>
             </p>
             <%
-    }
-} else {
-    // La subasta es futura
-    %>
+                  }
+                  } else {
+                      // La subasta es futura
+                      %>
             <p class="footer subasta-activa">
               <i class="fa-solid fa-gavel" style="color: #ffffff;"></i>
               <span class="date">
@@ -437,8 +437,8 @@ if (fechaSubasta < fechaActual) {
               </span>
             </p>
             <%
-}
-%>
+                  }
+                  %>
 
 
           </div>
