@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="/css/partials/styles_footer.css">
   <link rel="stylesheet" href="/css/partials/styles_whatsapp_flot.css">
   <link rel="stylesheet" href="/css/partials/style_chat_subastas.css">
+  <link rel="stylesheet" href="/css/partials/styles_search.css">
   <!-- ICONS -->
   <script src="https://kit.fontawesome.com/78137c0870.js" crossorigin="anonymous"></script>
   <title>Inmueble || subasta</title>
@@ -318,7 +319,7 @@
 
 
       <!-- card del chat subastas -->
-       <%- include('partials/chat_subasta') %>
+      <%- include('partials/chat_subasta') %>
     </div>
   </div>
 
@@ -522,13 +523,15 @@
           const user = username || data.user; // Usar `username` si está definido, de lo contrario usar el nombre original
           const bid = data.bid;
 
-          const message = `<b>${user}:</b> $${formatNumber(bid)}`;
+          // Agregar el ícono antes del mensaje
+          const message = `<i class="fa-solid fa-share" style="color: #ffffff; margin-right: .5rem; font-size: .9rem;"></i>  <b>${user}:</b> $${formatNumber(bid)}`;
           const li = document.createElement('li');
           li.innerHTML = message;
           messages.appendChild(li);
           messageInput.value = formatNumber(bid + 100);
           startProgressBar();
         });
+
 
         socket.on('endAuction', function() {
           auctionEnded = true;

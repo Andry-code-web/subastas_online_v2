@@ -328,15 +328,15 @@ router.post('/registro', (req, res) => {
 });
 
 
-// Catalogo
+// Catálogo con funcionalidad de búsqueda
 router.get("/catalogo", (req, res) => {
-  const { categoria, page = 1, estado } = req.query; // Agregamos el estado de las subastas ('finalizadas' o 'activas')
+  const { categoria, page = 1, estado, search } = req.query; // Parámetros de la consulta
   const usuario_id = req.session.usuario ? req.session.usuario.id : null;
   const limit = 12; // Número de subastas por página
   const offset = (page - 1) * limit; // Calcular el desplazamiento
 
   let querySubastas = "SELECT * FROM subastas";
-  const queryParams = [];
+  const queryParams = []; // arrays
 
   // Filtro por categoría si se proporciona
   if (categoria) {
@@ -346,10 +346,8 @@ router.get("/catalogo", (req, res) => {
 
   // Filtro por estado de subasta
   if (estado === "finalizadas") {
-    // Subastas finalizadas: fecha pasada o con un ganador
     querySubastas += (categoria ? " AND" : " WHERE") + " (fecha_subasta < NOW() OR currentWinner IS NOT NULL)";
   } else if (estado === "activas") {
-    // Subastas activas: fecha futura y sin ganador
     querySubastas += (categoria ? " AND" : " WHERE") + `
       (
         fecha_subasta > CURDATE() -- Subastas para fechas futuras
@@ -362,9 +360,18 @@ router.get("/catalogo", (req, res) => {
     `;
   }
 
+  // Filtro por búsqueda si se proporciona
+  if (search) {
+    querySubastas += (categoria || estado ? " AND" : " WHERE") + `
+      (categoria LIKE ? OR marca LIKE ? OR modelo LIKE ? OR ubicacion LIKE ? OR importante LIKE ?)
+    `;
+    const searchQuery = `%${search}%`; // Definición de searchQuery
+    queryParams.push(searchQuery, searchQuery, searchQuery, searchQuery, searchQuery);
+  }
+
   console.log(querySubastas); // Imprimir la consulta SQL para verificar
 
-  querySubastas += " ORDER BY id ASC LIMIT ? OFFSET ?";
+  querySubastas += " ORDER BY id ASC LIMIT ? OFFSET ?"; // Agregar paginación
   queryParams.push(limit, offset); // Agregar limit y offset a los parámetros de consulta
 
   const queryImagenes = "SELECT id_subasta, imagen FROM imagenes_propiedad";
@@ -427,6 +434,15 @@ router.get("/catalogo", (req, res) => {
         `;
       }
 
+      // Filtro de búsqueda para contar total de subastas
+      if (search) {
+        const searchQuery = `%${search}%`; // Definición de searchQuery
+        totalSubastasQuery += (categoria || estado ? " AND" : " WHERE") + `
+          (categoria LIKE ? OR marca LIKE ? OR modelo LIKE ? OR ubicacion LIKE ? OR importante LIKE ?)
+        `;
+        totalParams.push(searchQuery, searchQuery, searchQuery, searchQuery, searchQuery);
+      }
+
       conection.query(totalSubastasQuery, totalParams, (error, totalResult) => {
         if (error) {
           console.error("Error al contar subastas", error);
@@ -456,6 +472,7 @@ router.get("/catalogo", (req, res) => {
               subastas: subastasConImagenes,
               categoria,
               estado,
+              search,
               page: Number(page),
               totalPages,
             });
@@ -466,6 +483,7 @@ router.get("/catalogo", (req, res) => {
             subastas: subastasConImagenes,
             categoria,
             estado,
+            search,
             page: Number(page),
             totalPages,
           });
@@ -474,6 +492,8 @@ router.get("/catalogo", (req, res) => {
     });
   });
 });
+
+
 
 
 
@@ -864,5 +884,34 @@ router.get('/condicionesYterminos', (req, res) => {
 router.get('/chat', (req, res) => {
   res.render('chat');
 });
+
+
+//Buscador por categorias
+router.post('/buscador', (req, res) => {
+  const { search } = req.body; // Capturamos lo que el usuario busca
+
+  // La consulta SQL para buscar por marca, modelo o precio
+  const sql = `
+      SELECT * FROM subastas 
+      WHERE (marca LIKE ? OR modelo LIKE ? OR precio_base <= ?)
+  `;
+
+  const searchTerm = `%${search}%`; // Para que busque coincidencias parciales
+  const maxPrice = parseFloat(search) || Number.MAX_SAFE_INTEGER; // Si el usuario introduce un número, lo tomamos como precio
+
+  conection.query(sql, [searchTerm, searchTerm, maxPrice], (err, results) => {
+    if (err) {
+      return res.status(500).send('Error en la consulta');
+    }
+
+    // Enviar los resultados al frontend
+    res.render('catalogo', {
+      usuario: req.session.usuario,
+      subastas: results
+    });
+  });
+});
+
+
 
 module.exports = router;

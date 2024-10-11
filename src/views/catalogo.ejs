@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="/css/partials/styles_header.css">
   <link rel="stylesheet" href="/css/partials/styles_footer.css">
   <link rel="stylesheet" href="/css/partials/styles_whatsapp_flot.css">
+  <link rel="stylesheet" href="/css/partials/styles_search.css">
 
   <!-- ICONS -->
   <script src="https://kit.fontawesome.com/78137c0870.js" crossorigin="anonymous"></script>
@@ -169,131 +170,6 @@
         </form>
       </div>
     </div>
-
-    <!-- <div class="property-listing">
-      <% subastas.forEach(subasta=> { %>
-      <div class="property-card mt-4">
-        <div id="carouselExample<%= subasta.id %>" class="carousel slide slider">
-          <div class="carousel-inner">
-            <% subasta.imagenes.forEach((imagen, index)=> { %>
-            <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
-              <img src="data:image/jpeg;base64,<%= imagen %>" class="d-block w-100" alt="Imagen de propiedad">
-            </div>
-            <% }) %>
-          </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample<%= subasta.id %>" data-bs-slide="prev">
-            <span class="img_flechas" aria-hidden="true">
-              <img src="/img/back_flecha.svg" alt="">
-            </span>
-            <span class="visually-hidden">Previous</span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#carouselExample<%= subasta.id %>" data-bs-slide="next">
-            <span class="img_flechas" aria-hidden="true">
-              <img src="/img/next_flecha.svg" alt="">
-            </span>
-            <span class="visually-hidden">Next</span>
-          </button>
-        </div>
-        <div class="property-card-content">
-          <div class="content_info">
-            <div class="nombre_tipo">
-              <h3>
-                <%= subasta.marca %>
-              </h3>
-              <p>
-                <%= subasta.categoria.toUpperCase() %>
-              </p>
-              <p class="text-model">Modelo: <%= subasta.modelo %>
-              </p>
-              <p style="color: #000; font-size: 1.1rem;">
-                <%= subasta.anio %>
-              </p>
-            </div>
-            <p class="ubicacion">
-              <%= subasta.ubicacion %>
-            </p>
-            <p class="precio">Precio Base: <span class="price">US$<%= subasta.precio_base %></span></p>
-          </div>
-          <div class="features">
-            <div class="imgenes">
-              <i class="bi bi-key"></i>
-              <p>
-                <%= subasta.llave %>
-              </p>
-            </div>
-            <div class="imgenes">
-              <i class="bi bi-credit-card-2-front"></i>
-              <p>
-                <%= subasta.tarjeta_propiedad %>
-              </p>
-            </div>
-            <div class="imgenes">
-              <i class="bi bi-question-diamond"></i>
-              <p>
-                <%= subasta.estado.toLowerCase() %>
-              </p>
-            </div>
-          </div>
-          //Botón de Like en la vista general
-          <div class="detalle_like">
-
-            <a href="/subasta/<%= subasta.id %>" class="button_a">
-              <span class="label">Entrar</span>
-              <span class="icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                  <path fill="none" d="M0 0h24v24H0z"></path>
-                  <path fill="currentColor" d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"></path>
-                </svg>
-              </span>
-            </a>
-            <button class="like-button" data-subasta-id="<%= subasta.id %>">
-              <p>Me gusta</p>
-              |
-              <i class="bi bi-heart-fill like-icon <%= subasta.liked_by_user ? 'like-filled' : 'd-none' %>"></i>
-              <i class="bi bi-heart like-icon <%= subasta.liked_by_user ? 'd-none' : 'like-empty' %>"></i>
-            </button>
-
-          </div>
-        </div>
-      </div>
-      <% }) %>
-
-      <nav aria-label="Page navigation" class="paginas_navegacion">
-        <ul class="pagination">
-          <% if (page> 1) { %>
-          <li class="page-item">
-            <a class="page-link" href="?page=<%= page - 1 %>&categoria=<%= categoria %>" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-          <% } else { %>
-          <li class="page-item disabled">
-            <span class="page-link">&laquo;</span>
-          </li>
-          <% } %>
-
-          <% for (let i=1; i <=totalPages; i++) { %>
-          <li class="page-item <%= page === i ? 'active' : '' %>">
-            <a class="page-link" href="?page=<%= i %>&categoria=<%= categoria %>">
-              <%= i %>
-            </a>
-          </li>
-          <% } %>
-
-          <% if (page < totalPages) { %>
-          <li class="page-item">
-            <a class="page-link" href="?page=<%= page + 1 %>&categoria=<%= categoria %>" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-          <% } else { %>
-          <li class="page-item disabled">
-            <span class="page-link">&raquo;</span>
-          </li>
-          <% } %>
-        </ul>
-      </nav>
-    </div> -->
 
 
     <div class="contenendor_tarjeta_catalogo">
