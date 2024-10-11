@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario</title>
+    <link rel="stylesheet" href="/public/css/partials/style_ventas.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- Carga el script de reCAPTCHA de Google -->
+    <!-- Agrega esto en el <head> de index.ejs y resultados.ejs -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <!-- <img src="logo.png" alt="Logo" class="logo"> -->
+        </div>
+        <form action="#" method="post">
+            <div class="form-section">
+                <h2>Datos de contacto:</h2>
+                <label for="cliente">Cliente</label>
+                <select id="cliente" name="cliente">
+                    <option value="individual">Individual</option>
+                    <option value="empresa">Empresa</option>
+                </select>
+
+                <label for="nombres">Nombres y Apellidos</label>
+                <input type="text" id="nombres" name="nombres" placeholder="Nombres y Apellidos">
+
+                <label for="telefono">Teléfono</label>
+                <input type="text" id="telefono" name="telefono" placeholder="Teléfono">
+
+                <label for="celular">Celular</label>
+                <input type="text" id="celular" name="celular" placeholder="Celular">
+
+                <label for="correo">Correo electrónico</label>
+                <input type="email" id="correo" name="correo" placeholder="Correo electrónico">
+
+                <label for="departamento">Departamento</label>
+                <select id="departamento" name="departamento">
+                    <option value="">Seleccione una opción</option>
+                    <option value=""></option>
+
+                    <!-- Agregar opciones de departamentos aquí -->
+                </select>
+
+                <label for="ciudad">Ciudad</label>
+                <input type="text" id="ciudad" name="ciudad" placeholder="Ciudad">
+            </div>
+
+            <div class="form-section">
+                <h2>Descripción de los activos:</h2>
+                <textarea id="descripcion" name="descripcion" rows="5"
+                    placeholder="(Describir brevemente los bienes que le gustaría poner a la venta...)"></textarea>
+            </div>
+
+            <div class="form-section">
+                <h2>Información complementaria:</h2>
+                <label for="informacion">Como te enteraste de nuestro sitio</label>
+                <select id="informacion" name="informacion">
+                    <option value="">Seleccione una opción</option>
+                    <!-- Agregar opciones de cómo se enteraron aquí -->
+                </select>
+
+                <!-- Añadido: Div para el captcha -->
+                <div class="mt-4 mx-4"> <!-- Contenedor para el captcha con margen superior -->
+                    <div class="g-recaptcha" data-sitekey="6Lfyyl4qAAAAAM59ovRCFLLwpoMXq61NGfQc_lX7"></div>
+                </div>
+            </div>
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+
+
+
+
+</body>
+
+</html>
