@@ -889,5 +889,13 @@ router.get('/condicionesYterminos', (req, res) => {
       }); 
     });
 
+  //Moises
+  //BUSCADOR
+  /* LOGIN, LOGOUT GET POST */
+  router.get("/login", (req, res) => {
+  res.render("login");
+});
+
+  //
 
 module.exports = router;
