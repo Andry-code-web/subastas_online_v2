@@ -35,4 +35,10 @@ jobs:
           git config --local user.name "Andry-code-web"
           git add README.md
           git commit -m "Actualizar README.md automáticamente"
+        # Autenticación usando el token para hacer push
+      - name: Push changes
+        env:
+          GH_TOKEN: ${{ secrets.GHS_TOKEN }}
+        run: |
+          git remote set-url origin https://Andry-code-web:${{ secrets.GHS_TOKEN }}@github.com/Andry-code-web/subastas_online_v2.git
           git push origin main  # Cambia esto si usas otra rama
