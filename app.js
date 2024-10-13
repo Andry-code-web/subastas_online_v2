@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 require('dotenv').config();
 
-// Base de datos
+// Conección a la base de datos
 const { conection } = require('./src/database/db');
 const sessionStore = require('./src/database/sessionStore');
 
