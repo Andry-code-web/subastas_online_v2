@@ -41,4 +41,5 @@ jobs:
           GHS_TOKEN: ${{ secrets.GHS_TOKEN }}
         run: |
           git remote set-url origin https://Andry-code-web:${{ secrets.GHS_TOKEN }}@github.com/Andry-code-web/subastas_online_v2.git
-          git push origin main  # Cambia esto si usas otra rama
+          git push origin main
+      
