@@ -344,65 +344,40 @@
       const socket = io();
       const messages = document.getElementById('messages');
       const messageInput = document.getElementById('lastBidInput');
-      const customBidInput = document.getElementById('customBidInput'); // Input para puja personalizada
+      const customBidInput = document.getElementById('customBidInput');
       const sendButton = document.getElementById('sendButton');
-      const sendCustomBidButton = document.getElementById('sendCustomBidButton'); // Botón para enviar puja personalizada
+      const sendCustomBidButton = document.getElementById('sendCustomBidButton');
       const btnMas = document.getElementById('mas');
       const btnMenos = document.getElementById('menos');
-      const progressBar = document.getElementById('progressBar'); // Barra de progreso
-  
-      let currentBid = parseInt('<%= subasta.precio_base %>'); // Precio base de la subasta
-      let minBid = currentBid; // Guardar la puja mínima permitida
-      let username; // Variable para almacenar el nombre de usuario
-      let auctionParticipants = 0; // Contador de participantes
-      let auctionInProgress = false; // Para manejar si la subasta está en progreso
-      let auctionEnded = false; // Para manejar si la subasta ha terminado
-      let progressValue = 100; // Valor inicial de la barra de progreso
-      let auctionCount = 0; // Contador de las veces (a la 1, a las 2, a las 3)
-      let progressInterval; // Variable para el intervalo de la barra de progreso
-  
+      const progressBar = document.getElementById('progressBar');
+
+      let currentBid = parseInt('<%= subasta.precio_base %>');
+      let minBid = currentBid;
+      let username;
+      let auctionParticipants = 0;
+      let auctionInProgress = false;
+      let auctionEnded = false;
+      let progressValue = 100;
+      let auctionCount = 0;
+      let progressInterval;
+
       const auctionRoom = '<%= subasta.id %>';
       socket.emit('joinRoom', auctionRoom);
-  
+
       socket.on('participantJoined', function() {
         auctionParticipants++;
-        if (auctionParticipants >= 2) {
-          enableButtons();
-        }
+        console.log(`Participante unido. Total de participantes: ${auctionParticipants}`);
+        if (auctionParticipants >= 2) enableButtons();
       });
-  
+
       socket.on('participantLeft', function() {
         auctionParticipants--;
-        if (auctionParticipants < 2) {
-          disableButtons();
-        }
+        console.log(`Participante salido. Total de participantes: ${auctionParticipants}`);
+        if (auctionParticipants < 2) disableButtons();
       });
-  
-      function enableButtons() {
-        btnMas.disabled = false;
-        btnMenos.disabled = false;
-        sendButton.disabled = false;
-        sendCustomBidButton.disabled = false;
-        messageInput.disabled = false;
-        customBidInput.disabled = false;
-  
-        // Asegurarse de que el valor de inicio en el input de la última puja sea precio base + 100
-        if (!messageInput.value || parseInt(messageInput.value) < currentBid + 100) {
-          messageInput.value = formatNumber(currentBid + 100); // Precio base + 100
-        }
-      }
-  
-      function disableButtons() {
-        btnMas.disabled = true;
-        btnMenos.disabled = true;
-        sendButton.disabled = true;
-        sendCustomBidButton.disabled = true;
-        messageInput.disabled = true;
-        customBidInput.disabled = true;
-      }
-  
-      // Mostrar el mensaje de "Esperando más participantes" si hay menos de 2 participantes cuando se hace clic en los botones
+
       function checkParticipantsBeforeAction() {
+        console.log(`Participantes al intentar pujar: ${auctionParticipants}`);
         if (auctionParticipants < 2) {
           Swal.fire({
             title: 'Esperando más participantes',
@@ -413,14 +388,34 @@
         }
         return true;
       }
-  
-      // Configurar eventos para los botones
+
+
+      function enableButtons() {
+        btnMas.disabled = false;
+        btnMenos.disabled = false;
+        sendButton.disabled = false;
+        sendCustomBidButton.disabled = false;
+        messageInput.disabled = false;
+        customBidInput.disabled = false;
+
+        if (!messageInput.value || parseInt(messageInput.value) < currentBid + 100) {
+          messageInput.value = formatNumber(currentBid + 100);
+        }
+      }
+
+      function disableButtons() {
+        btnMas.disabled = true;
+        btnMenos.disabled = true;
+        sendButton.disabled = true;
+        sendCustomBidButton.disabled = true;
+        messageInput.disabled = true;
+        customBidInput.disabled = true;
+      }
 
       sendButton.addEventListener('click', function() {
-        if (!checkParticipantsBeforeAction()) return; // Verificar participantes
-  
+        if (!checkParticipantsBeforeAction()) return;
+
         let bidValue = parseInt(messageInput.value.replace(/,/g, ''));
-  
         if (bidValue < minBid) {
           Swal.fire({
             title: `La puja debe ser al menos $${formatNumber(minBid)}.`,
@@ -428,19 +423,18 @@
           });
           return;
         }
-  
+
         socket.emit('bid', {
-          user: username || '<%= usuario ? usuario.nombre : "Invitado" %>', 
+          user: username || '<%= usuario ? usuario.nombre : "Invitado" %>',
           bid: bidValue,
           room: auctionRoom
         });
       });
-  
+
       sendCustomBidButton.addEventListener('click', function() {
-        if (!checkParticipantsBeforeAction()) return; // Verificar participantes
-  
+        if (!checkParticipantsBeforeAction()) return;
+
         let customBidValue = parseInt(customBidInput.value.replace(/,/g, ''));
-  
         if (isNaN(customBidValue) || customBidInput.value.trim() === '') {
           Swal.fire({
             title: 'Debes ingresar un monto.',
@@ -448,7 +442,7 @@
           });
           return;
         }
-  
+
         if (customBidValue < minBid) {
           Swal.fire({
             title: `La puja debe ser al menos $${formatNumber(minBid)}.`,
@@ -456,59 +450,51 @@
           });
           return;
         }
-  
+
         socket.emit('bid', {
           user: username || '<%= usuario ? usuario.nombre : "Invitado" %>',
           bid: customBidValue,
           room: auctionRoom
         });
-  
+
         customBidInput.value = '';
       });
-  
-      // Escuchar cuando se recibe una nueva puja
+
       socket.on('newBid', function(data) {
         currentBid = parseInt(data.bid);
         minBid = currentBid;
-  
+
         const user = username || data.user;
         const bid = data.bid;
-  
+
         const message = `<i class="fa-solid fa-share" style="color: #ffffff; margin-right: .5rem; font-size: .9rem;"></i>  <b>${user}:</b> $${formatNumber(bid)}`;
         const li = document.createElement('li');
         li.innerHTML = message;
         messages.appendChild(li);
-  
-        // Actualizar el input con la nueva puja + $100
+
         messageInput.value = formatNumber(bid + 100);
       });
-  
-      // Función para formatear los números con comas
+
       function formatNumber(num) {
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       }
-  
-      // Inicializar el valor del input con el precio base + 100 desde el inicio
+
       messageInput.value = formatNumber(currentBid + 100);
-  
-      // Iniciar la barra de progreso y contar subasta "a la 1, a las 2, a las 3"
+
       function startProgressBar() {
         if (auctionEnded) return;
-  
+
         progressValue = 100;
         auctionCount = 0;
         progressBar.style.width = `${progressValue}%`;
-  
-        if (progressInterval) {
-          clearInterval(progressInterval);
-        }
-  
+
+        if (progressInterval) clearInterval(progressInterval);
         auctionInProgress = true;
-  
+
         progressInterval = setInterval(() => {
           progressValue -= 1;
           progressBar.style.width = `${progressValue}%`;
-  
+
           if (progressValue <= 50 && auctionCount === 0) {
             auctionCount = 1;
             addAuctionMessage("a la 1");
@@ -519,38 +505,52 @@
             auctionCount = 3;
             addAuctionMessage("a las 3");
             clearInterval(progressInterval);
-            if (auctionInProgress) {
-              auctionInProgress = false;
-              auctionEnded = true;
-              socket.emit('endAuction', auctionRoom);
-              disableButtons();
-            }
+            auctionInProgress = false;
+            auctionEnded = true;
+            socket.emit('endAuction', auctionRoom);
+            disableButtons();
           }
         }, 50);
       }
-  
-      // Función para agregar mensaje de la subasta ("a la 1", "a las 2", etc.)
+
       function addAuctionMessage(message) {
         const li = document.createElement('li');
         li.innerHTML = `<b>${message}</b>`;
         messages.appendChild(li);
       }
-  
-      // Escuchar cuando se inicie la subasta
+
       socket.on('startAuction', function() {
-        enableButtons();
-        startProgressBar(); // Iniciar la barra de progreso
-        Swal.fire({
-          title: '¡Subasta Comenzando!',
-          text: 'La subasta ha comenzado.',
-          icon: 'success',
-        });
+        if (auctionParticipants >= 2) {
+          enableButtons();
+          startProgressBar();
+          Swal.fire({
+            title: '¡Subasta Comenzando!',
+            text: 'La subasta ha comenzado.',
+            icon: 'success',
+          });
+        } else {
+          Swal.fire({
+            title: 'No se puede iniciar la subasta',
+            text: 'Se requieren al menos 2 participantes.',
+            icon: 'error',
+          });
+        }
       });
+
+
+      // Emitir un evento para iniciar la subasta si hay suficientes participantes
+      socket.on('checkParticipants', function() {
+        if (auctionParticipants >= 2) {
+          socket.emit('startAuction', auctionRoom);
+        } else {
+          console.log('No hay suficientes participantes para iniciar la subasta.');
+        }
+      });
+
     });
   </script>
-  
-  
-  
+
+
 
 
 
