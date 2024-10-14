@@ -175,6 +175,9 @@
   margin-top: .5rem;
 }
 
+.messages::-webkit-scrollbar{
+  display: none;
+}
 
 .contenedor_subastas_input {
   width: 100%;
@@ -197,8 +200,8 @@
 .input_mensaje {
   border: 1px solid #BD0000;
   background: none;
-  width: 65%;
-  height: 35px;
+  width: 95%;
+  height: 40px;
   padding: 0 2em;
   text-align: center;
   margin-right: 1rem;
@@ -238,7 +241,7 @@
   border-radius: 5px;
   cursor: pointer;
   width: 30%;
-  height: 35px;
+  height: 40px;
   font-family: var(--font--banner--semi);
   font-size: .8rem;
 }

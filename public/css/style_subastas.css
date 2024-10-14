@@ -362,8 +362,8 @@
 }
       
 
-/* CHAT */
-
+ /* CHAT */
+/*
 .card {
   background-color: white;
   border-radius: 0.5rem;
@@ -494,7 +494,6 @@
 
 .messages {
   height: calc(100% - 80px);
-  /* Ajustar según la altura de .content_acciones y .progress */
   overflow-y: scroll;
   padding: 10px;
   border: 1px solid #ddd;
@@ -578,7 +577,7 @@
 
 .btn_enviar {
   width: 23%;
-}
+} */
 
 #particles-js {
   position: absolute;
