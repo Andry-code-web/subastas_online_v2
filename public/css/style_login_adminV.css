@@ -35,7 +35,7 @@
     padding: 1rem;
     position: absolute;
     top: 50%;
-    left: 35%;
+    left: 50%;
     transform: translate(-50%, -50%);
 }
 
@@ -91,7 +91,6 @@
     border-radius: 50px;
     padding: 0 1rem;
     padding-right: 40px;
-    /* espacio para el botón */
     box-shadow: 3px 5px 15px rgba(63, 63, 63, 0.411);
 }
 
@@ -145,7 +144,7 @@ a {
     text-decoration: none;
 }
 
-.btn_registro{
+.btn_registro {
     width: 200px;
     height: 35px;
     border: none;
@@ -156,15 +155,89 @@ a {
     box-shadow: 1px 3px 5px rgba(63, 63, 63, 0.411);
 }
 
-.regresar{
+.regresar {
     margin-top: .5rem;
     font-weight: 400;
     cursor: pointer;
 }
-  
-.regresar span a{
+
+.regresar span a {
     border: none;
     font-weight: 500;
     color: #d10000;
     text-decoration: underline;
+}
+
+/* Responsividad */
+@media (max-width: 1200px) {
+    .content .content_form {
+        width: 40%;
+    }
+
+    .content .content_form h1 {
+        font-size: 4rem; /* Aumenta el tamaño del título principal */
+    }
+
+    .content .content_form h2 {
+        font-size: 2.5rem; /* Aumenta el tamaño del subtítulo */
+    }
+}
+
+
+@media (max-width: 992px) {
+    .content .content_form {
+        width: 50%;
+    }
+
+    .content .content_form h1 {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .content .content_form {
+        width: 60%;
+    }
+
+    .content .content_form h1 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .content .content_form {
+        width: 80%;
+    }
+
+    .content .content_form h1 {
+        font-size: 1.8rem;
+    }
+
+    .content_form form .inputs {
+        width: 90%;
+    }
+
+    .content_form form .btn_enviar,
+    .btn_registro {
+        width: 100%;
+    }
+}
+
+@media (max-width: 400px) {
+    .content .content_form {
+        width: 90%;
+    }
+
+    .content .content_form h1 {
+        font-size: 1.5rem;
+    }
+
+    .content .content_form h2 {
+        font-size: 1.5rem;
+    }
+
+    .content_form form input[name="usuario"],
+    .content_form form .input_contra .password-input {
+        height: 35px;
+    }
 }
