@@ -367,6 +367,24 @@ ALTER TABLE `visitas_subasta`
   ADD CONSTRAINT `visitas_subasta_ibfk_2` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`);
 COMMIT;
 
+
+--Creamos la tabla para nuestro formulario de ventas
+--
+CREATE TABLE `FORMULARIO_VENTAS` (
+  `id` int NOT NULL,
+  `tipo_cliente` enum('individual','empresa') NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `celular` varchar(15) NOT NULL,
+  `telefono` varchar(15) DEFAULT NULL,
+  `nombre_apellidos` varchar(100) DEFAULT NULL,
+  `actividad_comercial` varchar(100) DEFAULT NULL,
+  `departamento` varchar(50) DEFAULT NULL,
+  `ciudad` varchar(50) DEFAULT NULL,
+  `complemento` varchar(100) DEFAULT NULL,
+  `usuario` varchar(50) NOT NULL,
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
