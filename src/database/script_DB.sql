@@ -185,6 +185,28 @@ CREATE TABLE `visitas_subasta` (
   `fecha_visita` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+
+
+
+CREATE TABLE vehiculos_venta (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cliente VARCHAR(20) NOT NULL,
+    usuario VARCHAR(50) NOT NULL,
+    nombres_apellidos VARCHAR(100) NOT NULL,
+    sexo ENUM('femenino', 'masculino', 'prefiero no decirlo'),
+    ruc VARCHAR(11),
+    telefono VARCHAR(20),
+    celular VARCHAR(20),
+    correo VARCHAR(100) NOT NULL,
+    departamento VARCHAR(50),
+    ciudad VARCHAR(50),
+    descripcion TEXT,
+    informacion_origen ENUM('facebook', 'instagram', 'tiktok', 'otro'),
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
 --
 -- Índices para tablas volcadas
 --

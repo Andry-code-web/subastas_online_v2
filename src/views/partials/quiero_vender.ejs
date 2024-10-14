@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario</title>
-    <link rel="stylesheet" href="style_vender.css">
+    <link rel="stylesheet" href="queirovender.css">
 </head>
 
 <body>
     <div class="container">
         <div class="header">
-            <!-- <img src="logo.png" alt="Logo" class="logo"> -->
+            <a href="/" class="logo"><img src="/img/SUBASTA-SUR-ROJO-HORIZONTAL.png" alt=""></a>
         </div>
         <form action="#" method="post">
             <div class="form-section">
@@ -22,40 +22,41 @@
                     <option value="empresa">Empresa</option>
                 </select>
                 <label for="id">usuario</label>
-                <input type="usuario">
+                <input type="usuario" id="usuario" name="usuario" placeholder="usuario">
 
                 <label for="nombres">Nombres y Apellidos</label>
                 <input type="text" id="nombres" name="nombres" placeholder="Nombres y Apellidos">
-                
-                <label for="sexo">sexo</label>
+
+                <label for="sexo">Sexo</label>
                 <select id="sexo" name="sexo">
                     <option value="">Seleccione una opción</option>
                     <option value="">femenino</option>
                     <option value="">masculino</option>
                     <option value="">prefiero no decirlo</option>
+                 </select>
 
+                <label for="ruc">RUC</label>
+                <input type="number" id="ruc" name="ruc" placeholder="RUC">
+                    
 
                 <label for="telefono">Teléfono</label>
-                <input type="text" id="telefono" name="telefono" placeholder="Teléfono">
+                <input type="number" id="telefono" name="telefono" placeholder="Teléfono">
 
                 <label for="celular">Celular</label>
-                <input type="text" id="celular" name="celular" placeholder="Celular">
+                <input type="number" id="celular" name="celular" placeholder="Celular">
 
                 <label for="correo">Correo electrónico</label>
                 <input type="email" id="correo" name="correo" placeholder="Correo electrónico">
 
                 <label for="departamento">Departamento</label>
-                <select id="departamento" name="departamento">
-                    <option value="">Seleccione una opción</option>
-                    <!-- Agregar opciones de departamentos aquí -->
-                </select>
+                <input type="text" id="departamento" name="Departamento" placeholder="Departamento">
 
                 <label for="ciudad">Ciudad</label>
                 <input type="text" id="ciudad" name="ciudad" placeholder="Ciudad">
             </div>
 
             <div class="form-section">
-                <h2>Descripción de los activos:</h2>
+                <h2>Descripción del veiculo:</h2>
                 <textarea id="descripcion" name="descripcion" rows="5"
                     placeholder="(Describir brevemente los bienes que le gustaría poner a la venta...)"></textarea>
             </div>
@@ -65,7 +66,10 @@
                 <label for="informacion">Como te enteraste de nuestro sitio</label>
                 <select id="informacion" name="informacion">
                     <option value="">Seleccione una opción</option>
-                    <!-- Agregar opciones de cómo se enteraron aquí -->
+                    <option value="">facebook</option>
+                    <option value="">instagran</option>
+                    <option value="">tiktok</option>
+                    
                 </select>
 
 
