@@ -349,46 +349,46 @@
       const sendCustomBidButton = document.getElementById('sendCustomBidButton');
       const progressBar = document.getElementById('progressBar');
       const numeroOportunidades = document.getElementById('numero-oportunidades-span');
-
+  
       let currentBid = parseInt('<%= subasta.precio_base %>');
       let minBid = currentBid;
       let username;
       let auctionInProgress = false;
       let auctionEnded = false;
-
+  
       const auctionRoom = '<%= subasta.id %>';
       socket.emit('joinRoom', auctionRoom);
-
+  
       function startAuction() {
         Swal.fire({
           title: '¡Subasta Comenzando!',
           text: 'La subasta ha comenzado.',
           icon: 'success',
         });
-
+  
         messageInput.value = formatNumber(currentBid + 100);
-
+  
         let progressInterval;
         let progressValue = 100;
         let auctionCount = 0;
-
+  
         function startProgressBar() {
           if (auctionEnded) return;
-
+  
           progressValue = 100;
           auctionCount = 0;
           progressBar.style.width = `${progressValue}%`;
-
+  
           if (progressInterval) {
             clearInterval(progressInterval);
           }
-
+  
           auctionInProgress = true;
-
+  
           progressInterval = setInterval(() => {
             progressValue -= 1;
             progressBar.style.width = `${progressValue}%`;
-
+  
             if (progressValue <= 50 && auctionCount === 0) {
               auctionCount = 1;
               addAuctionMessage("a la 1");
@@ -402,10 +402,10 @@
               if (auctionInProgress) {
                 auctionInProgress = false;
                 auctionEnded = true;
-
+  
                 // Emitir el evento al servidor indicando que la subasta ha terminado
                 socket.emit('endAuction', auctionRoom);
-
+  
                 // Mostrar alerta de ganador después de un pequeño retraso
                 setTimeout(() => {
                   socket.emit('getWinner', auctionRoom); // Solicitar el ganador
@@ -415,12 +415,12 @@
             }
           }, 50);
         }
-
+  
         sendButton.addEventListener('click', function() {
           if (auctionEnded) return;
-
+  
           let bidValue = parseInt(messageInput.value.replace(/,/g, ''));
-
+  
           if (bidValue < minBid) {
             Swal.fire({
               title: `La puja debe ser al menos $${formatNumber(minBid)}.`,
@@ -428,7 +428,7 @@
             });
             return;
           }
-
+  
           socket.emit('bid', {
             user: username || '<%= usuario ? usuario.nombre : "Invitado" %>',
             bid: bidValue,
@@ -436,12 +436,12 @@
           });
           startProgressBar();
         });
-
+  
         sendCustomBidButton.addEventListener('click', function() {
           if (auctionEnded) return;
-
+  
           let customBidValue = parseInt(customBidInput.value.replace(/,/g, ''));
-
+  
           // Validar si el input está vacío
           if (isNaN(customBidValue) || customBidInput.value.trim() === '') {
             Swal.fire({
@@ -450,7 +450,7 @@
             });
             return;
           }
-
+  
           // Validar si la oferta es mayor o igual a la última puja
           if (customBidValue < minBid) {
             Swal.fire({
@@ -459,46 +459,49 @@
             });
             return;
           }
-
+  
           // Emitir la puja personalizada al servidor
           socket.emit('bid', {
             user: username || '<%= usuario ? usuario.nombre : "Invitado" %>',
             bid: customBidValue,
             room: auctionRoom
           });
-
+  
           // Limpiar el input de la oferta personalizada
           customBidInput.value = '';
           startProgressBar();
         });
-
+  
         socket.on('setUsername', function(newUsername) {
           username = newUsername; // Guardar el nombre de usuario recibido
         });
-
+  
         socket.on('newBid', function(data) {
           if (auctionEnded) return;
-
+  
           currentBid = parseInt(data.bid);
           minBid = currentBid;
-
+  
           const user = username || data.user;
           const bid = data.bid;
-
+  
           // Agregar el ícono antes del mensaje
           const message = `<i class="fa-solid fa-share" style="color: #ffffff; margin-right: .5rem; font-size: .9rem;"></i>  <b>${user}:</b> $${formatNumber(bid)}`;
           const li = document.createElement('li');
           li.innerHTML = message;
           messages.appendChild(li);
+  
+          // Desplazar automáticamente el contenedor hacia el último mensaje
+          messages.scrollTop = messages.scrollHeight;
+  
           messageInput.value = formatNumber(bid + 100);
           startProgressBar();
         });
-
+  
         socket.on('endAuction', function() {
           auctionEnded = true;
           auctionInProgress = false;
-
-          
+  
           Swal.fire({
             title: '¡Subasta finalizada!',
             text: 'La subasta ya tiene un ganador',
@@ -510,15 +513,15 @@
               window.location.href = '/catalogo';
             }
           });
-
+  
           disableButtons();
         });
-
+  
         // Escuchar el evento de ganador
         socket.on('announceWinner', function(data) {
           Swal.fire({
             title: `Felicidades ${data.winner}`,
-            text: 'Nos estaremos comunicando dentro de las 24h atreves del correo',
+            text: 'Nos estaremos comunicando dentro de las 24h a través del correo',
             icon: 'success',
             allowOutsideClick: false,
             confirmButtonText: 'Ir al catálogo',
@@ -528,13 +531,16 @@
             }
           });
         });
-
+  
         function addAuctionMessage(message) {
           const li = document.createElement('li');
           li.innerText = message;
           messages.appendChild(li);
+  
+          // Desplazar automáticamente el contenedor hacia el último mensaje
+          messages.scrollTop = messages.scrollHeight;
         }
-
+  
         function disableButtons() {
           sendButton.disabled = true;
           sendCustomBidButton.disabled = true;
@@ -542,14 +548,15 @@
           customBidInput.disabled = true;
         }
       }
-
+  
       function formatNumber(num) {
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       }
-
+  
       startAuction();
     });
   </script>
+  
 
 
 
