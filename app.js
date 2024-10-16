@@ -200,6 +200,14 @@ io.on('connection', (socket) => {
         }
     });
 
+    // Nueva funcionalidad para obtener el ganador
+    socket.on('getWinner', (room) => {
+        const winner = auctions[room].currentWinner; // Obtener el ganador de la subasta
+        io.to(room).emit('announceWinner', { winner }); // Anunciar el ganador
+    });
+
+
+
     socket.on('disconnect', () => {
         console.log('Cliente desconectado');
 
