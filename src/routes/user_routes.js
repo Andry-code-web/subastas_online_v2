@@ -494,12 +494,6 @@ router.get("/catalogo", (req, res) => {
 });
 
 
-
-
-
-
-
-
 // Subastas
 router.get('/subasta/:id', (req, res) => {
   const subastaId = req.params.id;
@@ -887,7 +881,7 @@ router.get('/chat', (req, res) => {
 
 
 //Buscador por categorias
-router.post('/buscador', (req, res) => {
+/* router.post('/buscador', (req, res) => {
   const { search } = req.body; // Capturamos lo que el usuario busca
 
   // La consulta SQL para buscar por marca, modelo o precio
@@ -910,7 +904,7 @@ router.post('/buscador', (req, res) => {
       subastas: results
     });
   });
-});
+}); */
 
 
 

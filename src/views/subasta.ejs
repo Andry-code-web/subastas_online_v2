@@ -343,41 +343,21 @@
     document.addEventListener('DOMContentLoaded', function() {
       const socket = io();
       const messages = document.getElementById('messages');
-      const messageInput = document.getElementById('messageInput'); // Input para puja con incremento
-      const customBidInput = document.getElementById('customBidInput'); // Input para puja personalizada
+      const messageInput = document.getElementById('lastBidInput');
+      const customBidInput = document.getElementById('customBidInput');
       const sendButton = document.getElementById('sendButton');
-      const sendCustomBidButton = document.getElementById('sendCustomBidButton'); // Botón para enviar puja personalizada
-      const btnMas = document.getElementById('mas');
-      const btnMenos = document.getElementById('menos');
+      const sendCustomBidButton = document.getElementById('sendCustomBidButton');
       const progressBar = document.getElementById('progressBar');
       const numeroOportunidades = document.getElementById('numero-oportunidades-span');
 
       let currentBid = parseInt('<%= subasta.precio_base %>');
-      let minBid = currentBid; // Guardar la puja mínima permitida
-      let username; // Variable para almacenar el nombre de usuario
-      let auctionParticipants = 0; // Contador de participantes
+      let minBid = currentBid;
+      let username;
+      let auctionInProgress = false;
+      let auctionEnded = false;
 
       const auctionRoom = '<%= subasta.id %>';
       socket.emit('joinRoom', auctionRoom);
-
-      socket.on('participantJoined', function(data) {
-        auctionParticipants++;
-        if (auctionParticipants >= 2) {
-          startAuction();
-        }
-      });
-
-      socket.on('participantLeft', function(data) {
-        auctionParticipants--;
-        if (auctionParticipants < 2) {
-          Swal.fire({
-            title: 'Esperando más participantes',
-            text: 'La subasta no puede comenzar sin al menos 2 participantes.',
-            icon: 'info',
-          });
-          disableButtons();
-        }
-      });
 
       function startAuction() {
         Swal.fire({
@@ -391,8 +371,6 @@
         let progressInterval;
         let progressValue = 100;
         let auctionCount = 0;
-        let auctionInProgress = false;
-        let auctionEnded = false;
 
         function startProgressBar() {
           if (auctionEnded) return;
@@ -424,34 +402,19 @@
               if (auctionInProgress) {
                 auctionInProgress = false;
                 auctionEnded = true;
+
+                // Emitir el evento al servidor indicando que la subasta ha terminado
                 socket.emit('endAuction', auctionRoom);
+
+                // Mostrar alerta de ganador después de un pequeño retraso
+                setTimeout(() => {
+                  socket.emit('getWinner', auctionRoom); // Solicitar el ganador
+                }, 1000); // Espera 1 segundo antes de solicitar el ganador
                 disableButtons();
               }
             }
           }, 50);
         }
-
-        btnMas.addEventListener('click', function() {
-          if (auctionEnded) return;
-
-          let currentBidValue = parseInt(messageInput.value.replace(/,/g, ''));
-          currentBidValue += 100;
-          messageInput.value = formatNumber(currentBidValue);
-          minBid = currentBidValue;
-        });
-
-        btnMenos.addEventListener('click', function() {
-          if (auctionEnded) return;
-
-          let currentBidValue = parseInt(messageInput.value.replace(/,/g, ''));
-          if (currentBidValue > minBid) {
-            currentBidValue -= 100;
-            if (currentBidValue < minBid) {
-              currentBidValue = minBid;
-            }
-            messageInput.value = formatNumber(currentBidValue);
-          }
-        });
 
         sendButton.addEventListener('click', function() {
           if (auctionEnded) return;
@@ -467,14 +430,13 @@
           }
 
           socket.emit('bid', {
-            user: username || '<%= usuario ? usuario.nombre : "Invitado" %>', // Usa el nombre de usuario recibido
+            user: username || '<%= usuario ? usuario.nombre : "Invitado" %>',
             bid: bidValue,
             room: auctionRoom
           });
           startProgressBar();
         });
 
-        // Envío de puja personalizada
         sendCustomBidButton.addEventListener('click', function() {
           if (auctionEnded) return;
 
@@ -500,7 +462,7 @@
 
           // Emitir la puja personalizada al servidor
           socket.emit('bid', {
-            user: username || '<%= usuario ? usuario.nombre : "Invitado" %>', // Usa el nombre de usuario recibido
+            user: username || '<%= usuario ? usuario.nombre : "Invitado" %>',
             bid: customBidValue,
             room: auctionRoom
           });
@@ -520,7 +482,7 @@
           currentBid = parseInt(data.bid);
           minBid = currentBid;
 
-          const user = username || data.user; // Usar `username` si está definido, de lo contrario usar el nombre original
+          const user = username || data.user;
           const bid = data.bid;
 
           // Agregar el ícono antes del mensaje
@@ -531,7 +493,6 @@
           messageInput.value = formatNumber(bid + 100);
           startProgressBar();
         });
-
 
         socket.on('endAuction', function() {
           auctionEnded = true;
@@ -553,6 +514,21 @@
           disableButtons();
         });
 
+        // Escuchar el evento de ganador
+        socket.on('announceWinner', function(data) {
+          Swal.fire({
+            title: `Felicidades ${data.winner}`,
+            text: 'Nos estaremos comunicando dentro de las 24h atreves del correo',
+            icon: 'success',
+            allowOutsideClick: false,
+            confirmButtonText: 'Ir al catálogo',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.href = '/catalogo';
+            }
+          });
+        });
+
         function addAuctionMessage(message) {
           const li = document.createElement('li');
           li.innerText = message;
@@ -560,20 +536,21 @@
         }
 
         function disableButtons() {
-          btnMas.disabled = true;
-          btnMenos.disabled = true;
           sendButton.disabled = true;
-          sendCustomBidButton.disabled = true; // Deshabilitar botón de puja personalizada
+          sendCustomBidButton.disabled = true;
           messageInput.disabled = true;
-          customBidInput.disabled = true; // Deshabilitar input de puja personalizada
+          customBidInput.disabled = true;
         }
       }
 
       function formatNumber(num) {
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       }
+
+      startAuction();
     });
   </script>
+
 
 
   <script>

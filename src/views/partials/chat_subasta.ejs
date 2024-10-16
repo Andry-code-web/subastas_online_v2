@@ -5,7 +5,7 @@
         <%= fechaFormateadaEsp %>
       </p>
     </div>
-
+    <!-- <p id="participantCount">Participantes: 0</p> -->
     <div class="hora_subasta">
       <p>
         <%= subasta.hora_formateada %>
@@ -57,15 +57,13 @@
     </p>
 
 
-
     <button id="participar" <% if (!estaEnCurso) { %> disabled <% } %>>
       <% if (estaTerminada) { %>
       Subasta inactiva
       <% } else { %>
-      PARTICIPA
+      UNIRME
       <% } %>
     </button>
-
 
 
     <p id="estado-subasta" style="display: none;"></p>
@@ -98,22 +96,25 @@
       <div class="progress-bar" id="progressBar" style="width: 100%"></div>
     </div>
     <div class="prorroga_esperando"></div>
-    <div id="messages" class="messages"></div>
-
-    <!-- Input para la última puja +100 (no editable) -->
-    <div class="content_acciones d-flex justify-content-center">
-      <div class="mensaje">
-        <input type="text" id="lastBidInput" placeholder="Última Puja" class="input_mensaje" disabled />
-      </div>
-      <button id="sendLastBidButton" class="btn_enviar">Enviar Última Puja</button>
+    <div id="messages" class="messages">
     </div>
 
-    <!-- Input para puja personalizada (editable) -->
-    <div class="content_acciones d-flex justify-content-center">
-      <div class="mensaje">
-        <input type="text" id="customBidInput" placeholder="Ingresa tu oferta" class="input_mensaje" />
+    <div class="contenedor_subastas_input">
+      <!-- Input para la última puja +100 (no editable) -->
+      <div class="content_acciones_ d-flex justify-content-center mb-3">
+        <div class="mensaje">
+          <input type="text" id="lastBidInput" placeholder="Última Puja" class="input_mensaje" disabled />
+        </div>
+        <button id="sendButton" class="btn_enviar">Enviar</button>
       </div>
-      <button id="sendCustomBidButton" class="btn_enviar">Enviar Puja Personalizada</button>
+
+      <!-- Input para puja personalizada (editable) -->
+      <div class="content_acciones d-flex justify-content-center">
+        <div class="mensaje">
+          <input type="text" id="customBidInput" placeholder="Ingresa tu oferta" class="input_mensaje" />
+        </div>
+        <button id="sendCustomBidButton" class="btn_enviar">Enviar Puja</button>
+      </div>
     </div>
   </div>
 </div>

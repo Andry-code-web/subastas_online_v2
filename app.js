@@ -54,31 +54,7 @@ const lastHeartbeat = {}; // Mantener un registro del último latido recibido po
 io.on('connection', (socket) => {
     console.log('Nuevo cliente conectado');
 
-    /* socket.on('joinRoom', (room) => {
-        const query = "SELECT auctionEnded, currentWinner FROM subastas WHERE id = ?";
-        conection.query(query, [room], (error, results) => {
-            if (error) {
-                console.error("Error al obtener el estado de la subasta:", error);
-                return;
-            }
-
-            if (results.length > 0) {
-                const auctionEnded = results[0].auctionEnded;
-                const currentWinner = results[0].currentWinner;
-
-                if (auctionEnded && currentWinner) {
-                    // Emitir evento endAuction para el cliente que acaba de unirse
-                    socket.emit('endAuction', { winner: currentWinner });
-                    console.log(`Cliente se unió a una subasta ya terminada en la sala ${room}`);
-                } else {
-                    socket.join(room);
-                    console.log(`Cliente unido a la sala: ${room}`);
-                }
-            }
-        });
-    }); */
-
-    socket.on('joinRoom', (room) => {
+    socket.on('joinRoom', (room, userName) => {
         const query = "SELECT auctionEnded, currentWinner FROM subastas WHERE id = ?";
         conection.query(query, [room], (error, results) => {
             if (error) {
@@ -98,55 +74,86 @@ io.on('connection', (socket) => {
                     socket.join(room);
                     console.log(`Cliente unido a la sala: ${room}`);
 
-                    // Verificar si hay al menos dos usuarios en la sala
-                    const numClientsInRoom = io.sockets.adapter.rooms.get(room)?.size || 0;
-                    if (numClientsInRoom >= 2) {
-                        console.log(`Hay al menos dos participantes en la sala ${room}. La subasta puede comenzar.`);
-                        io.to(room).emit('auctionCanStart', { message: 'La subasta puede comenzar' });
-                    } else {
-                        console.log(`Esperando más participantes en la sala ${room}`);
-                        io.to(room).emit('waitingForParticipants', { message: 'Esperando al menos 2 participantes para comenzar la subasta' });
+                    // Inicializar el estado de la subasta si no existe
+                    if (!auctions[room]) {
+                        auctions[room] = {
+                            auctionEnded: false,
+                            currentWinner: null,
+                            clientDisconnected: false,
+                            currentBid: 0,
+                            winnerNotified: false
+                        };
                     }
+
+                    // Emitir evento participantJoined
+                    socket.to(room).emit('participantJoined', { message: `${userName} se ha unido.` });
                 }
             }
         });
     });
 
+    socket.on('heartbeat', (room) => {
+        // Actualizar el tiempo del último latido recibido
+        lastHeartbeat[room] = Date.now();
+    });
+
+    socket.on('participate', ({ room }) => {
+        // Notificar a otros participantes en la sala que uno nuevo se ha unido
+        socket.to(room).emit('newParticipant');
+    });
+
     socket.on('bid', (data) => {
         const room = data.room;
         const bidValue = parseInt(data.bid);
-        // Verificar si auctions[room] está inicializado; si no, inicializarlo
-        if (!auctions[room]) {
-            auctions[room] = {
-                auctionEnded: false,
-                currentWinner: null,
-                clientDisconnected: false,
-                currentBid: 0,
-                winnerNotified: false
-            };
+
+        // Verificar si la subasta ha terminado o si el cliente se ha desconectado
+        if (auctions[room]?.auctionEnded || auctions[room]?.clientDisconnected) {
+            console.log('Subasta terminada o cliente desconectado.');
+            return;
         }
 
-        // Verificar que la puja no sea menor que la puja mínima permitida
-        if (auctions[room].auctionEnded || auctions[room].clientDisconnected || bidValue < (auctions[room].currentBid || 0)) {
-            console.log('Puja inválida o subasta terminada.');
-            return; // No aceptar nuevas pujas si la subasta ha terminado o si la puja es menor que la actual
+        // Verificar si la puja es válida
+        if (isNaN(bidValue) || bidValue <= auctions[room].currentBid) {
+            console.log('Puja inválida. Debe ser un número mayor que la puja actual.');
+            return;
         }
 
+        // Registrar la nueva puja
         console.log('Nueva puja recibida:', data);
-        auctions[room].currentWinner = data.user; // Actualizar el ganador actual
-        auctions[room].currentBid = bidValue; // Actualizar la puja actual
+        auctions[room].currentWinner = data.user;
+        auctions[room].currentBid = bidValue;
 
-        // Emitir la nueva puja a todos los clientes en la sala específica
-        io.to(room).emit('newBid', data);
+        // Emitir la nueva puja a todos los usuarios en la sala
+        io.to(room).emit('newBid', {
+            user: data.user,
+            bid: bidValue,
+            message: `${data.user} ha pujado con ${bidValue}`
+        });
 
-        // Actualizar el estado de la subasta en la base de datos
         const updateQuery = "UPDATE subastas SET currentWinner = ?, currentBid = ? WHERE id = ?";
-        conection.query(updateQuery, [data.user, data.bid, room], (error, results) => {
+        conection.query(updateQuery, [data.user, bidValue, room], (error) => {
             if (error) {
                 console.error("Error al actualizar el ganador de la subasta:", error);
+            } else {
+                console.log(`Ganador y puja actualizados en la subasta ${room}:`, data.user, bidValue);
+            }
+        });
+
+        // Obtener el ID del usuario de la base de datos
+        const getUserIdQuery = "SELECT id FROM usuarios WHERE usuario = ?";
+        conection.query(getUserIdQuery, [data.user], (error, results) => {
+            if (error) {
+                console.error('Error al obtener el ID del usuario:', error);
                 return;
             }
-            console.log(`Ganador y puja actualizados en la subasta ${room}:`, data.user, data.bid);
+
+            if (results.length > 0) {
+                const userId = results[0].id;
+                console.log(`ID del usuario ${data.user} es: ${userId}`);
+                // Aquí puedes usar el userId para realizar otras operaciones si es necesario
+            } else {
+                console.error('No se encontró el usuario con el nombre de usuario:', data.user);
+            }
         });
     });
 
@@ -154,19 +161,16 @@ io.on('connection', (socket) => {
         if (!auctions[room].auctionEnded) {
             auctions[room].auctionEnded = true;
 
-            // Marca la subasta como finalizada en la base de datos
             const updateQuery = "UPDATE subastas SET auctionEnded = true WHERE id = ?";
-            conection.query(updateQuery, [room], (error, results) => {
+            conection.query(updateQuery, [room], (error) => {
                 if (error) {
                     console.error("Error al marcar la subasta como finalizada:", error);
                     return;
                 }
 
-                // Obtener el nombre de usuario del ganador
                 const username = auctions[room].currentWinner;
-
-                // Consulta para obtener el ID del usuario basado en su nombre de usuario
                 const getUserIdQuery = "SELECT id FROM usuarios WHERE usuario = ?";
+
                 conection.query(getUserIdQuery, [username], (error, results) => {
                     if (error) {
                         console.error('Error al obtener el ID del usuario:', error);
@@ -175,36 +179,13 @@ io.on('connection', (socket) => {
 
                     if (results.length > 0) {
                         const userId = results[0].id;
-
-                        // Actualizar oportunidades
                         const updateOpportunitiesQuery = "UPDATE usuarios SET oportunidades = oportunidades - 1 WHERE id = ? AND oportunidades > 0";
-                        conection.query(updateOpportunitiesQuery, [userId], (error, results) => {
+
+                        conection.query(updateOpportunitiesQuery, [userId], (error) => {
                             if (error) {
                                 console.error('Error al actualizar oportunidades:', error);
-                                return;
-                            }
-
-                            // Verificar si se realizó la actualización
-                            if (results.affectedRows > 0) {
-                                console.log('Oportunidad restada correctamente.');
-
-                                // Consultar el número de oportunidades restantes
-                                const getOpportunitiesQuery = "SELECT oportunidades FROM usuarios WHERE id = ?";
-                                conection.query(getOpportunitiesQuery, [userId], (error, results) => {
-                                    if (error) {
-                                        console.error('Error al obtener el número de oportunidades restantes:', error);
-                                        return;
-                                    }
-
-                                    if (results.length > 0) {
-                                        const remainingOpportunities = results[0].oportunidades;
-                                        console.log(`El usuario con ID ${userId} ahora tiene ${remainingOpportunities} oportunidades restantes.`);
-                                    } else {
-                                        console.log('No se encontró el usuario para obtener las oportunidades restantes.');
-                                    }
-                                });
                             } else {
-                                console.log('No se pudo restar la oportunidad o el usuario no tenía oportunidades.');
+                                console.log('Oportunidad restada correctamente.');
                             }
                         });
                     } else {
@@ -212,50 +193,47 @@ io.on('connection', (socket) => {
                     }
                 });
 
-                // Notificar a todos los clientes que la subasta ha terminado
                 io.to(room).emit('auctionEnded', { winner: auctions[room].currentWinner });
-                auctions[room].winnerNotified = true; // Marcar que el ganador ha sido notificado
+                auctions[room].winnerNotified = true;
                 console.log(`Subasta ${room} marcada como finalizada.`);
             });
         }
     });
 
-    // Manejar latidos de corazón para mantener la subasta activa
-    socket.on('heartbeat', (room) => {
-        console.log(`Latido recibido de la sala ${room}`);
-
-        // Inicializar el estado de la subasta si no existe en la memoria
-        if (!auctions[room]) {
-            auctions[room] = {
-                auctionEnded: false,
-                currentWinner: null,
-                clientDisconnected: false,
-                winnerNotified: false
-            };
-        }
-
-        lastHeartbeat[room] = Date.now(); // Actualizar el tiempo del último latido recibido para esta sala
-        auctions[room].clientDisconnected = false; // Marcar al cliente como conectado
+    // Nueva funcionalidad para obtener el ganador
+    socket.on('getWinner', (room) => {
+        const winner = auctions[room].currentWinner; // Obtener el ganador de la subasta
+        io.to(room).emit('announceWinner', { winner }); // Anunciar el ganador
     });
 
-    // Verificar el estado de los latidos de corazón y manejar desconectiones
+
+
+    socket.on('disconnect', () => {
+        console.log('Cliente desconectado');
+
+        // Reducir el contador de participantes si el cliente estaba en una sala
+        const rooms = Object.keys(socket.rooms);
+        rooms.forEach(room => {
+            if (auctions[room]) {
+                // Aquí hemos eliminado la lógica de reducción del contador de participantes
+            }
+        });
+    });
+
+    // Intervalo para verificar los latidos
     setInterval(() => {
         Object.keys(lastHeartbeat).forEach(room => {
             const timeSinceLastHeartbeat = Date.now() - lastHeartbeat[room];
             if (timeSinceLastHeartbeat > HEARTBEAT_TIMEOUT) {
-                console.log(`Cliente en la sala ${room} desconectado`);
-                auctions[room].clientDisconnected = true; // Marcar al cliente como desconectado
-
-                // Notificar a todos los clientes en la sala que un cliente se desconectó
+                auctions[room].clientDisconnected = true;
                 io.to(room).emit('clientDisconnected', { message: `Cliente desconectado de la subasta ${room}` });
             }
         });
-    }, 5000); // Verificar cada 5 segundos el estado de los latidos de corazón (ajusta según tus necesidades)
-
-    socket.on('disconnect', () => {
-        console.log('Cliente desconectado');
-    });
+    }, 5000);
 });
+
+
+
 
 server.timeout = 0;
 
