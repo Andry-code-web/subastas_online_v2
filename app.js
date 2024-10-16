@@ -50,23 +50,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 const auctions = {}; // Objeto para almacenar el estado de cada subasta
 const HEARTBEAT_TIMEOUT = 5000; // Tiempo en milisegundos para considerar que un cliente se desconectó (5 segundos)
 const lastHeartbeat = {}; // Mantener un registro del último latido recibido por cada sala (subasta)
-const auctionRooms = {}; // Objeto para almacenar participantes por sala
 
 io.on('connection', (socket) => {
-    console.log('Nuevo cliente conectado:', socket.id);
+    console.log('Nuevo cliente conectado');
 
-    // Cuando un usuario se une a una sala, recibe su nombre
     socket.on('joinRoom', (room, userName) => {
-        // Asignar el nombre de usuario al socket
-        socket.userName = userName; 
-
-        if (!auctionRooms[room]) {
-            auctionRooms[room] = new Set(); // Usamos un Set para evitar duplicados
-        }
-
-        // Unirse a la sala
-        socket.join(room);
-
         const query = "SELECT auctionEnded, currentWinner FROM subastas WHERE id = ?";
         conection.query(query, [room], (error, results) => {
             if (error) {
@@ -83,17 +71,22 @@ io.on('connection', (socket) => {
                     socket.emit('endAuction', { winner: currentWinner });
                     console.log(`Cliente se unió a una subasta ya terminada en la sala ${room}`);
                 } else {
-                    auctionRooms[room].add(socket.userName); // Añadir el usuario al Set
+                    socket.join(room);
+                    console.log(`Cliente unido a la sala: ${room}`);
 
-                    // Emitir el número de participantes a todos en la sala
-                    const participantCount = auctionRooms[room].size;
-                    io.to(room).emit('updateParticipantCount', participantCount);
+                    // Inicializar el estado de la subasta si no existe
+                    if (!auctions[room]) {
+                        auctions[room] = {
+                            auctionEnded: false,
+                            currentWinner: null,
+                            clientDisconnected: false,
+                            currentBid: 0,
+                            winnerNotified: false
+                        };
+                    }
 
                     // Emitir evento participantJoined
-                    socket.to(room).emit('participantJoined', { message: `${socket.userName} se ha unido.` });
-
-                    // Log para el servidor
-                    console.log(`Participante ${socket.userName} se ha unido a la subasta ${room}. Total de participantes: ${participantCount}`);
+                    socket.to(room).emit('participantJoined', { message: `${userName} se ha unido.` });
                 }
             }
         });
@@ -102,6 +95,11 @@ io.on('connection', (socket) => {
     socket.on('heartbeat', (room) => {
         // Actualizar el tiempo del último latido recibido
         lastHeartbeat[room] = Date.now();
+    });
+
+    socket.on('participate', ({ room }) => {
+        // Notificar a otros participantes en la sala que uno nuevo se ha unido
+        socket.to(room).emit('newParticipant');
     });
 
     socket.on('bid', (data) => {
@@ -130,6 +128,32 @@ io.on('connection', (socket) => {
             user: data.user,
             bid: bidValue,
             message: `${data.user} ha pujado con ${bidValue}`
+        });
+
+        const updateQuery = "UPDATE subastas SET currentWinner = ?, currentBid = ? WHERE id = ?";
+        conection.query(updateQuery, [data.user, bidValue, room], (error) => {
+            if (error) {
+                console.error("Error al actualizar el ganador de la subasta:", error);
+            } else {
+                console.log(`Ganador y puja actualizados en la subasta ${room}:`, data.user, bidValue);
+            }
+        });
+
+        // Obtener el ID del usuario de la base de datos
+        const getUserIdQuery = "SELECT id FROM usuarios WHERE usuario = ?";
+        conection.query(getUserIdQuery, [data.user], (error, results) => {
+            if (error) {
+                console.error('Error al obtener el ID del usuario:', error);
+                return;
+            }
+
+            if (results.length > 0) {
+                const userId = results[0].id;
+                console.log(`ID del usuario ${data.user} es: ${userId}`);
+                // Aquí puedes usar el userId para realizar otras operaciones si es necesario
+            } else {
+                console.error('No se encontró el usuario con el nombre de usuario:', data.user);
+            }
         });
     });
 
@@ -177,14 +201,13 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        console.log('Cliente desconectado:', socket.id);
+        console.log('Cliente desconectado');
 
         // Reducir el contador de participantes si el cliente estaba en una sala
         const rooms = Object.keys(socket.rooms);
         rooms.forEach(room => {
-            if (auctionRooms[room]) {
-                auctionRooms[room].delete(socket.userName); // Suponiendo que has guardado el nombre de usuario en socket.userName
-                io.to(room).emit('updateParticipantCount', auctionRooms[room].size);
+            if (auctions[room]) {
+                // Aquí hemos eliminado la lógica de reducción del contador de participantes
             }
         });
     });
@@ -200,12 +223,6 @@ io.on('connection', (socket) => {
         });
     }, 5000);
 });
-
-
-
-
-
-
 
 
 
