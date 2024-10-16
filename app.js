@@ -50,11 +50,23 @@ app.use(express.static(path.join(__dirname, 'public')));
 const auctions = {}; // Objeto para almacenar el estado de cada subasta
 const HEARTBEAT_TIMEOUT = 5000; // Tiempo en milisegundos para considerar que un cliente se desconectó (5 segundos)
 const lastHeartbeat = {}; // Mantener un registro del último latido recibido por cada sala (subasta)
+const auctionRooms = {}; // Objeto para almacenar participantes por sala
 
 io.on('connection', (socket) => {
-    console.log('Nuevo cliente conectado');
+    console.log('Nuevo cliente conectado:', socket.id);
 
-    socket.on('joinRoom', (room) => {
+    // Cuando un usuario se une a una sala, recibe su nombre
+    socket.on('joinRoom', (room, userName) => {
+        // Asignar el nombre de usuario al socket
+        socket.userName = userName; 
+
+        if (!auctionRooms[room]) {
+            auctionRooms[room] = new Set(); // Usamos un Set para evitar duplicados
+        }
+
+        // Unirse a la sala
+        socket.join(room);
+
         const query = "SELECT auctionEnded, currentWinner FROM subastas WHERE id = ?";
         conection.query(query, [room], (error, results) => {
             if (error) {
@@ -71,77 +83,40 @@ io.on('connection', (socket) => {
                     socket.emit('endAuction', { winner: currentWinner });
                     console.log(`Cliente se unió a una subasta ya terminada en la sala ${room}`);
                 } else {
-                    socket.join(room);
-                    console.log(`Cliente unido a la sala: ${room}`);
+                    auctionRooms[room].add(socket.userName); // Añadir el usuario al Set
 
-                    // Inicializar el estado de la subasta si no existe
-                    if (!auctions[room]) {
-                        auctions[room] = {
-                            auctionEnded: false,
-                            currentWinner: null,
-                            clientDisconnected: false,
-                            currentBid: 0,
-                            winnerNotified: false,
-                            auctionParticipants: 0 // Inicializar contador de participantes
-                        };
-                    }
-
-                    // Incrementar el número de participantes
-                    auctions[room].auctionParticipants++;
-                    console.log(`Participantes en la sala ${room}: ${auctions[room].auctionParticipants}`);
-
-                    // Emitir el número actual de participantes a todos en la sala
-                    io.to(room).emit('participantCountUpdated', {
-                        participants: auctions[room].auctionParticipants
-                    });
+                    // Emitir el número de participantes a todos en la sala
+                    const participantCount = auctionRooms[room].size;
+                    io.to(room).emit('updateParticipantCount', participantCount);
 
                     // Emitir evento participantJoined
-                    socket.to(room).emit('participantJoined', { message: `Un nuevo participante se ha unido. Total de participantes: ${auctions[room].auctionParticipants}` });
+                    socket.to(room).emit('participantJoined', { message: `${socket.userName} se ha unido.` });
 
-                    // Verificar si hay al menos dos usuarios en la sala
-                    if (auctions[room].auctionParticipants >= 2) {
-                        console.log(`Hay al menos dos participantes en la sala ${room}. La subasta puede comenzar.`);
-                        io.to(room).emit('auctionCanStart', { message: 'La subasta puede comenzar' });
-                    } else {
-                        console.log(`Esperando más participantes en la sala ${room}`);
-                        io.to(room).emit('waitingForParticipants', { message: 'Esperando al menos 2 participantes para comenzar la subasta' });
-                    }
+                    // Log para el servidor
+                    console.log(`Participante ${socket.userName} se ha unido a la subasta ${room}. Total de participantes: ${participantCount}`);
                 }
             }
         });
     });
 
+    socket.on('heartbeat', (room) => {
+        // Actualizar el tiempo del último latido recibido
+        lastHeartbeat[room] = Date.now();
+    });
 
     socket.on('bid', (data) => {
         const room = data.room;
         const bidValue = parseInt(data.bid);
 
-        if (!auctions[room]) {
-            auctions[room] = {
-                auctionEnded: false,
-                currentWinner: null,
-                clientDisconnected: false,
-                currentBid: 0,
-                winnerNotified: false,
-                auctionParticipants: 0
-            };
-        }
-
         // Verificar si la subasta ha terminado o si el cliente se ha desconectado
-        if (auctions[room].auctionEnded || auctions[room].clientDisconnected) {
+        if (auctions[room]?.auctionEnded || auctions[room]?.clientDisconnected) {
             console.log('Subasta terminada o cliente desconectado.');
             return;
         }
 
-        // Verificar si hay al menos 2 participantes
-        if (auctions[room].auctionParticipants < 2) {
-            console.log('No hay suficientes participantes para pujar.');
-            return;
-        }
-
         // Verificar si la puja es válida
-        if (bidValue < (auctions[room].currentBid || 0)) {
-            console.log('Puja inválida. Debe ser mayor que la puja actual.');
+        if (isNaN(bidValue) || bidValue <= auctions[room].currentBid) {
+            console.log('Puja inválida. Debe ser un número mayor que la puja actual.');
             return;
         }
 
@@ -150,15 +125,11 @@ io.on('connection', (socket) => {
         auctions[room].currentWinner = data.user;
         auctions[room].currentBid = bidValue;
 
-        io.to(room).emit('newBid', data);
-
-        const updateQuery = "UPDATE subastas SET currentWinner = ?, currentBid = ? WHERE id = ?";
-        conection.query(updateQuery, [data.user, bidValue, room], (error) => {
-            if (error) {
-                console.error("Error al actualizar el ganador de la subasta:", error);
-            } else {
-                console.log(`Ganador y puja actualizados en la subasta ${room}:`, data.user, bidValue);
-            }
+        // Emitir la nueva puja a todos los usuarios en la sala
+        io.to(room).emit('newBid', {
+            user: data.user,
+            bid: bidValue,
+            message: `${data.user} ha pujado con ${bidValue}`
         });
     });
 
@@ -206,29 +177,19 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        Object.keys(socket.rooms).forEach((room) => {
-            if (auctions[room]) {
-                // Decrementar el número de participantes al desconectar
-                auctions[room].auctionParticipants--;
-                console.log(`Participantes en la sala ${room} después de la desconexión: ${auctions[room].auctionParticipants}`);
+        console.log('Cliente desconectado:', socket.id);
 
-                // Emitir el nuevo número de participantes a todos en la sala
-                io.to(room).emit('participantCountUpdated', {
-                    participants: auctions[room].auctionParticipants
-                });
-
-                // Emitir evento participantLeft
-                io.to(room).emit('participantLeft', { message: `Un participante ha salido. Total de participantes: ${auctions[room].auctionParticipants}` });
-
-                if (auctions[room].auctionParticipants < 2) {
-                    io.to(room).emit('waitingForParticipants', { message: 'Esperando al menos 2 participantes para comenzar la subasta' });
-                }
+        // Reducir el contador de participantes si el cliente estaba en una sala
+        const rooms = Object.keys(socket.rooms);
+        rooms.forEach(room => {
+            if (auctionRooms[room]) {
+                auctionRooms[room].delete(socket.userName); // Suponiendo que has guardado el nombre de usuario en socket.userName
+                io.to(room).emit('updateParticipantCount', auctionRooms[room].size);
             }
         });
-        console.log('Cliente desconectado');
     });
 
-
+    // Intervalo para verificar los latidos
     setInterval(() => {
         Object.keys(lastHeartbeat).forEach(room => {
             const timeSinceLastHeartbeat = Date.now() - lastHeartbeat[room];
@@ -239,6 +200,12 @@ io.on('connection', (socket) => {
         });
     }, 5000);
 });
+
+
+
+
+
+
 
 
 

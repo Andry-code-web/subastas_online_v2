@@ -85,7 +85,7 @@
 .card-body button {
   width: 100%;
   height: 45px;
-  background-color: #FBB44C;
+  background-color: var(--bg--botones);
   font-family: var(--font--sub--title--3);
   font-weight: 600;
   color: white;
