@@ -172,6 +172,8 @@
     </div>
 
 
+    <!-- hasta qui funciona -->
+
     <div class="contenendor_tarjeta_catalogo">
 
       <div class="btn_fechas_F_A">
@@ -180,7 +182,14 @@
       </div>
 
 
+
       <div class="contenido_card_grid">
+        <% if (mensaje) { %>
+        <div class="alert alert-warning mensaje_info">
+          <%= mensaje %>
+        </div>
+        <% } %>
+
         <% subastas.forEach(subasta => { %>
         <div class="card">
           <div id="carouselExample<%= subasta.id %>" class="carousel slide slider">
@@ -255,66 +264,30 @@
 
             <!-- Mostrar la fecha de la subasta -->
             <% 
-              const fechaActual = new Date();
-              const fechaSubasta = new Date(subasta.fecha_subasta);
-              const horaSubasta = new Date(`${subasta.fecha_subasta}T${subasta.hora_subasta}`); // Asumiendo que `hora_subasta` es una cadena con el formato "HH:mm:ss"
+// Comprobamos el estado de la subasta basado en act_fina
+if (subasta.act_fina === 'finalizada') {
+    // Si la subasta está marcada como finalizada
+    %>
+            <p class="footer subasta-finalizada">
+              <i class="fa-solid fa-gavel" style="color: #ffffff;"></i>
+              <span class="date">
+                <%= subasta.fecha_formateada %>
+              </span>
+            </p>
+            <%
+} else {
+    // La subasta está activa
+    %>
+            <p class="footer subasta-activa">
+              <i class="fa-solid fa-gavel fa-bounce" style="color: #ffffff;"></i>
+              <span class="date">
+                <%= subasta.fecha_formateada %>
+              </span>
+            </p>
+            <%
+}
+%>
 
-              // Condición para determinar si la subasta es finalizada
-              if (fechaSubasta < fechaActual) {
-                  // Si ya pasó la fecha
-                  %>
-            <p class="footer subasta-finalizada">
-              <i class="fa-solid fa-gavel" style="color: #ffffff;"></i>
-              <span class="date">
-                <%= subasta.fecha_formateada %>
-              </span>
-            </p>
-            <%
-              } else if (fechaSubasta.toDateString() === fechaActual.toDateString()) {
-                  // Si la subasta es hoy
-                  if (horaSubasta < fechaActual) {
-                      // Si la hora de la subasta ya ha pasado
-                      %>
-            <p class="footer subasta-finalizada">
-              <i class="fa-solid fa-gavel" style="color: #ffffff;"></i>
-              <span class="date">
-                <%= subasta.fecha_formateada %>
-              </span>
-            </p>
-            <%
-                  } else if (subasta.currentWinner) {
-                      // Si tiene un ganador y la subasta está en tiempo
-                      %>
-            <p class="footer subasta-finalizada">
-              <i class="fa-solid fa-gavel" style="color: #ffffff;"></i>
-              <span class="date">
-                <%= subasta.fecha_formateada %>
-              </span>
-            </p>
-            <%
-                  } else {
-                      // La subasta está en tiempo y no tiene ganador
-                      %>
-            <p class="footer subasta-activa">
-              <i class="fa-solid fa-gavel" style="color: #ffffff;"></i>
-              <span class="date">
-                <%= subasta.fecha_formateada %>
-              </span>
-            </p>
-            <%
-                  }
-                  } else {
-                      // La subasta es futura
-                      %>
-            <p class="footer subasta-activa">
-              <i class="fa-solid fa-gavel" style="color: #ffffff;"></i>
-              <span class="date">
-                <%= subasta.fecha_formateada %>
-              </span>
-            </p>
-            <%
-                  }
-                  %>
 
 
           </div>

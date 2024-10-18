@@ -331,6 +331,7 @@ router.get("/logoutAdminV", (req, res) => {
   });
 });
 
+
 // Ruta protegida que requiere autenticación de admin vendedor
 router.get("/adminV", isAuthenticatedAdminV, (req, res) => {
   if (!req.session.adminVendedorNombreUsuario) {
@@ -345,6 +346,18 @@ router.get("/adminV", isAuthenticatedAdminV, (req, res) => {
       console.error("Error al obtener los datos de subasta:", error);
       return res.status(500).send("Error al obtener los datos de subasta");
     }
+
+    // Formatear la fecha de cada subasta
+    results.forEach(subasta => {
+      const fecha = new Date(subasta.fecha_subasta);
+      // Formato día/mes/año
+      subasta.fecha_formateada = fecha.toLocaleDateString('es-PE', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    });
+
     const numSubastas = results.length;
     res.render("adminVendedor", {
       nombreUsuario,
@@ -353,6 +366,7 @@ router.get("/adminV", isAuthenticatedAdminV, (req, res) => {
     });
   });
 });
+
 
 
 // Función para calcular la fecha y hora `DATETIME` de prórroga
@@ -412,8 +426,27 @@ router.post("/subir-vehiculo", upload.fields([{ name: 'images', maxCount: 10 }])
 });
 
 
+// Activar subasta
+router.post('/subasta/activar/:id', (req, res) => {
+  const subastaId = req.params.id;
+  conection.query('UPDATE subastas SET act_fina = ? WHERE id = ?', ['activa', subastaId], (err, result) => {
+    if (err) {
+      return res.status(500).json({ success: false, message: 'Error al activar la subasta' });
+    }
+    res.json({ success: true });
+  });
+});
 
-
+// Finalizar subasta
+router.post('/subasta/finalizar/:id', (req, res) => {
+  const subastaId = req.params.id;
+  conection.query('UPDATE subastas SET act_fina = ? WHERE id = ?', ['finalizada', subastaId], (err, result) => {
+    if (err) {
+      return res.status(500).json({ success: false, message: 'Error al finalizar la subasta' });
+    }
+    res.json({ success: true });
+  });
+});
 
 
 

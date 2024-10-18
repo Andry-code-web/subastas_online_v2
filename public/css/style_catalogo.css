@@ -262,7 +262,7 @@ header .session p .btn_menu i {
 }
 
 .content_filtro {
-  width: 30%;
+  width: 25%;
 }
 
 .filtro-seleccionado {
@@ -595,8 +595,6 @@ header .session p .btn_menu i {
 }
 
 
-
-
 .button_a {
   position: relative;
   font-size: 14px;
@@ -712,6 +710,11 @@ header .session p .btn_menu i {
   opacity: 80%;
 }
 
+/* alerta de vehiculo no encontrado */
+.mensaje_info {
+  grid-column: span 2 / span 2;
+  grid-column-start: 2;
+}
 
 
 .contenido_card_grid {

@@ -73,12 +73,39 @@
         </ul>
 
         <div class="group ms-3">
-          <form action="/catalogo" method="GET"> <!-- Cambié el método a GET para búsquedas -->
-            <input placeholder="Buscar" type="search" class="input" name="search">
+          <form id="search-form" action="/catalogo" method="GET">
+            <input id="search-input" placeholder="Buscar marca o modelo" type="search" class="input" name="search">
             <button type="submit" class="btn_buscar">Buscar</button>
-          </form>
+            <!-- <ul id="suggestions-list" class="suggestions"></ul> -->
+          </form>          
         </div>
         
+
+        <!-- CSS para estilos de sugerencias -->
+        <!-- <style>
+          .suggestions {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 3rem;
+            border: 1px solid #ccc;
+            max-height: 200px;
+            overflow-y: auto;
+            position: absolute;
+            z-index: 100;
+          }
+
+          .suggestions li {
+            padding: 10px;
+            background-color: white;
+            cursor: pointer;
+          }
+
+          .suggestions li:hover {
+            background-color: #f0f0f0;
+          }
+        </style> -->
+
+
 
       </div>
     </div>
