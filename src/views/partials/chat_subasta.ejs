@@ -5,6 +5,7 @@
         <%= fechaFormateadaEsp %>
       </p>
     </div>
+    <p class="cronometro" id="cronometro"></p>
     <!-- <p id="participantCount">Participantes: 0</p> -->
     <div class="hora_subasta">
       <p>
@@ -98,10 +99,9 @@
   </div>
 
   <!-- Chat de pujas -->
+  <!-- Componente de chat para la subasta -->
   <div id="chat" class="chat">
-    <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-      <div class="progress-bar" id="progressBar" style="width: 100%"></div>
-    </div>
+    <div id="countdown" class="countdown">03:00</div>
     <div class="prorroga_esperando"></div>
     <div id="messages" class="messages">
     </div>
