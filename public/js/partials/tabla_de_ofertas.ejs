@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla de Ofertas</title>
+    <!-- Link al archivo CSS externo -->
+    <link rel="stylesheet" href="quierovender.css">
+</head>
+<body>
+
+<h2> OFERTAS</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>USUARIO</th>
+            <th>UBICACION DEL VEHICULO</th>
+            <th>FECHA DE LA SUBASTA</th>
+            <th>VALOR DE LA OFERTA</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><%= oferta.usuario %><br></td>
+            <td><% oferta.ubicacion %></td>
+            <td><% oferta.fecha %></td>
+            <td><% oferta.valor %></td>
+           <!--  <td data-label="USUARIO">  <br></td>
+            <td data-label="FECHA DE LA SUBASTA">19/10/2024<br>10:34:26 GMT -05:00</td>
+            <td data-label="VALOR DE LA OFERTA">4,500.00 $</td> -->
+        </tr>
+    </tbody>
+</table>
+
+<h2>OFERTAS CONSOLIDADAS</h2>
+<p class="offer-summary"><strong>TOTAL: 1 COMPRADOR(ES)</strong></p>
+
+<table>
+    <thead>
+        <tr>
+            <th>USUARIO</th>
+            <th>UBICACION DEL VEHICULO</th>
+            <th>CANTIDAD DE OFERTAS</th>
+            <th>VALOR DE LA OFERTA</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><% oferta.usuario %></td>
+            <td><% oferta.ubicacion %></td>
+            <td><% oferta.fecha %></td> 
+            <td><% oferta.valor %></td>
+            <!-- <td data-label="USUARIO">c*****ue<br></td>
+            <td data-label="CANTIDAD DE OFERTAS">1</td>
+            <td data-label="VALOR DE LA OFERTA">4,500.00 $</td> -->
+        </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
