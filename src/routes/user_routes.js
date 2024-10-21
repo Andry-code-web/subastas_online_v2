@@ -17,6 +17,7 @@ const isAuthenticated = (req, res, next) => {
   }
 };
 
+
 router.get("/", (req, res) => {
   // Consulta para obtener todas las subastas, incluyendo likes
   let querySubastas = `
@@ -508,6 +509,10 @@ router.get('/subasta/:id', (req, res) => {
   // Consulta para contar visitas
   const queryContarVisitas = 'SELECT COUNT(*) AS total_visitas FROM visitas_subasta WHERE subasta_id = ?';
 
+
+  //Consulta para obtener las ofertas de la subasta
+  const queryOfertasSubastas = 'SELECT * FROM ofertas WHERE id_subasta = ?';
+
   // Formato de número
   function formatNumber(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -594,22 +599,30 @@ router.get('/subasta/:id', (req, res) => {
             }
 
             const totalVisitas = resultadoVisitas[0].total_visitas;
+            //Obtener la informacion de la subasta por id
+            conection.query(queryOfertasSubastas, [subastaId], (error, resultadoOfertas) => {
+              if (error) {
+                console.error("Error al obtener ofertas de la subasta", error);
+                return res.status(500).send("Error al obtener ofertas de la subasta");
+              }
 
-            // Renderizar la vista con los datos de la subasta y el contador de visitas
-            res.render("subasta", {
-              usuario: req.session.usuario,
-              subasta,
-              imagenes: resultadoImagenes.map(img => img.imagen.toString('base64')),
-              anexos: resultadoAnexos.map(anexo => ({ id: anexo.id, url: anexo.anexo })),
-              estaEnCurso, // Indica si la subasta está en curso
-              estaTerminada, // Nueva variable que indica si la subasta ha terminado
-              fechaFormateadaEsp, // Fecha traducida a español
-              formatNumber, // Función para formatear números
-              totalVisitas, // Total de visitas
-              ofertaActual, // Nueva variable que contiene el precio base + 100
-              fechaHoraSubasta: fechaHoraSubasta.format(), // Pasar la fecha y hora de la subasta
-              fechaHoraFinSubasta: fechaHoraFinSubasta.format(), // Pasar la fecha y hora de fin de la subasta
-              fechaActual
+              // Renderizar la vista con los datos de la subasta y el contador de visitas
+              res.render("subasta", {
+                usuario: req.session.usuario,
+                subasta,
+                imagenes: resultadoImagenes.map(img => img.imagen.toString('base64')),
+                anexos: resultadoAnexos.map(anexo => ({ id: anexo.id, url: anexo.anexo })),
+                estaEnCurso, // Indica si la subasta está en curso
+                estaTerminada, // Nueva variable que indica si la subasta ha terminado
+                fechaFormateadaEsp, // Fecha traducida a español
+                formatNumber, // Función para formatear números
+                totalVisitas, // Total de visitas
+                ofertaActual, // Nueva variable que contiene el precio base + 100
+                fechaHoraSubasta: fechaHoraSubasta.format(), // Pasar la fecha y hora de la subasta
+                fechaHoraFinSubasta: fechaHoraFinSubasta.format(), // Pasar la fecha y hora de fin de la subasta
+                fechaActual, 
+                oferta: resultadoOfertas
+              });
             });
           });
         });
@@ -862,40 +875,71 @@ router.get('/condicionesYterminos', (req, res) => {
 
 
 //SubastasActivas             //solicitud/respuesta// 
-  router.get("/SubastasActivas", (req, res) => {   //router.get: define una ruta para manejar solicitudes GET. 
-    const { page = 1} = req.query //parámetros de la solicitud
-    const limit = 12; //numero de subastas por pagina
-    const offset = (page -1) * limit; //Calcular el desplazamiento para obtener las subastas de la p.solicitada
+router.get("/SubastasActivas", (req, res) => {   //router.get: define una ruta para manejar solicitudes GET. 
+  const { page = 1 } = req.query //parámetros de la solicitud
+  const limit = 12; //numero de subastas por pagina
+  const offset = (page - 1) * limit; //Calcular el desplazamiento para obtener las subastas de la p.solicitada
 
-    let querySubastas = "SELECT * FROM subastas WHERE estado = 'activa'"; //la consulta selecciona todos los campos * de la tabla 'subastas' donde el estado sea 'activa'.
-    const queryParams = []; //constante para almacenar todos los parámetros de la consulta SQL.
+  let querySubastas = "SELECT * FROM subastas WHERE estado = 'activa'"; //la consulta selecciona todos los campos * de la tabla 'subastas' donde el estado sea 'activa'.
+  const queryParams = []; //constante para almacenar todos los parámetros de la consulta SQL.
 
   //Agregar paginación a la consulta  
-                    //clausulas
+  //clausulas
   querySubastas += ' LIMIT $1 OOFSET $2'; //
   queryParams.push(limit, offset); //limit para limitar el numero de filas que se devuelven, 
-                                    //offset para saltar un numero de filas antes de empezar a devolver R
+  //offset para saltar un numero de filas antes de empezar a devolver R
 
-    //Consulta a la base de datos
-    db.query(express.querySubastas, queryParams)
+  //Consulta a la base de datos
+  db.query(express.querySubastas, queryParams)
     //Manejo de la respuesta// 
-      .then(result => {
-        res.json(result.rows); //enviar resuldatos  como respuesta al cliente
-      })
+    .then(result => {
+      res.json(result.rows); //enviar resuldatos  como respuesta al cliente
+    })
     //Manejo de los errores//
-      .catch(error => {
-          console.error("Error al obtener subastas activas:", error); //mensaje que saldra  al momento de que ya no se pueda obtener informacion de las subastas
-          res.status(500).json({ error: 'Error al obtener subastas activas'}); //respuesta al cliente 
-      }); 
+    .catch(error => {
+      console.error("Error al obtener subastas activas:", error); //mensaje que saldra  al momento de que ya no se pueda obtener informacion de las subastas
+      res.status(500).json({ error: 'Error al obtener subastas activas' }); //respuesta al cliente 
     });
-
-  //Moises
-  //BUSCADOR
-  /* LOGIN, LOGOUT GET POST */
-  router.get("/login", (req, res) => {
-  res.render("login");
 });
 
-  //
 
+//Moises
+//BUSCADOR
+router.get("/buscador", (req, res) => {
+  res.render("buscador");
+});
+
+router.post("/buscador", (req, res) => {
+  res.render("buscador")
+});
+
+//MOISES
+//RUTAS TABLA_OFERTAS
+router.post('/ofertas', async (req, res) => {
+  try {
+    const { id_usuario, id_subasta, monto_oferta, fecha_oferta, usuario_oferta } = req.body;
+    const nuevaOferta = await Oferta.create({
+      id_usuario,
+      id_subasta,
+      monto_oferta,
+      fecha_oferta,
+      usuario_oferta
+    });
+    res.status(201).json(nuevaOferta);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al crear la oferta' });
+  }
+});
+
+//MOISES
+router.get('/ofertas', async (req, res) => {
+  try {
+    const ofertas = await Oferta.findAll();
+    res.json(ofertas);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener las ofertas' });
+  }
+});
 module.exports = router;

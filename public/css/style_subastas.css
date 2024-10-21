@@ -626,7 +626,11 @@
   text-decoration: underline;
 }
 
-
+.contenedor_ofertas {
+  width: 60%;
+  height: auto;
+  margin: auto;
+}
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {

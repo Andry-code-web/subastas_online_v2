@@ -15,8 +15,16 @@
   <!-- Estructura principal -->
   <div class="d-flex">
     <!-- Sidebar del administrador -->
-    <div class="d-flex flex-column justify-content-between sidebar p-3">
-      <div>
+        <div class="sidebar">
+          <button class="close-sidebar">X</button>
+        </div>
+        <div class="d-flex">
+          <div class="sidebar">
+            <div class="sidebar-content">
+              </div>
+            <button class="close-sidebar">X</button>
+          </div>
+          </div>
         <!-- Logo y nombre del dashboard -->
         <div class="mb-4">
           <h2 class="text-white">Subastas</h2>
@@ -262,9 +270,11 @@
   </div>
 
   <!-- SCRIPTS -->
+   
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script>
+    
     var inputHora = document.getElementById("hora_subasta");
 
     function MedirTiempo() {
@@ -324,6 +334,16 @@
           console.error('Error:', error);
         });
     });
+
+
+
+    const closeButton = document.querySelector('.close-sidebar');
+    const sidebar = document.querySelector('.sidebar');
+
+    closeButton.addEventListener('click', () => {
+    sidebar.style.display = 'none';
+    });
+    
   </script>
 
 </body>

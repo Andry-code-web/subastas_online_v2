@@ -161,10 +161,55 @@ a {
     font-weight: 400;
     cursor: pointer;
 }
-  
+
 .regresar span a{
     border: none;
     font-weight: 500;
     color: #d10000;
     text-decoration: underline;
+}
+.close-sidebar {
+    position: absolute;
+    top: 10px; /* Ajusta la posición según sea necesario */
+    right: 10px;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  .sidebar {
+    /* Estilos para la barra lateral */
+    width: 250px; /* Ajusta el ancho según sea necesario */
+    background-color: rgb(209, 116, 53);
+    /* Otros estilos */
+  }
+  
+  .sidebar-content {
+    /* Estilos para el contenido principal de la barra lateral */
+    height: calc(100% - 40px); /* Ajusta la altura según el tamaño del botón de cerrar */
+  }
+  
+  .close-sidebar {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    /* Otros estilos */
+  }
+
+  /* Para ocultar la parte inferior de la barra lateral al hacer clic en la "X" */
+  .sidebar.hidden .sidebar-content {
+    display: none;
+    }
+/*responsivo*/
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+    .sidebar {
+        display: none;
+        }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) and (max-width: 1440px) {
+    .sidebar {
+        display: none;
+        }
 }
