@@ -93,7 +93,6 @@ DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
 
-
 -- -----------------------------------------------------
 -- Table `subastaonline`.`ofertas`
 -- -----------------------------------------------------
@@ -387,3 +386,39 @@ COLLATE = utf8mb4_0900_ai_ci;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+--  ---------------------------------------------
+--  Modificacion dia 21-10-2024 añadimos datos en la tabla
+-- ----------------------------------------------
+
+SELECT * FROM SubastaSurPeru.ofertas;
+/* 
+actualizacion dia 21/10/2024
+*/
+ALTER TABLE SubastaSurPeru.ofertas
+ADD COLUMN usuario VARCHAR(255),
+ADD COLUMN cantidad INT,
+ADD COLUMN fecha DATETIME,
+ADD COLUMN valor_oferta DECIMAL(10, 2);
+/* 
+añadimos tablas
+*/
+ALTER TABLE SubastaSurPeru.ofertas
+DROP COLUMN cantidad,
+DROP COLUMN valor_oferta;
+/* 
+actualizamos la columna de usuario
+*/
+ALTER TABLE SubastaSurPeru.ofertas
+CHANGE COLUMN usuario usuario_oferta VARCHAR(255);
+/* 
+actualizamos la columna fecha
+*/
+alter table SubastaSurPeru.oferta
+change column fecha fecha_oferta varchar(255);
+/* 
+eliminamos la columna sobrante
+*/
+ALTER TABLE SubastaSurPeru.ofertas
+DROP COLUMN fecha;

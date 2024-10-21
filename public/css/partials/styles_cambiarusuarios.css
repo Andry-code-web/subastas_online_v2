@@ -1,0 +1,139 @@
+@import url("https://fonts.googleapis.com/css2?family=BioRhyme:wght@200..800&family=Sedan:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Modern+Antiqua&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Scope+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Heebo:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Heebo:wght@100..900&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+:root {
+    --font--banner--semi: "Heebo", sans-serif;
+    --font--banner--bool: "Kanit", sans-serif;
+    --font--parrafo: "Space Mono", monospace;
+    --font--header: "Sedan", serif;
+    --font--testimoni: "Modern Antiqua", serif;
+    --font--about: "BioRhyme", serif;
+    --font--cont: "Scope One", serif;
+    --color--label: #989898;
+    --color--activo--nav: #c72c3b;
+    /* Color rojo activo */
+    --color--inactivo--nav: #b62a46;
+    /* Color rojo inactivo */
+}
+
+body {
+    background-color: #f5f9fc;
+    font-family: var(--font--parrafo);
+}
+
+.form-container {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar {
+    background-color: var(--color--inactivo--nav);
+    /* Color de fondo de la barra lateral */
+    padding: 20px;
+    border-radius: 8px;
+    margin-right: 20px;
+    color: white;
+}
+
+.form-title {
+    font-weight: bold;
+    margin-bottom: 20px;
+    font-family: var(--font--header);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.btn-primary {
+    background-color: #c72c3b;
+    /* Botón rojo */
+    border-color: #b62a46;
+    /* Borde de botón */
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #b62a46;
+    /* Color de fondo al pasar el ratón */
+}
+
+.requirements {
+    font-size: 0.9rem;
+    color: #67727e;
+}
+
+.requirements ul {
+    padding-left: 20px;
+}
+
+.requirements li {
+    margin-bottom: 5px;
+}
+
+.active {
+    background-color: var(--color--inactivo--nav);
+    /* Color de fondo para el cuadro activo */
+    border: 1px solid #c72c3b;
+    /* Borde rojo para el cuadro activo */
+}
+
+.hidden {
+    display: none;
+}
+
+/* From Uiverse.io by adamgiebl */
+button {
+    align-items: center;
+    background-image: linear-gradient(144deg, #FF9A76, #FF6363 50%, #FF1E62);
+    border: 0;
+    border-radius: 8px;
+    box-shadow: rgba(255, 154, 118, 0.2) 0 15px 30px -5px;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    display: flex;
+    font-family: Phantomsans, sans-serif;
+    font-size: 18px;
+    justify-content: center;
+    line-height: 1em;
+    max-width: 100%;
+    min-width: 140px;
+    padding: 3px;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all .3s;
+}
+
+button:active,
+button:hover {
+    outline: 0;
+}
+
+button span {
+    background-color: rgb(5, 6, 45);
+    padding: 16px 24px;
+    border-radius: 6px;
+    width: 100%;
+    height: 100%;
+    transition: 300ms;
+}
+
+button:hover span {
+    background: none;
+}
+
+button:active {
+    transform: scale(0.9);
+}
+

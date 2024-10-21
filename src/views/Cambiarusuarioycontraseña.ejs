@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Cambio de Contraseña</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles_cambiarusuarios.css">
+
+</head>
+
+<body>
+
+    <div class="container form-container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="sidebar">
+                    <h5>Perfil del Usuario</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white" onclick="showSection('userInfo')"><i class="fas fa-user"></i>
+                                Información de usuario</a></li>
+                        <li class="mt-3"><a href="#" class="text-white rounded d-block"
+                                onclick="showSection('changePassword')"><i class="fas fa-lock"></i> Contraseña</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <!-- Sección de información del usuario -->
+                <div id="userInfo" class="hidden">
+                    <div class="form-title active text-white">
+                        <h4 class="form-title">Información del Usuario</h4>
+                    </div>
+                    <form>
+                        <div class="form-group">
+                            <label for="username">Nombre de usuario</label>
+                            <input type="text" class="form-control" id="username" value="Jesús Dorian Ururi Andia"
+                                readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Correo electrónico</label>
+                            <input type="email" class="form-control" id="email" value="ururiandia@gmail.com" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Teléfono</label>
+                            <input type="text" class="form-control" id="phone" value="999019097" readonly>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Sección de cambio de contraseña -->
+                <div id="changePassword">
+                    <div class="form-title">
+                        <h4 class="form-title">Cambia tu contraseña</h4>
+                    </div>
+                    <form id="passwordChangeForm">
+                        <div class="form-group">
+                            <label for="currentPassword">Contraseña anterior</label>
+                            <input type="password" class="form-control" id="currentPassword" required
+                                placeholder="********">
+                        </div>
+                        <div class="form-group">
+                            <label for="newPassword">Nueva contraseña</label>
+                            <input type="password" class="form-control" id="newPassword" required
+                                placeholder="********">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirmar nueva contraseña</label>
+                            <input type="password" class="form-control" id="confirmPassword" required
+                                placeholder="********">
+                        </div>
+                        <button>
+                            <span class="text">Enviar</span>
+                        </button>
+                    </form>
+
+                    <div class="requirements mt-4">
+                        <h5>Requisitos de contraseña:</h5>
+                        <ul>
+                            <li>Mínimo 8 caracteres: cuantos más, mejor</li>
+                            <li>Al menos un carácter en minúscula</li>
+                            <li>Al menos un carácter en mayúscula</li>
+                            <li>Al menos un número, símbolo o carácter de espacio en blanco</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script>
+        document.getElementById('passwordChangeForm').addEventListener('submit', function (event) {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (newPassword !== confirmPassword) {
+                event.preventDefault();
+                alert('Las contraseñas no coinciden. Por favor, inténtalo de nuevo.');
+            }
+        });
+
+        function showSection(sectionId) {
+            // Oculta todas las secciones
+            document.getElementById('userInfo').classList.add('hidden');
+            document.getElementById('changePassword').classList.add('hidden');
+
+            // Elimina la clase activa de ambos títulos
+            document.querySelectorAll('.form-title').forEach(title => title.classList.remove('active'));
+
+            // Muestra la sección seleccionada
+            if (sectionId === 'userInfo') {
+                document.getElementById('userInfo').classList.remove('hidden');
+                document.querySelector('.form-title').classList.add('active');
+            } else {
+                document.getElementById('changePassword').classList.remove('hidden');
+                document.querySelectorAll('.form-title')[1].classList.add('active');
+            }
+        }
+
+        // Mostrar sección de cambio de contraseña por defecto
+        showSection('changePassword');
+    </script>
+</body>
+
+</html>
