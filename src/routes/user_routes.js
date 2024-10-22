@@ -860,10 +860,32 @@ router.get('/condicionesYterminos', (req, res) => {
 });
 
 //buscador
-router.get('/navegador',function (req, res) {
-    res.render('busqueda', {
-      usuario: req.session.usuario
-    });
+router.get('/navegador', function (req, res) {
+  res.render('busqueda', {
+    usuario: req.session.usuario
   });
+});
+
+
+
+
+
+// Actualiza los datos en la base de datos
+router.put('/actualizar-datos', (req, res) => {
+  const { email, confirmacion_email, celular, usuario } = req.body;
+  const userId = req.session.userId; // Asegúrate de que userId esté disponible en la sesión
+
+  const query = 'UPDATE usuarios SET email = ?, confirmacion_email = ?, celular = ?, usuario = ? WHERE id = ?';
+  conection.query(query, [email, confirmacion_email, celular, usuario, userId], (error, results) => {
+    if (error) {
+      console.error('Error al actualizar los datos:', error);
+      return res.status(500).json({ success: false, message: 'Error en la base de datos.' });
+    }
+
+    return res.json({ success: true, message: 'Datos actualizados correctamente.' });
+  });
+});
+
+
 
 module.exports = router;
