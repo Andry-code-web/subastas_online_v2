@@ -41,6 +41,10 @@
       cursor: not-allowed;
     }
 
+    #participar_puja:disabled {
+      background-color: #d30000;
+      color: white;
+    }
 
 
     /* Estilos del modal */
@@ -348,41 +352,41 @@
       const sendButton = document.getElementById('sendButton');
       const sendCustomBidButton = document.getElementById('sendCustomBidButton');
       const countdownElement = document.getElementById('countdown');
-    
+
       let currentBid = parseInt('<%= subasta.precio_base %>');
       let minBid = currentBid;
       let username;
       let auctionInProgress = false;
       let auctionEnded = false;
       let countdownInterval;
-    
+
       const auctionRoom = '<%= subasta.id %>';
       socket.emit('joinRoom', auctionRoom);
-    
+
       function startAuction() {
         Swal.fire({
           title: '¡Subasta Activa!',
           text: 'La subasta se activará cuando se realice la primera puja',
           icon: 'success',
         });
-    
+
         messageInput.value = formatNumber(currentBid + 100);
-    
+
         function startCountdown() {
           if (auctionEnded) return;
-    
+
           let timeLeft = 180; // 3 minutos en segundos
           auctionInProgress = true;
-    
+
           if (countdownInterval) {
             clearInterval(countdownInterval);
           }
-    
+
           countdownInterval = setInterval(() => {
             const minutes = Math.floor(timeLeft / 60);
             const seconds = timeLeft % 60;
             countdownElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    
+
             if (timeLeft <= 0) {
               clearInterval(countdownInterval);
               if (auctionInProgress) {
@@ -398,19 +402,19 @@
             timeLeft--;
           }, 1000);
         }
-    
+
         function resetCountdown() {
           if (countdownInterval) {
             clearInterval(countdownInterval);
           }
           startCountdown();
         }
-    
+
         sendButton.addEventListener('click', function() {
           if (auctionEnded) return;
-    
+
           let bidValue = parseInt(messageInput.value.replace(/,/g, ''));
-    
+
           if (bidValue < minBid) {
             Swal.fire({
               title: `La puja debe ser al menos $${formatNumber(minBid)}.`,
@@ -418,7 +422,7 @@
             });
             return;
           }
-    
+
           socket.emit('bid', {
             user: username || '<%= usuario ? usuario.nombre : "Invitado" %>',
             bid: bidValue,
@@ -426,12 +430,12 @@
           });
           resetCountdown();
         });
-    
+
         sendCustomBidButton.addEventListener('click', function() {
           if (auctionEnded) return;
-    
+
           let customBidValue = parseInt(customBidInput.value.replace(/,/g, ''));
-    
+
           if (isNaN(customBidValue) || customBidInput.value.trim() === '') {
             Swal.fire({
               title: 'Debes ingresar un monto.',
@@ -439,7 +443,7 @@
             });
             return;
           }
-    
+
           if (customBidValue < minBid) {
             Swal.fire({
               title: `La puja debe ser al menos $${formatNumber(minBid)}.`,
@@ -447,45 +451,45 @@
             });
             return;
           }
-    
+
           socket.emit('bid', {
             user: username || '<%= usuario ? usuario.nombre : "Invitado" %>',
             bid: customBidValue,
             room: auctionRoom
           });
-    
+
           customBidInput.value = '';
           resetCountdown();
         });
-    
+
         socket.on('setUsername', function(newUsername) {
           username = newUsername;
         });
-    
+
         socket.on('newBid', function(data) {
           if (auctionEnded) return;
-    
+
           currentBid = parseInt(data.bid);
           minBid = currentBid;
-    
+
           const user = username || data.user;
           const bid = data.bid;
-    
+
           const message = `<i class="fa-solid fa-share" style="color: #ffffff; margin-right: .5rem; font-size: .9rem;"></i>  <b>${user}:</b> $${formatNumber(bid)}`;
           const li = document.createElement('li');
           li.innerHTML = message;
           messages.appendChild(li);
-    
+
           messages.scrollTop = messages.scrollHeight;
-    
+
           messageInput.value = formatNumber(bid + 100);
           resetCountdown();
         });
-    
+
         socket.on('endAuction', function() {
           auctionEnded = true;
           auctionInProgress = false;
-    
+
           Swal.fire({
             title: '¡Subasta finalizada!',
             text: 'La subasta ya tiene un ganador',
@@ -497,10 +501,10 @@
               window.location.href = '/catalogo';
             }
           });
-    
+
           disableButtons();
         });
-    
+
         socket.on('announceWinner', function(data) {
           Swal.fire({
             title: `Felicidades ${data.winner}`,
@@ -514,7 +518,7 @@
             }
           });
         });
-    
+
         function disableButtons() {
           sendButton.disabled = true;
           sendCustomBidButton.disabled = true;
@@ -522,15 +526,15 @@
           customBidInput.disabled = true;
         }
       }
-    
+
       function formatNumber(num) {
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       }
-    
+
       startAuction();
     });
-    </script>
-  
+  </script>
+
 
 
 
@@ -713,6 +717,7 @@
                 Swal.fire("Puedes ingresar a la subasta");
                 chat.classList.add('active');
                 cardBody.classList.add('active');
+                cardBody.removeAttribute('style');
               } else {
                 Swal.fire({
                   title: "No tienes intentos disponibles",
@@ -850,11 +855,28 @@
     btn_pedir_oportunidades.addEventListener('click', () => {
       event.preventDefault();
       console.log("se realizo click");
-      
+
       Swal.fire({
         title: "Para participar en hasta 3 subastas, es necesario depositar $500.",
         icon: "question"
       });
+    });
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const subastaComenzada = <%= estaEnCurso ? 'true' : 'false' %>; // Variable desde EJS
+      const cardBody = document.getElementById('body_card');
+      const cardBodyPuja = document.getElementById('body_card_puja');
+
+      // Mostrar o ocultar dependiendo del estado de la subasta
+      if (subastaComenzada) {
+        cardBody.style.display = 'block';
+        cardBodyPuja.style.display = 'none';
+      } else {
+        cardBody.style.display = 'none';
+        cardBodyPuja.style.display = 'block';
+      }
     });
   </script>
 </body>

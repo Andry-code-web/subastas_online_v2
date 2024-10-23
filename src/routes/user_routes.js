@@ -938,4 +938,50 @@ router.get('/chat', (req, res) => {
 
 
 
+router.get('/editar_user/:id', (req, res) => {
+  const userId = req.params.id;
+
+  const query = 'SELECT * FROM usuarios WHERE id = ?';
+  conection.query(query, [userId], (error, result) => {
+    if (error) {
+      console.error("Error al obtener el usuario para editar: ", error);
+      return res.status(500).send("Error el usuario para editar");
+    }
+
+    if (result.length === 0) {
+      return res.status(404).send("Usuario no encontrado");
+    }
+
+    const usuario = result[0];
+    res.render('editar_user', { usuario });
+  });
+})
+
+router.post('/editar_user/:id', (req, res) => {
+  const userId = req.params.id;
+  const { email, confirmacion_email, celular, usuario } = req.body;
+
+  const query = 'UPDATE usuarios SET email = ?, confirmacion_email = ?, celular = ?, usuario = ? WHERE id = ?';
+  conection.query(query, [email, confirmacion_email, celular, usuario, userId], (error, results) => {
+    if (error) {
+      console.error('Error al actualizar los datos:', error);
+      return res.status(500).json({ success: false, message: 'Error en la base de datos.' });
+    }
+
+    // Aquí puedes buscar los datos del usuario actualizado para pasarlos a la vista
+    const userQuery = 'SELECT * FROM usuarios WHERE id = ?';
+    conection.query(userQuery, [userId], (err, userResults) => {
+      if (err) {
+        console.error('Error al obtener los datos del usuario:', err);
+        return res.status(500).json({ success: false, message: 'Error en la base de datos.' });
+      }
+
+      const usuario = userResults[0]; // Suponiendo que solo hay un usuario con ese ID
+      res.redirect('/login');
+    });
+  });
+});
+
+
+
 module.exports = router;
