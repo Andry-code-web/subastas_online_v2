@@ -1,8 +1,50 @@
-<table class="table">
-    <thead class="table-light">
-      ...
+<h2> OFERTAS</h2>
+
+<table class="tabla_principal">
+    <thead class="tabla_letras">
+        <tr>
+            <th>USUARIO</th>
+            <th>UBICACION DEL VEHICULO</th>
+            <th>FECHA DE LA SUBASTA</th>
+            <th>VALOR DE LA OFERTA</th>
+        </tr>
     </thead>
-    <tbody>
-      ...
+    <tbody class="tabla_borde">
+        <tr>
+            <td><%= oferta.usuario %><br></td>
+            <td><% oferta.ubicacion %></td>
+            <td><% oferta.fecha %></td>
+            <td><% oferta.valor %></td>
+            <!--  <td data-label="USUARIO">  <br></td>
+            <td data-label="FECHA DE LA SUBASTA">19/10/2024<br>10:34:26 GMT -05:00</td>
+            <td data-label="VALOR DE LA OFERTA">4,500.00 $</td> -->
+        </tr>
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-between align-items-center">
+<h2>OFERTAS CONSOLIDADAS</h2>
+<p class="offer-summary"><strong>TOTAL: 0 COMPRADOR(ES)</strong></p>
+</div>
+
+<table class="tabla_principal">
+    <thead class="tabla_letras">
+        <tr>
+            <th>USUARIO</th>
+            <th>UBICACION DEL VEHICULO</th>
+            <th>CANTIDAD DE OFERTAS</th>
+            <th>VALOR DE LA OFERTA</th>
+        </tr>
+    </thead>
+    <tbody class="tabla_borde">
+        <tr>
+            <td><% oferta.usuario %></td>
+            <td><% oferta.ubicacion %></td>
+            <td><% oferta.fecha %></td> 
+            <td><% oferta.valor %></td>
+            <!-- <td data-label="USUARIO">c*****ue<br></td>
+            <td data-label="CANTIDAD DE OFERTAS">1</td>
+            <td data-label="VALOR DE LA OFERTA">4,500.00 $</td> -->
+        </tr>
     </tbody>
   </table>

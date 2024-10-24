@@ -19,11 +19,11 @@
   --color--sub: #d30000;
 }
 
-.contenedor_superior_subastas{
+.contenedor_superior_subastas {
   width: 100%;
 }
 
-.title_veiculo{
+.title_veiculo {
   width: 100%;
   text-align: center;
   font-size: 1.6rem;
@@ -34,7 +34,7 @@
   color: #494949;
 }
 
-.sub_title_apertura{
+.sub_title_apertura {
   margin-bottom: .4rem;
   padding: 0;
   font-size: .9rem;
@@ -52,9 +52,12 @@
 }
 
 .property-detail {
-  width: 35%;
+  width: 41%;
+  height: auto;
   background-color: #f0f0f0;
   padding: 1rem;
+  flex-direction: 2rem;
+  overflow-y: auto;
 }
 
 .scroll-1::-webkit-scrollbar {
@@ -79,7 +82,8 @@
   border-radius: 5px;
 }
 
-.imgen_principal, .img_principal {
+.imgen_principal,
+.img_principal {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -215,33 +219,37 @@
   text-align: end;
 }
 
-.descripcion span:last-child{
+.descripcion span:last-child {
   width: 65%;
   font-size: .9rem;
   text-align: justify;
 }
 
 .descripcion-text {
-  white-space: pre-line; /* Esto preserva los saltos de línea */
-  width: 65%; /* Mantiene el mismo ancho que antes */
-  font-size: .9rem; /* Ajusta el tamaño de fuente */
-  text-align: justify; /* Alinea el texto a la izquierda */
+  white-space: pre-line;
+  /* Esto preserva los saltos de línea */
+  width: 65%;
+  /* Mantiene el mismo ancho que antes */
+  font-size: .9rem;
+  /* Ajusta el tamaño de fuente */
+  text-align: justify;
+  /* Alinea el texto a la izquierda */
 }
 
-.info_apertura_redes{
+.info_apertura_redes {
   width: 100%;
   height: auto;
   margin-top: 1rem;
   margin-left: 1rem;
 }
 
-.redes_apertura{
+.redes_apertura {
   width: 50%;
   height: auto;
   gap: .5rem;
 }
 
-.redes_apertura div{
+.redes_apertura div {
   width: 40px;
   height: 40px;
   display: flex;
@@ -249,19 +257,19 @@
   align-items: center;
 }
 
-.redes_apertura .face{
+.redes_apertura .face {
   background-color: #3C5A99;
 }
 
-.redes_apertura .tik{
+.redes_apertura .tik {
   background-color: #000000;
 }
 
-.redes_apertura .youtu{
+.redes_apertura .youtu {
   background-color: #993c3c;
 }
 
-.redes_apertura .whats{
+.redes_apertura .whats {
   background-color: #25D366;
 }
 
@@ -269,13 +277,13 @@
 .redes_apertura .face i,
 .redes_apertura .tik i,
 .redes_apertura .youtu i,
-.redes_apertura .whats i{
+.redes_apertura .whats i {
   font-size: 1.2rem;
   color: #ffff;
 }
 
 
-.info_apertura{
+.info_apertura {
   width: 100%;
   height: auto;
   margin-top: 2.5rem;
@@ -283,39 +291,39 @@
   margin-left: .5rem;
 }
 
-.info_apertura h4{
+.info_apertura h4 {
   font-size: 1.2rem;
   font-family: var(--font--banner--bool);
   font-weight: 600;
 }
 
-.info_apertura p:first-child{
+.info_apertura p:first-child {
   margin: 0;
   padding: 0;
 }
 
-.info_apertura p span:first-child{
+.info_apertura p span:first-child {
   font-size: 1.05srem;
   font-family: var(--font--banner--bool);
   font-weight: 700;
 }
 
-.precio_apertura{
+.precio_apertura {
   margin-bottom: 1rem;
 }
 
-.precio_con_incremento span:first-child{
+.precio_con_incremento span:first-child {
   font-size: 1.2rem;
   font-family: var(--font--banner--bool);
 }
 
-.precio_con_incremento span:last-child{
+.precio_con_incremento span:last-child {
   font-size: 1.4rem;
   font-family: var(--font--banner--bool);
   color: #00722a;
 }
 
-.info_apertura p span:last-child{
+.info_apertura p span:last-child {
   font-size: 1.1rem;
 }
 
@@ -353,14 +361,14 @@
 .grid_info_card .div1 p,
 .grid_info_card .div2 p,
 .grid_info_card .div3 p,
-.grid_info_card .div4 p{
+.grid_info_card .div4 p {
   font-size: .7rem;
   color: #fff;
   font-family: var(--font--banner--bool);
   margin: 0;
   padding: 0;
 }
-      
+
 
 /* CHAT */
 
@@ -369,8 +377,12 @@
   border-radius: 0.5rem;
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
   width: 350px;
-  height: 560px;
+  height: 600px;
   font-family: Arial, sans-serif;
+  position: sticky;
+  top: 140px;
+  padding: 20px;
+  z-index: 1;
 }
 
 .card-header {
@@ -391,13 +403,13 @@
 
 }
 
-.analisis{
+.analisis {
   gap: 3rem;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
 }
 
-.analisis p{
+.analisis p {
   width: 100%;
   margin: 0;
   padding: 0;
@@ -467,13 +479,13 @@
   margin: 1rem 0;
 }
 
-.incremento_precio{
+.incremento_precio {
   font-size: .8rem;
   font-family: var(--font--banner--bool);
   margin-bottom: 2rem;
 }
 
-.incremento_precio span{
+.incremento_precio span {
   font-weight: 700;
   color: #00521e;
 }
@@ -503,7 +515,7 @@
   font-family: var(--font--banner--semi);
 }
 
-.mensaje li{
+.mensaje li {
   list-style: none;
 }
 
@@ -590,24 +602,24 @@
   /* Asegurar que las partículas estén detrás de la alerta */
 }
 
-.bg-btn-alert2{
+.bg-btn-alert2 {
   background-color: #BD0000;
 }
 
-.bg-btn-alert2:focus-visible{
+.bg-btn-alert2:focus-visible {
   box-shadow: none;
 }
 
-.contet_pdf{
+.contet_pdf {
   transition: ease-in .2s;
   cursor: pointer;
 }
 
-.contet_pdf:hover{
+.contet_pdf:hover {
   background-color: #ccc;
 }
 
-.archivo_pdf{
+.archivo_pdf {
   width: 100%;
   height: auto;
   font-size: .9rem;
@@ -617,7 +629,7 @@
   transition: ease-in .1s;
 }
 
-.archivo_pdf i{
+.archivo_pdf i {
   font-size: 1.5rem !important;
   color: #990000 !important;
 }
@@ -626,29 +638,46 @@
   text-decoration: underline;
 }
 
-.contenedor_ofertas {
-  width: 60%;
-  height: auto;
-  margin: auto;
-}
-
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
-  .detalles_subasta{
+  .detalles_subasta {
     flex-direction: column-reverse;
     align-items: center;
   }
 
-  .property-detail{
+  .property-detail {
     width: 95%;
   }
 
-  .imgen_principal{
+  .imgen_principal {
     height: 25vh;
   }
 
-  .img_wrapper{
+  .img_wrapper {
     width: 170px;
+  }
+}
+
+/* Small devices (small cell phones, 360px and up) */
+@media only screen and (min-width: 360px) and (max-width: 740px) {
+  .card {
+    position: relative;
+    top: 5px;
+  }
+  .title_veiculo {
+    margin-top: 4rem;
+  }
+}
+
+/* Small devices (small cell phones, 412px and up) */
+@media only screen and (min-width: 412px) and (max-width: 915px) {
+  .card {
+    position: relative;
+    top: 10px;
+  }
+
+  .title_veiculo {
+    margin-top: 5rem;
   }
 }
 
@@ -657,42 +686,48 @@
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) and (max-width: 992px) {
-  .detalles_subasta{
+  .detalles_subasta {
     flex-direction: column-reverse;
     align-items: center;
   }
 
-  .property-detail{
+  .property-detail {
     width: 80%;
+  }
+
+  .card {
+    position: relative;
+    top: 20px;
   }
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
-  .detalles_subasta{
+  .detalles_subasta {
     margin-top: 4rem;
   }
 
-  .property-detail{
+  .property-detail {
     width: 50%;
   }
 
-  .card{
+  .card {
     width: 300px;
+    position: sticky;
   }
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) and (max-width: 1440px) {
-  .detalles_subasta{
+  .detalles_subasta {
     margin-top: 5rem;
   }
 
-  .property-detail{
+  .property-detail {
     width: 50%;
   }
 
-  .card{
+  .card {
     margin-top: 1rem;
   }
 }

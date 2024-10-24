@@ -16,13 +16,14 @@
   <link rel="stylesheet" href="/css/partials/styles_header.css">
   <link rel="stylesheet" href="/css/partials/styles_footer.css">
   <link rel="stylesheet" href="/css/partials/styles_whatsapp_flot.css">
-  <!-- <link rel="stylesheet" href="/css/partials/styles_tabla_Ofertas.css"> -->
+  <link rel="stylesheet" href="/css/partials/styles_tabla_Ofertas.css"> 
   <!-- ICONS -->
   <script src="https://kit.fontawesome.com/78137c0870.js" crossorigin="anonymous"></script>
   <title>Inmueble || subasta</title>
   <script src="/socket.io/socket.io.js"></script>
 
   <style>
+    
     .disabled-button {
       background-color: #ccc;
       /* Color de fondo gris */
@@ -98,9 +99,10 @@
     .next_button {
       right: 10px;
     }
+    
   </style>
 </head>
-
+ 
 <body>
   <%- include('partials/header') %>
 
@@ -405,11 +407,9 @@
               <p>Sin Comisión</p>
             </div>
           </div>
-
-
-
+        </div> 
         </div>
-
+        
         <!-- Chat de pujas -->
         <div id="chat" class="chat">
           <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
@@ -435,60 +435,14 @@
           </div>
         </div>
       </div>
-
-
-    </div>
+      
+      
+    </div> 
     <!--Componente de tabla ofertas -->
     <div class="contenedor_ofertas">
-      <h2> OFERTAS</h2>
-      <table class="table">
-        <thead class="table-light">
-          <tr>
-            <th>USUARIO</th>
-            <th>UBICACION DEL VEHICULO</th>
-            <th>FECHA DE LA SUBASTA</th>
-            <th>VALOR DE LA OFERTA</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><% oferta.usuario %></td>
-            <td><% oferta.ubicacion %></td>
-            <td><% oferta.fecha %></td>
-            <td><% oferta.valor %></td>
-            <!-- <td data-label="USUARIO">c*****ue<br></td>
-            <td data-label="CANTIDAD DE OFERTAS">1</td>
-            <td data-label="VALOR DE LA OFERTA">4,500.00 $</td> -->
-          </tr>
-        </tbody>
-      </table>
-
-      <h2>OFERTAS CONSOLIDADAS</h2>
-      <p class="offer-summary"><strong>TOTAL: 1 COMPRADOR(ES)</strong></p>
-      <table class="table">
-        <thead class="table-light">
-          <tr>
-            <th>USUARIO</th>
-            <th>UBICACION DEL VEHICULO</th>
-            <th>CANTIDAD DE OFERTAS</th>
-            <th>VALOR DE LA OFERTA</th>
-        </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><% oferta.usuario %></td>
-            <td><% oferta.ubicacion %></td>
-            <td><% oferta.fecha %></td>
-            <td><% oferta.valor %></td>
-            <!-- <td data-label="USUARIO">c*****ue<br></td>
-            <td data-label="CANTIDAD DE OFERTAS">1</td>
-            <td data-label="VALOR DE LA OFERTA">4,500.00 $</td> -->
-          </tr>
-        </tbody>
-      </table>
-    </div>
+      <%- include('partials/tabla_Ofertas') %>
+      </div>
   </div>
-
 
   <!-- WHATSAPP FLOTANTE -->
   <%- include('partials/whatsapp_flot') %>
@@ -504,7 +458,26 @@
   <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
   <!-- script moment fecha y hora -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  
 
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+  // ... (código original)
+
+  // Agregar un efecto de transición CSS a las imágenes (opcional)
+  const images = document.querySelectorAll('.galeria .imgs');
+  images.forEach(image => {
+    image.style.transition = 'transform 0.3s ease-in-out';
+  });
+
+  // Pausar la animación al hacer clic en una imagen (opcional)
+  imageCarousel.addEventListener('click', function() {
+    isScrolling = false;
+  });
+
+  // ... (resto del código)
+});
+  </script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const socket = io();
@@ -990,6 +963,7 @@
 
 
   <script>
+    
     const modal = document.getElementById('modal_slider');
     const modalImage = document.getElementById('modal_image');
     const closeModal = document.getElementById('close_modal');
