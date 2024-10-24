@@ -9,6 +9,8 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <link rel="stylesheet" href="/css/style_adminV.css">
+  <!-- ICONS -->
+  <script src="https://kit.fontawesome.com/78137c0870.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -76,7 +78,7 @@
       <!-- Gráficos y tablas -->
       <div class="row mb-4">
         <!-- Gráfico de visitantes y tarjeta de nuevas subastas -->
-        <div class="col-md-8">
+        <div class="">
           <div class="graph-card">
             <h5>Subastas</h5>
             <!-- Gráfico de subastas y ofertas -->
@@ -86,59 +88,75 @@
                 <table class="table-bordered" style="width: 100%; text-align: center;">
                   <thead style="font-weight: 600; font-size: .9rem;">
                     <tr>
-                      <td>Marca</td>
-                      <td>Modelo</td>
-                      <td>Descripción</td>
-                      <td>Categoría</td>
-                      <td>Año</td>
-                      <td>Precio Base</td>
-                      <td>Placa</td>
-                      <td>Tarjeta de Propiedad</td>
-                      <td>Llave</td>
-                      <td>Ubicación</td>
-                      <td>Estado</td>
-                      <td>Importante</td>
+                      <td class="marca">Marca</td>
+                      <td class="modelo">Modelo</td>
+                      <td class="descripción">Descripción</td>
+                      <td class="categoría">Categoría</td>
+                      <td class="año">Año</td>
+                      <td class="precio">Precio Base</td>
+                      <td class="placa">Placa</td>
+                      <td class="tarjeta">Tarjeta de Propiedad</td>
+
+                      <td class="hora_subasta">Hora subastas</td>
+                      <td class="fecha_subasta">Fecha subastas</td>
+                      <td class="importante">Ganadores</td>
+                      <td class="llave">Llave</td>
+                      <td class="activo">activo / finalizado</td>
                     </tr>
                   </thead>
                   <tbody style="font-size: .9rem;">
                     <% subastas.forEach(subasta=> { %>
                     <tr>
-                      <td>
+                      <td class="marca">
                         <%= subasta.marca %>
                       </td>
-                      <td>
+                      <td class="modelo">
                         <%= subasta.modelo %>
                       </td>
-                      <td class="descripcion-corta">
+                      <td class="descripcion-corta descripción">
                         <%= subasta.descripcion %>
                       </td>
-                      <td>
+                      <td class="categoría">
                         <%= subasta.categoria %>
                       </td>
-                      <td>
+                      <td class="año">
                         <%= subasta.anio %>
                       </td>
-                      <td>
+                      <td class="precio">
                         $<%= subasta.precio_base %>
                       </td>
-                      <td>
+                      <td class="placa">
                         <%= subasta.placa %>
                       </td>
-                      <td>
+                      <td class="tarjeta">
                         <%= subasta.tarjeta_propiedad %>
                       </td>
-                      <td>
-                        <%= subasta.llave %>
+
+                      <td class="hora_subasta">
+                        <%= subasta.hora_subasta %>
                       </td>
-                      <td>
-                        <%= subasta.ubicacion %>
+                      <td class="fecha_subasta">
+                        <%= subasta.fecha_formateada %>
                       </td>
-                      <td>
-                        <%= subasta.estado %>
+
+                      <td class="truncate importante">
+                        <%= subasta.currentWinner %>
                       </td>
-                      <td class="truncate">
-                        <%= subasta.importante %>
+
+                      <% if (subasta.act_fina == "activa") { %>
+                      <td class="llave_activa">
+                        activa
                       </td>
+                      <% } else { %>
+                      <td class="llave_finalizada">
+                        finalizada
+                      </td>
+                      <% } %>
+                      <td class="btn_activas_finalidas">
+                        <button class="btn-activar acti" id="btn_activar" data-id="<%= subasta.id %>">Activar</button>
+                        <button class="btn-finalizar fina" id="btn_finalizar" data-id="<%= subasta.id %>">Finalizar</button>
+                      </td>
+
                     </tr>
                     <% }); %>
                   </tbody>
@@ -149,7 +167,8 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4">
+
+        <div class="col-md-6 mt-5 tarjeta_suvir_vehiculo">
           <!-- Formulario para crear nueva subasta -->
           <div class="card">
             <form action="/admin/subir-vehiculo" method="POST" enctype="multipart/form-data">
@@ -253,7 +272,6 @@
                   </div>
                 </div>
             </form>
-
           </div>
         </div>
       </div>
@@ -325,6 +343,72 @@
     });
   </script>
 
+  <script>
+    document.querySelectorAll('.btn-activar').forEach(button => {
+      button.addEventListener('click', function() {
+        const subastaId = this.getAttribute('data-id');
+        fetch(`/admin/subasta/activar/${subastaId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              // Notificar al usuario usando SweetAlert2
+              Swal.fire({
+                title: "Subasta activa con éxito",
+                text: "La subasta se activó",
+                icon: 'success'
+              }).then(() => {
+                location.reload(); // Recargar la página después de que el usuario haga clic en "OK"
+              });
+            } else {
+              Swal.fire({
+                title: "Error",
+                text: "Error al activar la subasta",
+                icon: 'error'
+              });
+            }
+
+          })
+          .catch(error => console.error('Error:', error));
+      });
+    });
+
+    document.querySelectorAll('.btn-finalizar').forEach(button => {
+      button.addEventListener('click', function() {
+        const subastaId = this.getAttribute('data-id');
+        fetch(`/admin/subasta/finalizar/${subastaId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              // Notificar al usuario usando SweetAlert2
+              Swal.fire({
+                title: "Subasta finalizada con éxito",
+                text: "La subasta se finalizo",
+                icon: 'success'
+              }).then(() => {
+                location.reload(); // Recargar la página después de que el usuario haga clic en "OK"
+              });
+            } else {
+              Swal.fire({
+                title: "Error",
+                text: "Error al finalizar la subasta",
+                icon: 'error'
+              });
+            }
+          })
+          .catch(error => console.error('Error:', error));
+      });
+    });
+  </script>
 </body>
 
 </html>
