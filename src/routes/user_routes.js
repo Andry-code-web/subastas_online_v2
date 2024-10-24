@@ -851,7 +851,7 @@ router.get('/politicasDEprivacidad', (req, res) => {
     usuario: req.session.usuario
   })
 });
-
+0
 //condicionesYterminos
 router.get('/condicionesYterminos', (req, res) => {
   res.render('terminos_condiciones', {
@@ -864,5 +864,51 @@ router.get('/condicionesYterminos', (req, res) => {
 router.get('/chat', (req, res) => {
   res.render('chat');
 });
+
+//chat prueva editaruser
+router.get('/editar_user/:id', (req, res) => {
+  const userId = req.session.userId; 
+  res.render('edituser');
+});
+
+
+//metodo post
+router.post('/editar_user/:id', (req, res) => {
+  const { email, confirmacion_email, celular, usuario } = req.body;
+  const userId = req.session.userId; // Asegúrate de que userId esté disponible en la sesión
+
+  const query = 'UPDATE usuarios SET email = ?, confirmacion_email = ?, celular = ?, usuario = ? WHERE id = ?';
+  conection.query(query, [email, confirmacion_email, celular, usuario, userId], (error, results) => {
+    if (error) {
+      console.error('Error al actualizar los datos:', error);
+      return res.status(500).json({ success: false, message: 'Error en la base de datos.' });
+    }
+
+    // Aquí puedes buscar los datos del usuario actualizado para pasarlos a la vista
+    const userQuery = 'SELECT * FROM usuarios WHERE id = ?';
+    conection.query(userQuery, [userId], (err, userResults) => {
+      if (err) {
+        console.error('Error al obtener los datos del usuario:', err);
+        return res.status(500).json({ success: false, message: 'Error en la base de datos.' });
+      }
+
+      const usuario = userResults[0]; // Suponiendo que solo hay un usuario con ese ID
+      res.redirect('/', { usuario: req.session.usuario, message: 'Datos actualizados correctamente.' });
+    });
+  });
+});
+
+//Cambiamos de usuario
+router.post('/editar_user', (req, res) => {
+  res.render('home');
+});
+
+//cambia contraseña
+
+router.post('/editar_psswd', (req, res) => {
+  res.render('login');
+});
+
+
 
 module.exports = router;

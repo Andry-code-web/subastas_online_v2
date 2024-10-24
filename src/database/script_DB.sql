@@ -96,6 +96,7 @@ CREATE TABLE `ofertas` (
   `id_subasta` int NOT NULL,
   `monto_oferta` decimal(10,2) NOT NULL,
   `fecha_oferta` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+  `usuario_oferta`varchar(255);
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------

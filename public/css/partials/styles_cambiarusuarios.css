@@ -14,9 +14,7 @@
     --font--cont: "Scope One", serif;
     --color--label: #989898;
     --color--activo--nav: #c72c3b;
-    /* Color rojo activo */
     --color--inactivo--nav: #b62a46;
-    /* Color rojo inactivo */
 }
 
 body {
@@ -35,7 +33,6 @@ body {
 
 .sidebar {
     background-color: var(--color--inactivo--nav);
-    /* Color de fondo de la barra lateral */
     padding: 20px;
     border-radius: 8px;
     margin-right: 20px;
@@ -54,15 +51,12 @@ body {
 
 .btn-primary {
     background-color: #c72c3b;
-    /* Botón rojo */
     border-color: #b62a46;
-    /* Borde de botón */
     color: white;
 }
 
 .btn-primary:hover {
     background-color: #b62a46;
-    /* Color de fondo al pasar el ratón */
 }
 
 .requirements {
@@ -80,60 +74,37 @@ body {
 
 .active {
     background-color: var(--color--inactivo--nav);
-    /* Color de fondo para el cuadro activo */
     border: 1px solid #c72c3b;
-    /* Borde rojo para el cuadro activo */
 }
 
 .hidden {
     display: none;
 }
-
-/* From Uiverse.io by adamgiebl */
+/* UI VERSE*/ 
 button {
-    align-items: center;
-    background-image: linear-gradient(144deg, #FF9A76, #FF6363 50%, #FF1E62);
-    border: 0;
-    border-radius: 8px;
-    box-shadow: rgba(255, 154, 118, 0.2) 0 15px 30px -5px;
-    box-sizing: border-box;
-    color: #FFFFFF;
-    display: flex;
-    font-family: Phantomsans, sans-serif;
-    font-size: 18px;
-    justify-content: center;
-    line-height: 1em;
-    max-width: 100%;
-    min-width: 140px;
-    padding: 3px;
-    text-decoration: none;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    white-space: nowrap;
-    cursor: pointer;
-    transition: all .3s;
-}
-
-button:active,
-button:hover {
-    outline: 0;
-}
-
-button span {
-    background-color: rgb(5, 6, 45);
-    padding: 16px 24px;
-    border-radius: 6px;
-    width: 100%;
-    height: 100%;
-    transition: 300ms;
-}
-
-button:hover span {
-    background: none;
-}
-
-button:active {
-    transform: scale(0.9);
-}
-
+    --bg: #d60d0d;
+    --text-color: #fff;
+    position: relative;
+    width: 100px;
+    height: 55px;
+    border: none;
+    background: var(--bg);
+    color: var(--text-color);
+    padding: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: 0.2s;
+    border-radius: 5px;
+    opacity: 0.8;
+    letter-spacing: 1px;
+    box-shadow: #c60909 0px 7px 2px, #000 0px 8px 5px;
+  }
+  
+  button:hover {
+    opacity: 1;
+  }
+  
+  button:active {
+    top: 4px;
+    box-shadow: #a00505 0px 3px 2px,#000 0px 3px 5px;
+  }

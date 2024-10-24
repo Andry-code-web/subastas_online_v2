@@ -161,7 +161,8 @@
 .iconos_cuentas .icono img {
   width: 70%;
   -webkit-filter: grayscale(0.5);
-  filter: opacity(50%);
+ /*  filter: opacity(50%); */
+  filter: invert(16%) sepia(90%) saturate(3000%) hue-rotate(-20deg) brightness(110%);
 }
 
 .iconos_cuentas .icono img:hover {
