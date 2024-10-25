@@ -333,6 +333,7 @@
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
   gap: 8px;
+  margin-top: 15px;
 }
 
 .grid_info_card .div3 {
@@ -377,7 +378,7 @@
   border-radius: 0.5rem;
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
   width: 350px;
-  height: 600px;
+  height: 610px;
   font-family: Arial, sans-serif;
   position: sticky;
   top: 140px;
@@ -592,6 +593,65 @@
   width: 23%;
 }
 
+------------------
+.container-precio {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.bid-container {
+  display: flex;
+  align-items: center;
+  border-radius: 25px;
+  align-items: center;
+  justify-content: center;
+}
+
+button {
+  background-color: transparent;
+  color: #ff3434;
+  border: 2px solid #f16310;
+  padding: 10px 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 1.0s, color 1.0s;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: #4CAF50; 
+  color: white; 
+}
+
+input {
+  border: 2px solid #4CAF50;
+  padding: 10px;
+  font-size: 18px;
+  text-align: center;
+  width: 100px;
+  border-radius: 5px;
+}
+input:focus {
+  outline: none; 
+}
+.precio-base {
+  width: 160px;
+  height: 40px;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.card-body .restar, 
+.card-body .sumar {
+  height: 35px;
+  width: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+---------------------------
 #particles-js {
   position: absolute;
   top: 0;
@@ -714,6 +774,7 @@
   .card {
     width: 300px;
     position: sticky;
+    height: 660px;
   }
 }
 
@@ -729,5 +790,6 @@
 
   .card {
     margin-top: 1rem;
+    height: 620px;
   }
 }

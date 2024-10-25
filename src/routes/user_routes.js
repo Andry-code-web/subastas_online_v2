@@ -932,7 +932,7 @@ router.post('/ofertas', async (req, res) => {
   }
 });
 
-//MOISES
+
 router.get('/ofertas', async (req, res) => {
   try {
     const ofertas = await Oferta.findAll();
@@ -942,4 +942,51 @@ router.get('/ofertas', async (req, res) => {
     res.status(500).json({ message: 'Error al obtener las ofertas' });
   }
 });
+
+router.get('/tabla/:id/Ofertas' , async (req, res) => {
+  const tablaId = req.params.id;
+}
+)
+
+
+router.post('/ofertas', async (req, res) => {
+  try {
+      const { usuarioId, subastaId, valorOferta } = req.body;
+
+      if (!usuarioId || !subastaId || !valorOferta) {
+          return res.status(400).json({ message: 'Faltan datos requeridos' });
+      }
+
+      const nuevaOferta = await Oferta.create({
+          usuarioId,
+          subastaId,
+          valor: valorOferta,
+          fecha: new Date()
+      });
+
+      res.status(201).json(nuevaOferta);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error al crear la oferta' });
+  }
+});
+
+router.get('/ofertas', async (req, res) => {
+  try {
+      const { subastaId } = req.query;
+
+      let ofertas;
+      if (subastaId) {
+          ofertas = await Oferta.findAll({ where: { subastaId } });
+      } else {
+          ofertas = await Oferta.findAll();
+      }
+
+      res.json(ofertas);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error al obtener las ofertas' });
+  }
+});
+
 module.exports = router;
