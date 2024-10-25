@@ -177,6 +177,13 @@
   /* Add padding to make space for the button */
 }
 
+.Olvide {
+  color: red;
+  position: fixed;
+  top: 9.6rem;
+  right: -10px;
+}
+
 .mostarC {
   width: auto !important;
   height: auto !important;

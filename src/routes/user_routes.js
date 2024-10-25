@@ -6,6 +6,7 @@ const moment = require('moment');
 const momenT = require('moment-timezone'); // Asegúrate de tener moment-timezone instalado
 
 const { conection } = require("../database/db"); // Asegúrate de que el nombre del archivo y la ruta sean correctos
+const { render } = require("ejs");
 
 router.use(bodyParser.urlencoded({ extended: true }));
 
@@ -953,7 +954,7 @@ router.get('/editar_user/:id', (req, res) => {
     }
 
     const usuario = result[0];
-    res.render('editar_user', { usuario: req.session.usuario});
+    res.render('editar_user', { usuario: req.session.usuario });
   });
 })
 
@@ -982,7 +983,7 @@ router.post('/editar_user/:id', (req, res) => {
   });
 });
 //ingreso al correo
-router.get('/confirmar/datos',(req, res)=>{
+router.get('/confirmar/datos', (req, res) => {
   res.render('Verificar_por_DNI')
 })
 
@@ -996,6 +997,7 @@ router.post('/verificar/email', (req, res) => {
       return res.status(500).json({ success: false, message: "Error interno del servidor" });
     }
     if (result.length > 0) {
+      req.session.email = email; // Guarda el email en la sesión
       res.json({ success: true });
     } else {
       res.json({ success: false });
@@ -1003,12 +1005,26 @@ router.post('/verificar/email', (req, res) => {
   });
 });
 
-router.post('/actualizar/contraseña', (req, res) => {
+
+//contraseña
+
+router.post('/actualizar/contrasena', (req, res) => {
   const { newPassword, confirmPassword } = req.body;
-  // Lógica para actualizar la contraseña aquí...
-  // Asegúrate de verificar que newPassword y confirmPassword coincidan y actualiza la base de datos
+
+  if (newPassword === confirmPassword) {
+    const hashedContraseña = bcrypt.hashSync(newPassword, 10); // Aquí usamos hashedContraseña
+    const sql = "UPDATE usuarios SET contraseña = ? WHERE email = ?";
+    conection.query(sql, [hashedContraseña, req.session.email], (err, result) => {
+      if (err) {
+        console.error("Error al actualizar la contraseña: ", err);
+        return res.status(500).json({ success: false, message: "Error interno del servidor" });
+      }
+      res.redirect('/login')
+      /* res.json({ success: true, message: "Contraseña actualizada correctamente" }); */
+    });
+  } else {
+    res.json({ success: false, message: "Las contraseñas no coinciden" });
+  }
+
 });
-
-
-
 module.exports = router;
