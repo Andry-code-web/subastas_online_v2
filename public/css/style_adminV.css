@@ -155,7 +155,7 @@ body {
 
 .chart-container {
     position: relative;
-    height: 300px;
+    height: 400px;
 }
 
 .new-customers-card {
@@ -221,6 +221,22 @@ body {
     align-items: center;
 }
 
+.marca{
+    width: 90px;
+}
+
+.modelo{
+    width: 100px;
+}
+
+.descripción{
+    width: 200px;
+}
+
+.tarjeta{
+    width: 100px;
+}
+
 .truncate {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -263,3 +279,42 @@ body {
 }
 
 
+.btn_activas_finalidas .acti{
+    background: none;
+    border: 1px solid #28a745;
+    text-align: center;
+    font-weight: 600;
+    font-size: .8rem;
+}
+
+.btn_activas_finalidas .acti:hover{
+    background-color: #28a745;
+    color: #fff;
+}
+
+.btn_activas_finalidas .fina{
+    background: none;
+    border: 1px solid #a72828;
+    text-align: center;
+    font-weight: 600;
+    font-size: .8rem;
+}
+
+.btn_activas_finalidas .fina:hover{
+    background-color: #a72828;
+    color: #fff;
+}
+
+.llave_activa{
+    background-color: #28a745;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.llave_finalizada{
+    background-color: #a72828;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+}
