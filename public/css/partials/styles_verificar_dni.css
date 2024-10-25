@@ -49,14 +49,21 @@ body {
     width: 50%;
     margin-bottom: 15px;
 }
-
+.passwordForm{
+    align-items: center;
+}
 .formulario_usuario{
     margin-top: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
 }
-
+.clave{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
 .btn-primary {
     background-color: #c72c3b;
     /* Botón rojo */

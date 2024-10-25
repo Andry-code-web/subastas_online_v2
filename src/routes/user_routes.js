@@ -953,7 +953,7 @@ router.get('/editar_user/:id', (req, res) => {
     }
 
     const usuario = result[0];
-    res.render('editar_user', { usuario });
+    res.render('editar_user', { usuario: req.session.usuario});
   });
 })
 
@@ -980,6 +980,33 @@ router.post('/editar_user/:id', (req, res) => {
       res.redirect('/login');
     });
   });
+});
+//ingreso al correo
+router.get('/confirmar/datos',(req, res)=>{
+  res.render('Verificar_por_DNI')
+})
+
+//verificamos correo
+router.post('/verificar/email', (req, res) => {
+  const { email } = req.body;
+  const sql = "SELECT email FROM usuarios WHERE email = ?";
+  conection.query(sql, [email], (err, result) => {
+    if (err) {
+      console.error("Error al realizar la consulta: ", err);
+      return res.status(500).json({ success: false, message: "Error interno del servidor" });
+    }
+    if (result.length > 0) {
+      res.json({ success: true });
+    } else {
+      res.json({ success: false });
+    }
+  });
+});
+
+router.post('/actualizar/contraseña', (req, res) => {
+  const { newPassword, confirmPassword } = req.body;
+  // Lógica para actualizar la contraseña aquí...
+  // Asegúrate de verificar que newPassword y confirmPassword coincidan y actualiza la base de datos
 });
 
 
