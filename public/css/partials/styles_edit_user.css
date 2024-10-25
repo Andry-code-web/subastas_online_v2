@@ -87,7 +87,7 @@ body {
     display: none;
 }
 /* From Uiverse.io by adamgiebl */
-button {
+.btn_enviar_usuario{
     align-items: center;
     background-image: linear-gradient(144deg, #FF9A76, #FF6363 50%, #FF1E62);
     border: 0;

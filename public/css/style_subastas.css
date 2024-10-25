@@ -19,11 +19,11 @@
   --color--sub: #d30000;
 }
 
-.contenedor_superior_subastas{
+.contenedor_superior_subastas {
   width: 100%;
 }
 
-.title_veiculo{
+.title_veiculo {
   width: 100%;
   text-align: center;
   font-size: 1.6rem;
@@ -34,7 +34,7 @@
   color: #494949;
 }
 
-.sub_title_apertura{
+.sub_title_apertura {
   margin-bottom: .4rem;
   padding: 0;
   font-size: .9rem;
@@ -79,7 +79,8 @@
   border-radius: 5px;
 }
 
-.imgen_principal, .img_principal {
+.imgen_principal,
+.img_principal {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -215,33 +216,37 @@
   text-align: end;
 }
 
-.descripcion span:last-child{
+.descripcion span:last-child {
   width: 65%;
   font-size: .9rem;
   text-align: justify;
 }
 
 .descripcion-text {
-  white-space: pre-line; /* Esto preserva los saltos de línea */
-  width: 65%; /* Mantiene el mismo ancho que antes */
-  font-size: .9rem; /* Ajusta el tamaño de fuente */
-  text-align: justify; /* Alinea el texto a la izquierda */
+  white-space: pre-line;
+  /* Esto preserva los saltos de línea */
+  width: 65%;
+  /* Mantiene el mismo ancho que antes */
+  font-size: .9rem;
+  /* Ajusta el tamaño de fuente */
+  text-align: justify;
+  /* Alinea el texto a la izquierda */
 }
 
-.info_apertura_redes{
+.info_apertura_redes {
   width: 100%;
   height: auto;
   margin-top: 1rem;
   margin-left: 1rem;
 }
 
-.redes_apertura{
+.redes_apertura {
   width: 50%;
   height: auto;
   gap: .5rem;
 }
 
-.redes_apertura div{
+.redes_apertura div {
   width: 40px;
   height: 40px;
   display: flex;
@@ -249,19 +254,19 @@
   align-items: center;
 }
 
-.redes_apertura .face{
+.redes_apertura .face {
   background-color: #3C5A99;
 }
 
-.redes_apertura .tik{
+.redes_apertura .tik {
   background-color: #000000;
 }
 
-.redes_apertura .youtu{
+.redes_apertura .youtu {
   background-color: #993c3c;
 }
 
-.redes_apertura .whats{
+.redes_apertura .whats {
   background-color: #25D366;
 }
 
@@ -269,13 +274,13 @@
 .redes_apertura .face i,
 .redes_apertura .tik i,
 .redes_apertura .youtu i,
-.redes_apertura .whats i{
+.redes_apertura .whats i {
   font-size: 1.2rem;
   color: #ffff;
 }
 
 
-.info_apertura{
+.info_apertura {
   width: 100%;
   height: auto;
   margin-top: 2.5rem;
@@ -283,39 +288,39 @@
   margin-left: .5rem;
 }
 
-.info_apertura h4{
+.info_apertura h4 {
   font-size: 1.2rem;
   font-family: var(--font--banner--bool);
   font-weight: 600;
 }
 
-.info_apertura p:first-child{
+.info_apertura p:first-child {
   margin: 0;
   padding: 0;
 }
 
-.info_apertura p span:first-child{
+.info_apertura p span:first-child {
   font-size: 1.05srem;
   font-family: var(--font--banner--bool);
   font-weight: 700;
 }
 
-.precio_apertura{
+.precio_apertura {
   margin-bottom: 1rem;
 }
 
-.precio_con_incremento span:first-child{
+.precio_con_incremento span:first-child {
   font-size: 1.2rem;
   font-family: var(--font--banner--bool);
 }
 
-.precio_con_incremento span:last-child{
+.precio_con_incremento span:last-child {
   font-size: 1.4rem;
   font-family: var(--font--banner--bool);
   color: #00722a;
 }
 
-.info_apertura p span:last-child{
+.info_apertura p span:last-child {
   font-size: 1.1rem;
 }
 
@@ -350,15 +355,15 @@
   cursor: default;
 }
 
-.grid_info_card .div5{
+.grid_info_card .div5 {
   grid-column: span 2 / span 2;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
 }
 
 .grid_info_card .div1 p,
 .grid_info_card .div2 p,
 .grid_info_card .div3 p,
-.grid_info_card .div4 p{
+.grid_info_card .div4 p {
   font-size: .7rem;
   color: #fff;
   font-family: var(--font--banner--bool);
@@ -366,17 +371,17 @@
   padding: 0;
 }
 
-.grid_info_card .div5 a{
+.grid_info_card .div5 a {
   text-decoration: none;
   color: #000;
 }
 
-.grid_info_card .div5 a:hover{
+.grid_info_card .div5 a:hover {
   color: var(--color--sub);
 }
-      
 
- /* CHAT */
+
+/* CHAT */
 /*
 .card {
   background-color: white;
@@ -603,24 +608,24 @@
   /* Asegurar que las partículas estén detrás de la alerta */
 }
 
-.bg-btn-alert2{
+.bg-btn-alert2 {
   background-color: #BD0000;
 }
 
-.bg-btn-alert2:focus-visible{
+.bg-btn-alert2:focus-visible {
   box-shadow: none;
 }
 
-.contet_pdf{
+.contet_pdf {
   transition: ease-in .2s;
   cursor: pointer;
 }
 
-.contet_pdf:hover{
+.contet_pdf:hover {
   background-color: #ccc;
 }
 
-.archivo_pdf{
+.archivo_pdf {
   width: 100%;
   height: auto;
   font-size: .9rem;
@@ -630,7 +635,7 @@
   transition: ease-in .1s;
 }
 
-.archivo_pdf i{
+.archivo_pdf i {
   font-size: 1.5rem !important;
   color: #990000 !important;
 }
@@ -643,20 +648,20 @@
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
-  .detalles_subasta{
+  .detalles_subasta {
     flex-direction: column-reverse;
     align-items: center;
   }
 
-  .property-detail{
+  .property-detail {
     width: 95%;
   }
 
-  .imgen_principal{
+  .imgen_principal {
     height: 25vh;
   }
 
-  .img_wrapper{
+  .img_wrapper {
     width: 170px;
   }
 }
@@ -666,42 +671,42 @@
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) and (max-width: 992px) {
-  .detalles_subasta{
+  .detalles_subasta {
     flex-direction: column-reverse;
     align-items: center;
   }
 
-  .property-detail{
+  .property-detail {
     width: 80%;
   }
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
-  .detalles_subasta{
+  .detalles_subasta {
     margin-top: 4rem;
   }
 
-  .property-detail{
+  .property-detail {
     width: 50%;
   }
 
-  .card{
+  .card {
     width: 300px;
   }
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) and (max-width: 1440px) {
-  .detalles_subasta{
+  .detalles_subasta {
     margin-top: 5rem;
   }
 
-  .property-detail{
+  .property-detail {
     width: 50%;
   }
 
-  .card{
+  .card {
     margin-top: 1rem;
   }
 }

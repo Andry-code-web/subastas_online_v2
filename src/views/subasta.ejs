@@ -103,6 +103,32 @@
     .next_button {
       right: 10px;
     }
+
+
+    /* Efecto de temblor */
+    .shake-animation {
+      animation: shake 0.1s ease-in-out 10;
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-5px);
+      }
+
+      50% {
+        transform: translateX(5px);
+      }
+
+      75% {
+        transform: translateX(-5px);
+      }
+    }
   </style>
 </head>
 
@@ -326,7 +352,7 @@
       <%- include('partials/chat_subasta') %>
     </div>
   </div>
-
+  <div id="particles-js"></div>
 
   <!-- WHATSAPP FLOTANTE -->
   <%- include('partials/whatsapp_flot') %>
@@ -342,6 +368,8 @@
   <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
   <!-- script moment fecha y hora -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -387,7 +415,25 @@
             const seconds = timeLeft % 60;
             countdownElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
-            if (timeLeft <= 0) {
+            // Check for "a la 1", "a las 2", and "a las 3"
+            if (minutes === 2 && seconds === 0) {
+              Swal.fire({
+                title: '¡A la 1!',
+                icon: 'info',
+                timer: 1000
+              });
+            } else if (minutes === 1 && seconds === 0) {
+              Swal.fire({
+                title: '¡A las 2!',
+                icon: 'info',
+                timer: 1000
+              });
+            } else if (minutes === 0 && seconds === 0) {
+              Swal.fire({
+                title: '¡A las 3!',
+                icon: 'info',
+                timer: 1000
+              });
               clearInterval(countdownInterval);
               if (auctionInProgress) {
                 auctionInProgress = false;
@@ -399,6 +445,7 @@
                 disableButtons();
               }
             }
+
             timeLeft--;
           }, 1000);
         }
@@ -410,11 +457,14 @@
           startCountdown();
         }
 
+
+        const bidSound = new Audio('/sonido/bellding-254774.mp3');
+
+        // Evento al hacer clic en el botón de puja
         sendButton.addEventListener('click', function() {
           if (auctionEnded) return;
 
           let bidValue = parseInt(messageInput.value.replace(/,/g, ''));
-
           if (bidValue < minBid) {
             Swal.fire({
               title: `La puja debe ser al menos $${formatNumber(minBid)}.`,
@@ -422,6 +472,9 @@
             });
             return;
           }
+
+          // Reproduce el sonido al enviar la puja
+          bidSound.play();
 
           socket.emit('bid', {
             user: username || '<%= usuario ? usuario.nombre : "Invitado" %>',
@@ -435,7 +488,6 @@
           if (auctionEnded) return;
 
           let customBidValue = parseInt(customBidInput.value.replace(/,/g, ''));
-
           if (isNaN(customBidValue) || customBidInput.value.trim() === '') {
             Swal.fire({
               title: 'Debes ingresar un monto.',
@@ -452,6 +504,9 @@
             return;
           }
 
+          // Reproduce el sonido al enviar la puja personalizada
+          bidSound.play();
+
           socket.emit('bid', {
             user: username || '<%= usuario ? usuario.nombre : "Invitado" %>',
             bid: customBidValue,
@@ -462,10 +517,12 @@
           resetCountdown();
         });
 
+
         socket.on('setUsername', function(newUsername) {
           username = newUsername;
         });
 
+        // Animación de temblor para el mensaje de puja
         socket.on('newBid', function(data) {
           if (auctionEnded) return;
 
@@ -478,7 +535,13 @@
           const message = `<i class="fa-solid fa-share" style="color: #ffffff; margin-right: .5rem; font-size: .9rem;"></i>  <b>${user}:</b> $${formatNumber(bid)}`;
           const li = document.createElement('li');
           li.innerHTML = message;
+
+          // Añadir clase para el efecto de temblor
+          li.classList.add('shake-animation');
           messages.appendChild(li);
+
+          // Eliminar el efecto de temblor después de 2 segundos
+          setTimeout(() => li.classList.remove('shake-animation'), 2000);
 
           messages.scrollTop = messages.scrollHeight;
 
@@ -505,7 +568,24 @@
           disableButtons();
         });
 
+        // Función para generar confetti
+        // Función para generar confetti
+        function confettiEffect() {
+          confetti({
+            particleCount: 200,
+            spread: 70,
+            origin: {
+              y: 0.6
+            }
+          });
+        }
+
+        // Evento para mostrar el confeti y la alerta juntos
         socket.on('announceWinner', function(data) {
+          // Ejecutar el efecto de confeti
+          confettiEffect();
+
+          // Mostrar la alerta de ganador
           Swal.fire({
             title: `Felicidades ${data.winner}`,
             text: 'Nos estaremos comunicando dentro de las 24h a través del correo',
@@ -518,6 +598,8 @@
             }
           });
         });
+
+
 
         function disableButtons() {
           sendButton.disabled = true;
@@ -534,6 +616,7 @@
       startAuction();
     });
   </script>
+
 
 
 
@@ -589,7 +672,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       const btnIniciarChat = document.getElementById('participar');
       const chat = document.getElementById('chat');
-      const cardBody = document.getElementById('body_card');
+      const cardBody = document.getElementById('body_card_puja');
 
       async function obtenerIdUsuario() {
         try {
@@ -863,7 +946,7 @@
     });
   </script>
 
-  <script>
+  <!-- <script>
     document.addEventListener("DOMContentLoaded", function() {
       const subastaComenzada = <%= estaEnCurso ? 'true' : 'false' %>; // Variable desde EJS
       const cardBody = document.getElementById('body_card');
@@ -878,7 +961,51 @@
         cardBodyPuja.style.display = 'block';
       }
     });
-  </script>
+  </script> -->
+
+  <!--  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const cardBody = document.getElementById('body_card');
+      const cardBodyPuja = document.getElementById('body_card_puja');
+      const cardBodyTermino = document.getElementById('body_card_termino');
+
+      function checkAuctionStatus() {
+        const now = new Date();
+        const fechaHoraSubasta = new Date(window.fechaHoraSubasta);
+        const fechaHoraFinSubasta = new Date(window.fechaHoraFinSubasta);
+
+        // Ocultar todas las cards primero
+        [cardBody, cardBodyPuja, cardBodyTermino].forEach(card => {
+          if (card) card.style.display = 'none';
+        });
+
+        // Subasta terminada
+        if (now > fechaHoraFinSubasta) {
+          if (cardBodyTermino) {
+            cardBodyTermino.style.display = 'block';
+          }
+        }
+        // Subasta en curso
+        else if (now >= fechaHoraSubasta && now <= fechaHoraFinSubasta) {
+          if (cardBodyPuja) {
+            cardBodyPuja.style.display = 'block';
+          }
+        }
+        // Antes de la subasta
+        else if (now < fechaHoraSubasta) {
+          if (cardBody) {
+            cardBody.style.display = 'block';
+          }
+        }
+      }
+
+      // Verificar estado inicial
+      checkAuctionStatus();
+
+      // Actualizar cada minuto
+      setInterval(checkAuctionStatus, 60000);
+    });
+  </script> -->
 </body>
 
 </html>

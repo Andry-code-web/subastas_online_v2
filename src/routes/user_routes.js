@@ -524,10 +524,10 @@ function buscarSugerencia(busqueda, conexion, callback) {
 
 
 
-// Subastas
+// Subastas route with termination handling
 router.get('/subasta/:id', (req, res) => {
   const subastaId = req.params.id;
-  const usuarioId = req.session.usuario ? req.session.usuario.id : null; // ID del usuario si está autenticado
+  const usuarioId = req.session.usuario ? req.session.usuario.id : null;
 
   const querySubasta = `
     SELECT s.*, 
@@ -545,19 +545,13 @@ router.get('/subasta/:id', (req, res) => {
 
   const queryImagenes = 'SELECT imagen FROM imagenes_propiedad WHERE id_subasta = ?';
   const queryAnexos = 'SELECT id, anexo FROM anexos_propiedad WHERE id_subasta = ?';
-
-  // Consulta para registrar la visita
   const queryRegistrarVisita = 'INSERT INTO visitas_subasta (subasta_id, usuario_id) VALUES (?, ?)';
-
-  // Consulta para contar visitas
   const queryContarVisitas = 'SELECT COUNT(*) AS total_visitas FROM visitas_subasta WHERE subasta_id = ?';
 
-  // Formato de número
   function formatNumber(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
-  // Traducción de días
   function translateDay(day) {
     const days = {
       'Sunday': 'Domingo',
@@ -571,17 +565,14 @@ router.get('/subasta/:id', (req, res) => {
     return days[day] || day;
   }
 
-  const now = momenT().tz("America/Lima"); // Ajusta a la zona horaria de Perú
-  // Nueva variable para la fecha actual
-  const fechaActual = now.format('YYYY-MM-DD HH:mm:ss'); // Formato de fecha que necesites
+  const now = moment().tz("America/Lima");
+  const fechaActual = now.format('YYYY-MM-DD HH:mm:ss');
 
-  // Registrar la visita
   conection.query(queryRegistrarVisita, [subastaId, usuarioId], (error) => {
     if (error) {
       console.error("Error al registrar la visita", error);
     }
 
-    // Obtener los datos de la subasta
     conection.query(querySubasta, [subastaId], (error, resultadoSubasta) => {
       if (error) {
         console.error("Error al obtener datos de subasta", error);
@@ -593,44 +584,40 @@ router.get('/subasta/:id', (req, res) => {
       }
 
       const subasta = resultadoSubasta[0];
-      const fechaHoraSubasta = momenT(subasta.fecha_hora_subasta).tz("America/Lima");
-
-      // Lógica para verificar el estado de la subasta
-      const duracionSubasta = 5; // duración en minutos
+      const fechaHoraSubasta = moment(subasta.fecha_hora_subasta).tz("America/Lima");
+      const duracionSubasta = 5;
       const fechaHoraFinSubasta = fechaHoraSubasta.clone().add(duracionSubasta, 'minutes');
+      
+      // Estado de la subasta
       const estaEnCurso = now.isBetween(fechaHoraSubasta, fechaHoraFinSubasta, null, '[]');
-      const estaTerminada = now.isAfter(fechaHoraFinSubasta); // Nueva variable que indica si ha terminado
+      const estaTerminada = now.isAfter(fechaHoraFinSubasta);
 
-      // Logs para verificar las fechas y el estado de la subasta
-      console.log("Fecha y hora de la subasta:", fechaHoraSubasta.format());
-      console.log("Fecha y hora de fin de subasta:", fechaHoraFinSubasta.format());
-      console.log("Fecha y hora actual en producción:", now.format());
-      console.log("¿Subasta en curso?:", estaEnCurso);
-      console.log("¿Subasta terminada?:", estaTerminada);
+      console.log("Estado de la subasta:", {
+        fechaHoraSubasta: fechaHoraSubasta.format(),
+        fechaHoraFinSubasta: fechaHoraFinSubasta.format(),
+        now: now.format(),
+        estaEnCurso,
+        estaTerminada
+      });
 
-      // Calcular la oferta actual
       const precioBase = parseInt(subasta.precio_base);
       const ofertaActual = formatNumber(precioBase + 100);
-
       const fechaFormateada = subasta.fecha_formateada;
       const [day, dayNumber] = fechaFormateada.split(' ');
       const fechaFormateadaEsp = `${translateDay(day)} ${dayNumber}`;
 
-      // Obtener imágenes de la subasta
       conection.query(queryImagenes, [subastaId], (error, resultadoImagenes) => {
         if (error) {
           console.error("Error al obtener imágenes de subasta", error);
           return res.status(500).send("Error al obtener imágenes de subasta");
         }
 
-        // Obtener anexos de la subasta
         conection.query(queryAnexos, [subastaId], (error, resultadoAnexos) => {
           if (error) {
             console.error("Error al obtener anexos de subasta", error);
             return res.status(500).send("Error al obtener anexos de subasta");
           }
 
-          // Contar cuántas personas han visto la subasta
           conection.query(queryContarVisitas, [subastaId], (error, resultadoVisitas) => {
             if (error) {
               console.error("Error al contar visitas de la subasta", error);
@@ -639,20 +626,19 @@ router.get('/subasta/:id', (req, res) => {
 
             const totalVisitas = resultadoVisitas[0].total_visitas;
 
-            // Renderizar la vista con los datos de la subasta y el contador de visitas
             res.render("subasta", {
               usuario: req.session.usuario,
               subasta,
               imagenes: resultadoImagenes.map(img => img.imagen.toString('base64')),
               anexos: resultadoAnexos.map(anexo => ({ id: anexo.id, url: anexo.anexo })),
-              estaEnCurso, // Indica si la subasta está en curso
-              estaTerminada, // Nueva variable que indica si la subasta ha terminado
-              fechaFormateadaEsp, // Fecha traducida a español
-              formatNumber, // Función para formatear números
-              totalVisitas, // Total de visitas
-              ofertaActual, // Nueva variable que contiene el precio base + 100
-              fechaHoraSubasta: fechaHoraSubasta.format(), // Pasar la fecha y hora de la subasta
-              fechaHoraFinSubasta: fechaHoraFinSubasta.format(), // Pasar la fecha y hora de fin de la subasta
+              estaEnCurso,
+              estaTerminada,
+              fechaFormateadaEsp,
+              formatNumber,
+              totalVisitas,
+              ofertaActual,
+              fechaHoraSubasta: fechaHoraSubasta.format(),
+              fechaHoraFinSubasta: fechaHoraFinSubasta.format(),
               fechaActual
             });
           });
@@ -952,8 +938,10 @@ router.get('/editar_user/:id', (req, res) => {
       return res.status(404).send("Usuario no encontrado");
     }
 
-    const usuario = result[0];
-    res.render('editar_user', { usuario });
+/*     const usuario = result[0]; */
+    res.render('editar_user', { 
+      usuario: req.session.usuario
+     });
   });
 })
 

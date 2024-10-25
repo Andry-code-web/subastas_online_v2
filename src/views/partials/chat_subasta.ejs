@@ -14,40 +14,31 @@
     </div>
   </div>
 
-
-  <% if (!estaEnCurso) { %>
-  <div class="card-body-puja" id="body_card_puja" style="display: block;">
-
-
+  <!-- Card para unirse (antes de que empiece) -->
+  <div class="card-body" id="body_card" style="display: <%= !estaEnCurso && !estaTerminada ? 'block' : 'none' %>">
     <div class="analisis d-flex justify-content-center">
-
       <div class="vistas">
         <p>
           <span>VISTAS</span>
-          <span>
-            <%= totalVisitas %>
-          </span>
+          <span><%= totalVisitas %></span>
         </p>
       </div>
       <div class="megusta">
         <p>
           <span>LIKES</span>
-          <span>
-            <%= subasta.like_count %>
-          </span>
+          <span><%= subasta.like_count %></span>
         </p>
       </div>
-
     </div>
 
-    <h2>¡Oportunidad para el que sabe!</h2>
+    <h2>¡Próximamente!</h2>
+    <p class="fecha-subasta">
+      Fecha de inicio: <%= fechaFormateadaEsp %> <%= subasta.hora_formateada %>
+    </p>
 
     <p class="precio_con_incremento">
-      <span>Oferta Actual: </span>
-      <span>
-        US$ <%= ofertaActual %>
-      </span>
-
+      <span>Precio Inicial: </span>
+      <span>US$ <%= ofertaActual %></span>
     </p>
 
     <hr>
@@ -58,16 +49,17 @@
       <span class="price">US$<%= formatNumber(subasta.precio_base) %></span>
     </p>
 
+    <form action="" method="post" class="form_oferta">
+      <div class="inputGroup">
+        <input type="text" required="" autocomplete="off">
+        <label for="name"><%= ofertaActual %> $</label>
+        <p class="Incremento">Incremento US$100.00</p>
+      </div>
+      
 
-    <button id="participar_puja">
-      ENVIAR PUJAS
-    </button>
+      <button type="submit" id="participar_puja">ENVIAR PUJA</button>
+    </form>
 
-
-    <p id="estado-subasta" style="display: none;"></p>
-    <p class="incremento_precio">
-      Incremento <span>US$100.00</span>
-    </p>
 
     <div class="grid_info_card">
       <div class="div1">
@@ -88,124 +80,31 @@
           <span>Participa en 3 subastas por $500.</span>
         </a>
       </div>
-
     </div>
-
-
-
   </div>
-  <% } else if (estaTerminada) { %>
-    <div class="card-body-termino" id="body_card_termino" style="display: block;">
 
-
-      <div class="analisis d-flex justify-content-center">
-  
-        <div class="vistas">
-          <p>
-            <span>VISTAS</span>
-            <span>
-              <%= totalVisitas %>
-            </span>
-          </p>
-        </div>
-        <div class="megusta">
-          <p>
-            <span>LIKES</span>
-            <span>
-              <%= subasta.like_count %>
-            </span>
-          </p>
-        </div>
-  
-      </div>
-  
-      <h2>¡Oportunidad para el que sabe!</h2>
-  
-      <p class="precio_con_incremento">
-        <span>Oferta Actual: </span>
-        <span>
-          US$ <%= ofertaActual %>
-        </span>
-  
-      </p>
-  
-      <hr>
-  
-      <p class="precio d-flex align-items-center justify-content-center">
-        <i class="bi bi-cash-coin d-flex"></i>
-        <span class="precio_base">Precio base:</span>
-        <span class="price">US$<%= formatNumber(subasta.precio_base) %></span>
-      </p>
-  
-  
-      <button id="participar_termino">
-        La subasta acabo
-      </button>
-  
-  
-      <p id="estado-subasta" style="display: none;"></p>
-      <p class="incremento_precio">
-        Incremento <span>US$100.00</span>
-      </p>
-  
-      <div class="grid_info_card">
-        <div class="div1">
-          <p>mínimo de participantes 2</p>
-        </div>
-        <div class="div2">
-          <p>Con Precio Reserva</p>
-        </div>
-        <div class="div3">
-          <p>Opción a Visitas previa cita</p>
-        </div>
-        <div class="div4">
-          <p>Sin Comisión</p>
-        </div>
-        <div class="div5">
-          <a href="" id="oportunidades">
-            <i class="fa-solid fa-circle-info" style="color: #db0000;"></i>
-            <span>Participa en 3 subastas por $500.</span>
-          </a>
-        </div>
-  
-      </div>
-  
-  
-  
-    </div>
-  <% } else { %>
-  <div class="card-body" id="body_card" style="display: block;">
-
-
+  <!-- Card para enviar pujas (durante la subasta) -->
+  <div class="card-body-puja" id="body_card_puja" style="display: <%= estaEnCurso && !estaTerminada ? 'block' : 'none' %>">
     <div class="analisis d-flex justify-content-center">
-
       <div class="vistas">
         <p>
           <span>VISTAS</span>
-          <span>
-            <%= totalVisitas %>
-          </span>
+          <span><%= totalVisitas %></span>
         </p>
       </div>
       <div class="megusta">
         <p>
           <span>LIKES</span>
-          <span>
-            <%= subasta.like_count %>
-          </span>
+          <span><%= subasta.like_count %></span>
         </p>
       </div>
-
     </div>
 
-    <h2>¡Oportunidad para el que sabe!</h2>
+    <h2>¡Subasta en Curso!</h2>
 
     <p class="precio_con_incremento">
       <span>Oferta Actual: </span>
-      <span>
-        US$ <%= ofertaActual %>
-      </span>
-
+      <span>US$ <%= ofertaActual %></span>
     </p>
 
     <hr>
@@ -216,16 +115,7 @@
       <span class="price">US$<%= formatNumber(subasta.precio_base) %></span>
     </p>
 
-
-    <button id="participar">
-      UNIRME
-    </button>
-
-
-    <p id="estado-subasta" style="display: none;"></p>
-    <p class="incremento_precio">
-      Incremento <span>US$100.00</span>
-    </p>
+    <button id="participar">UNIRME</button>
 
     <div class="grid_info_card">
       <div class="div1">
@@ -246,15 +136,65 @@
           <span>Participa en 3 subastas por $500.</span>
         </a>
       </div>
+    </div>
+  </div>
 
+  <!-- Card para subasta terminada -->
+  <div class="card-body-termino" id="body_card_termino" style="display: <%= estaTerminada ? 'block' : 'none' %>">
+    <div class="analisis d-flex justify-content-center">
+      <div class="vistas">
+        <p>
+          <span>VISTAS</span>
+          <span><%= totalVisitas %></span>
+        </p>
+      </div>
+      <div class="megusta">
+        <p>
+          <span>LIKES</span>
+          <span><%= subasta.like_count %></span>
+        </p>
+      </div>
     </div>
 
+    <h2>¡Subasta Finalizada!</h2>
 
+    <p class="precio_con_incremento">
+      <span>Oferta Final: </span>
+      <span>US$ <%= ofertaActual %></span>
+    </p>
 
+    <hr>
+
+    <p class="precio d-flex align-items-center justify-content-center">
+      <i class="bi bi-cash-coin d-flex"></i>
+      <span class="precio_base">Precio base:</span>
+      <span class="price">US$<%= formatNumber(subasta.precio_base) %></span>
+    </p>
+
+    <button disabled aria-disabled="true">SUBASTA FINALIZADA</button>
+
+    <div class="grid_info_card">
+      <div class="div1">
+        <p>mínimo de participantes 2</p>
+      </div>
+      <div class="div2">
+        <p>Con Precio Reserva</p>
+      </div>
+      <div class="div3">
+        <p>Opción a Visitas previa cita</p>
+      </div>
+      <div class="div4">
+        <p>Sin Comisión</p>
+      </div>
+      <div class="div5">
+        <a href="" id="oportunidades">
+          <i class="fa-solid fa-circle-info" style="color: #db0000;"></i>
+          <span>Participa en 3 subastas por $500.</span>
+        </a>
+      </div>
+    </div>
   </div>
-  <% }  %>
 
-  
 
 
 
