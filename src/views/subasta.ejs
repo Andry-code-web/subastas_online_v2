@@ -16,14 +16,13 @@
   <link rel="stylesheet" href="/css/partials/styles_header.css">
   <link rel="stylesheet" href="/css/partials/styles_footer.css">
   <link rel="stylesheet" href="/css/partials/styles_whatsapp_flot.css">
-  <link rel="stylesheet" href="/css/partials/styles_tabla_Ofertas.css"> 
+  <link rel="stylesheet" href="/css/partials/styles_tabla_Ofertas.css">
   <!-- ICONS -->
   <script src="https://kit.fontawesome.com/78137c0870.js" crossorigin="anonymous"></script>
   <title>Inmueble || subasta</title>
   <script src="/socket.io/socket.io.js"></script>
 
   <style>
-    
     .disabled-button {
       background-color: #ccc;
       /* Color de fondo gris */
@@ -99,10 +98,9 @@
     .next_button {
       right: 10px;
     }
-    
   </style>
 </head>
- 
+
 <body>
   <%- include('partials/header') %>
 
@@ -375,6 +373,42 @@
             <span class="precio_base">Precio base:</span>
             <span class="price">US$<%= formatNumber(subasta.precio_base) %></span>
           </p>
+          <!--Boton precio-->
+          <div class="container-precio">
+            <div class="bid-container">
+              <button class="restar" id="restar">-</button>
+              <input class="precio-base" type="text" value="US$<%= ofertaActual %>" id="valorOferta">
+              <button class="sumar" id="sumatoria">+</button>
+            </div>
+            <p class="incremento_precio">
+              Incremento <span>US$100.00</span>
+            </p>
+          </div>
+          <!--Click aumento-->
+          <!-- <script>
+            let basePrice = 4000; // Precio inicial
+            const incrementValue = 100.00; // Incremento
+            const amountElement = document.querySelector('.amount');
+            // Función para actualizar el precio en la interfaz
+            function updateAmount() {
+              amountElement.innerText = `${basePrice.toFixed(2).replace('.', ',')} $`;
+            }
+            // Event listener para el botón +
+            document.querySelector('.plus-icon').addEventListener('click', () => {
+              basePrice += incrementValue;
+              updateAmount();
+            });
+            // Event listener para el botón -
+            document.querySelector('.minus-icon').addEventListener('click', () => {
+              if (basePrice > incrementValue) { // Asegura que no baje a menos de 0
+                basePrice -= incrementValue;
+                updateAmount();
+              }
+            });
+            // Inicializa el precio al cargar
+            updateAmount();
+
+          </script> -->
 
 
 
@@ -389,9 +423,6 @@
 
 
           <p id="estado-subasta" style="display: none;"></p>
-          <p class="incremento_precio">
-            Incremento <span>US$100.00</span>
-          </p>
 
           <div class="grid_info_card">
             <div class="div1">
@@ -407,41 +438,41 @@
               <p>Sin Comisión</p>
             </div>
           </div>
-        </div> 
-        </div>
-        
-        <!-- Chat de pujas -->
-        <div id="chat" class="chat">
-          <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-            <div class="progress-bar" id="progressBar" style="width: 100%"></div>
-          </div>
-          <div class="prorroga_esperando"></div>
-          <div id="messages" class="messages"></div>
-
-          <!-- Input para la última puja +100 (no editable) -->
-          <div class="content_acciones d-flex justify-content-center">
-            <div class="mensaje">
-              <input type="text" id="lastBidInput" placeholder="Última Puja" class="input_mensaje" disabled />
-            </div>
-            <button id="sendLastBidButton" class="btn_enviar">Enviar Última Puja</button>
-          </div>
-
-          <!-- Input para puja personalizada (editable) -->
-          <div class="content_acciones d-flex justify-content-center">
-            <div class="mensaje">
-              <input type="text" id="customBidInput" placeholder="Ingresa tu oferta" class="input_mensaje" />
-            </div>
-            <button id="sendCustomBidButton" class="btn_enviar">Enviar Puja Personalizada</button>
-          </div>
         </div>
       </div>
-      
-      
-    </div> 
-    <!--Componente de tabla ofertas -->
-    <div class="contenedor_ofertas">
-      <%- include('partials/tabla_Ofertas') %>
+
+      <!-- Chat de pujas -->
+      <div id="chat" class="chat">
+        <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+          <div class="progress-bar" id="progressBar" style="width: 100%"></div>
+        </div>
+        <div class="prorroga_esperando"></div>
+        <div id="messages" class="messages"></div>
+
+        <!-- Input para la última puja +100 (no editable) -->
+        <div class="content_acciones d-flex justify-content-center">
+          <div class="mensaje">
+            <input type="text" id="lastBidInput" placeholder="Última Puja" class="input_mensaje" disabled />
+          </div>
+          <button id="sendLastBidButton" class="btn_enviar">Enviar Última Puja</button>
+        </div>
+
+        <!-- Input para puja personalizada (editable) -->
+        <div class="content_acciones d-flex justify-content-center">
+          <div class="mensaje">
+            <input type="text" id="customBidInput" placeholder="Ingresa tu oferta" class="input_mensaje" />
+          </div>
+          <button id="sendCustomBidButton" class="btn_enviar">Enviar Puja Personalizada</button>
+        </div>
       </div>
+    </div>
+
+
+  </div>
+  <!--Componente de tabla ofertas -->
+  <div class="contenedor_ofertas">
+    <%- include('partials/tabla_Ofertas') %>
+  </div>
   </div>
 
   <!-- WHATSAPP FLOTANTE -->
@@ -458,25 +489,25 @@
   <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
   <!-- script moment fecha y hora -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-  
+
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-  // ... (código original)
+      // ... (código original)
 
-  // Agregar un efecto de transición CSS a las imágenes (opcional)
-  const images = document.querySelectorAll('.galeria .imgs');
-  images.forEach(image => {
-    image.style.transition = 'transform 0.3s ease-in-out';
-  });
+      // Agregar un efecto de transición CSS a las imágenes (opcional)
+      const images = document.querySelectorAll('.galeria .imgs');
+      images.forEach(image => {
+        image.style.transition = 'transform 0.3s ease-in-out';
+      });
 
-  // Pausar la animación al hacer clic en una imagen (opcional)
-  imageCarousel.addEventListener('click', function() {
-    isScrolling = false;
-  });
+      // Pausar la animación al hacer clic en una imagen (opcional)
+      imageCarousel.addEventListener('click', function() {
+        isScrolling = false;
+      });
 
-  // ... (resto del código)
-});
+      // ... (resto del código)
+    });
   </script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -963,7 +994,6 @@
 
 
   <script>
-    
     const modal = document.getElementById('modal_slider');
     const modalImage = document.getElementById('modal_image');
     const closeModal = document.getElementById('close_modal');
@@ -1020,6 +1050,47 @@
     document.getElementById('next').addEventListener('click', () => {
       currentIndex = (currentIndex < images.length - 1) ? currentIndex + 1 : 0; // Ir al siguiente o al primero si estamos en el último
       showModalImage(currentIndex);
+    });
+  </script>
+
+  <script>
+    const btnRestar = document.getElementById('restar');
+    const btnSumatoria = document.getElementById('sumatoria');
+    const input = document.getElementById('valorOferta');
+    const incremento = 100;
+
+    // Valor base con prefijo
+    let valorBase = 4000; // Valor base sin el prefijo
+    input.value = `US$ ${formatearNumero(valorBase)}`; // Mostrar el precio base con el prefijo
+
+    function formatearNumero(numero) {
+      return numero.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Agregar comas
+    }
+
+    function actualizarValor(nuevoValor) {
+      input.value = `US$ ${formatearNumero(nuevoValor)}`; // Mostrar el valor actualizado con el prefijo
+    }
+
+    // Sumar
+    btnSumatoria.addEventListener('click', () => {
+      let valorActual = parseFloat(input.value.replace(/US\$ |,/g, '')); // Eliminar el prefijo y comas
+      if (!isNaN(valorActual)) {
+        actualizarValor(valorActual + incremento);
+      }
+    });
+
+    // Restar
+    btnRestar.addEventListener('click', () => {
+      let valorActual = parseFloat(input.value.replace(/US\$ |,/g, '')); // Eliminar el prefijo y comas
+      if (!isNaN(valorActual) && valorActual > valorBase) { // Solo permitir restar si es mayor que el valor base
+        actualizarValor(valorActual - incremento);
+      } else {
+        //alert("No se puede disminuir por debajo del precio base."); // Mensaje si se intenta restar demasiado
+      Swal.fire({
+        icon:'error',
+        title:'No se puede disminuir por debajo del precio base',
+      })
+      }
     });
   </script>
 </body>
