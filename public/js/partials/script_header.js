@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const conterMenu = document.getElementById('menu_navegador');
 
     activarMenu.addEventListener('click', () => {
+        console.log("serealizo click");
+        
         conterMenu.classList.add('active');
     });
 

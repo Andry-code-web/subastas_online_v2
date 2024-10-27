@@ -92,8 +92,8 @@ CREATE TABLE `likes` (
 
 CREATE TABLE `ofertas` (
   `id` int NOT NULL,
-  `id_usuario` int NOT NULL,
   `id_subasta` int NOT NULL,
+  `usuario` VARCHAR(50) NOT NULL,
   `monto_oferta` decimal(10,2) NOT NULL,
   `fecha_oferta` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

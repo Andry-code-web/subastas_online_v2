@@ -11,6 +11,9 @@
   --font--about: "BioRhyme";
   --font--cont: "Scope One";
   --color--label: #989898;
+  --color--activo--nav: #c72c3b;
+  /* Color rojo activo */
+  --color--inactivo--nav: #b62a46;
 }
 
 * {
@@ -118,7 +121,7 @@
   border: none;
   color: #fff;
   font-family: var(--font--testimoni);
-  font-size: .9rem;
+  font-size: 0.9rem;
   margin-top: 1rem;
   display: flex;
   justify-content: center;
@@ -167,6 +170,7 @@
 
 .input-container {
   position: relative;
+  text-align: end;
   /* Make this container relative for positioning the button inside it */
 }
 
@@ -175,6 +179,7 @@
   /* Make sure the input takes the full width */
   padding-right: 2.5rem;
   /* Add padding to make space for the button */
+  margin-bottom: 0;
 }
 
 .mostarC {
@@ -196,6 +201,19 @@
   font-size: 1.1rem;
 }
 
+.olvide{
+  font-size: .9rem;
+  font-family: var(--font--banner--bool);
+  color: var(--color--inactivo--nav);
+  text-decoration: none;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+}
+
+.olvide:hover{
+  text-decoration: underline;
+}
+
 /* Animación de deslizamiento desde la izquierda */
 @keyframes slideInLeft {
   from {
@@ -212,8 +230,6 @@
   animation: slideInLeft 0.5s ease forwards;
 }
 
-
-
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
   .imagen {
@@ -221,7 +237,7 @@
   }
 
   .imagen_fondo {
-    opacity: .8;
+    opacity: 0.8;
   }
 
   .content_form form {
@@ -250,7 +266,7 @@
     border: none;
     color: #fff;
     font-family: var(--font--testimoni);
-    font-size: .9rem;
+    font-size: 0.9rem;
     margin-top: 1rem;
     display: flex;
     justify-content: center;
@@ -259,7 +275,7 @@
   }
 
   .g-recaptcha {
-    font-size: .9rem;
+    font-size: 0.9rem;
     margin-top: 1rem;
     display: flex;
     justify-content: center;
@@ -279,9 +295,9 @@
         text-shadow: 2px 2px 5px #000;
     } */
 
-
 /* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {}
+@media only screen and (min-width: 600px) {
+}
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) and (max-width: 992px) {
@@ -290,7 +306,7 @@
   }
 
   .imagen_fondo {
-    opacity: .8;
+    opacity: 0.8;
   }
 
   .content_form {
@@ -309,7 +325,7 @@
 
   .subastar {
     color: #ffff;
-    font-size: .9rem;
+    font-size: 0.9rem;
     text-shadow: 2px 2px 5px #000;
   }
 
@@ -319,7 +335,7 @@
   }
 
   .g-recaptcha {
-    font-size: .9rem;
+    font-size: 0.9rem;
     margin-top: 1rem;
     display: flex;
     justify-content: center;
@@ -335,7 +351,7 @@
   }
 
   .g-recaptcha {
-    font-size: .9rem;
+    font-size: 0.9rem;
     margin-top: 1rem;
     display: flex;
     justify-content: center;

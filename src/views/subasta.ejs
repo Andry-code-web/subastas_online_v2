@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="/css/partials/styles_whatsapp_flot.css">
   <link rel="stylesheet" href="/css/partials/style_chat_subastas.css">
   <link rel="stylesheet" href="/css/partials/styles_search.css">
+  <link rel="stylesheet" href="/css/partials/styles_tabla_Ofertas.css">
   <!-- ICONS -->
   <script src="https://kit.fontawesome.com/78137c0870.js" crossorigin="anonymous"></script>
   <title>Inmueble || subasta</title>
@@ -351,7 +352,61 @@
       <!-- card del chat subastas -->
       <%- include('partials/chat_subasta') %>
     </div>
+
   </div>
+
+  <!--Componente de tabla ofertas -->
+  <div class="contenedor_ofertas">
+    <h2> OFERTAS</h2>
+
+    <table class="tabla_principal">
+      <thead class="tabla_letras">
+        <tr>
+          <th>USUARIO</th>
+          <th>UBICACION DEL VEHICULO</th>
+          <th>FECHA DE LA SUBASTA</th>
+          <th>VALOR DE LA OFERTA</th>
+        </tr>
+      </thead>
+      <tbody class="tabla_borde">
+        <% oferta.forEach((oferta) => { %>
+          <tr>
+            <td><%= oferta.usuario %></td>
+            <td><!-- Aquí puedes incluir el campo de ubicación si está disponible en `oferta` --></td>
+            <td><%= oferta.fecha_subasta %></td>
+            <td><%= oferta.monto_oferta %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <div class="d-flex justify-content-between align-items-center">
+      <h2>OFERTAS CONSOLIDADAS</h2>
+      <p class="offer-summary"><strong>TOTAL: 0 COMPRADOR(ES)</strong></p>
+    </div>
+
+    <table class="tabla_principal">
+      <thead class="tabla_letras">
+        <tr>
+          <th>USUARIO</th>
+          <th>UBICACION DEL VEHICULO</th>
+          <th>CANTIDAD DE OFERTAS</th>
+          <th>VALOR DE LA OFERTA</th>
+        </tr>
+      </thead>
+      <tbody class="tabla_borde">
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+
   <div id="particles-js"></div>
 
   <!-- WHATSAPP FLOTANTE -->
@@ -392,11 +447,11 @@
       socket.emit('joinRoom', auctionRoom);
 
       function startAuction() {
-        Swal.fire({
+        /* Swal.fire({
           title: '¡Subasta Activa!',
           text: 'La subasta se activará cuando se realice la primera puja',
           icon: 'success',
-        });
+        }); */
 
         messageInput.value = formatNumber(currentBid + 100);
 
@@ -780,7 +835,7 @@
             value: deposit
           } = await Swal.fire({
             title: "Depósito requerido",
-            text: "Debes depositar 200 dólares para participar en la subasta.",
+            text: "Debes depositar 300 dólares para participar en 5 subasta.",
             showCancelButton: true,
             confirmButtonText: 'Ya deposité',
             cancelButtonText: 'No deposité',
@@ -943,6 +998,209 @@
         title: "Para participar en hasta 3 subastas, es necesario depositar $500.",
         icon: "question"
       });
+    });
+  </script>
+
+  <script>
+    const btnRestar = document.getElementById('restar');
+    const btnSumatoria = document.getElementById('sumatoria');
+    const input = document.getElementById('valorOferta');
+    const incremento = 100;
+    // Valor base con prefijo
+    // Valor base con prefijo, eliminando la coma de ofertaActual
+    let valorBase = Number("<%= ofertaActual.replace(/,/g, '') %>"); // Convierte a número eliminando cualquier coma
+    input.value = `US$ ${formatearNumero(valorBase)}`; // Mostrar el precio base con el prefijo
+
+    function formatearNumero(numero) {
+      return numero.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Agregar comas
+    }
+
+    function actualizarValor(nuevoValor) {
+      input.value = `US$ ${formatearNumero(nuevoValor)}`; // Mostrar el valor actualizado con el prefijo
+    }
+    // Sumar
+    btnSumatoria.addEventListener('click', () => {
+      let valorActual = parseFloat(input.value.replace(/US\$ |,/g, '')); // Eliminar el prefijo y comas
+      if (!isNaN(valorActual)) {
+        actualizarValor(valorActual + incremento);
+      }
+    });
+    // Restar
+    btnRestar.addEventListener('click', () => {
+      let valorActual = parseFloat(input.value.replace(/US\$ |,/g, '')); // Eliminar el prefijo y comas
+      if (!isNaN(valorActual) && valorActual > valorBase) { // Solo permitir restar si es mayor que el valor base
+        actualizarValor(valorActual - incremento);
+      } else {
+        //alert("No se puede disminuir por debajo del precio base."); // Mensaje si se intenta restar demasiado
+        Swal.fire({
+          icon: 'error',
+          title: 'No se puede disminuir por debajo del precio base',
+        })
+      }
+    });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btnParticiparPuja = document.getElementById('participar_puja');
+      let montoSeleccionado = document.getElementById('valorOferta').value;
+      montoSeleccionado = parseFloat(montoSeleccionado.replace(/[^0-9.-]+/g, '')); // Extrae solo el número
+
+
+      async function obtenerDatosUsuario() {
+        try {
+          const response = await fetch('/usuario');
+          const data = await response.json();
+
+          if (data.success) {
+            return {
+              id: data.id,
+              nombre: data.nombre
+            };
+          } else {
+            console.error('Error al obtener datos del usuario:', data.message);
+            return null;
+          }
+        } catch (error) {
+          console.error('Error al obtener datos del usuario:', error);
+          return null;
+        }
+      }
+
+      async function enviarPuja(idSubasta, monto, usuario, fecha, hora) {
+        try {
+          const response = await fetch('/enviar-puja', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              idSubasta,
+              montoSeleccionado: monto, // Asegúrate de que aquí se use el monto numérico
+              usuario,
+              fechaSubasta: fecha,
+              horaSubasta: hora
+            }),
+          });
+
+          if (response.ok) {
+            await Swal.fire({
+              title: 'Puja enviada',
+              text: 'Tu puja ha sido registrada exitosamente.',
+              icon: 'success',
+              confirmButtonText: 'Aceptar'
+            });
+          } else {
+            await Swal.fire('Error', 'No se pudo registrar la puja. Inténtalo nuevamente.', 'error');
+          }
+        } catch (error) {
+          console.error('Error al enviar la puja:', error);
+        }
+      }
+
+      async function confirmarPuja(idSubasta, monto, usuarioDatos, fecha, hora) {
+        const confirmPuja = await Swal.fire({
+          title: 'Confirmación de Puja',
+          text: `Usuario: ${usuarioDatos.nombre}\nID de la subasta: ${idSubasta}\nMonto seleccionado: US$${monto}\nFecha: ${fecha}\nHora: ${hora}`,
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonText: 'Enviar Puja',
+          cancelButtonText: 'Modificar Monto'
+        });
+
+        if (confirmPuja.isConfirmed) {
+          await enviarPuja(idSubasta, monto, usuarioDatos.nombre, fecha, hora);
+        } else if (confirmPuja.dismiss === Swal.DismissReason.cancel) {
+          const {
+            value: nuevoMonto
+          } = await Swal.fire({
+            title: `Modificar Monto US$${monto}`,
+            input: 'text',
+            inputLabel: 'Introduce el nuevo monto de la puja',
+            showCancelButton: true,
+            confirmButtonText: 'Modificar',
+            cancelButtonText: 'Cancelar',
+            inputValidator: (value) => {
+              if (!value || isNaN(value) || Number(value) <= 0) {
+                return 'Debes ingresar un monto válido mayor que 0';
+              }
+            }
+          });
+
+          if (nuevoMonto) {
+            await confirmarPuja(idSubasta, nuevoMonto, usuarioDatos, fecha, hora); // Llamada recursiva con el nuevo monto
+          }
+        }
+      }
+
+      if (btnParticiparPuja) {
+        btnParticiparPuja.addEventListener('click', async () => {
+          const usuarioDatos = await obtenerDatosUsuario();
+
+          if (!usuarioDatos) {
+            const {
+              value: login
+            } = await Swal.fire({
+              title: "¡Atención!",
+              text: "Debes iniciar sesión para participar en la puja.",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Iniciar sesión',
+              cancelButtonText: 'Crear cuenta'
+            });
+
+            if (login) {
+              window.location.href = '/login';
+            } else {
+              window.location.href = '/registro';
+            }
+            return;
+          }
+
+          const idSubasta = "<%= subasta.id %>";
+          let montoSeleccionado = document.getElementById('valorOferta').value;
+          const fechaActual = new Date();
+          const fechaFormateada = fechaActual.toISOString().split('T')[0];
+          const horaFormateada = fechaActual.toTimeString().split(' ')[0];
+
+          await confirmarPuja(idSubasta, montoSeleccionado, usuarioDatos, fechaFormateada, horaFormateada);
+        });
+      } else {
+        console.log("El botón 'participar_puja' no está disponible.");
+      }
+    });
+  </script>
+
+
+
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const countdownElement = document.getElementById("countdown-timer");
+      const estadoSubasta = document.getElementById("estado_subasta");
+
+      //fecha de la subasta
+      const fechaIniciSubasta = new Date("<%= fechaHoraSubasta %>").getTime();
+
+      //funcion para actualizar el contador cada segundo
+      const IntervalId = setInterval(() => {
+        const now = new Date().getTime();
+        const timeLeft = fechaIniciSubasta - now;
+
+        if (timeLeft <= 0) {
+          clearInterval(IntervalId);
+          estadoSubasta.innerHTML = "La subasta a comenzado actualize la pagina";
+          countdownElement.innerHTML = "0d 0h 0m 0s";
+          return;
+        }
+
+        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(timeLeft % (1000 * 60 * 60 * 24) / (1000 * 60 * 60));
+        const minutes = Math.floor(timeLeft % (1000 * 60 * 60) / (1000 * 60));
+        const seconds = Math.floor(timeLeft % (1000 * 60) / 1000);
+
+        countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      }, 1000);
     });
   </script>
 

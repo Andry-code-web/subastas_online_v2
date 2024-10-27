@@ -1,6 +1,9 @@
 <!DOCTYPE html> <!-- Declara que este documento es HTML5 -->
-<html lang="en"> <!-- Inicio del documento HTML, especificando el idioma como inglés -->
-<head> <!-- Inicio de la sección de cabecera del documento -->
+<html lang="en">
+<!-- Inicio del documento HTML, especificando el idioma como inglés -->
+
+<head>
+  <!-- Inicio de la sección de cabecera del documento -->
   <meta charset="UTF-8"> <!-- Define la codificación de caracteres del documento como UTF-8 -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Configura la vista para dispositivos móviles -->
   <link rel="shortcut icon" href="/img/footer_logo.svg" type="image/x-icon"> <!-- Define el icono de la pestaña del navegador -->
@@ -11,38 +14,48 @@
   <title>Subastas online | login</title> <!-- Define el título de la página -->
 </head>
 
-<body> <!-- Inicio del cuerpo del documento -->
-  <div class="contenedor"> <!-- Contenedor principal -->
-    <div class="imagen slideInLeft"> <!-- Sección de imagen con animación de deslizamiento -->
-      <a class="regreso" href="/"> <!-- Enlace para regresar a la página principal -->
+<body>
+  <!-- Inicio del cuerpo del documento -->
+  <div class="contenedor">
+    <!-- Contenedor principal -->
+    <div class="imagen slideInLeft">
+      <!-- Sección de imagen con animación de deslizamiento -->
+      <a class="regreso" href="/">
+        <!-- Enlace para regresar a la página principal -->
         <img src="/img/regresar.svg" alt=""> <!-- Imagen del botón de regreso -->
       </a>
       <img class="imagen_fondo" src="/img/banner_login_3.jpeg" alt=""> <!-- Imagen de fondo -->
     </div>
-    
-    <div class="fondo"> <!-- Sección de fondo -->
-      <div class="content_form slideInLeft"> <!-- Contenedor del formulario con animación -->
+
+    <div class="fondo">
+      <!-- Sección de fondo -->
+      <div class="content_form slideInLeft">
+        <!-- Contenedor del formulario con animación -->
         <h2>Inicio de sesión</h2> <!-- Título del formulario -->
-        
-        <form action="/login" class="slideInLeft" method="POST" id="loginForm"> <!-- Formulario de inicio de sesión -->
+
+        <form action="/login" class="slideInLeft" method="POST" id="loginForm">
+          <!-- Formulario de inicio de sesión -->
           <label for="usuario">Usuario*</label> <!-- Etiqueta para el campo de usuario -->
           <input type="text" name="usuario" id="usuario" placeholder="Ingresa tu Usuario" required> <!-- Campo de entrada para el usuario -->
-          
-          <div class="content_contra"> <!-- Contenedor para el campo de contraseña -->
+
+          <div class="content_contra">
+            <!-- Contenedor para el campo de contraseña -->
             <label for="contraseña">Contraseña*</label> <!-- Etiqueta para el campo de contraseña -->
-            <div class="input-container"> <!-- Contenedor para el input de contraseña y el botón de mostrar/ocultar -->
+            <div class="input-container">
+              <!-- Contenedor para el input de contraseña y el botón de mostrar/ocultar -->
               <input type="password" name="contra" id="contraseña" placeholder="Ingresa tu Contraseña" required> <!-- Campo de entrada para la contraseña -->
-              <button type="button" class="mostarC" id="toggleButton" onclick="mostrar()"> <!-- Botón para mostrar/ocultar contraseña -->
-               
-              </button>
+              <!-- Botón para mostrar/ocultar contraseña -->
+              <!-- <button type="button" class="mostarC" id="toggleButton" onclick="mostrar()"></button> -->
+              <a href="/confirmar/datos" class="olvide">Olvide mi contraseña</a>
             </div>
           </div>
-          
+
           <!-- Añadido: Div para el captcha -->
-          <div class="mt-1 mx-5"> <!-- Contenedor para el captcha con margen superior 6Ld5v10qAAAAAJLNFTMiEGGW-fiNln15iEL7t2em-->
+          <div class="mt-1 mx-5">
+            <!-- Contenedor para el captcha con margen superior 6Ld5v10qAAAAAJLNFTMiEGGW-fiNln15iEL7t2em-->
             <div class="g-recaptcha" data-sitekey="6LePP2EqAAAAADM8IRmkyUS2jT8xWndcwjC_jjGs"></div> <!-- Widget de reCAPTCHA -->
           </div>
-          
+
           <button type="submit">Iniciar sesión</button> <!-- Botón para enviar el formulario -->
           <a class="registrar" href="/registro">Regístrate</a> <!-- Enlace para registrarse -->
           <a class="regresar" href="/">Ir al inicio</a> <!-- Enlace para volver al inicio -->
@@ -58,7 +71,7 @@
   <script>
     document.getElementById('loginForm').addEventListener('submit', async function(event) { // Agrega un evento de escucha al formulario
       event.preventDefault(); // Previene el envío por defecto del formulario
-      
+
       // Verificar si el captcha está completo
       const response = grecaptcha.getResponse(); // Obtiene la respuesta del captcha
       if (response === '') { // Si el captcha no está completo
@@ -70,7 +83,7 @@
         });
         return; // Detiene la ejecución si el captcha no está completo
       }
-      
+
       // Si el captcha está completo, continuar con el proceso de login
       const formData = new FormData(this); // Crea un objeto FormData con los datos del formulario
       const data = { // Crea un objeto con los datos del formulario y el captcha
@@ -87,9 +100,9 @@
           },
           body: JSON.stringify(data)
         });
-        
+
         const result = await responseServer.json(); // Convierte la respuesta del servidor a JSON
-        
+
         if (responseServer.ok) { // Si la respuesta del servidor es exitosa
           // Si el login es exitoso
           Swal.fire({ // Muestra una alerta de éxito
@@ -125,7 +138,7 @@
     function mostrar() { // Función para mostrar/ocultar la contraseña
       const contra = document.getElementById("contraseña"); // Obtiene el elemento de la contraseña
       const icon = document.getElementById("toggleIcon"); // Obtiene el icono del botón
-      
+
       if (contra.type == "password") { // Si el tipo es "password" (contraseña oculta)
         contra.type = "text"; // Cambia el tipo a "text" para mostrar la contraseña
         icon.classList.remove('bi-eye-slash-fill'); // Remueve el icono de ojo tachado
@@ -139,4 +152,5 @@
   </script>
 
 </body>
+
 </html>

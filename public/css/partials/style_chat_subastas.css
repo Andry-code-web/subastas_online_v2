@@ -360,19 +360,30 @@
 
 .inputGroup {
   font-family: 'Segoe UI', sans-serif;
-  width: 80%;
+  width: 100%;
   position: relative;
 }
 
-.inputGroup input {
+.inputGroup div input {
   font-size: 100%;
   padding: 0.8em;
   outline: none;
   border: 2px solid rgb(200, 200, 200);
   background-color: transparent;
   border-radius: 20px;
-  width: 100%;
+  width: 65%;
   height: 45px;
+  text-align: center;
+}
+
+.card-body .restar,
+.card-body .sumar{
+  width: 30px;
+  height: 30px;
+  border-radius: .5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .inputGroup label {

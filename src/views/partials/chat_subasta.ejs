@@ -31,9 +31,12 @@
       </div>
     </div>
 
-    <h2>¡Próximamente!</h2>
+    <h2 id="estado_subasta">¡Próximamente!</h2>
     <p class="fecha-subasta">
       Fecha de inicio: <%= fechaFormateadaEsp %> <%= subasta.hora_formateada %>
+    </p>
+    <p class="fecha-subasta" id="countdown">
+      Tiempo restante: <span id="countdown-timer"></span>
     </p>
 
     <p class="precio_con_incremento">
@@ -49,16 +52,19 @@
       <span class="price">US$<%= formatNumber(subasta.precio_base) %></span>
     </p>
 
-    <form action="" method="post" class="form_oferta">
+    <div class="form_oferta">
       <div class="inputGroup">
-        <input type="text" required="" autocomplete="off">
-        <label for="name"><%= ofertaActual %> $</label>
+        <div class="d-flex justify-content-evenly align-items-center">
+          <button class="restar" id="restar">-</button>
+          <input type="text" value="<%= ofertaActual %>" id="valorOferta">
+          <button class="sumar" id="sumatoria">+</button>
+        </div>
         <p class="Incremento">Incremento US$100.00</p>
       </div>
-      
+
 
       <button type="submit" id="participar_puja">ENVIAR PUJA</button>
-    </form>
+    </div>
 
 
     <div class="grid_info_card">
