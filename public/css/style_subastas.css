@@ -55,6 +55,8 @@
   width: 35%;
   background-color: #f0f0f0;
   padding: 1rem;
+  flex-direction: 2rem;
+  overflow-y: auto;
 }
 
 .scroll-1::-webkit-scrollbar {
@@ -645,7 +647,6 @@
 }
 
 
-
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
   .detalles_subasta {
@@ -666,47 +667,58 @@
   }
 }
 
-/* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {}
-
-/* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (min-width: 768px) and (max-width: 992px) {
-  .detalles_subasta {
-    flex-direction: column-reverse;
-    align-items: center;
-  }
-
-  .property-detail {
-    width: 80%;
-  }
-}
-
-/* Large devices (laptops/desktops, 992px and up) */
-@media only screen and (min-width: 992px) and (max-width: 1200px) {
-  .detalles_subasta {
+/*Actualizacion tamaño de letras*/
+/* Small devices (small cell phones, 360px and up) */
+@media only screen and (min-width: 360px) and (max-width: 740px) {
+  .title_veiculo {
     margin-top: 4rem;
-  }
-
-  .property-detail {
-    width: 50%;
-  }
-
-  .card {
-    width: 300px;
+    font-size: 28px;
   }
 }
 
-/* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1200px) and (max-width: 1440px) {
-  .detalles_subasta {
+/* Small devices (small cell phones, 412px and up) */
+@media only screen and (min-width: 412px) and (max-width: 915px) {
+  .title_veiculo {
     margin-top: 5rem;
+    font-size: 25px;
   }
 
-  .property-detail {
-    width: 50%;
+  /* Small devices (portrait tablets and large phones, 600px and up) */
+  @media only screen and (min-width: 600px) {}
+
+  /* Medium devices (landscape tablets, 768px and up) */
+  @media only screen and (min-width: 768px) and (max-width: 992px) {
+    .detalles_subasta {
+      flex-direction: column-reverse;
+      align-items: center;
+    }
+
+    .property-detail {
+      width: 80%;
+    }
+
+    .title_veiculo {
+      margin-top: 8rem;
+    }
   }
 
-  .card {
-    margin-top: 1rem;
+  /* Large devices (laptops/desktops, 992px and up) */
+  @media only screen and (min-width: 992px) and (max-width: 1200px) {
+    .detalles_subasta {
+      margin-top: 4rem;
+    }
+
+    .property-detail {
+      width: 50%;
+    }
   }
-}
+
+  /* Extra large devices (large laptops and desktops, 1200px and up) */
+  @media only screen and (min-width: 1200px) and (max-width: 1440px) {
+    .detalles_subasta {
+      margin-top: 5rem;
+    }
+    .property-detail {
+      width: 50%;
+    }
+  }

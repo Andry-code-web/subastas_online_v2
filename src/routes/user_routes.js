@@ -1228,6 +1228,7 @@ router.post("/editar_user/:id", (req, res) => {
   );
 });
 
+
 /* Validar el correo y mandar por la session */
 router.get("/confirmar/datos", (req, res) => {
   res.render("validar_correo");
