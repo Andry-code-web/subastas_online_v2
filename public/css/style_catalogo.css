@@ -813,7 +813,7 @@ header .session p .btn_menu i {
   /* BANNER */
   .header img {
     margin-top: 2rem;
-    height: 30vh;
+    height: 18vh;
   }
 
   .header .overlay h1 {
@@ -824,6 +824,17 @@ header .session p .btn_menu i {
   .header .overlay p {
     font-size: .9rem;
     margin-left: 2rem;
+  }
+
+  .btn_fechas_F_A{
+    height: 93px;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .btn_fechas_F_A a{
+    padding: 4px 12px;
+    font-size: 13px;
   }
 
   /* SUBASTAS */
@@ -920,6 +931,15 @@ header .session p .btn_menu i {
   .like-button {
     margin-top: 0rem;
   }
+
+.card{
+  width: 314px;
+}
+
+  .contenido_card_grid{
+    grid-template-columns: repeat(1, 1fr);
+  }
+
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
@@ -931,7 +951,7 @@ header .session p .btn_menu i {
   /* BANNER */
   .header img {
     margin-top: 5rem;
-    height: 35vh;
+    height: 27vh;
   }
 
   /* SUBASTAS */
@@ -940,6 +960,11 @@ header .session p .btn_menu i {
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  .btn_fechas_F_A{
+    height: 100px;
+    gap: 2rem;
   }
 
   .filtros form {
@@ -973,8 +998,13 @@ header .session p .btn_menu i {
 
   .detalle_like {
     justify-content: flex-end;
-    width: 30%;
+    width: 90%;
   }
+
+  .contenido_card_grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
@@ -1031,12 +1061,21 @@ header .session p .btn_menu i {
   }
 
   .detalle_like {
-    width: 30%;
+    width: 100%;
   }
 
   .like-button {
-    width: 80%;
+    width: 56%;
   }
+
+  .card{
+    width: 287px;
+  }
+
+  .contenido_card_grid{
+    grid-template-columns: repeat(3,1fr);
+  }
+
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
@@ -1066,10 +1105,18 @@ header .session p .btn_menu i {
   }
 
   .detalle_like {
-    width: 30%;
+    width: 100%;
   }
 
   .like-button {
-    width: 80%;
+    width: 50%;
+  }
+
+  .contenido_card_grid{
+    grid-template-columns: repeat(3,1fr);
+  }
+  .card{
+    padding: 19px;
+    width: 295px;
   }
 }

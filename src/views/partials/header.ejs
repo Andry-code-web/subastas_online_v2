@@ -26,6 +26,18 @@
         <li>
           <a href="/info-comprar">Comprar</a>
         </li>
+        <li class="item_buscador">
+          <div class="group ms-3">
+            <form id="search-form" action="/catalogo" method="GET">
+              <input id="search-input" placeholder="Buscar marca o modelo" type="search" class="input" name="search">
+              <button type="submit" class="btn_buscar">Buscar</button>
+              <!-- <ul id="suggestions-list" class="suggestions"></ul> -->
+            </form>
+          </div>
+
+        </li>
+
+
       </ul>
     </div>
   </div>
@@ -36,7 +48,8 @@
   <nav class="navbar navbar-expand-lg">
 
     <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -77,9 +90,9 @@
             <input id="search-input" placeholder="Buscar marca o modelo" type="search" class="input" name="search">
             <button type="submit" class="btn_buscar">Buscar</button>
             <!-- <ul id="suggestions-list" class="suggestions"></ul> -->
-          </form>          
+          </form>
         </div>
-        
+
 
         <!-- CSS para estilos de sugerencias -->
         <!-- <style>
@@ -112,51 +125,51 @@
   </nav>
 
 
-  <div class="session"> 
+  <div class="session">
     <% if (usuario) { %>
-    <p class="d-flex align-items-center ">
-      <span>
-        <%= usuario.nombre %>
-      </span>
-      <button class="btn_menu ms-1" id="btn_menu">
-        <i class="bi bi-list"></i>
-      </button>
-    <div class="menu_desplegable d-flex flex-column justify-content-between">
-      <div>
-        <div class="cabezera_menu d-flex justify-content-between">
-          <h3>Subastas</h3>
-          <button id="btn_close">
-            <i class="bi bi-x-lg"></i>
-          </button>
+      <p class="d-flex align-items-center ">
+        <span>
+          <%= usuario.nombre %>
+        </span>
+        <button class="btn_menu ms-1" id="btn_menu">
+          <i class="bi bi-list"></i>
+        </button>
+      <div class="menu_desplegable d-flex flex-column justify-content-between">
+        <div>
+          <div class="cabezera_menu d-flex justify-content-between">
+            <h3>Subastas</h3>
+            <button id="btn_close">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+          <ul>
+            <li><a href="#">Me gusta</a></li>
+            <li><a href="/editar_user/<%= usuario.id %>">Editar usuario</a></li>
+          </ul>
         </div>
-        <ul>
-          <li><a href="#">Me gusta</a></li>
-          <li><a href="/editar_user/<%= usuario.id %>">Editar usuario</a></li>
-        </ul>
-      </div>
-      <div class="perfil_user">
-        <div class="d-flex flex-row">
-          <i class="bi bi-person-bounding-box" style="font-size: 2.5rem; color: #fff; margin-right: 1rem;"></i>
-          <div class="d-flex flex-column">
-            <strong>Cliente</strong>
-            <small>
-              <%= usuario.nombre %>
-            </small>
-            <a href="/logout" class="btn btn-danger btn-sm ms-2">Cerrar Sesión</a>
+        <div class="perfil_user">
+          <div class="d-flex flex-row">
+            <i class="bi bi-person-bounding-box" style="font-size: 2.5rem; color: #fff; margin-right: 1rem;"></i>
+            <div class="d-flex flex-column">
+              <strong>Cliente</strong>
+              <small>
+                <%= usuario.nombre %>
+              </small>
+              <a href="/logout" class="btn btn-danger btn-sm ms-2">Cerrar Sesión</a>
+            </div>
           </div>
         </div>
-      </div>
-      <% } else { %>
-      <p class="ingresar">
-        <span class="">
-          <i class="bi bi-person"></i>
-        </span>
-        <span>
-          <a href="/login" class="ingresar_ligin">Ingresar</a>
+        <% } else { %>
+          <p class="ingresar">
+            <span class="">
+              <i class="bi bi-person"></i>
+            </span>
+            <span>
+              <a href="/login" class="ingresar_ligin">Ingresar</a>
 
-        </span>
-      </p>
-      <% } %>
-    </div>
+            </span>
+          </p>
+          <% } %>
+      </div>
   </div>
 </header>
