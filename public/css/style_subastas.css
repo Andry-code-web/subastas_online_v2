@@ -594,6 +594,7 @@
 }
 
 ------------------
+/*PrecioBase*/
 .container-precio {
   display: flex;
   justify-content: center;
@@ -651,6 +652,7 @@ input:focus {
   align-items: center;
   justify-content: center;
 }
+/**/
 ---------------------------
 #particles-js {
   position: absolute;

@@ -373,7 +373,7 @@
             <span class="precio_base">Precio base:</span>
             <span class="price">US$<%= formatNumber(subasta.precio_base) %></span>
           </p>
-          <!--Boton precio-->
+          <!--Boton precioBase-->
           <div class="container-precio">
             <div class="bid-container">
               <button class="restar" id="restar">-</button>
@@ -1052,8 +1052,9 @@
       showModalImage(currentIndex);
     });
   </script>
-
+   
   <script>
+    //Sumar y restar precioBase
     const btnRestar = document.getElementById('restar');
     const btnSumatoria = document.getElementById('sumatoria');
     const input = document.getElementById('valorOferta');

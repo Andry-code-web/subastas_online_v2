@@ -1,9 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const router = express.Router();
-const bcrypt = require('bcrypt');
-const moment = require('moment');
-const momenT = require('moment-timezone'); // Asegúrate de tener moment-timezone instalado
+const bcrypt = require("bcrypt");
+const moment = require("moment");
+const momenT = require("moment-timezone"); // Asegúrate de tener moment-timezone instalado
 
 const { conection } = require("../database/db"); // Asegúrate de que el nombre del archivo y la ruta sean correctos
 
@@ -13,10 +13,9 @@ const isAuthenticated = (req, res, next) => {
   if (req.session && req.session.usuario) {
     return next();
   } else {
-    res.redirect('/login');
+    res.redirect("/login");
   }
 };
-
 
 router.get("/", (req, res) => {
   // Consulta para obtener todas las subastas, incluyendo likes
@@ -54,7 +53,9 @@ router.get("/", (req, res) => {
       conection.query(queryConteoCategorias, (error, conteoCategorias) => {
         if (error) {
           console.error("Error al obtener el conteo de categorías", error);
-          return res.status(500).send("Error al obtener el conteo de categorías");
+          return res
+            .status(500)
+            .send("Error al obtener el conteo de categorías");
         }
 
         // Función para formatear el precio
@@ -73,15 +74,25 @@ router.get("/", (req, res) => {
           return {
             ...subasta,
             precio_base: formatearPrecio(subasta.precio_base), // Formatea el precio aquí
-            imagenes: imagenesSubasta.map((img) => img.imagen.toString("base64")),
+            imagenes: imagenesSubasta.map((img) =>
+              img.imagen.toString("base64")
+            ),
           };
         });
 
         // Filtra subastas por categoría y limita a un máximo de 10 subastas por categoría
-        const camionetas = subastasConImagenes.filter(subasta => subasta.categoria === 'camioneta').slice(0, 10);
-        const autos = subastasConImagenes.filter(subasta => subasta.categoria === 'auto').slice(0, 10);
-        const motos = subastasConImagenes.filter(subasta => subasta.categoria === 'moto').slice(0, 10);
-        const piezas = subastasConImagenes.filter(subasta => subasta.categoria === 'piezas');
+        const camionetas = subastasConImagenes
+          .filter((subasta) => subasta.categoria === "camioneta")
+          .slice(0, 10);
+        const autos = subastasConImagenes
+          .filter((subasta) => subasta.categoria === "auto")
+          .slice(0, 10);
+        const motos = subastasConImagenes
+          .filter((subasta) => subasta.categoria === "moto")
+          .slice(0, 10);
+        const piezas = subastasConImagenes.filter(
+          (subasta) => subasta.categoria === "piezas"
+        );
 
         // Obtener las cantidades de subastas por categoría
         const cantidades = conteoCategorias.reduce((acc, categoria) => {
@@ -95,7 +106,7 @@ router.get("/", (req, res) => {
           autos,
           motos,
           piezas,
-          cantidades // Objeto con la cantidad de subastas por categoría
+          cantidades, // Objeto con la cantidad de subastas por categoría
         });
       });
     });
@@ -129,7 +140,7 @@ router.get("/login", (req, res) => {
 });
 
 // Ruta de inicio de sesión
-router.post('/login', (req, res) => {
+router.post("/login", (req, res) => {
   const { usuario, contra } = req.body;
 
   // Consulta parametrizada para evitar inyecciones SQL
@@ -148,7 +159,9 @@ router.post('/login', (req, res) => {
       bcrypt.compare(contra, usuarioEncontrado.contraseña, (err, isMatch) => {
         if (err) {
           console.error("Error al comparar contraseñas: ", err);
-          return res.status(500).json({ message: "Error interno del servidor" });
+          return res
+            .status(500)
+            .json({ message: "Error interno del servidor" });
         }
 
         if (isMatch) {
@@ -170,14 +183,13 @@ router.post('/login', (req, res) => {
 });
 
 // Ruta para obtener información del usuario
-router.get('/usuario', (req, res) => {
+router.get("/usuario", (req, res) => {
   if (req.session.usuario) {
     res.json({ success: true, id: req.session.usuario.id });
   } else {
-    res.status(401).json({ success: false, message: 'No estás autenticado' });
+    res.status(401).json({ success: false, message: "No estás autenticado" });
   }
 });
-
 
 router.get("/logout", (req, res) => {
   req.session.destroy((err) => {
@@ -197,42 +209,42 @@ router.get("/registro", (req, res) => {
 
 const saltRounds = 10; // Puedes ajustar el número de rondas de sal
 
-router.post('/registro', (req, res) => {
+router.post("/registro", (req, res) => {
   const datos = req.body;
 
   // Determinar el tipo de persona y asignar valores predeterminados
-  if (datos.tipo_persona === 'natural') {
+  if (datos.tipo_persona === "natural") {
     // Persona Natural
     const valores = {
       tipo_persona: datos.tipo_persona,
-      email: datos.email || '0',
-      confirmacion_email: datos.confirmacion_email || '0',
-      celular: datos.celular || '0',
-      telefono: datos.telefono || '0',
-      nombre_apellidos: datos.nombre_apellidos || '0',
-      dni_ce: datos.dni_ce || '0',
-      fecha_nacimiento: datos.fecha_nacimiento || '0000-00-00',
-      sexo: datos.sexo || '0',
-      estado_civil: datos.estado_civil || '0',
+      email: datos.email || "0",
+      confirmacion_email: datos.confirmacion_email || "0",
+      celular: datos.celular || "0",
+      telefono: datos.telefono || "0",
+      nombre_apellidos: datos.nombre_apellidos || "0",
+      dni_ce: datos.dni_ce || "0",
+      fecha_nacimiento: datos.fecha_nacimiento || "0000-00-00",
+      sexo: datos.sexo || "0",
+      estado_civil: datos.estado_civil || "0",
       ruc: null,
       nombre_comercial: null,
       actividad_comercial: null,
-      departamento: datos.departamento || '0',
-      provincia: datos.provincia || '0',
-      distrito: datos.distrito || '0',
-      direccion: datos.direccion || '0',
-      numero: datos.numero || '0',
-      complemento: datos.complemento || '0',
-      usuario: datos.usuario || '0',
-      contraseña: datos.contraseña || '0',
-      terminos_y_condiciones: parseInt(datos.terminos_y_condiciones) ? 1 : 0
+      departamento: datos.departamento || "0",
+      provincia: datos.provincia || "0",
+      distrito: datos.distrito || "0",
+      direccion: datos.direccion || "0",
+      numero: datos.numero || "0",
+      complemento: datos.complemento || "0",
+      usuario: datos.usuario || "0",
+      contraseña: datos.contraseña || "0",
+      terminos_y_condiciones: parseInt(datos.terminos_y_condiciones) ? 1 : 0,
     };
 
     // Encriptar la contraseña
     bcrypt.hash(valores.contraseña, saltRounds, (err, hashedPassword) => {
       if (err) {
-        console.error('Error al encriptar la contraseña:', err);
-        return res.status(500).send('Error al encriptar la contraseña');
+        console.error("Error al encriptar la contraseña:", err);
+        return res.status(500).send("Error al encriptar la contraseña");
       }
 
       // Actualizar el valor de la contraseña con el hash
@@ -248,52 +260,73 @@ router.post('/registro', (req, res) => {
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
 
-      conection.query(sql, [
-        valores.tipo_persona, valores.email, valores.confirmacion_email, valores.celular, valores.telefono,
-        valores.nombre_apellidos, valores.dni_ce, valores.fecha_nacimiento, valores.sexo, valores.estado_civil,
-        valores.ruc, valores.nombre_comercial, valores.actividad_comercial,
-        valores.departamento, valores.provincia, valores.distrito, valores.direccion, valores.numero, valores.complemento,
-        valores.usuario, valores.contraseña, valores.terminos_y_condiciones
-      ], (err, results) => {
-        if (err) {
-          console.error('Error al realizar la inserción:', err);
-          return res.status(500).send('Error al realizar la inserción');
+      conection.query(
+        sql,
+        [
+          valores.tipo_persona,
+          valores.email,
+          valores.confirmacion_email,
+          valores.celular,
+          valores.telefono,
+          valores.nombre_apellidos,
+          valores.dni_ce,
+          valores.fecha_nacimiento,
+          valores.sexo,
+          valores.estado_civil,
+          valores.ruc,
+          valores.nombre_comercial,
+          valores.actividad_comercial,
+          valores.departamento,
+          valores.provincia,
+          valores.distrito,
+          valores.direccion,
+          valores.numero,
+          valores.complemento,
+          valores.usuario,
+          valores.contraseña,
+          valores.terminos_y_condiciones,
+        ],
+        (err, results) => {
+          if (err) {
+            console.error("Error al realizar la inserción:", err);
+            return res.status(500).send("Error al realizar la inserción");
+          }
+          res.redirect("/login");
         }
-        res.redirect('/login');
-      });
+      );
     });
-  } else if (datos.tipo_persona === 'juridica') {
+  } else if (datos.tipo_persona === "juridica") {
     // Persona Jurídica
     const valores = {
       tipo_persona: datos.tipo_persona,
-      email: datos.email || '0',
-      confirmacion_email: datos.confirmacion_email || '0',
-      celular: datos.celular || '0',
-      telefono: datos.telefono || '0',
+      email: datos.email || "0",
+      confirmacion_email: datos.confirmacion_email || "0",
+      celular: datos.celular || "0",
+      telefono: datos.telefono || "0",
       nombre_apellidos: null,
       dni_ce: null,
       fecha_nacimiento: null,
       sexo: null,
       estado_civil: null,
-      ruc: datos.ruc || '0',
-      nombre_comercial: datos.nombre_comercial || '0',
-      actividad_comercial: datos.actividad_comercial || '0',
-      departamento: datos.departamento || '0',
-      provincia: datos.provincia || '0',
-      distrito: datos.distrito || '0',
-      direccion: datos.direccion || '0',
-      numero: datos.numero || '0',
-      complemento: datos.complemento || '0',
-      usuario: datos.usuario || '0',
-      contraseña: datos.contraseña || '0',
-      terminos_y_condiciones: parseInt(datos.terminos_y_condiciones) ? 1 : 0
+      ruc: datos.ruc || "0",
+      nombre_comercial: datos.nombre_comercial || "0",
+      actividad_comercial: datos.actividad_comercial || "0",
+      departamento: datos.departamento || "0",
+      provincia: datos.provincia || "0",
+      distrito: datos.distrito || "0",
+      direccion: datos.direccion || "0",
+      numero: datos.numero || "0",
+      complemento: datos.complemento || "0",
+      usuario: datos.usuario || "0",
+      contraseña: datos.contraseña || "0",
+      terminos_y_condiciones: parseInt(datos.terminos_y_condiciones) ? 1 : 0,
     };
 
     // Encriptar la contraseña
     bcrypt.hash(valores.contraseña, saltRounds, (err, hashedPassword) => {
       if (err) {
-        console.error('Error al encriptar la contraseña:', err);
-        return res.status(500).send('Error al encriptar la contraseña');
+        console.error("Error al encriptar la contraseña:", err);
+        return res.status(500).send("Error al encriptar la contraseña");
       }
 
       // Actualizar el valor de la contraseña con el hash
@@ -309,25 +342,45 @@ router.post('/registro', (req, res) => {
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
 
-      conection.query(sql, [
-        valores.tipo_persona, valores.email, valores.confirmacion_email, valores.celular, valores.telefono,
-        valores.nombre_apellidos, valores.dni_ce, valores.fecha_nacimiento, valores.sexo, valores.estado_civil,
-        valores.ruc, valores.nombre_comercial, valores.actividad_comercial,
-        valores.departamento, valores.provincia, valores.distrito, valores.direccion, valores.numero, valores.complemento,
-        valores.usuario, valores.contraseña, valores.terminos_y_condiciones
-      ], (err, results) => {
-        if (err) {
-          console.error('Error al realizar la inserción:', err);
-          return res.status(500).send('Error al realizar la inserción');
+      conection.query(
+        sql,
+        [
+          valores.tipo_persona,
+          valores.email,
+          valores.confirmacion_email,
+          valores.celular,
+          valores.telefono,
+          valores.nombre_apellidos,
+          valores.dni_ce,
+          valores.fecha_nacimiento,
+          valores.sexo,
+          valores.estado_civil,
+          valores.ruc,
+          valores.nombre_comercial,
+          valores.actividad_comercial,
+          valores.departamento,
+          valores.provincia,
+          valores.distrito,
+          valores.direccion,
+          valores.numero,
+          valores.complemento,
+          valores.usuario,
+          valores.contraseña,
+          valores.terminos_y_condiciones,
+        ],
+        (err, results) => {
+          if (err) {
+            console.error("Error al realizar la inserción:", err);
+            return res.status(500).send("Error al realizar la inserción");
+          }
+          res.redirect("/login");
         }
-        res.redirect('/login');
-      });
+      );
     });
   } else {
-    res.status(400).send('Tipo de persona no válido');
+    res.status(400).send("Tipo de persona no válido");
   }
 });
-
 
 // Catalogo
 router.get("/catalogo", (req, res) => {
@@ -348,10 +401,14 @@ router.get("/catalogo", (req, res) => {
   // Filtro por estado de subasta
   if (estado === "finalizadas") {
     // Subastas finalizadas: fecha pasada o con un ganador
-    querySubastas += (categoria ? " AND" : " WHERE") + " (fecha_subasta < NOW() OR currentWinner IS NOT NULL)";
+    querySubastas +=
+      (categoria ? " AND" : " WHERE") +
+      " (fecha_subasta < NOW() OR currentWinner IS NOT NULL)";
   } else if (estado === "activas") {
     // Subastas activas: fecha futura y sin ganador
-    querySubastas += (categoria ? " AND" : " WHERE") + `
+    querySubastas +=
+      (categoria ? " AND" : " WHERE") +
+      `
       (
         fecha_subasta > CURDATE() -- Subastas para fechas futuras
         OR (
@@ -382,7 +439,7 @@ router.get("/catalogo", (req, res) => {
       subasta.fecha_formateada = fecha.toLocaleDateString("es-PE", {
         day: "2-digit",
         month: "2-digit",
-        year: "2-digit"
+        year: "2-digit",
       });
       return subasta;
     });
@@ -414,9 +471,13 @@ router.get("/catalogo", (req, res) => {
       }
 
       if (estado === "finalizadas") {
-        totalSubastasQuery += (categoria ? " AND" : " WHERE") + " (fecha_subasta < NOW() OR currentWinner IS NOT NULL)";
+        totalSubastasQuery +=
+          (categoria ? " AND" : " WHERE") +
+          " (fecha_subasta < NOW() OR currentWinner IS NOT NULL)";
       } else if (estado === "activas") {
-        totalSubastasQuery += (categoria ? " AND" : " WHERE") + `
+        totalSubastasQuery +=
+          (categoria ? " AND" : " WHERE") +
+          `
           (
             fecha_subasta >= CURDATE() -- Subastas para fechas futuras
             OR (
@@ -476,13 +537,8 @@ router.get("/catalogo", (req, res) => {
   });
 });
 
-
-
-
-
-
 // Subastas
-router.get('/subasta/:id', (req, res) => {
+router.get("/subasta/:id", (req, res) => {
   const subastaId = req.params.id;
   const usuarioId = req.session.usuario ? req.session.usuario.id : null; // ID del usuario si está autenticado
 
@@ -500,41 +556,44 @@ router.get('/subasta/:id', (req, res) => {
     ) l ON s.id = l.subasta_id
     WHERE s.id = ?`;
 
-  const queryImagenes = 'SELECT imagen FROM imagenes_propiedad WHERE id_subasta = ?';
-  const queryAnexos = 'SELECT id, anexo FROM anexos_propiedad WHERE id_subasta = ?';
+  const queryImagenes =
+    "SELECT imagen FROM imagenes_propiedad WHERE id_subasta = ?";
+  const queryAnexos =
+    "SELECT id, anexo FROM anexos_propiedad WHERE id_subasta = ?";
 
   // Consulta para registrar la visita
-  const queryRegistrarVisita = 'INSERT INTO visitas_subasta (subasta_id, usuario_id) VALUES (?, ?)';
+  const queryRegistrarVisita =
+    "INSERT INTO visitas_subasta (subasta_id, usuario_id) VALUES (?, ?)";
 
   // Consulta para contar visitas
-  const queryContarVisitas = 'SELECT COUNT(*) AS total_visitas FROM visitas_subasta WHERE subasta_id = ?';
-
+  const queryContarVisitas =
+    "SELECT COUNT(*) AS total_visitas FROM visitas_subasta WHERE subasta_id = ?";
 
   //Consulta para obtener las ofertas de la subasta
-  const queryOfertasSubastas = 'SELECT * FROM ofertas WHERE id_subasta = ?';
+  const queryOfertasSubastas = "SELECT * FROM ofertas WHERE id_subasta = ?";
 
   // Formato de número
   function formatNumber(num) {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   // Traducción de días
   function translateDay(day) {
     const days = {
-      'Sunday': 'Domingo',
-      'Monday': 'Lunes',
-      'Tuesday': 'Martes',
-      'Wednesday': 'Miércoles',
-      'Thursday': 'Jueves',
-      'Friday': 'Viernes',
-      'Saturday': 'Sábado'
+      Sunday: "Domingo",
+      Monday: "Lunes",
+      Tuesday: "Martes",
+      Wednesday: "Miércoles",
+      Thursday: "Jueves",
+      Friday: "Viernes",
+      Saturday: "Sábado",
     };
     return days[day] || day;
   }
 
   const now = momenT().tz("America/Lima"); // Ajusta a la zona horaria de Perú
   // Nueva variable para la fecha actual
-  const fechaActual = now.format('YYYY-MM-DD HH:mm:ss'); // Formato de fecha que necesites
+  const fechaActual = now.format("YYYY-MM-DD HH:mm:ss"); // Formato de fecha que necesites
 
   // Registrar la visita
   conection.query(queryRegistrarVisita, [subastaId, usuarioId], (error) => {
@@ -554,17 +613,29 @@ router.get('/subasta/:id', (req, res) => {
       }
 
       const subasta = resultadoSubasta[0];
-      const fechaHoraSubasta = momenT(subasta.fecha_hora_subasta).tz("America/Lima");
+      const fechaHoraSubasta = momenT(subasta.fecha_hora_subasta).tz(
+        "America/Lima"
+      );
 
       // Lógica para verificar el estado de la subasta
       const duracionSubasta = 5; // duración en minutos
-      const fechaHoraFinSubasta = fechaHoraSubasta.clone().add(duracionSubasta, 'minutes');
-      const estaEnCurso = now.isBetween(fechaHoraSubasta, fechaHoraFinSubasta, null, '[]');
+      const fechaHoraFinSubasta = fechaHoraSubasta
+        .clone()
+        .add(duracionSubasta, "minutes");
+      const estaEnCurso = now.isBetween(
+        fechaHoraSubasta,
+        fechaHoraFinSubasta,
+        null,
+        "[]"
+      );
       const estaTerminada = now.isAfter(fechaHoraFinSubasta); // Nueva variable que indica si ha terminado
 
       // Logs para verificar las fechas y el estado de la subasta
       console.log("Fecha y hora de la subasta:", fechaHoraSubasta.format());
-      console.log("Fecha y hora de fin de subasta:", fechaHoraFinSubasta.format());
+      console.log(
+        "Fecha y hora de fin de subasta:",
+        fechaHoraFinSubasta.format()
+      );
       console.log("Fecha y hora actual en producción:", now.format());
       console.log("¿Subasta en curso?:", estaEnCurso);
       console.log("¿Subasta terminada?:", estaTerminada);
@@ -574,74 +645,106 @@ router.get('/subasta/:id', (req, res) => {
       const ofertaActual = formatNumber(precioBase + 100);
 
       const fechaFormateada = subasta.fecha_formateada;
-      const [day, dayNumber] = fechaFormateada.split(' ');
+      const [day, dayNumber] = fechaFormateada.split(" ");
       const fechaFormateadaEsp = `${translateDay(day)} ${dayNumber}`;
 
       // Obtener imágenes de la subasta
-      conection.query(queryImagenes, [subastaId], (error, resultadoImagenes) => {
-        if (error) {
-          console.error("Error al obtener imágenes de subasta", error);
-          return res.status(500).send("Error al obtener imágenes de subasta");
-        }
-
-        // Obtener anexos de la subasta
-        conection.query(queryAnexos, [subastaId], (error, resultadoAnexos) => {
+      conection.query(
+        queryImagenes,
+        [subastaId],
+        (error, resultadoImagenes) => {
           if (error) {
-            console.error("Error al obtener anexos de subasta", error);
-            return res.status(500).send("Error al obtener anexos de subasta");
+            console.error("Error al obtener imágenes de subasta", error);
+            return res.status(500).send("Error al obtener imágenes de subasta");
           }
 
-          // Contar cuántas personas han visto la subasta
-          conection.query(queryContarVisitas, [subastaId], (error, resultadoVisitas) => {
-            if (error) {
-              console.error("Error al contar visitas de la subasta", error);
-              return res.status(500).send("Error al contar visitas de la subasta");
-            }
-
-            const totalVisitas = resultadoVisitas[0].total_visitas;
-            //Obtener la informacion de la subasta por id
-            conection.query(queryOfertasSubastas, [subastaId], (error, resultadoOfertas) => {
+          // Obtener anexos de la subasta
+          conection.query(
+            queryAnexos,
+            [subastaId],
+            (error, resultadoAnexos) => {
               if (error) {
-                console.error("Error al obtener ofertas de la subasta", error);
-                return res.status(500).send("Error al obtener ofertas de la subasta");
+                console.error("Error al obtener anexos de subasta", error);
+                return res
+                  .status(500)
+                  .send("Error al obtener anexos de subasta");
               }
 
-              // Renderizar la vista con los datos de la subasta y el contador de visitas
-              res.render("subasta", {
-                usuario: req.session.usuario,
-                subasta,
-                imagenes: resultadoImagenes.map(img => img.imagen.toString('base64')),
-                anexos: resultadoAnexos.map(anexo => ({ id: anexo.id, url: anexo.anexo })),
-                estaEnCurso, // Indica si la subasta está en curso
-                estaTerminada, // Nueva variable que indica si la subasta ha terminado
-                fechaFormateadaEsp, // Fecha traducida a español
-                formatNumber, // Función para formatear números
-                totalVisitas, // Total de visitas
-                ofertaActual, // Nueva variable que contiene el precio base + 100
-                fechaHoraSubasta: fechaHoraSubasta.format(), // Pasar la fecha y hora de la subasta
-                fechaHoraFinSubasta: fechaHoraFinSubasta.format(), // Pasar la fecha y hora de fin de la subasta
-                fechaActual, 
-                oferta: resultadoOfertas
-              });
-            });
-          });
-        });
-      });
+              // Contar cuántas personas han visto la subasta
+              conection.query(
+                queryContarVisitas,
+                [subastaId],
+                (error, resultadoVisitas) => {
+                  if (error) {
+                    console.error(
+                      "Error al contar visitas de la subasta",
+                      error
+                    );
+                    return res
+                      .status(500)
+                      .send("Error al contar visitas de la subasta");
+                  }
+
+                  const totalVisitas = resultadoVisitas[0].total_visitas;
+                  //Obtener la informacion de la subasta por id
+                  conection.query(
+                    queryOfertasSubastas,
+                    [subastaId],
+                    (error, resultadoOfertas) => {
+                      if (error) {
+                        console.error(
+                          "Error al obtener ofertas de la subasta",
+                          error
+                        );
+                        return res
+                          .status(500)
+                          .send("Error al obtener ofertas de la subasta");
+                      }
+
+                      // Renderizar la vista con los datos de la subasta y el contador de visitas
+                      res.render("subasta", {
+                        usuario: req.session.usuario,
+                        subasta,
+                        imagenes: resultadoImagenes.map((img) =>
+                          img.imagen.toString("base64")
+                        ),
+                        anexos: resultadoAnexos.map((anexo) => ({
+                          id: anexo.id,
+                          url: anexo.anexo,
+                        })),
+                        estaEnCurso, // Indica si la subasta está en curso
+                        estaTerminada, // Nueva variable que indica si la subasta ha terminado
+                        fechaFormateadaEsp, // Fecha traducida a español
+                        formatNumber, // Función para formatear números
+                        totalVisitas, // Total de visitas
+                        ofertaActual, // Nueva variable que contiene el precio base + 100
+                        fechaHoraSubasta: fechaHoraSubasta.format(), // Pasar la fecha y hora de la subasta
+                        fechaHoraFinSubasta: fechaHoraFinSubasta.format(), // Pasar la fecha y hora de fin de la subasta
+                        fechaActual,
+                        oferta: resultadoOfertas,
+                      });
+                    }
+                  );
+                }
+              );
+            }
+          );
+        }
+      );
     });
   });
 });
 
-
 // Ruta para descargar un anexo
-router.get('/descargar-anexo/:id', isAuthenticated, (req, res) => {
+router.get("/descargar-anexo/:id", isAuthenticated, (req, res) => {
   const anexoId = req.params.id;
 
   // Consulta para recuperar el anexo
-  const query = 'SELECT anexo FROM anexos_propiedad WHERE id = ?';
+  const query = "SELECT anexo FROM anexos_propiedad WHERE id = ?";
   conection.query(query, [anexoId], (err, results) => {
     if (err) {
-      console.error('Error al obtener el anexo:', err);
-      return res.status(500).send('Error al obtener el anexo');
+      console.error("Error al obtener el anexo:", err);
+      return res.status(500).send("Error al obtener el anexo");
     }
 
     if (results.length > 0) {
@@ -649,22 +752,21 @@ router.get('/descargar-anexo/:id', isAuthenticated, (req, res) => {
 
       if (anexo) {
         // Usa res.download para descargar el archivo
-        const filePath = path.join(__dirname, 'public', anexo); // Asegúrate de ajustar el path según tu estructura
+        const filePath = path.join(__dirname, "public", anexo); // Asegúrate de ajustar el path según tu estructura
         res.download(filePath, (err) => {
           if (err) {
-            console.error('Error al descargar el anexo:', err);
-            res.status(500).send('Error al descargar el anexo');
+            console.error("Error al descargar el anexo:", err);
+            res.status(500).send("Error al descargar el anexo");
           }
         });
       } else {
-        res.status(404).send('Anexo no encontrado');
+        res.status(404).send("Anexo no encontrado");
       }
     } else {
-      res.status(404).send('Anexo no encontrado');
+      res.status(404).send("Anexo no encontrado");
     }
   });
 });
-
 
 // Ruta para actualizar oportunidades cuando el cliente gana una subasta
 /* router.post('/ganarSubasta/:idSubasta', (req, res) => {
@@ -702,35 +804,41 @@ router.get('/descargar-anexo/:id', isAuthenticated, (req, res) => {
   );
 }); */
 
-
 // Ruta para obtener oportunidades
-router.get('/oportunidades/:id', (req, res) => {
+router.get("/oportunidades/:id", (req, res) => {
   const usuarioId = req.params.id;
 
   // Consulta para obtener el número de oportunidades
   conection.query(
-    'SELECT oportunidades FROM usuarios WHERE id = ?',
+    "SELECT oportunidades FROM usuarios WHERE id = ?",
     [usuarioId],
     (error, results) => {
       if (error) {
-        console.error('Error al obtener oportunidades:', error);
-        return res.status(500).json({ success: false, message: 'Error al obtener oportunidades' });
+        console.error("Error al obtener oportunidades:", error);
+        return res
+          .status(500)
+          .json({ success: false, message: "Error al obtener oportunidades" });
       }
 
       if (results.length > 0) {
         res.json({ success: true, oportunidades: results[0].oportunidades });
       } else {
-        res.json({ success: false, message: 'Usuario no encontrado' });
+        res.json({ success: false, message: "Usuario no encontrado" });
       }
     }
   );
 });
 
-
 // Like
 router.post("/like", (req, res) => {
   if (!req.session.usuario) {
-    return res.status(401).json({ success: false, message: "Usuario no autenticado", redirect: "/login" });
+    return res
+      .status(401)
+      .json({
+        success: false,
+        message: "Usuario no autenticado",
+        redirect: "/login",
+      });
   }
 
   const { subasta_id } = req.body;
@@ -750,158 +858,186 @@ router.post("/like", (req, res) => {
       }
 
       // Verificar si el usuario ya ha dado like a la subasta
-      const checkLikeQuery = "SELECT * FROM likes WHERE user_id = ? AND subasta_id = ?";
-      connection.query(checkLikeQuery, [usuario_id, subasta_id], (error, results) => {
-        if (error) {
-          return connection.rollback(() => {
-            console.error("Error al verificar el like:", error);
-            connection.release();
-            return res.status(500).json({ success: false });
-          });
-        }
+      const checkLikeQuery =
+        "SELECT * FROM likes WHERE user_id = ? AND subasta_id = ?";
+      connection.query(
+        checkLikeQuery,
+        [usuario_id, subasta_id],
+        (error, results) => {
+          if (error) {
+            return connection.rollback(() => {
+              console.error("Error al verificar el like:", error);
+              connection.release();
+              return res.status(500).json({ success: false });
+            });
+          }
 
-        if (results.length > 0) {
-          // El usuario ya ha dado like, eliminar el like y decrementar el like_count
-          const deleteLikeQuery = "DELETE FROM likes WHERE user_id = ? AND subasta_id = ?";
-          connection.query(deleteLikeQuery, [usuario_id, subasta_id], (error) => {
-            if (error) {
-              return connection.rollback(() => {
-                console.error("Error al eliminar el like:", error);
-                connection.release();
-                return res.status(500).json({ success: false });
-              });
-            }
-
-            const decrementLikeCountQuery = "UPDATE subastas SET like_count = GREATEST(like_count - 1, 0) WHERE id = ?";
-            connection.query(decrementLikeCountQuery, [subasta_id], (error) => {
-              if (error) {
-                return connection.rollback(() => {
-                  console.error("Error al decrementar el like_count:", error);
-                  connection.release();
-                  return res.status(500).json({ success: false });
-                });
-              }
-
-              connection.commit((err) => {
-                if (err) {
+          if (results.length > 0) {
+            // El usuario ya ha dado like, eliminar el like y decrementar el like_count
+            const deleteLikeQuery =
+              "DELETE FROM likes WHERE user_id = ? AND subasta_id = ?";
+            connection.query(
+              deleteLikeQuery,
+              [usuario_id, subasta_id],
+              (error) => {
+                if (error) {
                   return connection.rollback(() => {
-                    console.error("Error al hacer commit:", err);
+                    console.error("Error al eliminar el like:", error);
                     connection.release();
                     return res.status(500).json({ success: false });
                   });
                 }
-                connection.release(); // Libera la conexión de vuelta al pool
-                res.json({ success: true });
-              });
-            });
-          });
-        } else {
-          // El usuario no ha dado like, agregar el like y incrementar el like_count
-          const addLikeQuery = "INSERT INTO likes (user_id, subasta_id) VALUES (?, ?)";
-          connection.query(addLikeQuery, [usuario_id, subasta_id], (error) => {
-            if (error) {
-              return connection.rollback(() => {
-                console.error("Error al agregar el like:", error);
-                connection.release();
-                return res.status(500).json({ success: false });
-              });
-            }
 
-            const incrementLikeCountQuery = "UPDATE subastas SET like_count = like_count + 1 WHERE id = ?";
-            connection.query(incrementLikeCountQuery, [subasta_id], (error) => {
-              if (error) {
-                return connection.rollback(() => {
-                  console.error("Error al incrementar el like_count:", error);
-                  connection.release();
-                  return res.status(500).json({ success: false });
-                });
+                const decrementLikeCountQuery =
+                  "UPDATE subastas SET like_count = GREATEST(like_count - 1, 0) WHERE id = ?";
+                connection.query(
+                  decrementLikeCountQuery,
+                  [subasta_id],
+                  (error) => {
+                    if (error) {
+                      return connection.rollback(() => {
+                        console.error(
+                          "Error al decrementar el like_count:",
+                          error
+                        );
+                        connection.release();
+                        return res.status(500).json({ success: false });
+                      });
+                    }
+
+                    connection.commit((err) => {
+                      if (err) {
+                        return connection.rollback(() => {
+                          console.error("Error al hacer commit:", err);
+                          connection.release();
+                          return res.status(500).json({ success: false });
+                        });
+                      }
+                      connection.release(); // Libera la conexión de vuelta al pool
+                      res.json({ success: true });
+                    });
+                  }
+                );
               }
-
-              connection.commit((err) => {
-                if (err) {
+            );
+          } else {
+            // El usuario no ha dado like, agregar el like y incrementar el like_count
+            const addLikeQuery =
+              "INSERT INTO likes (user_id, subasta_id) VALUES (?, ?)";
+            connection.query(
+              addLikeQuery,
+              [usuario_id, subasta_id],
+              (error) => {
+                if (error) {
                   return connection.rollback(() => {
-                    console.error("Error al hacer commit:", err);
+                    console.error("Error al agregar el like:", error);
                     connection.release();
                     return res.status(500).json({ success: false });
                   });
                 }
-                connection.release(); // Libera la conexión de vuelta al pool
-                res.json({ success: true });
-              });
-            });
-          });
+
+                const incrementLikeCountQuery =
+                  "UPDATE subastas SET like_count = like_count + 1 WHERE id = ?";
+                connection.query(
+                  incrementLikeCountQuery,
+                  [subasta_id],
+                  (error) => {
+                    if (error) {
+                      return connection.rollback(() => {
+                        console.error(
+                          "Error al incrementar el like_count:",
+                          error
+                        );
+                        connection.release();
+                        return res.status(500).json({ success: false });
+                      });
+                    }
+
+                    connection.commit((err) => {
+                      if (err) {
+                        return connection.rollback(() => {
+                          console.error("Error al hacer commit:", err);
+                          connection.release();
+                          return res.status(500).json({ success: false });
+                        });
+                      }
+                      connection.release(); // Libera la conexión de vuelta al pool
+                      res.json({ success: true });
+                    });
+                  }
+                );
+              }
+            );
+          }
         }
-      });
+      );
     });
   });
 });
 
-
 //Info page vender
-router.get('/info-vender', (req, res) => {
+router.get("/info-vender", (req, res) => {
   res.render("vender", {
-    usuario: req.session.usuario
-  })
+    usuario: req.session.usuario,
+  });
 });
 
 //Info page comprar
-router.get('/info-comprar', (req, res) => {
-  res.render('comprar', {
-    usuario: req.session.usuario
-  })
+router.get("/info-comprar", (req, res) => {
+  res.render("comprar", {
+    usuario: req.session.usuario,
+  });
 });
 
 //politica de cookies
-router.get('/politicasDEcookies', (req, res) => {
-  res.render('politica_cookies', {
-    usuario: req.session.usuario
-  })
+router.get("/politicasDEcookies", (req, res) => {
+  res.render("politica_cookies", {
+    usuario: req.session.usuario,
+  });
 });
 
 //terminos y condiciones
-router.get('/politicasDEprivacidad', (req, res) => {
-  res.render('politicas_privacidad', {
-    usuario: req.session.usuario
-  })
+router.get("/politicasDEprivacidad", (req, res) => {
+  res.render("politicas_privacidad", {
+    usuario: req.session.usuario,
+  });
 });
 
 //condicionesYterminos
-router.get('/condicionesYterminos', (req, res) => {
-  res.render('terminos_condiciones', {
-    usuario: req.session.usuario
-  })
+router.get("/condicionesYterminos", (req, res) => {
+  res.render("terminos_condiciones", {
+    usuario: req.session.usuario,
+  });
 });
 
-
-
-//SubastasActivas             //solicitud/respuesta// 
-router.get("/SubastasActivas", (req, res) => {   //router.get: define una ruta para manejar solicitudes GET. 
-  const { page = 1 } = req.query //parámetros de la solicitud
+//SubastasActivas             //solicitud/respuesta//
+router.get("/SubastasActivas", (req, res) => {
+  //router.get: define una ruta para manejar solicitudes GET.
+  const { page = 1 } = req.query; //parámetros de la solicitud
   const limit = 12; //numero de subastas por pagina
   const offset = (page - 1) * limit; //Calcular el desplazamiento para obtener las subastas de la p.solicitada
 
   let querySubastas = "SELECT * FROM subastas WHERE estado = 'activa'"; //la consulta selecciona todos los campos * de la tabla 'subastas' donde el estado sea 'activa'.
   const queryParams = []; //constante para almacenar todos los parámetros de la consulta SQL.
 
-  //Agregar paginación a la consulta  
+  //Agregar paginación a la consulta
   //clausulas
-  querySubastas += ' LIMIT $1 OOFSET $2'; //
-  queryParams.push(limit, offset); //limit para limitar el numero de filas que se devuelven, 
+  querySubastas += " LIMIT $1 OOFSET $2"; //
+  queryParams.push(limit, offset); //limit para limitar el numero de filas que se devuelven,
   //offset para saltar un numero de filas antes de empezar a devolver R
 
   //Consulta a la base de datos
   db.query(express.querySubastas, queryParams)
-    //Manejo de la respuesta// 
-    .then(result => {
+    //Manejo de la respuesta//
+    .then((result) => {
       res.json(result.rows); //enviar resuldatos  como respuesta al cliente
     })
     //Manejo de los errores//
-    .catch(error => {
+    .catch((error) => {
       console.error("Error al obtener subastas activas:", error); //mensaje que saldra  al momento de que ya no se pueda obtener informacion de las subastas
-      res.status(500).json({ error: 'Error al obtener subastas activas' }); //respuesta al cliente 
+      res.status(500).json({ error: "Error al obtener subastas activas" }); //respuesta al cliente
     });
 });
-
 
 //Moises
 //BUSCADOR
@@ -910,83 +1046,92 @@ router.get("/buscador", (req, res) => {
 });
 
 router.post("/buscador", (req, res) => {
-  res.render("buscador")
+  res.render("buscador");
 });
 
 //MOISES
 //RUTAS TABLA_OFERTAS
-router.post('/ofertas', async (req, res) => {
+router.post("/ofertas", async (req, res) => {
   try {
-    const { id_usuario, id_subasta, monto_oferta, fecha_oferta, usuario_oferta } = req.body;
+    const {
+      id_usuario,
+      id_subasta,
+      monto_oferta,
+      fecha_oferta,
+      usuario_oferta,
+    } = req.body;
     const nuevaOferta = await Oferta.create({
       id_usuario,
       id_subasta,
       monto_oferta,
       fecha_oferta,
-      usuario_oferta
+      usuario_oferta,
     });
     res.status(201).json(nuevaOferta);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Error al crear la oferta' });
+    res.status(500).json({ message: "Error al crear la oferta" });
   }
 });
 
-
-router.get('/ofertas', async (req, res) => {
+router.get("/ofertas", async (req, res) => {
   try {
     const ofertas = await Oferta.findAll();
     res.json(ofertas);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Error al obtener las ofertas' });
+    res.status(500).json({ message: "Error al obtener las ofertas" });
   }
 });
 
-router.get('/tabla/:id/Ofertas' , async (req, res) => {
-  const tablaId = req.params.id;
-}
-)
+  router.get("/tabla/:id/Ofertas", async (req, res) => {
+    const tablaId = req.params.id;
+});
 
-
-router.post('/ofertas', async (req, res) => {
-  try {
+  router.post("/ofertas", async (req, res) => {
+    try {
       const { usuarioId, subastaId, valorOferta } = req.body;
 
-      if (!usuarioId || !subastaId || !valorOferta) {
-          return res.status(400).json({ message: 'Faltan datos requeridos' });
-      }
+    if (!usuarioId || !subastaId || !valorOferta) {
+      return res.status(400).json({ message: "Faltan datos requeridos" });
+    }
 
-      const nuevaOferta = await Oferta.create({
-          usuarioId,
-          subastaId,
-          valor: valorOferta,
-          fecha: new Date()
-      });
+    const nuevaOferta = await Oferta.create({
+      usuarioId,
+      subastaId,
+      valor: valorOferta,
+      fecha: new Date(),
+    });
 
-      res.status(201).json(nuevaOferta);
+    res.status(201).json(nuevaOferta);
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Error al crear la oferta' });
+    console.error(error);
+    res.status(500).json({ message: "Error al crear la oferta" });
   }
 });
 
-router.get('/ofertas', async (req, res) => {
+  router.get("/ofertas", async (req, res) => {
   try {
-      const { subastaId } = req.query;
+    const { subastaId } = req.query;
 
-      let ofertas;
-      if (subastaId) {
-          ofertas = await Oferta.findAll({ where: { subastaId } });
-      } else {
-          ofertas = await Oferta.findAll();
-      }
+    let ofertas;
+    if (subastaId) {
+      ofertas = await Oferta.findAll({ where: { subastaId } });
+    } else {
+      ofertas = await Oferta.findAll();
+    }
 
-      res.json(ofertas);
+    res.json(ofertas);
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Error al obtener las ofertas' });
+    console.error(error);
+    res.status(500).json({ message: "Error al obtener las ofertas" });
   }
 });
 
+    //Ruta de pujas
+    router.get("/subasta/:id/pujas", async (req, res) => {
+      const subastaId = req.params.id;
+      
+      });
+    
 module.exports = router;
