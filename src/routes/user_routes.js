@@ -632,16 +632,18 @@ router.get('/subasta/:id', (req, res) => {
 
   const queryImagenes = 'SELECT imagen FROM imagenes_propiedad WHERE id_subasta = ?';
   const queryAnexos = 'SELECT id, anexo FROM anexos_propiedad WHERE id_subasta = ?';
-
+  
   // Consulta para registrar la visita
   const queryRegistrarVisita = 'INSERT INTO visitas_subasta (subasta_id, usuario_id) VALUES (?, ?)';
-
+  
   // Consulta para contar visitas
   const queryContarVisitas = 'SELECT COUNT(*) AS total_visitas FROM visitas_subasta WHERE subasta_id = ?';
-
-
-  //Consulta para obtener las ofertas de la subasta
+  
+  // Consulta para obtener las ofertas de la subasta
   const queryOfertasSubastas = 'SELECT * FROM ofertas WHERE id_subasta = ?';
+
+  // Nueva consulta para contar el total de pujas en la subasta
+  const queryContarPujas = 'SELECT COUNT(*) AS total_pujas FROM ofertas WHERE id_subasta = ?';
 
   // Formato de número
   function formatNumber(num) {
@@ -663,7 +665,6 @@ router.get('/subasta/:id', (req, res) => {
   }
 
   const now = momenT().tz("America/Lima"); // Ajusta a la zona horaria de Perú
-  // Nueva variable para la fecha actual
   const fechaActual = now.format('YYYY-MM-DD HH:mm:ss'); // Formato de fecha que necesites
 
   // Registrar la visita
@@ -729,29 +730,41 @@ router.get('/subasta/:id', (req, res) => {
             }
 
             const totalVisitas = resultadoVisitas[0].total_visitas;
-            //Obtener la informacion de la subasta por id
-            conection.query(queryOfertasSubastas, [subastaId], (error, resultadoOfertas) => {
+
+            // Obtener la cantidad total de pujas
+            conection.query(queryContarPujas, [subastaId], (error, resultadoPujas) => {
               if (error) {
-                console.error("Error al obtener ofertas de la subasta", error);
-                return res.status(500).send("Error al obtener ofertas de la subasta");
+                console.error("Error al contar pujas de la subasta", error);
+                return res.status(500).send("Error al contar pujas de la subasta");
               }
 
-              // Renderizar la vista con los datos de la subasta y el contador de visitas
-              res.render("subasta", {
-                usuario: req.session.usuario,
-                subasta,
-                imagenes: resultadoImagenes.map(img => img.imagen.toString('base64')),
-                anexos: resultadoAnexos.map(anexo => ({ id: anexo.id, url: anexo.anexo })),
-                estaEnCurso, // Indica si la subasta está en curso
-                estaTerminada, // Nueva variable que indica si la subasta ha terminado
-                fechaFormateadaEsp, // Fecha traducida a español
-                formatNumber, // Función para formatear números
-                totalVisitas, // Total de visitas
-                ofertaActual, // Nueva variable que contiene el precio base + 100
-                fechaHoraSubasta: fechaHoraSubasta.format(), // Pasar la fecha y hora de la subasta
-                fechaHoraFinSubasta: fechaHoraFinSubasta.format(), // Pasar la fecha y hora de fin de la subasta
-                fechaActual, 
-                oferta: resultadoOfertas
+              const totalPujas = resultadoPujas[0].total_pujas;
+
+              // Obtener la informacion de la subasta por id
+              conection.query(queryOfertasSubastas, [subastaId], (error, resultadoOfertas) => {
+                if (error) {
+                  console.error("Error al obtener ofertas de la subasta", error);
+                  return res.status(500).send("Error al obtener ofertas de la subasta");
+                }
+
+                // Renderizar la vista con los datos de la subasta y el contador de visitas
+                res.render("subasta", {
+                  usuario: req.session.usuario,
+                  subasta,
+                  imagenes: resultadoImagenes.map(img => img.imagen.toString('base64')),
+                  anexos: resultadoAnexos.map(anexo => ({ id: anexo.id, url: anexo.anexo })),
+                  estaEnCurso, // Indica si la subasta está en curso
+                  estaTerminada, // Nueva variable que indica si la subasta ha terminado
+                  fechaFormateadaEsp, // Fecha traducida a español
+                  formatNumber, // Función para formatear números
+                  totalVisitas, // Total de visitas
+                  totalPujas, // Nueva variable que contiene el total de pujas
+                  ofertaActual, // Nueva variable que contiene el precio base + 100
+                  fechaHoraSubasta: fechaHoraSubasta.format(), // Pasar la fecha y hora de la subasta
+                  fechaHoraFinSubasta: fechaHoraFinSubasta.format(), // Pasar la fecha y hora de fin de la subasta
+                  fechaActual,
+                  oferta: resultadoOfertas
+                });
               });
             });
           });
@@ -760,8 +773,35 @@ router.get('/subasta/:id', (req, res) => {
     });
   });
 });
+
+
+// Ruta para obtener la puja más alta de una subasta
+router.get("/puja-mas-alta/:idSubasta", (req, res) => {
+  const idSubasta = req.params.idSubasta;
+  
+  const query = `
+    SELECT MAX(monto_oferta) as puja_maxima 
+    FROM ofertas 
+    WHERE id_subasta = ?
+  `;
+
+  conection.query(query, [idSubasta], (error, resultado) => {
+    if (error) {
+      console.error("Error al obtener la puja más alta:", error);
+      return res.status(500).json({ 
+        mensaje: "Error al obtener la puja más alta.",
+        error: error.message 
+      });
+    }
+    
+    res.json({ 
+      puja_maxima: resultado[0].puja_maxima || 0
+    });
+  });
+});
+
 // Ruta para recibir una puja
-router.post("/enviar-puja", (req, res) => {
+router.post("/enviar-puja", async (req, res) => {
   let { idSubasta, usuario, montoSeleccionado, fechaSubasta, horaSubasta } = req.body;
 
   // Clean up the amount value - remove currency symbol and commas
@@ -778,26 +818,52 @@ router.post("/enviar-puja", (req, res) => {
     return res.status(400).json({ mensaje: "El monto debe ser un número válido." });
   }
 
-  const query = `
-    INSERT INTO ofertas (id_subasta, usuario, monto_oferta, fecha_subasta, hora_subasta)
-    VALUES (?, ?, ?, ?, ?)
-  `;
+  // Obtener la puja más alta actual
+  const queryMaxBid = "SELECT MAX(monto_oferta) as puja_maxima FROM ofertas WHERE id_subasta = ?";
+  
+  conection.query(queryMaxBid, [idSubasta], (error, resultado) => {
+    if (error) {
+      console.error("Error al obtener la puja más alta:", error);
+      return res.status(500).json({ 
+        mensaje: "Error al validar la puja.",
+        error: error.message 
+      });
+    }
 
-  conection.query(
-    query,
-    [idSubasta, usuario, montoSeleccionado, fechaSubasta, horaSubasta],
-    (error, resultado) => {
-      if (error) {
-        console.error("Error al registrar la puja:", error);
-        return res.status(500).json({ 
-          mensaje: "Error al registrar la puja en la base de datos.",
-          error: error.message 
+    const pujaMaxima = resultado[0].puja_maxima || 0;
+    
+    // Validar que la nueva puja sea mayor que la puja más alta
+    if (parseFloat(montoSeleccionado) <= pujaMaxima) {
+      return res.status(400).json({ 
+        mensaje: `La puja debe ser mayor que la puja más alta actual (US$${pujaMaxima}).`
+      });
+    }
+
+    // Si la validación pasa, insertar la nueva puja
+    const queryInsert = `
+      INSERT INTO ofertas (id_subasta, usuario, monto_oferta, fecha_subasta, hora_subasta)
+      VALUES (?, ?, ?, ?, ?)
+    `;
+
+    conection.query(
+      queryInsert,
+      [idSubasta, usuario, montoSeleccionado, fechaSubasta, horaSubasta],
+      (error, resultado) => {
+        if (error) {
+          console.error("Error al registrar la puja:", error);
+          return res.status(500).json({ 
+            mensaje: "Error al registrar la puja en la base de datos.",
+            error: error.message 
+          });
+        }
+
+        res.status(200).json({ 
+          mensaje: "Puja registrada exitosamente.",
+          puja_anterior: pujaMaxima
         });
       }
-
-      res.status(200).json({ mensaje: "Puja registrada exitosamente." });
-    }
-  );
+    );
+  });
 });
 
 // Ruta para descargar un anexo

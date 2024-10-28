@@ -269,6 +269,7 @@
   font-size: .9rem;
   font-family: var(--font--about);
   margin: 1rem 0;
+  text-align: center;
 }
 
 .fecha-subasta {

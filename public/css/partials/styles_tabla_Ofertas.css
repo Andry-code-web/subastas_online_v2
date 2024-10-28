@@ -54,7 +54,7 @@ h2 {
 }
 
 .contenedor_ofertas {
-  width: 62%;
+  width: 50%;
   height: auto;
   margin: auto;
 }
@@ -62,11 +62,12 @@ h2 {
 th, td {
   border: 1px solid #ffffff;
   padding: 7px;
-  text-align: left;
+  text-align: center;
 }
 
 tr {
   height: 35px;
+  text-align: center;
 }
 
 /* Titles and Summary Styles */

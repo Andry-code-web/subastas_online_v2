@@ -357,50 +357,31 @@
 
   <!--Componente de tabla ofertas -->
   <div class="contenedor_ofertas">
-    <h2> OFERTAS</h2>
-
-    <table class="tabla_principal">
-      <thead class="tabla_letras">
-        <tr>
-          <th>USUARIO</th>
-          <th>UBICACION DEL VEHICULO</th>
-          <th>FECHA DE LA SUBASTA</th>
-          <th>VALOR DE LA OFERTA</th>
-        </tr>
-      </thead>
-      <tbody class="tabla_borde">
-        <% oferta.forEach((oferta) => { %>
-          <tr>
-            <td><%= oferta.usuario %></td>
-            <td><!-- Aquí puedes incluir el campo de ubicación si está disponible en `oferta` --></td>
-            <td><%= oferta.fecha_subasta %></td>
-            <td><%= oferta.monto_oferta %></td>
-          </tr>
-        <% }) %>
-      </tbody>
-    </table>
-
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex justify-content-around align-items-center">
       <h2>OFERTAS CONSOLIDADAS</h2>
-      <p class="offer-summary"><strong>TOTAL: 0 COMPRADOR(ES)</strong></p>
+      <p class="offer-summary"><strong>Total de ofertantes: <%= totalPujas %> </strong></p>
+
     </div>
 
     <table class="tabla_principal">
       <thead class="tabla_letras">
         <tr>
-          <th>USUARIO</th>
-          <th>UBICACION DEL VEHICULO</th>
-          <th>CANTIDAD DE OFERTAS</th>
-          <th>VALOR DE LA OFERTA</th>
+          <th>Usuario</th>
+          <th>Fecha de la subasta</th>
+          <th>Valor de la oferta</th>
         </tr>
       </thead>
       <tbody class="tabla_borde">
+        <% oferta.forEach((oferta) => { %>
         <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td><%= oferta.usuario %></td>
+          <td>
+            <span><%= oferta.hora_subasta %></span>
+            <%= oferta.fecha_subasta %>
+          </td>
+          <td>US$<%= oferta.monto_oferta %></td>
         </tr>
+        <% }) %>
       </tbody>
     </table>
   </div>
@@ -671,10 +652,6 @@
       startAuction();
     });
   </script>
-
-
-
-
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -1046,6 +1023,16 @@
       let montoSeleccionado = document.getElementById('valorOferta').value;
       montoSeleccionado = parseFloat(montoSeleccionado.replace(/[^0-9.-]+/g, '')); // Extrae solo el número
 
+      async function obtenerPujaMasAlta(idSubasta) {
+        try {
+          const response = await fetch(`/puja-mas-alta/${idSubasta}`);
+          const data = await response.json();
+          return data.puja_maxima;
+        } catch (error) {
+          console.error('Error al obtener la puja más alta:', error);
+          return 0;
+        }
+      }
 
       async function obtenerDatosUsuario() {
         try {
@@ -1076,12 +1063,14 @@
             },
             body: JSON.stringify({
               idSubasta,
-              montoSeleccionado: monto, // Asegúrate de que aquí se use el monto numérico
+              montoSeleccionado: monto,
               usuario,
               fechaSubasta: fecha,
               horaSubasta: hora
             }),
           });
+
+          const data = await response.json();
 
           if (response.ok) {
             await Swal.fire({
@@ -1090,18 +1079,43 @@
               icon: 'success',
               confirmButtonText: 'Aceptar'
             });
+            location.reload();
+            return true;
           } else {
-            await Swal.fire('Error', 'No se pudo registrar la puja. Inténtalo nuevamente.', 'error');
+            await Swal.fire('Error', data.mensaje || 'No se pudo registrar la puja. Inténtalo nuevamente.', 'error');
+            return false;
           }
         } catch (error) {
           console.error('Error al enviar la puja:', error);
+          return false;
         }
       }
 
       async function confirmarPuja(idSubasta, monto, usuarioDatos, fecha, hora) {
+        // Obtener la puja más alta actual
+        const pujaMaxima = await obtenerPujaMasAlta(idSubasta);
+
+        // Validar que la nueva puja sea mayor
+        if (parseFloat(monto) <= pujaMaxima) {
+          await Swal.fire({
+            title: 'Puja inválida',
+            text: `Tu puja debe ser mayor que US$${pujaMaxima}`,
+            icon: 'warning',
+            confirmButtonText: 'Entendido'
+          });
+          return;
+        }
+
         const confirmPuja = await Swal.fire({
           title: 'Confirmación de Puja',
-          text: `Usuario: ${usuarioDatos.nombre}\nID de la subasta: ${idSubasta}\nMonto seleccionado: US$${monto}\nFecha: ${fecha}\nHora: ${hora}`,
+          html: `
+          <p>Usuario: ${usuarioDatos.nombre}</p>
+          <p>ID de la subasta: ${idSubasta}</p>
+          <p>Monto seleccionado: US$${monto}</p>
+          <p>Puja más alta actual: US$${pujaMaxima}</p>
+          <p>Fecha: ${fecha}</p>
+          <p>Hora: ${hora}</p>
+        `,
           icon: 'info',
           showCancelButton: true,
           confirmButtonText: 'Enviar Puja',
@@ -1109,26 +1123,30 @@
         });
 
         if (confirmPuja.isConfirmed) {
-          await enviarPuja(idSubasta, monto, usuarioDatos.nombre, fecha, hora);
+          const pujaEnviada = await enviarPuja(idSubasta, monto, usuarioDatos.nombre, fecha, hora);
+          if (pujaEnviada) {
+            // Actualizar la interfaz si es necesario
+          }
         } else if (confirmPuja.dismiss === Swal.DismissReason.cancel) {
           const {
             value: nuevoMonto
           } = await Swal.fire({
-            title: `Modificar Monto US$${monto}`,
-            input: 'text',
+            title: `Modificar Monto (Mínimo: US$${pujaMaxima + 1})`,
+            input: 'number',
             inputLabel: 'Introduce el nuevo monto de la puja',
+            inputValue: pujaMaxima + 1,
             showCancelButton: true,
             confirmButtonText: 'Modificar',
             cancelButtonText: 'Cancelar',
             inputValidator: (value) => {
-              if (!value || isNaN(value) || Number(value) <= 0) {
-                return 'Debes ingresar un monto válido mayor que 0';
+              if (!value || isNaN(value) || Number(value) <= pujaMaxima) {
+                return `La puja debe ser mayor que US$${pujaMaxima}`;
               }
             }
           });
 
           if (nuevoMonto) {
-            await confirmarPuja(idSubasta, nuevoMonto, usuarioDatos, fecha, hora); // Llamada recursiva con el nuevo monto
+            await confirmarPuja(idSubasta, nuevoMonto, usuarioDatos, fecha, hora);
           }
         }
       }
@@ -1144,6 +1162,7 @@
               title: "¡Atención!",
               text: "Debes iniciar sesión para participar en la puja.",
               icon: 'warning',
+              allowOutsideClick: false,
               showCancelButton: true,
               confirmButtonText: 'Iniciar sesión',
               cancelButtonText: 'Crear cuenta'
