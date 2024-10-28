@@ -254,6 +254,12 @@ header .session p .btn_menu i {
         margin-left: 1rem;
     }
 
+    .item_buscador{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
     .navegador li a {
         font-family: var(--font--banner--semi);
         font-size: 1.2rem;
@@ -379,6 +385,10 @@ header .session p .btn_menu i {
     .navegador li {
         margin-bottom: 1.5rem;
         margin-left: 1rem;
+    }
+
+    .item_buscador{
+        margin-left: 0 !important;
     }
 
     .navegador li a {
