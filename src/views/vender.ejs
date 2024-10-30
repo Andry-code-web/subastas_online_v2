@@ -109,11 +109,11 @@
     </div>
   </sectiom>
   <div class="container" id="formulario_vender" style="display: none;">
-    
+
     <div class="content_btn">
-<button class="cerrar_vender" id="cerrar_vender">
-      <i class="bi bi-x-circle"></i>
-    </button>
+      <button class="cerrar_vender" id="cerrar_vender">
+        <i class="bi bi-x-circle"></i>
+      </button>
     </div>
 
     <img class="imagen_icon" src="/img/SUBASTA-SUR-POSITIVO-HORIZONTAL.png" alt>
@@ -230,14 +230,14 @@
   </script>
 
   <!-- CERRAR LA PANTALLA -->
-   <script>
+  <script>
     const btn_cerrar_vender = document.getElementById("cerrar_vender");
     const formulario = document.getElementById("formulario_vender");
 
-    btn_cerrar_vender.addEventListener('click', () =>{
+    btn_cerrar_vender.addEventListener('click', () => {
       formulario.style.display = formulario.style.display === "none" ? "block" : "none";
     })
-   </script>
+  </script>
 
   <script>
     // Busca el botón llamado "quiero_vender" en la página 
