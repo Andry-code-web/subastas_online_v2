@@ -19,15 +19,17 @@
 
 /* FOOTER */
 footer {
-    margin-top: 2rem;
+    margin-top: 3rem;
     width: 100%;
-    height: 20vh;
+    height: 24vh;
     position: relative;
     box-shadow: inset 0px .5px 5px #cccc;
+    display: flex;
+    justify-content: center;
 }
  
 .contenedor_superior {
-    width: 100%;
+    width: 90%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -43,12 +45,17 @@ footer {
     transform: translate(-50%, -50%);
 }
 
+.categoria a{
+    text-decoration: none;
+    color: #444444;
+}
+
 .contet_footer {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    gap: 2rem;
-    margin-top: 0rem;
+    gap: 0rem;
+    margin-top: 0.5rem;
 }
 
 .contet_footer p{
@@ -56,7 +63,7 @@ footer {
 }
 
 .img_logo {
-    width: 20%;
+    width: 100%;
 }
 
 .subastar {
@@ -82,8 +89,8 @@ footer {
 }
 
 .redes_footer {
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+    margin-top: 0rem;
+    margin-bottom: 0rem;
     display: flex;
     gap: 1rem;
     justify-content: center;
@@ -118,6 +125,17 @@ footer {
     width: 30px;
 }
 
+
+h3{
+    margin: 1rem;
+    font-size: 1.1rem;
+    font-family: var(--font--banner--bool);
+}
+
+.col{
+    font-size: 1rem;
+}
+
 .terminos_condiciones a{
     font-family: var(--font--header--v2);
     font-weight: 500;
@@ -132,6 +150,30 @@ footer {
     text-decoration: underline;
 }
 
+.ayuda a{
+    text-decoration: none;
+    color: #d30000;
+}
+
+.iconos{
+    display: flex;
+    flex-direction: column;
+}
+
+.iconos a img{
+    width: 55%;
+    margin: 0.3rem;
+}
+
+.categoria2{
+    display: flex;
+    flex-direction: column;
+    width: 15%;
+}
+.categoria2 a{
+    text-decoration: none;
+    color: #d30000;
+}
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
@@ -192,7 +234,11 @@ footer {
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {}
+@media only screen and (min-width: 600px) {
+    .img_logo {
+        width: 120%;
+    }
+}
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) and (max-width: 992px) {
@@ -212,7 +258,7 @@ footer {
     }
 
     .img_logo {
-        width: 38%;
+        width: 100%;
     }
 
     .redes_footer{
