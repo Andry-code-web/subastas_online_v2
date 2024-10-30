@@ -214,11 +214,117 @@
   text-decoration: underline;
 }
 
+
+-------------------------
+.swal2-container {
+  width: 300px;
+  height: 200px;
+  background-color: #851414;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+.swal2-icon {
+  font-size: 12px; 
+}
+.my-custom-list-item {
+  list-style: none;
+  margin-bottom: 10px;
+  font-family: var(--font--banner--bool);
+  text-align: left;
+  font-size: 20px;
+}
+.swal2-title {
+  font-size: 1.5rem;
+  color: #333;
+  /*font-family: var(--font--testimoni);*/
+  /*font-family: var(--font--about);*/
+  /*font-family: var(--font--header);*/
+  font-family: var(--font--banner--bool);
+  
+}
+.contactos {
+  margin-top: 11px;
+}
+/*Boton Contactanos_aqui*/
+.botoncito {
+  position: relative;
+  padding: 10px 20px;
+  border-radius: 7px;
+  border: 1px solid rgb(196, 142, 25);
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: 200;
+  letter-spacing: 2px;
+  background: transparent;
+  color: #fff;
+  overflow: hidden;
+  box-shadow: 0 0 0 0 transparent;
+  -webkit-transition: all 0.2s ease-in;
+  -moz-transition: all 0.2s ease-in;
+  transition: all 0.2s ease-in;
+}
+
+.botoncito:hover {
+  background: rgb(218, 149, 21);
+  box-shadow: 0 0 30px 5px rgba(205, 108, 22, 0.815);
+  -webkit-transition: all 0.2s ease-out;
+  -moz-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
+}
+
+.botoncito:hover::before {
+  -webkit-animation: sh02 0.5s 0s linear;
+  -moz-animation: sh02 0.5s 0s linear;
+  animation: sh02 0.5s 0s linear;
+}
+
+.botoncito::before {
+  content: '';
+  display: block;
+  width: 0px;
+  height: 86%;
+  position: absolute;
+  top: 7%;
+  left: 0%;
+  opacity: 0;
+  background: #fff;
+  box-shadow: 0 0 50px 30px #fff;
+  -webkit-transform: skewX(-20deg);
+  -moz-transform: skewX(-20deg);
+  -ms-transform: skewX(-20deg);
+  -o-transform: skewX(-20deg);
+  transform: skewX(-20deg);
+}
+
+@keyframes sh02 {
+  from {
+    opacity: 0;
+    left: 0%;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    left: 100%;
+  }
+}
+
+.botoncito:active {
+  box-shadow: 0 0 0 0 transparent;
+  -webkit-transition: box-shadow 0.2s ease-in;
+  -moz-transition: box-shadow 0.2s ease-in;
+  transition: box-shadow 0.2s ease-in;
+}
+
+
 /* Animación de deslizamiento desde la izquierda */
 @keyframes slideInLeft {
   from {
     transform: translateX(-100%);
-  }
+}
 
   to {
     transform: translateX(0);
@@ -247,11 +353,6 @@
   .content_form {
     width: 80%;
   }
-
-  /* .content_form h2{
-        color: #ffff;
-        text-shadow: 6px 5px 15px #000;
-    } */
 
   .content_form form label {
     color: #000;
@@ -284,17 +385,6 @@
   }
 }
 
-/* .subastar{
-        color: #ffff;
-        font-size: .9rem;
-        text-shadow: 2px 2px 5px #000;
-    }
-
-    .subastar span{
-        color: #fff;
-        text-shadow: 2px 2px 5px #000;
-    } */
-
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
 }
@@ -302,38 +392,50 @@
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) and (max-width: 992px) {
   .imagen {
-    position: absolute;
-  }
-
-  .imagen_fondo {
-    opacity: 0.8;
+    display: none;
   }
 
   .content_form {
-    width: 80%;
+    width: 100%;
+    height: 100%;
   }
 
   .content_form h2 {
-    color: #ffff;
-    text-shadow: 6px 5px 15px #000;
+    color: #000;
   }
 
   .content_form form label {
     color: #ffff;
-    text-shadow: 2px 2px 5px #000;
   }
 
   .subastar {
     color: #ffff;
     font-size: 0.9rem;
-    text-shadow: 2px 2px 5px #000;
-  }
 
+  }
+  .content_form form label {
+    color: #000;
+  }
   .subastar span {
-    color: #fff;
-    text-shadow: 2px 2px 5px #000;
+    color: #000;
   }
 
+  .content_form form .regresar {
+    display: block;
+    width: 100%;
+    height: 40px;
+    background-color: #ed5544;
+    border-radius: 20px;
+    border: none;
+    color: #fff;
+    font-family: var(--font--testimoni);
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+  }
   .g-recaptcha {
     font-size: 0.9rem;
     margin-top: 1rem;
