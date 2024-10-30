@@ -1027,4 +1027,22 @@ router.post('/actualizar/contrasena', (req, res) => {
   }
 
 });
+
+// quiero vender
+router.post("/enviar/formulario", (req, res) => {
+  const { nombre, celular, correo, departamento, ciudad, descripcion, informacion } = req.body;
+
+  const query = 'INSERT INTO formularios(nombre, celular, correo, departamento, ciudad, descripcion, informacion) VALUES (?,?,?,?,?,?,?)';
+
+  // Ejecutar la consulta correctamente
+  conection.query(query, [nombre, celular, correo, departamento, ciudad, descripcion, informacion], (error, result) => {
+    if (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Error al ingresar los datos" });
+    }
+    // Enviar una respuesta JSON de éxito
+    res.status(200).json({ message: "Datos ingresados correctamente" });
+  });
+});
+
 module.exports = router;
