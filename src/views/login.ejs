@@ -59,6 +59,24 @@
           <button type="submit">Iniciar sesión</button> <!-- Botón para enviar el formulario -->
           <a class="registrar" href="/registro">Regístrate</a> <!-- Enlace para registrarse -->
           <a class="regresar" href="/">Ir al inicio</a> <!-- Enlace para volver al inicio -->
+          <!--Inicio anuncio-->
+          <p class="contactos">Si tienes problemas con tu cuenta, contáctanos aqui: <a href="#" onclick="mostrarModal()"><button class="botoncito">Contáctanos aquí</button></a></p>
+          <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+          <script>
+            function mostrarModal() {
+              Swal.fire({
+                title: 'Soporte al cliente: Resuelve tus dudas con nosotros.',
+                html: `
+                      <li class="my-custom-list-item"><strong>DNI:</strong></li>
+                      <li class="my-custom-list-item"><strong>Correo Electrónico:  subastasurperu@gmail.com</strong></li>
+                      <li class="my-custom-list-item"><strong>Número Telefónico:</strong></li>
+                      <li class="my-custom-list-item"><strong>Fecha de nacimiento:</strong></li>
+                      `,
+                icon: 'info',
+                confirmButtonText: 'OK'
+              })
+            }
+          </script>
         </form>
       </div>
     </div>
