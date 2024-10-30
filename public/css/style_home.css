@@ -148,7 +148,7 @@
   font-weight: 400;
 }
 
-.descripcion_categoria{
+.descripcion_categoria {
   width: 85px;
 }
 
@@ -350,7 +350,7 @@
   background-color: #000;
 } */
 
-.tipo_subastas_A_F{
+.tipo_subastas_A_F {
   width: 100%;
   height: auto;
 }
@@ -513,7 +513,7 @@ svg {
   font-size: 1rem;
 }
 
-.precio a{
+.precio a {
   text-decoration: none;
   color: #000;
 }
@@ -544,22 +544,22 @@ svg {
   color: #000;
 }
 
-.text_descripcion{
+.text_descripcion {
   display: none;
   opacity: 0;
   transition: .3s ease-in;
 }
 
-.card_home:hover{
+.card_home:hover {
   height: 435px;
   padding-bottom: 1rem;
 }
 
-.card_home:hover .card-img{
+.card_home:hover .card-img {
   height: 32%;
 }
 
-.card_home:hover .text_descripcion{
+.card_home:hover .text_descripcion {
   display: block;
   opacity: 1;
   width: 100%;
@@ -700,7 +700,7 @@ svg {
 
 
 /* banner informativos */
-.contenedor_banners_info{
+.contenedor_banners_info {
   width: 100%;
   height: auto;
   display: flex;
@@ -715,7 +715,7 @@ svg {
   grid-template-rows: repeat(1, 1fr);
   gap: .7rem;
 }
-  
+
 .banner_informativos .div1 {
   grid-column: span 2 / span 2;
 }
@@ -738,275 +738,13 @@ svg {
   grid-row-start: 2;
 }
 
-.img_div img{
+.img_div img {
   width: 100%;
   height: 190px;
   object-fit: cover;
   border-radius: .5rem;
 }
 
-
-/* COMENTARIOS
-.comentarios {
-  width: 100%;
-  height: 40vh;
-  margin-bottom: 5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-top: 5rem;
-}
-
-.comentarios h2 {
-  font-family: var(--font--testimoni);
-  font-size: 4rem;
-  text-align: center;
-  margin-bottom: 3rem;
-  color: var(--color--sub);
-}
-
-.Testimonio {
-  position: relative;
-  width: 80%;
-  margin: auto;
-  overflow: hidden;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.comentarios-container {
-  display: flex;
-  transition: transform 0.5s ease-in-out;
-  width: 100%;
-}
-
-.comentario {
-  min-width: 100%;
-  box-sizing: border-box;
-  text-align: center;
-}
-
-.comentario p:nth-child(1) {
-  font-size: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.comentario p:nth-child(2) {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.comentario p:nth-child(2) i {
-  font-size: 2rem;
-  color: var(--color--sub);
-}
-
-.Testimonio button {
-  background-color: #fff;
-  border: none;
-  cursor: pointer;
-}
-
-.Testimonio button img {
-  width: 1.5rem;
-} */
-
-/* REDES 
-.redes_sociales {
-  width: 100%;
-  height: 100vh;
-
-  position: relative;
-}
-
-.redes_sociales::before {
-  content: "";
-  position: absolute;
-  top: 30%;
-  left: 78.5%;
-  transform: translate(-50%, -50%);
-  width: 4px;
-  height: 30%;
-  background-color: #fff;
-}
-
-.contenedor_info_redes {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-}
-
-.redes_sociales .img_fondo {
-  width: 100%;
-  height: 100vh;
-  position: absolute;
-  z-index: -1;
-}
-
-.redes {
-  width: 40%;
-  height: 50%;
-}
-
-.youtube {
-  position: relative;
-  left: 11.5%;
-  top: 14%;
-}
-
-.linea2,
-.liena3 {
-  display: flex;
-}
-
-.liena3 {
-  position: relative;
-  left: 11%;
-  bottom: 14%;
-}
-
-.redes_sociales h2 {
-  font-size: 3rem;
-  font-family: var(--font--parrafo);
-  color: var(--color--sub);
-} */
-
-/* CONTACTANOS
-.contacto {
-  width: 100%;
-  height: 80vh;
-  display: flex;
-  justify-content: center;
-  gap: 5rem;
-  padding-left: 7rem;
-  padding-right: 7rem;
-  padding-top: 7rem;
-}
-
-.info_cont {
-  width: 30%;
-}
-
-.info_cont h2 {
-  font-size: 3rem;
-  font-family: var(--font--parrafo);
-  color: var(--color--sub);
-  margin-bottom: 1rem;
-}
-
-.contactos {
-  margin-left: 1rem;
-}
-
-.contactos ul li {
-  list-style: none;
-  margin-bottom: 1rem;
-}
-
-.contactos ul li a {
-  display: flex;
-  gap: 1rem;
-  text-decoration: none;
-  color: #000;
-  font-family: var(--font--cont);
-}
-
-.info_cont form {
-  display: flex;
-  flex-direction: column;
-  margin-top: 1.5rem;
-}
-
-.inputs {
-  width: 100%;
-  height: 5vh;
-  background-color: #ebebeb;
-  border: none;
-  border-left: 0.4rem solid var(--color--sub);
-  margin-bottom: 1rem;
-  padding-left: 1rem;
-  font-size: 1.1rem;
-  font-weight: 300;
-}
-
-.inputs::placeholder {
-  font-size: 0.9rem;
-}
-
-.inputs:focus {
-  outline: none;
-}
-
-.info_cont form textarea {
-  width: 100%;
-  height: 15vh;
-  background-color: #ebebeb;
-  border: none;
-  border-left: 0.4rem solid var(--color--sub);
-  padding-left: 1rem;
-  padding-top: 1rem;
-  font-size: 1.1rem;
-}
-
-.info_cont form textarea:focus {
-  outline: none;
-}
-
-.info_cont form textarea::placeholder {
-  font-size: 1.1rem;
-}
-
-.info_cont form button {
-  width: 30%;
-  height: 45px;
-  border: none;
-  background-color: #fff;
-  border: 2px solid var(--color--sub);
-  font-family: var(--font--parrafo);
-  border-radius: 5px;
-  color: #707070;
-  font-size: 1.05rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: ease-in-out 0.3s;
-}
-
-.info_cont form button:hover {
-  transform: scale(1.1);
-}
-
-.rating {
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: start;
-  gap: 5px;
-  margin-bottom: 1rem;
-}
-
-.rating input {
-  display: none;
-}
-
-.rating label {
-  font-size: 2.5rem;
-  color: #ccc;
-  cursor: pointer;
-}
-
-.rating label::before {
-  content: "★";
-}
-
-.rating label:hover,
-.rating label:hover ~ label,
-.rating input:checked ~ label {
-  color: var(--color--sub);
-} */
 
 
 /* ANIMACIONES */
@@ -1068,7 +806,7 @@ svg {
     gap: 0.5rem;
   }
 
-  .grid_colum_2{
+  .grid_colum_2 {
     grid-column: 3;
   }
 
@@ -1094,11 +832,11 @@ svg {
     padding-right: 1rem;
   }
 
-  .subastas h2{
+  .subastas h2 {
     font-size: 1.6rem;
   }
 
-  .content_card{
+  .content_card {
     margin-top: 1rem;
   }
 
@@ -1113,7 +851,7 @@ svg {
     font-size: .97rem;
   }
 
-  .card_home{
+  .card_home {
     width: 250px;
     height: 350px;
   }
