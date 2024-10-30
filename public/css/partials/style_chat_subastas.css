@@ -409,8 +409,9 @@ hr{
     height: 735px;
   }
   .div5 {
-    height: 60px;
+    height: 35px;
     top: 10px;
+    font-size: 13px;
   }
 }
 
@@ -424,6 +425,7 @@ hr{
   }
   .div5 {
     height: 45px;
+    font-size: 17px;
   }
 }
 
