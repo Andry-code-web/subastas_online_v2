@@ -429,13 +429,19 @@ router.post("/subir-vehiculo", upload.fields([{ name: 'images', maxCount: 10 }])
 // Activar subasta
 router.post('/subasta/activar/:id', (req, res) => {
   const subastaId = req.params.id;
-  conection.query('UPDATE subastas SET act_fina = ? WHERE id = ?', ['activa', subastaId], (err, result) => {
-    if (err) {
-      return res.status(500).json({ success: false, message: 'Error al activar la subasta' });
+  conection.query(
+    "UPDATE subastas SET act_fina = ?, fecha_activacion = CURDATE(), hora_activacion = DATE_ADD(CURTIME(), INTERVAL -5 HOUR) WHERE id = ?",
+    ['activa', subastaId],
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({ success: false, message: 'Error al activar la subasta' });
+      }
+      res.json({ success: true });
     }
-    res.json({ success: true });
-  });
+  );
 });
+
+
 
 // Finalizar subasta
 router.post('/subasta/finalizar/:id', (req, res) => {

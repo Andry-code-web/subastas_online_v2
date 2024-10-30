@@ -376,8 +376,8 @@
         <tr>
           <td><%= oferta.usuario %></td>
           <td>
-            <span><%= oferta.hora_subasta %></span>
-            <%= oferta.fecha_subasta %>
+            <span><%= oferta.hora_subasta %></span> <br>
+            <%= oferta.fecha_subasta_formateada  %>
           </td>
           <td>US$<%= oferta.monto_oferta %></td>
         </tr>
@@ -1218,7 +1218,7 @@
         const minutes = Math.floor(timeLeft % (1000 * 60 * 60) / (1000 * 60));
         const seconds = Math.floor(timeLeft % (1000 * 60) / 1000);
 
-        countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        countdownElement.innerHTML = `${days}dias ${hours}horas ${minutes}min ${seconds}seg`;
       }, 1000);
     });
   </script>

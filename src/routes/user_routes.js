@@ -621,6 +621,7 @@ router.get('/subasta/:id', (req, res) => {
       DATE_FORMAT(s.fecha_subasta, '%W %d') AS fecha_formateada, 
       DATE_FORMAT(s.hora_subasta, '%h:%i %p') AS hora_formateada, 
       CONCAT(s.fecha_subasta, ' ', s.hora_subasta) AS fecha_hora_subasta,
+      CONCAT(s.fecha_activacion, ' ', s.hora_activacion) AS fecha_hora_apertura_subasta, 
       IFNULL(l.like_count, 0) AS like_count
     FROM subastas s
     LEFT JOIN (
@@ -632,13 +633,13 @@ router.get('/subasta/:id', (req, res) => {
 
   const queryImagenes = 'SELECT imagen FROM imagenes_propiedad WHERE id_subasta = ?';
   const queryAnexos = 'SELECT id, anexo FROM anexos_propiedad WHERE id_subasta = ?';
-  
+
   // Consulta para registrar la visita
   const queryRegistrarVisita = 'INSERT INTO visitas_subasta (subasta_id, usuario_id) VALUES (?, ?)';
-  
+
   // Consulta para contar visitas
   const queryContarVisitas = 'SELECT COUNT(*) AS total_visitas FROM visitas_subasta WHERE subasta_id = ?';
-  
+
   // Consulta para obtener las ofertas de la subasta
   const queryOfertasSubastas = 'SELECT * FROM ofertas WHERE id_subasta = ?';
 
@@ -664,7 +665,7 @@ router.get('/subasta/:id', (req, res) => {
     return days[day] || day;
   }
 
-  const now = momenT().tz("America/Lima"); // Ajusta a la zona horaria de Perú
+  const now = moment().tz("America/Lima"); // Ajusta a la zona horaria de Perú
   const fechaActual = now.format('YYYY-MM-DD HH:mm:ss'); // Formato de fecha que necesites
 
   // Registrar la visita
@@ -685,20 +686,14 @@ router.get('/subasta/:id', (req, res) => {
       }
 
       const subasta = resultadoSubasta[0];
-      const fechaHoraSubasta = momenT(subasta.fecha_hora_subasta).tz("America/Lima");
+      const fechaHoraSubasta = moment(subasta.fecha_hora_subasta).tz("America/Lima");
+      const fechaHoraAperturaSubasta = moment(subasta.fecha_hora_apertura_subasta).tz("America/Lima"); // Nueva variable
 
       // Lógica para verificar el estado de la subasta
       const duracionSubasta = 5; // duración en minutos
       const fechaHoraFinSubasta = fechaHoraSubasta.clone().add(duracionSubasta, 'minutes');
       const estaEnCurso = now.isBetween(fechaHoraSubasta, fechaHoraFinSubasta, null, '[]');
       const estaTerminada = now.isAfter(fechaHoraFinSubasta); // Nueva variable que indica si ha terminado
-
-      // Logs para verificar las fechas y el estado de la subasta
-      console.log("Fecha y hora de la subasta:", fechaHoraSubasta.format());
-      console.log("Fecha y hora de fin de subasta:", fechaHoraFinSubasta.format());
-      console.log("Fecha y hora actual en producción:", now.format());
-      console.log("¿Subasta en curso?:", estaEnCurso);
-      console.log("¿Subasta terminada?:", estaTerminada);
 
       // Calcular la oferta actual
       const precioBase = parseInt(subasta.precio_base);
@@ -747,6 +742,11 @@ router.get('/subasta/:id', (req, res) => {
                   return res.status(500).send("Error al obtener ofertas de la subasta");
                 }
 
+                // Formatear la fecha de cada oferta
+                resultadoOfertas.forEach(oferta => {
+                  oferta.fecha_subasta_formateada = moment(oferta.fecha_subasta).tz("America/Lima").format('DD/MM/YYYY [GMT -05:00]');
+                });
+
                 // Renderizar la vista con los datos de la subasta y el contador de visitas
                 res.render("subasta", {
                   usuario: req.session.usuario,
@@ -762,6 +762,7 @@ router.get('/subasta/:id', (req, res) => {
                   ofertaActual, // Nueva variable que contiene el precio base + 100
                   fechaHoraSubasta: fechaHoraSubasta.format(), // Pasar la fecha y hora de la subasta
                   fechaHoraFinSubasta: fechaHoraFinSubasta.format(), // Pasar la fecha y hora de fin de la subasta
+                  fechaHoraAperturaSubasta: fechaHoraAperturaSubasta.format(), // Nueva variable para la apertura de la subasta
                   fechaActual,
                   oferta: resultadoOfertas
                 });
@@ -778,7 +779,7 @@ router.get('/subasta/:id', (req, res) => {
 // Ruta para obtener la puja más alta de una subasta
 router.get("/puja-mas-alta/:idSubasta", (req, res) => {
   const idSubasta = req.params.idSubasta;
-  
+
   const query = `
     SELECT MAX(monto_oferta) as puja_maxima 
     FROM ofertas 
@@ -788,13 +789,13 @@ router.get("/puja-mas-alta/:idSubasta", (req, res) => {
   conection.query(query, [idSubasta], (error, resultado) => {
     if (error) {
       console.error("Error al obtener la puja más alta:", error);
-      return res.status(500).json({ 
+      return res.status(500).json({
         mensaje: "Error al obtener la puja más alta.",
-        error: error.message 
+        error: error.message
       });
     }
-    
-    res.json({ 
+
+    res.json({
       puja_maxima: resultado[0].puja_maxima || 0
     });
   });
@@ -806,7 +807,7 @@ router.post("/enviar-puja", async (req, res) => {
 
   // Clean up the amount value - remove currency symbol and commas
   montoSeleccionado = montoSeleccionado.replace(/[^0-9.-]+/g, '');
-  
+
   // Validate data
   if (!idSubasta) {
     return res.status(400).json({ mensaje: "ID de subasta es requerido." });
@@ -820,21 +821,21 @@ router.post("/enviar-puja", async (req, res) => {
 
   // Obtener la puja más alta actual
   const queryMaxBid = "SELECT MAX(monto_oferta) as puja_maxima FROM ofertas WHERE id_subasta = ?";
-  
+
   conection.query(queryMaxBid, [idSubasta], (error, resultado) => {
     if (error) {
       console.error("Error al obtener la puja más alta:", error);
-      return res.status(500).json({ 
+      return res.status(500).json({
         mensaje: "Error al validar la puja.",
-        error: error.message 
+        error: error.message
       });
     }
 
     const pujaMaxima = resultado[0].puja_maxima || 0;
-    
+
     // Validar que la nueva puja sea mayor que la puja más alta
     if (parseFloat(montoSeleccionado) <= pujaMaxima) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         mensaje: `La puja debe ser mayor que la puja más alta actual (US$${pujaMaxima}).`
       });
     }
@@ -851,13 +852,13 @@ router.post("/enviar-puja", async (req, res) => {
       (error, resultado) => {
         if (error) {
           console.error("Error al registrar la puja:", error);
-          return res.status(500).json({ 
+          return res.status(500).json({
             mensaje: "Error al registrar la puja en la base de datos.",
-            error: error.message 
+            error: error.message
           });
         }
 
-        res.status(200).json({ 
+        res.status(200).json({
           mensaje: "Puja registrada exitosamente.",
           puja_anterior: pujaMaxima
         });
@@ -1254,7 +1255,7 @@ router.post("/confirmar/datos", (req, res) => {
   });
 });
 
-/* combiamos contraseña */
+
 /* Cambiar contraseña */
 router.post("/actualizar/contrasena", async (req, res) => {
   const { new_password, confirm_password } = req.body;
@@ -1286,6 +1287,21 @@ router.post("/actualizar/contrasena", async (req, res) => {
   } else {
     res.json({ success: false, message: "Las contraseñas no coinciden" });
   }
+});
+
+// quiero vender
+router.post("/enviar/formulario", (req, res) => {
+  const { nombre, celular, correo, departamento, ciudad, descripcion, informacion } = req.body;
+  const query = 'INSERT INTO formularios(nombre, celular, correo, departamento, ciudad, descripcion, informacion) VALUES (?,?,?,?,?,?,?)';
+  // Ejecutar la consulta correctamente
+  conection.query(query, [nombre, celular, correo, departamento, ciudad, descripcion, informacion], (error, result) => {
+    if (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Error al ingresar los datos" });
+    }
+    // Enviar una respuesta JSON de éxito
+    res.status(200).json({ message: "Datos ingresados correctamente" });
+  });
 });
 
 module.exports = router;

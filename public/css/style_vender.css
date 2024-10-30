@@ -146,170 +146,292 @@
     transform: scale(1.1);
 }
 
+/* formulario de ventas */
+
+.container {
+    width: 30%;
+    height: auto;
+    margin: 0 auto;
+    padding: 20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgb(211, 0, 0);
+    /* filter: blur(0.5px); */
+    background: linear-gradient(180deg, rgba(211, 0, 0, 1) 0%, rgba(255, 94, 0, 1) 100%);
+    border-radius: .5rem;
+    box-shadow: 5px 6px 20px 0px #0000009b;
+    align-items: center;
+    display: none;
+    z-index: 100;
+}
+
+.content_btn{
+    width: 100%;
+    text-align: end;
+}
+
+.cerrar_vender{
+    background: none;
+    border: none;
+}
+
+.cerrar_vender i{
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+.imagen_icon {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 50%;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    font-weight: bold;
+    color: rgb(255, 255, 255);
+    font-size: 17px;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.submit-btn {
+    background-color: #ff0000;
+    color: white;
+    padding: 10px;
+    border: none;
+    width: 100%;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background-color: #bd0303bb;
+}
+
+/* esto sera cuando el  usuario haga clic en el boton y recien salga el formulario */
+
+/* .container.active {
+
+}
+ */
 
 
 /* Extra small devices (phones, 600px and down) */
-@media only screen and (max-width: 600px){
-    .banner{
+@media only screen and (max-width: 600px) {
+    .banner {
         height: 60vh;
         margin-top: 3rem;
     }
 
-    .contenedor_banner h1{
+    .contenedor_banner h1 {
         width: 60%;
         font-size: 1.8rem;
         text-align: center;
     }
 
-    .contenedor_banner img{
+    .contenedor_banner img {
         width: 30%;
     }
 
-    .contenedor_banner h2{
+    .contenedor_banner h2 {
         width: 70%;
         text-align: center;
     }
 
-    .contenedor_banner p{
+    .contenedor_banner p {
         width: 90%;
         font-size: .8rem;
     }
 
     /*  */
 
-    .contenedor_informacion{
+    .contenedor_informacion {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
     }
 
-    .contenedor_informacion h2{
+    .contenedor_informacion h2 {
         width: 80%;
         text-align: center;
         margin-bottom: 2rem;
     }
 
-    .info{
+    .info {
         flex-direction: column;
         justify-content: center;
         align-items: center;
         gap: 0rem;
     }
 
-    .tarjeta{
+    .tarjeta {
         width: 90%;
         padding: 1rem .5rem;
     }
 
-    .tarjeta img{
+    .tarjeta img {
         width: 20%;
     }
 
-    .tarjeta p{
+    .tarjeta p {
         text-align: justify;
         margin: 0;
     }
 
     /*  */
-    .enviar_datos{
+    .enviar_datos {
         margin-top: 2rem;
     }
 
-    .contenedor_datos{
+    .contenedor_datos {
         padding: 1rem 1rem;
     }
 
-    .contenedor_datos h2{
+    .contenedor_datos h2 {
         font-size: 1.8rem;
     }
 
-    .contenedor_datos p{
+    .contenedor_datos p {
         width: 90%;
         font-size: .9rem;
     }
 
-    .contenedor_datos button{
+    .contenedor_datos button {
         width: 40%;
     }
+
+    .container {
+        width: 100%;
+        height: auto;
+        margin: 0 auto;
+        padding: 20px;
+        position: absolute;
+        top: 97%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgb(211, 0, 0);
+        /* filter: blur(0.5px); */
+        background: linear-gradient(180deg, rgba(211, 0, 0, 1) 0%, rgba(255, 94, 0, 1) 100%);
+        border-radius: .5rem;
+        box-shadow: 5px 6px 20px 0px #0000009b;
+        align-items: center;
+        display: none;
+    }
 }
+
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {}
 
 /* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (min-width: 768px) and (max-width: 992px){
-    .banner{
+@media only screen and (min-width: 768px) and (max-width: 992px) {
+    .banner {
         height: 40vh;
         margin-top: 4.5rem;
     }
 
-    .contenedor_banner h1{
+    .contenedor_banner h1 {
         font-size: 1.9rem;
     }
 
-    .contenedor_banner img{
+    .contenedor_banner img {
         width: 15%;
     }
 
-    .contenedor_banner h2{
+    .contenedor_banner h2 {
         font-size: 1.5rem;
     }
 
-    .contenedor_banner p{
+    .contenedor_banner p {
         width: 75%;
         font-size: .9rem;
     }
 
     /*  */
 
-    .contenedor_informacion h2{
+    .contenedor_informacion h2 {
         font-size: 1.8rem;
     }
 
-    .info{
+    .info {
         gap: 1rem;
     }
 
-    .tarjeta{
+    .tarjeta {
         width: 30%;
-    } 
+    }
 
-    .tarjeta h3{
+    .tarjeta h3 {
         font-size: 1.2rem;
     }
 
-    .tarjeta p{
+    .tarjeta p {
         text-align: justify;
         padding: .5rem 1rem;
     }
 
     /*  */
-    .enviar_datos{
+    .enviar_datos {
         height: 25vh;
     }
 
-    .contenedor_datos{
+    .contenedor_datos {
         padding: 1rem 5rem;
     }
 
-    .contenedor_datos h2{
+    .contenedor_datos h2 {
         font-size: 1.8rem;
     }
 
-    .contenedor_datos p{
+    .contenedor_datos p {
         width: 80%;
         font-size: .8rem;
     }
 
-    .contenedor_datos button{
+    .contenedor_datos button {
         width: 30%;
     }
+
+    .container {
+        width: 100%;
+        height: auto;
+        margin: 0 auto;
+        padding: 20px;
+        position: absolute;
+        top: 97%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgb(211, 0, 0);
+        /* filter: blur(0.5px); */
+        background: linear-gradient(180deg, rgba(211, 0, 0, 1) 0%, rgba(255, 94, 0, 1) 100%);
+        border-radius: .5rem;
+        box-shadow: 5px 6px 20px 0px #0000009b;
+        align-items: center;
+        display: none;
+    }
+
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
-@media only screen and (min-width: 992px) and (max-width: 1200px){
-    .banner{
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+    .banner {
         height: 50vh;
         margin-top: 3.5rem;
     }
@@ -322,33 +444,33 @@
         width: 5%;
     }
 
-    .contenedor_banner h2{
+    .contenedor_banner h2 {
         font-size: 1.1rem;
     }
 
-    .contenedor_banner p{
+    .contenedor_banner p {
         font-size: .7rem;
     }
 
     /*  */
 
-    .contenedor_informacion h2{
+    .contenedor_informacion h2 {
         font-size: 1.4rem;
     }
 
-    .tarjeta{
+    .tarjeta {
         width: 25%;
     }
 
-    .tarjeta img{
+    .tarjeta img {
         width: 25%;
     }
 
-    .tarjeta h3{
+    .tarjeta h3 {
         font-size: 1.1rem;
     }
 
-    .tarjeta p{
+    .tarjeta p {
         text-align: justify;
         font-size: .8rem;
     }
@@ -359,75 +481,92 @@
         height: 35vh;
     }
 
-    .contenedor_datos{
+    .contenedor_datos {
         gap: .9rem;
     }
 
-    .contenedor_datos h2{
+    .contenedor_datos h2 {
         font-size: 1.4rem;
     }
 
-    .contenedor_datos p{
+    .contenedor_datos p {
         width: 80%;
         font-size: .8rem;
     }
 
-    .contenedor_datos button{
+    .contenedor_datos button {
         width: 40%;
+    }
+    .container {
+        width: 60%;
+        height: auto;
+        margin: 0 auto;
+        padding: 20px;
+        position: absolute;
+        top: 97%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgb(211, 0, 0);
+        /* filter: blur(0.5px); */
+        background: linear-gradient(180deg, rgba(211, 0, 0, 1) 0%, rgba(255, 94, 0, 1) 100%);
+        border-radius: .5rem;
+        box-shadow: 5px 6px 20px 0px #0000009b;
+        align-items: center;
+        display: none;
     }
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1200px) and (max-width: 1440px){
-    .banner{
+@media only screen and (min-width: 1200px) and (max-width: 1440px) {
+    .banner {
         margin-top: 4.5rem;
     }
 
-    .contenedor_banner h1{
+    .contenedor_banner h1 {
         font-size: 1.8rem;
     }
 
-    .contenedor_banner h2{
+    .contenedor_banner h2 {
         font-size: 1.5rem;
     }
 
-    .contenedor_banner p{
+    .contenedor_banner p {
         font-size: .8rem;
     }
 
-    .contenedor_informacion h2{
+    .contenedor_informacion h2 {
         font-size: 1.8rem;
     }
 
-    .tarjeta{
+    .tarjeta {
         width: 25%;
     }
 
-    .tarjeta img{
+    .tarjeta img {
         width: 25%;
     }
 
-    .tarjeta h3{
+    .tarjeta h3 {
         font-size: 1.3rem;
     }
 
-    .tarjeta p{
+    .tarjeta p {
         text-align: justify;
     }
 
-    .enviar_datos{
+    .enviar_datos {
         height: 35vh;
     }
 
-    .enviar_datos h2{
+    .enviar_datos h2 {
         font-size: 1.9rem;
     }
 
-    .enviar_datos p{
+    .enviar_datos p {
         width: 70%;
     }
 
-    .contenedor_datos button{
+    .contenedor_datos button {
         width: 30%;
     }
 }

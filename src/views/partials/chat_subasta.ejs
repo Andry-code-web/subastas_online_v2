@@ -1,17 +1,12 @@
 <div class="card">
   <div class="card-header">
-    <div class="fecha_subasta">
-      <p>Inicia<br>
-        <%= fechaFormateadaEsp %>
-      </p>
-    </div>
-    <p class="cronometro" id="cronometro"></p>
-    <!-- <p id="participantCount">Participantes: 0</p> -->
-    <div class="hora_subasta">
-      <p>
-        <%= subasta.hora_formateada %>
-      </p>
-    </div>
+    <p class="title_p">
+      CIERRA EN:
+    </p>
+    <p class="fecha-subasta" id="countdown">
+      <span id="countdown-timer">0d 00h 00m 00s</span>
+    </p>
+
   </div>
 
   <!-- Card para unirse (antes de que empiece) -->
@@ -31,13 +26,54 @@
       </div>
     </div>
 
+    <div class="apertura_cierre d-flex justify-content-evenly" style="gap: 1rem;">
+      <div class="fecha_hoara_cierre">
+        <p class="titulo_cierre">Fecha Cierre:</p>
+        <p class="horasss">
+          <% 
+          const fechaHora = new Date(fechaHoraFinSubasta);
+          const dia = fechaHora.getDate().toString().padStart(2, '0');
+          const mes = (fechaHora.getMonth() + 1).toString().padStart(2, '0');
+          const anio = fechaHora.getFullYear();
+
+          const horas = fechaHora.getHours().toString().padStart(2, '0');
+          const minutos = fechaHora.getMinutes().toString().padStart(2, '0');
+          const segundos = fechaHora.getSeconds().toString().padStart(2, '0');
+
+          const fechaFormateada = `${dia}/${mes}/${anio} para <br>  las ${horas}:${minutos}:${segundos}`; 
+        %>
+
+          <%- fechaFormateada %>
+        </p>
+      </div>
+
+      <div class="fecha_hoara_apertura">
+        <p class="titulo_apertura">Fecha Apertura:</p>
+        <p class="horasss">
+          <% 
+          const fechaHoraActiva = new Date(fechaHoraAperturaSubasta);
+          const dias = fechaHoraActiva.getDate().toString().padStart(2, '0');
+          const mess = (fechaHoraActiva.getMonth() + 1).toString().padStart(2, '0');
+          const anios = fechaHoraActiva.getFullYear();
+          
+          const hora = fechaHoraActiva.getHours().toString().padStart(2, '0');
+          const minutoss = fechaHoraActiva.getMinutes().toString().padStart(2, '0');
+          const segundoss = fechaHoraActiva.getSeconds().toString().padStart(2, '0');
+
+          const fechaHoaraApertura = `${dias}/${mess}/${anios} para <br> las ${hora}:${minutoss}:${segundoss}`;
+        %>
+
+          <%- fechaHoaraApertura %>
+        </p>
+      </div>
+    </div>
+
+
+
     <h2 id="estado_subasta">¡Próximamente!</h2>
-    <p class="fecha-subasta">
+    <!-- <p class="fecha-subasta">
       Fecha de inicio: <%= fechaFormateadaEsp %> <%= subasta.hora_formateada %>
-    </p>
-    <p class="fecha-subasta" id="countdown">
-      Tiempo restante: <span id="countdown-timer"></span>
-    </p>
+    </p> -->
 
     <p class="precio_con_incremento">
       <span>Precio Inicial: </span>
