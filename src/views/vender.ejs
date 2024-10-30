@@ -228,66 +228,87 @@
 
         <!-- sweetalert2 -->
 
-<script>
-  // Escucha el evento click en el botón de envío
-  document.querySelector(".submit-btn").addEventListener("click", async (event) => {
-    event.preventDefault(); // Evita el envío del formulario por defecto
-
-    // Captura los valores de cada campo del formulario
-    const nombre = document.getElementById("nombre").value.trim();
-    const celular = document.getElementById("celular").value.trim();
-    const correo = document.getElementById("correo").value.trim();
-    const departamento = document.getElementById("departamento").value.trim();
-    const ciudad = document.getElementById("ciudad").value.trim();
-    const descripcion = document.getElementById("descripcion").value.trim();
-    const informacion = document.getElementById("informacion").value.trim();
-
-    // Verifica si algún campo está vacío
-    if (!nombre || !celular || !correo || !departamento || !ciudad || !descripcion || !informacion) {
-      // Muestra una alerta de error si algún campo está vacío
-      Swal.fire({
-        title: "Campos incompletos", // Título de la alerta
-        text: "Por favor, completa todos los campos antes de enviar.", // Mensaje de alerta
-        icon: "warning", // Icono de advertencia
-        confirmButtonText: "OK" // Texto del botón de confirmación
-      });
-      return; // Sale de la función para no continuar con el envío
-    }
-
-    // Si todos los campos están llenos, muestra la alerta de confirmación
-    Swal.fire({
-      title: "Solicitud recibida",
-      text: "Un asesor se comunicará contigo al WhatsApp / correo en las próximas 24 horas.",
-      icon: "success",
-      showCancelButton: true,
-      confirmButtonText: "Enviar",
-      cancelButtonText: "Cancelar",
-      showLoaderOnConfirm: true,
-      preConfirm: async () => {
-        try {
-          const response = await fetch("/enviar/formulario", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ nombre, celular, correo, departamento, ciudad, descripcion, informacion })
-          });
-
-          if (!response.ok) {
-            throw new Error("Error al enviar los datos");
+        <script>
+          // Función para obtener los valores del formulario
+          function obtenerValoresFormulario() {
+            // Devuelve un objeto con los valores de los campos del formulario, eliminando espacios en blanco al inicio y al final
+            return {
+              nombre: document.getElementById("nombre").value.trim(),
+              celular: document.getElementById("celular").value.trim(),
+              correo: document.getElementById("correo").value.trim(),
+              departamento: document.getElementById("departamento").value.trim(),
+              ciudad: document.getElementById("ciudad").value.trim(),
+              descripcion: document.getElementById("descripcion").value.trim(),
+              informacion: document.getElementById("informacion").value.trim(),
+            };
           }
-        } catch (error) {
-          Swal.showValidationMessage(`Solicitud fallida: ${error.message}`);
-        }
-      },
-      allowOutsideClick: () => !Swal.isLoading()
-    }).then((result) => {
-      if (result.isConfirmed) {
-        window.location.href = "/info-vender";
-      }
-    });
-  });
-</script>
+
+          // Función para mostrar alertas utilizando SweetAlert2
+          function mostrarAlerta(titulo, texto, icono, confirmText = "OK") {
+            // Muestra una alerta con los parámetros proporcionados
+            return Swal.fire({
+              title: titulo, // Título de la alerta
+              text: texto,   // Mensaje de la alerta
+              icon: icono,   // Icono de la alerta (ej. 'success', 'warning')
+              confirmButtonText: confirmText, // Texto del botón de confirmación
+            });
+          }
+
+          // Escucha el evento click en el botón de envío
+          document.querySelector(".submit-btn").addEventListener("click", async (event) => {
+            event.preventDefault(); // Evita que el formulario se envíe de forma predeterminada
+
+            // Obtiene los valores del formulario usando la función anterior
+            const { nombre, celular, correo, departamento, ciudad, descripcion, informacion } = obtenerValoresFormulario();
+
+            // Verifica si algún campo del formulario está vacío
+            if (!nombre || !celular || !correo || !departamento || !ciudad || !descripcion || !informacion) {
+              // Si hay campos vacíos, muestra una alerta de advertencia
+              await mostrarAlerta("Campos incompletos", "Por favor, completa todos los campos antes de enviar.", "warning");
+              return; // Sale de la función para evitar el envío del formulario
+            }
+
+            // Si todos los campos están llenos, muestra una alerta de confirmación
+            Swal.fire({
+              title: "Solicitud recibida", // Título de la alerta
+              text: "Un asesor se comunicará contigo al WhatsApp / correo en las próximas 24 horas.", // Mensaje de la alerta
+              icon: "success", // Icono de éxito
+              showCancelButton: true, // Muestra el botón de cancelar
+              confirmButtonText: "Enviar", // Texto del botón de confirmación
+              cancelButtonText: "Cancelar", // Texto del botón de cancelación
+              showLoaderOnConfirm: true, // Muestra un cargador mientras se procesa la solicitud
+              preConfirm: async () => {
+                // Función que se ejecuta antes de confirmar la alerta
+                try {
+                  // Envía los datos del formulario a la ruta especificada
+                  const response = await fetch("/enviar/formulario", {
+                    method: "POST", // Método HTTP
+                    headers: {
+                      "Content-Type": "application/json", // Tipo de contenido
+                    },
+                    body: JSON.stringify({ nombre, celular, correo, departamento, ciudad, descripcion, informacion }), // Convierte el objeto a JSON
+                  });
+
+                  // Verifica si la respuesta fue exitosa
+                  if (!response.ok) {
+                    throw new Error("Error al enviar los datos"); // Lanza un error si la respuesta no es exitosa
+                  }
+                } catch (error) {
+                  // Muestra un mensaje de validación en caso de error
+                  Swal.showValidationMessage(`Solicitud fallida: ${error.message}`);
+                }
+              },
+              allowOutsideClick: () => !Swal.isLoading(), // Permite hacer clic fuera de la alerta solo si no se está cargando
+            }).then((result) => {
+              // Maneja el resultado de la alerta
+              if (result.isConfirmed) {
+                // Si se confirma la alerta, redirige a la página especificada
+                window.location.href = "/info-vender";
+              }
+            });
+          });
+        </script>
+
 
 
 
