@@ -38,12 +38,26 @@
           <a class="registrar" href="/registro">Regístrate</a>
           <a class="regresar" href="/">Ir al inicio</a>
         </form>
+        <p class="contactos">Si tienes problemas al iniciar sesion, contáctanos aqui:</p>
+          <button class="botonSoporte" id="boton_soporte">Soporte Técnico</button>
       </div>
     </div>
   </div>
 
   <!-- Incluye SweetAlert2 desde un CDN -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+    const btnSoporteCliente = document.getElementById('boton_soporte');
+    btnSoporteCliente.addEventListener('click', () => {
+      Swal.fire({
+        icon: 'info',
+        title: 'Soporte al cliente',
+        text: 'Para validar si eres cliente, necesitamos los siguientes datos (DNI, CORREO, CELULAR, FECHA DE NACIMIENTO) y enviarlos al correo subastasurperu@gmail.com, con el asunto (recuperar cuenta).',
+        showConfirmButtonText: 'OK'
+      });
+    });
+  </script>
 
   <script>
     document.getElementById('loginForm').addEventListener('submit', async function(event) {
