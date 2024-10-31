@@ -296,6 +296,32 @@
   transform: skewX(-20deg);
 }
 
+.contactos {
+  width: 50%;
+  text-align: center;
+  margin-top: 1rem;
+  font-family: var(--font--about);
+}
+
+.botonSoporte {
+  background-color: #ed5544;
+  width: 40%;
+  height: 40PX;
+  color: #fff;
+  border-radius: 20px;
+  font-family: var(--font--testimoni);
+  font-size: 0.9rem;
+  margin-top: .5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+
+
+
 @keyframes sh02 {
   from {
     opacity: 0;
@@ -383,6 +409,17 @@
     align-items: center;
     text-decoration: none;
   }
+
+  .contactos{
+    width: 70%;
+    font-size: .9rem;
+    margin-top: .5rem;
+    margin-bottom: 0;
+  }
+
+  .botonSoporte{
+    width: 70%;
+  }
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
@@ -459,6 +496,16 @@
     justify-content: center;
     align-items: center;
     text-decoration: none;
+  }
+
+  .contactos{
+    font-size: .8rem;
+    margin-top: .5rem;
+    margin-bottom: 0rem;
+  }
+
+  .botonSoporte{
+    width: 60%;
   }
 }
 

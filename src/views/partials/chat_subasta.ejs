@@ -60,7 +60,7 @@
           const minutoss = fechaHoraActiva.getMinutes().toString().padStart(2, '0');
           const segundoss = fechaHoraActiva.getSeconds().toString().padStart(2, '0');
 
-          const fechaHoaraApertura = `${dias}/${mess}/${anios} para <br> las ${hora}:${minutoss}:${segundoss}`;
+          const fechaHoaraApertura = `${dias}/${mess}/${anios} a <br> las ${hora}:${minutoss}:${segundoss}`;
         %>
 
           <%- fechaHoaraApertura %>
@@ -141,6 +141,47 @@
         </p>
       </div>
     </div>
+
+    <div class="apertura_cierre d-flex justify-content-evenly" style="gap: 1rem;">
+      <div class="fecha_hora_cierre">
+        <p class="titulo_cierre">Fecha Cierre:</p>
+        <p class="horasss">
+          <% 
+            const fechaHoraCierre = new Date(fechaHoraFinSubasta);
+            const diaCierre = fechaHoraCierre.getDate().toString().padStart(2, '0');
+            const mesCierre = (fechaHoraCierre.getMonth() + 1).toString().padStart(2, '0');
+            const anioCierre = fechaHoraCierre.getFullYear();
+    
+            const horaCierre = fechaHoraCierre.getHours().toString().padStart(2, '0');
+            const minutosCierre = fechaHoraCierre.getMinutes().toString().padStart(2, '0');
+            const segundosCierre = fechaHoraCierre.getSeconds().toString().padStart(2, '0');
+    
+            const fechaFormateadaCierre = `${diaCierre}/${mesCierre}/${anioCierre} para <br> las ${horaCierre}:${minutosCierre}:${segundosCierre}`; 
+          %>
+          <%- fechaFormateadaCierre %>
+        </p>
+      </div>
+    
+      <div class="fecha_hora_apertura">
+        <p class="titulo_apertura">Fecha Apertura:</p>
+        <p class="horasss">
+          <% 
+            const fechaHoraApertura = new Date(fechaHoraAperturaSubasta);
+            const diaApertura = fechaHoraApertura.getDate().toString().padStart(2, '0');
+            const mesApertura = (fechaHoraApertura.getMonth() + 1).toString().padStart(2, '0');
+            const anioApertura = fechaHoraApertura.getFullYear();
+    
+            const horaApertura = fechaHoraApertura.getHours().toString().padStart(2, '0');
+            const minutosApertura = fechaHoraApertura.getMinutes().toString().padStart(2, '0');
+            const segundosApertura = fechaHoraApertura.getSeconds().toString().padStart(2, '0');
+    
+            const fechaFormateadaApertura = `${diaApertura}/${mesApertura}/${anioApertura} a <br> las ${horaApertura}:${minutosApertura}:${segundosApertura}`;
+          %>
+          <%- fechaFormateadaApertura %>
+        </p>
+      </div>
+    </div>
+    
 
     <h2>¡Subasta en Curso!</h2>
 
@@ -244,7 +285,7 @@
   <!-- Chat de pujas -->
   <!-- Componente de chat para la subasta -->
   <div id="chat" class="chat">
-    <div id="countdown" class="countdown">03:00</div>
+    <!-- <div id="countdown" class="countdown">03:00</div> -->
     <div class="prorroga_esperando"></div>
     <div id="messages" class="messages"></div>
 
