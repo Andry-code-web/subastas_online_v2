@@ -1045,4 +1045,10 @@ router.post("/enviar/formulario", (req, res) => {
   });
 });
 
+
+//ingreso a la propuesta
+router.get('/propuesta/comprar', (req, res) => {
+  res.render('Propuesta',{ usuario: req.session.usuario })
+})
+
 module.exports = router;
